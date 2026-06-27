@@ -1,0 +1,434 @@
+================================================================================
+   - GLOBAL EFFECT NEXUS & GLOBALEFFECT.ORG
+  Fecha de extracción: 15 de junio de 2026
+  Fuentes:
+    [1] https://rational-global-nexus-core.base44.app
+    [2] https://www.globaleffect.org/
+================================================================================
+
+
+════════════════════════════════════════════════════════════════════════════════
+ SECCIÓN 1: GLOBAL EFFECT NEXUS CORE
+ (https://rational-global-nexus-core.base44.app)
+════════════════════════════════════════════════════════════════════════════════
+
+DESCRIPCIÓN GENERAL
+───────────────────
+Nombre: Global Effect Nexus
+Subtítulo: Plataforma Integral de Gestión Educativa
+Descripción: An all-in-one academic and scholarship management platform
+designed to centralize and streamline the administrative, educational, and
+social impact workflows of the Global Effect foundation.
+Idioma: Español (es-ES)
+Tecnología: React 18.3.1 (SPA)
+Color institucional: #2096BA
+
+────────────────────────────────────────────────────────────────────────────────
+ 1.1 PORTALES DEL SISTEMA
+────────────────────────────────────────────────────────────────────────────────
+
+Los portales son accesos diferenciados por rol. Cada usuario ve solo su portal:
+
+  RUTA                        NOMBRE DEL PORTAL
+  ─────────────────────────── ─────────────────────────────────────────
+  /portal/estudiante          Portal Estudiantil / Portal de Estudiantes
+  /portal/profesor            Portal de Profesores / Portal de Docentes
+  /portal/administrativo      Portal Administrativo
+  /portal/contabilidad        Portal de Contabilidad
+  /portal/psicologia          Portal de Psicología
+
+  Portales adicionales mencionados:
+  - Portal Académico
+  - Portal Admin
+  - Portal Cursos Técnicos
+  - Portal Estudiante CT (Cursos Técnicos)
+
+────────────────────────────────────────────────────────────────────────────────
+ 1.2 MÓDULOS PRINCIPALES DEL SISTEMA (RUTAS)
+────────────────────────────────────────────────────────────────────────────────
+
+  RUTA                            MÓDULO / DESCRIPCIÓN
+  ─────────────────────────────── ───────────────────────────────────────────
+  /dashboard                      Dashboard / Panel de control
+  /academico                      Módulo Académico
+  /academico/cursos               Cursos académicos
+  /academico/materias             Materias / Mis Materias
+  /academico/calificaciones       Calificaciones y GPA
+  /academico/historial            Historial académico
+  /academico/periodos             Períodos / Cuatrimestres
+  /academico/prematricula         Prematrícula
+  /academias                      Academias
+  /academias/programas            Programas Académicos
+  /academias/materiales           Materiales educativos
+  /administrativo                 Módulo Administrativo
+  /administrativo/personal        Personal administrativo
+  /administrativo/proyectos       Proyectos
+  /administrativo/tareas          Tareas administrativas
+  /expedientes                    Expedientes estudiantiles
+  /patrocinadores                 Patrocinadores
+  /patrocinadores/becas           Becas / Asignación de Becas
+  /contabilidad                   Contabilidad / Módulo Financiero
+  /psicologia                     Psicología / Bienestar estudiantil
+  /calendario                     Calendario Institucional
+  /reportes                       Reportes
+  /configuracion                  Configuración del sistema
+  /comida                         Comida / Servicios alimentarios
+  /sitemap                        Mapa del sitio
+
+────────────────────────────────────────────────────────────────────────────────
+ 1.3 SUB-MÓDULOS Y FUNCIONALIDADES DETALLADAS
+────────────────────────────────────────────────────────────────────────────────
+
+  MÓDULO ACADÉMICO:
+  - Registro y seguimiento de notas de estudiantes
+  - Calificaciones por Período / Cuatrimestre
+  - Registro histórico de calificaciones por estudiante y cuatrimestre
+  - Promedio General / GPA
+  - Promedio por Curso
+  - Promedio por Tipo de Evaluación
+  - Calificaciones por Cuatrimestre
+  - Registro de Notas
+  - Prematrícula de materias
+  - Historial académico
+
+  MÓDULO ADMINISTRATIVO:
+  - Gestión de Personal
+  - Proyectos Activos
+  - Tareas y Proyectos
+  - Tareas Urgentes / Alta Prioridad
+  - Tareas con vencimiento
+  - Tareas Pendientes
+  - Asignación de usuarios
+  - Solicitudes Pendientes
+  - Planificación
+
+  MÓDULO EXPEDIENTES:
+  - Perfil del Estudiante
+  - Historia de vida (Acceso rápido)
+  - Situación Económica
+  - Situación Familiar
+  - Alergias
+  - Salud
+  - Residencia
+  - Religión
+  - Subir foto del estudiante
+  - Subir y escanear documentos
+
+  MÓDULO PATROCINADORES & BECAS:
+  - Registro de Patrocinadores
+  - Patrocinadores Activos
+  - Becas (Asignación de Becas)
+  - Becados Universitarios
+  - Aporte Mensual / Aporte por mes
+  - Patrocinador Vinculado (a estudiante)
+  - Registra el primer patrocinador de la fundación
+
+  MÓDULO CONTABILIDAD / FINANCIERO:
+  - Análisis financiero
+  - Balance Mes
+  - Balance Neto
+  - Registrar Transacción
+  - Servicios Mensuales
+  - Servicios y Reuniones Mensuales
+  - Aporte Mensual Total
+  - Reportes financieros
+  - Reportes fiscales
+  - Sin egresos registrados
+
+  MÓDULO PSICOLOGÍA:
+  - Seguimiento confidencial de bienestar estudiantil
+  - Agendar Cita de Psicología
+  - Agendar Nueva Cita
+  - Próximas Citas
+  - Seguimiento psicológico
+  - Alertas de riesgo
+  - Riesgos detectados
+  - Proceso confidencial
+  - Temas de atención:
+      • Ansiedad o estrés académico
+      • Bajo rendimiento académico
+      • Problemas de adaptación
+
+  MÓDULO ACADEMIAS:
+  - Academias / Programas
+  - Recursos y materiales de las academias
+  - Agregar Material
+  - Sube el primer material educativo
+  - Habitudes (programa de carácter y liderazgo)
+      • Breve Historia de Habitudes
+      • Subir imagen de Habitudes
+
+  MÓDULO CALENDARIO:
+  - Calendario y eventos
+  - Próximos Eventos
+  - Agregar al Calendario
+  - Reunión de Coordinación Docente
+  - Reunión mensual
+
+  MÓDULO REPORTES:
+  - Reportes Visuales
+  - Reportes avanzados
+  - Reportes en Tiempo Real
+  - Reportes financieros
+
+  MÓDULO CONFIGURACIÓN:
+  - Administración de usuarios y roles del sistema
+  - Roles y Permisos del Sistema
+  - Roles Disponibles
+  - Acceso Seguro por Roles
+
+────────────────────────────────────────────────────────────────────────────────
+ 1.4 INTELIGENCIAS ARTIFICIALES (IA) DEL SISTEMA
+────────────────────────────────────────────────────────────────────────────────
+
+  NOMBRE DEL ASISTENTE IA           DESCRIPCIÓN / FUNCIÓN
+  ─────────────────────────────────  ─────────────────────────────────────────
+  Chat IA Interno                    Asistente interno del sistema
+  Asistente IA Estudiantil           IA enfocada en el estudiante
+  Asistente IA Integrado             IA integrada al sistema global
+
+  Todos los asistentes IA están integrados directamente en la plataforma
+  como herramientas de apoyo en los diferentes portales.
+
+────────────────────────────────────────────────────────────────────────────────
+ 1.5 ROLES DEL SISTEMA (CONTROL DE ACCESO POR ROL)
+────────────────────────────────────────────────────────────────────────────────
+
+  ROL                    DESCRIPCIÓN
+  ─────────────────────  ─────────────────────────────────────────────────
+  Super Administrador    Acceso total al sistema / Administración Global
+  Administrador          Administración general del sistema
+  Profesor               Portal de Docentes - gestión académica
+  Estudiante             Portal Estudiantil - acceso personal
+  Psicólogo/a            Portal de Psicología - seguimiento bienestar
+  Contabilidad           Portal de Contabilidad - gestión financiera
+
+────────────────────────────────────────────────────────────────────────────────
+ 1.6 FUNCIONALIDADES TRANSVERSALES
+────────────────────────────────────────────────────────────────────────────────
+
+  - Notificaciones internas ("Se enviará notificación a...")
+  - Anuncios destacados
+  - Cambiar Portal (selección de portal por rol)
+  - Imprimir PDF
+  - Imprimir lista
+  - Subir documento
+  - Cambiar foto / Cambiar imagen
+  - Registrar Inscripción
+  - Registrar Asignación
+  - Sistema activo (monitoreo)
+  - Soporte Técnico
+  - Aviso Importante
+  - Acceso al Sistema (login seguro)
+
+────────────────────────────────────────────────────────────────────────────────
+ 1.7 ESTADÍSTICAS Y KPIs VISIBLES EN DASHBOARD
+────────────────────────────────────────────────────────────────────────────────
+
+  - Becados universitarios (total)
+  - Patrocinadores Activos
+  - Proyectos Activos
+  - Cursos asignados
+  - Inscritos
+  - Participantes
+  - Avance Promedio
+  - Promedio General
+  - Tareas Pendientes
+  - Solicitudes Pendientes
+  - Balance Neto
+  - Aporte Mensual Total
+  - Próximos Eventos
+  - Asistieron reunión
+
+
+════════════════════════════════════════════════════════════════════════════════
+ SECCIÓN 2: GLOBAL EFFECT - SITIO WEB OFICIAL
+ (https://www.globaleffect.org/)
+════════════════════════════════════════════════════════════════════════════════
+
+DESCRIPCIÓN GENERAL
+───────────────────
+Nombre: Global Effect
+Tipo: Organización 501c(3) sin fines de lucro
+Misión: Serves impoverished communities in the Dominican Republic by
+equipping them to transform their socio-economic, physical, and spiritual
+well-being.
+País de operación: República Dominicana
+Enfoque: Transformación holística e integrada (cuerpo, alma y espíritu)
+Distinción: Candid Gold Seal of Transparency 2026
+
+────────────────────────────────────────────────────────────────────────────────
+ 2.1 MENÚ DE NAVEGACIÓN PRINCIPAL
+────────────────────────────────────────────────────────────────────────────────
+
+  SECCIÓN PRINCIPAL         URL
+  ─────────────────────────  ──────────────────────────────────────────────
+  About (Acerca de)          / (homepage)
+  What We Do (Qué hacemos)   /transformation.html
+  Sponsorship (Patrocinio)   /sponsorship.html
+  Mission Trips              /mission-trips.html
+  Donate (Donar)             /donate.html
+
+────────────────────────────────────────────────────────────────────────────────
+ 2.2 SUB-MENÚ: ABOUT (ACERCA DE)
+────────────────────────────────────────────────────────────────────────────────
+
+  PÁGINA                     URL
+  ─────────────────────────  ──────────────────────────────────────────────
+  Our Mission & Vision        /mission.html
+  Statement of Faith          /statementoffaith.html
+  Staff & Board               /staff.html
+  Annual Report               /annual-report.html
+  Contact Us                  /contact.html
+
+────────────────────────────────────────────────────────────────────────────────
+ 2.3 SUB-MENÚ: WHAT WE DO (PROGRAMAS Y MINISTERIOS)
+────────────────────────────────────────────────────────────────────────────────
+
+  PROGRAMA                     URL                          DESCRIPCIÓN
+  ────────────────────────────  ───────────────────────────  ──────────────────────────────────────────────────────────
+  Community Transformation      /transformation.html         Transformación sostenible de comunidades geográficas
+  Juan Bosch Community          /juanbosch.html              Comunidad Juan Bosch (programa de estudiantes)
+  Clean Water Initiative        /cleanwater.html             Iniciativa de agua limpia / filtración de agua
+  Higher Education Program      /highereducation.html        Becas universitarias para jóvenes en pobreza
+  Career Institute              /careerinstitute.html        Instituto de 15 meses con carreras técnicas
+  Student Housing               /studenthousing.html         Residencia estudiantil gratuita y segura
+  Character & Leadership        /character.html              Programas de carácter y liderazgo
+  Leadership Academy            /leadershipacademy.html      Academia de liderazgo (10 meses, ~60 estudiantes/año)
+  Counseling                    /counseling.html             Consejería y cuidado pastoral
+  Short-Term Trips              /missiontrip.html            Viajes misioneros a corto plazo
+  Internships                   /internships.html            Pasantías
+  Microlending                  /microlending.html           Micro-préstamos para emprendimientos
+
+────────────────────────────────────────────────────────────────────────────────
+ 2.4 SUB-MENÚ: MISSION TRIPS (VIAJES MISIONEROS)
+────────────────────────────────────────────────────────────────────────────────
+
+  PÁGINA                       URL
+  ─────────────────────────    ──────────────────────────────────────────────
+  Trip Information             /tripinfo.html
+  Pricing Information          /pricing-information.html
+  Trip Project Options         /trip-project-options.html
+  Sample Itinerary             /sample-itinerary.html
+  Photos & Videos              /photos--videos.html
+  Internships (viajes)         /internships-688110.html
+
+────────────────────────────────────────────────────────────────────────────────
+ 2.5 PROGRAMAS DESCRITOS EN DETALLE (desde homepage)
+────────────────────────────────────────────────────────────────────────────────
+
+  1. COMMUNITY TRANSFORMATION
+     Proyectos catered a áreas geográficas específicas para crear cambio
+     sostenible. Identifican necesidades críticas e implementan programas
+     de transformación comunitaria.
+
+  2. COMMUNITY OUTREACH
+     Trabajo con iglesias locales para ayudar a comunidades. Incluye:
+     filtración de agua, clínicas médicas gratuitas, actividades deportivas
+     para niños, programas extraescolares, conferencias de hombres y mujeres,
+     capacitación de padres.
+
+  3. MICRO-LENDING (MICRO-PRÉSTAMOS)
+     Capacitación + capital financiero para individuos y familias que
+     deseen iniciar negocios autosustentables y romper el ciclo de pobreza.
+
+  4. HIGHER EDUCATION (EDUCACIÓN SUPERIOR)
+     Programa de Becas Universitarias. Jóvenes en pobreza obtienen títulos
+     universitarios mientras son discipulados y desarrollados.
+
+  5. CAREER INSTITUTE (INSTITUTO DE CARRERAS)
+     Programa de 15 meses. Carreras disponibles:
+     - English as a Second Language (ESL)
+     - Executive Secretary
+     - Bookkeeping (Contabilidad)
+     - Computer Technician
+     Incluye: desarrollo de liderazgo, carácter, discipulado y cuidado espiritual.
+
+  6. STUDENT HOUSING (RESIDENCIA ESTUDIANTIL)
+     Para estudiantes del programa de educación superior en condiciones
+     abusivas o poco saludables. Alojamiento completamente gratuito y seguro
+     mientras estudian.
+
+  7. PUBLIC SCHOOL PROGRAMS (PROGRAMAS EN ESCUELAS PÚBLICAS)
+     Programa "Habitudes":
+     - 13 escuelas secundarias públicas
+     - 191 salones de clases
+     - Más de 4,800 estudiantes por semana
+     - 2 sesiones semanales en el Centro de Detención Juvenil (60+ reclusos)
+     - Reunión anual con más de 1,500 estudiantes universitarios
+     - Enseña: carácter, liderazgo y valores bíblicos
+
+  8. LEADERSHIP ACADEMY (ACADEMIA DE LIDERAZGO)
+     - ~60 estudiantes seleccionados de escuelas secundarias locales
+     - Criterio: alto GPA pero pobreza severa
+     - Programa de 10 meses
+     - Enfoque: desarrollo de carácter y liderazgo desde perspectiva bíblica
+
+  9. COUNSELING & PASTORAL CARE (CONSEJERÍA Y CUIDADO PASTORAL)
+     Psicólogos, consejeros y pastores atienden necesidades psicosociales
+     de estudiantes y familias que viven en situaciones de pobreza, abuso
+     o dinámicas familiares difíciles.
+
+  10. PASTOR TRAINING (CAPACITACIÓN DE PASTORES)
+      Desarrollo de pastores y líderes eclesiásticos mediante enseñanza
+      de la Palabra y discipulado para servir sus comunidades.
+
+  11. SHORT-TERM IMPACT TRIPS (VIAJES MISIONEROS A CORTO PLAZO)
+      Oportunidades para iglesias, grupos y familias de participar en
+      proyectos de misión junto al ministerio de Global Effect.
+
+────────────────────────────────────────────────────────────────────────────────
+ 2.6 REDES SOCIALES Y CONTACTO
+────────────────────────────────────────────────────────────────────────────────
+
+  - Email: (protegido contra spam en el sitio)
+  - Facebook: https://www.facebook.com/GlobalEffect.org
+  - Instagram: https://instagram.com/globaleffect
+  - YouTube: https://www.youtube.com/channel/UCfp5zKJSkpuTv4xor47uWgg
+
+────────────────────────────────────────────────────────────────────────────────
+ 2.7 INFORMACIÓN LEGAL Y DE TRANSPARENCIA
+────────────────────────────────────────────────────────────────────────────────
+
+  - Tipo: 501(C)(3) Not for Profit
+  - País: Estados Unidos (donaciones deducibles de impuestos en EE.UU.)
+  - Copyright: ©2026 Global Effect
+  - Certificación: Candid Gold Seal of Transparency (Sello Dorado de
+    Transparencia 2026) - demuestra compromiso con rendición de cuentas
+    financiera
+
+
+════════════════════════════════════════════════════════════════════════════════
+ SECCIÓN 3: RESUMEN EJECUTIVO DE INTEGRACIÓN
+════════════════════════════════════════════════════════════════════════════════
+
+  La plataforma Global Effect Nexus es el sistema de gestión interno
+  (backend operativo) que da soporte a los programas mostrados en el
+  sitio web globaleffect.org.
+
+  CORRESPONDENCIA PROGRAMAS ↔ MÓDULOS NEXUS:
+  ────────────────────────────────────────────
+  Higher Education Program  →  Módulo Académico + Expedientes + Becas
+  Career Institute          →  Módulo Academias + Cursos Técnicos
+  Student Housing           →  Módulo Expedientes (Residencia)
+  Leadership Academy        →  Módulo Academias + Programas de Liderazgo
+  Counseling                →  Módulo Psicología
+  Sponsorship               →  Módulo Patrocinadores y Becas
+  Micro-lending             →  Módulo Contabilidad (Servicios)
+  Community Programs        →  Módulo Administrativo + Proyectos
+
+  CONTEO TOTAL:
+  ────────────────────────────────────────────
+  Portales del sistema:    5 portales diferenciados por rol
+  Módulos principales:     15 módulos con rutas únicas
+  Sub-módulos:             40+ funcionalidades detalladas
+  Asistentes IA:           3 asistentes de inteligencia artificial
+  Roles de usuario:        6 roles con acceso diferenciado
+  Programas en globaleffect.org: 11 programas documentados
+  Páginas web (globaleffect.org): 20+ páginas navegables
+
+================================================================================
+  FIN DEL INVENTARIO
+  Documento generado automáticamente mediante web scraping + análisis de JS
+  Para actualizaciones, revisar ambas URLs fuente indicadas arriba.
+================================================================================

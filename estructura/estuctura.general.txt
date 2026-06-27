@@ -1,0 +1,193 @@
+================================================================
+  GLOBAL EFFECT NEXUS - ESTRUCTURA COMPLETA DEL PROYECTO
+  Fecha: 2026-06-22
+================================================================
+
+ESTADÍSTICAS:
+  • 135 archivos
+  • 18 carpetas
+
+ESTRUCTURA:
+
+📁 base44/
+  📁 entities/                          ← Esquemas de la base de datos
+    📄 Academia.jsonc
+    📄 Calificacion.jsonc
+    📄 CitaPsicologia.jsonc
+    📄 Curso.jsonc
+    📄 Estudiante.jsonc
+    📄 Evento.jsonc
+    📄 HistorialCalificacion.jsonc
+    📄 InscripcionComida.jsonc
+    📄 Materia.jsonc
+    📄 Material.jsonc
+    📄 Patrocinador.jsonc
+    📄 Proyecto.jsonc
+    📄 RegistroServicio.jsonc
+    📄 Tarea.jsonc
+    📄 Transaccion.jsonc
+  📄 .app.jsonc
+  📄 config.jsonc
+
+📁 src/
+  📁 api/
+    📄 base44Client.js                  ← Cliente SDK de Base44 (pre-inicializado)
+
+  📁 components/
+    📁 expedientes/
+      📄 ExpedienteDetalle.jsx          ← Vista detalle de expediente (tabbed modal)
+      📄 FormFamiliar.jsx               ← Formulario de datos familiares
+      📄 FormSeguimiento.jsx            ← Formulario de seguimiento administrativo
+
+    📁 layout/
+      📄 AppLayout.jsx                 ← Layout principal con <Outlet/>
+      📄 Sidebar.jsx                   ← Navegación lateral por rol
+      📄 TopBar.jsx                    ← Barra superior
+
+    📁 shared/
+      📄 BuscadorEstudiantes.jsx        ← Buscador con dropdown de estudiantes
+      📄 EmptyState.jsx                 ← Estado vacío reutilizable
+      📄 PageHeader.jsx                ← Encabezado de página estándar
+      📄 StatCard.jsx                  ← Tarjeta de estadística
+
+    📁 ui/                              ← Componentes shadcn/ui (40 componentes)
+      📄 accordion.jsx
+      📄 alert-dialog.jsx
+      📄 alert.jsx
+      📄 aspect-ratio.jsx
+      📄 avatar.jsx
+      📄 badge.jsx
+      📄 breadcrumb.jsx
+      📄 button.jsx
+      📄 calendar.jsx
+      📄 card.jsx
+      📄 carousel.jsx
+      📄 chart.jsx
+      📄 checkbox.jsx
+      📄 collapsible.jsx
+      📄 command.jsx
+      📄 context-menu.jsx
+      📄 dialog.jsx
+      📄 drawer.jsx
+      📄 dropdown-menu.jsx
+      📄 form.jsx
+      📄 hover-card.jsx
+      📄 input-otp.jsx
+      📄 input.jsx
+      📄 label.jsx
+      📄 menubar.jsx
+      📄 navigation-menu.jsx
+      📄 pagination.jsx
+      📄 popover.jsx
+      📄 progress.jsx
+      📄 radio-group.jsx
+      📄 resizable.jsx
+      📄 scroll-area.jsx
+      📄 select.jsx
+      📄 separator.jsx
+      📄 sheet.jsx
+      📄 sidebar.jsx
+      📄 skeleton.jsx
+      📄 slider.jsx
+      📄 sonner.jsx
+      📄 switch.jsx
+      📄 table.jsx
+      📄 tabs.jsx
+      📄 textarea.jsx
+      📄 toast.jsx
+      📄 toaster.jsx
+      📄 toggle-group.jsx
+      📄 toggle.jsx
+      📄 tooltip.jsx
+      📄 use-toast.jsx
+
+    📄 ProtectedRoute.jsx              ← Ruta protegida por autenticación
+    📄 UserNotRegisteredError.jsx       ← Pantalla de usuario no registrado
+
+  📁 hooks/
+    📄 use-mobile.jsx                   ← Hook para detección móvil
+
+  📁 lib/
+    📄 app-params.js                    ← Parámetros de la app
+    📄 AuthContext.jsx                  ← Contexto de autenticación
+    📄 PageNotFound.jsx                 ← Página 404
+    📄 query-client.js                  ← Configuración de React Query
+    📄 RoleContext.jsx                  ← Contexto de roles (admin/user/estudiante/etc.)
+    📄 utils.js                         ← Utilidades (cn, etc.)
+
+  📁 pages/
+    📁 academias/
+      📄 Materiales.jsx                ← Gestión de materiales educativos
+      📄 Programas.jsx                  ← Gestión de academias/programas
+
+    📁 academico/
+      📄 Calificaciones.jsx             ← Registro de calificaciones
+      📄 Cursos.jsx                     ← Gestión de cursos técnicos
+      📄 HistorialAcademico.jsx         ← Historial académico por estudiante
+      📄 Materias.jsx                   ← Gestión de materias (CRUD completo)
+      📄 Periodos.jsx                   ← Gestión de períodos académicos
+      📄 Prematricula.jsx              ← Pre-matrícula de estudiantes
+
+    📁 administrativo/
+      📄 GestionPersonal.jsx            ← Gestión de personal
+      📄 Proyectos.jsx                  ← Gestión de proyectos sociales
+      📄 Tareas.jsx                     ← Gestión de tareas (Kanban + email + calendario)
+
+    📁 patrocinadores/
+      📄 AsignacionBecas.jsx            ← Asignación de beas a estudiantes
+
+    📁 portales/                        ← Dashboards por rol
+      📄 PortalAdministrativo.jsx       ← Portal administrativo
+      📄 PortalContabilidad.jsx         ← Portal de contabilidad
+      📄 PortalCursosTecnicos.jsx        ← Portal de cursos técnicos
+      📄 PortalEstudiante.jsx           ← Portal del estudiante
+      📄 PortalEstudianteCT.jsx         ← Portal estudiante (cursos técnicos)
+      📄 PortalProfesor.jsx             ← Portal del profesor
+      📄 PortalPsicologia.jsx           ← Portal de psicología
+
+    📄 Calendario.jsx                   ← Calendario de eventos
+    📄 ChatIA.jsx                       ← Chat con IA (administrativo)
+    📄 ChatIAEstudiantil.jsx            ← Chat con IA (estudiantil)
+    📄 CitaEstudiante.jsx               ← Solicitud de cita psicológica
+    📄 Configuracion.jsx                ← Configuración del sistema
+    📄 Contabilidad.jsx                 ← Módulo de contabilidad
+    📄 Dashboard.jsx                    ← Dashboard principal
+    📄 Expedientes.jsx                  ← Gestión de expedientes estudiantiles (CRUD + OCR)
+    📄 Inicio.jsx                       ← Landing page pública
+    📄 InscripcionComida.jsx            ← Inscripción a comida (pública)
+    📄 Patrocinadores.jsx               ← Gestión de patrocinadores
+    📄 Psicologia.jsx                   ← Módulo de psicología
+    📄 Reportes.jsx                     ← Reportes generales
+    📄 ServiciosMensuales.jsx           ← Registro de servicios mensuales
+    📄 Sitemap.jsx                      ← Mapa del sitio
+
+  📁 utils/
+    📄 index.ts
+
+  📄 App.jsx                           ← Router principal (todas las rutas)
+  📄 index.css                         ← Design tokens (colores, fuentes, tema)
+  📄 main.jsx                          ← Punto de entrada de React
+
+📄 .gitignore
+📄 components.json                     ← Configuración de shadcn/ui
+📄 eslint.config.js
+📄 index.html                          ← HTML raíz (meta tags, favicon)
+📄 jsconfig.json
+📄 package-lock.json
+📄 package.json
+📄 postcss.config.js
+📄 README.md
+📄 tailwind.config.js                  ← Configuración Tailwind + design tokens
+
+================================================================
+  TECNOLOGÍAS PRINCIPALES:
+  • React 18 + Vite
+  • Tailwind CSS + shadcn/ui
+  • React Router DOM
+  • TanStack React Query
+  • Base44 BaaS (auth, entities, integrations)
+  • Lucide React (iconos)
+  • Recharts (gráficos)
+  • Framer Motion (animaciones)
+  • React Hook Form + Zod (formularios)
+================================================================
