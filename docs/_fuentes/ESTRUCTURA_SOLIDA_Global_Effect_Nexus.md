@@ -1,6 +1,6 @@
 # Global Effect Nexus — Estructura sólida del proyecto
 
-Documento de arquitectura para reconstruir el sistema **desde los cimientos** en stack propio (no base44), apto para tesis. Toma como insumo la maqueta de base44 (15 entidades + frontend React) y la convierte en una base relacional normalizada con SQL propio, capa de identidad/roles, internacionalización (i18n) y una estructura de carpetas mantenible.
+Documento de arquitectura para construir el sistema **desde los cimientos** en stack propio, apto para tesis. Toma como insumo la maqueta inicial del sistema (15 entidades + frontend React) y la convierte en una base relacional normalizada con SQL propio, capa de identidad/roles, internacionalización (i18n) y una estructura de carpetas mantenible.
 
 Stack de datos: **PostgreSQL + `pg` (node-postgres)** — sin ORM. El SQL se escribe a mano, lo que da control total sobre tablas, índices y constraints, y alimenta directamente las entregas posteriores (Diagrama ER, Diccionario de Datos, Reglas de Negocio).
 
@@ -10,22 +10,22 @@ Fecha: 2026-06-22
 
 ## 1. Stack tecnológico 
 
-| Capa | base44 (maqueta) | Stack propio (tesis) |
-|------|------------------|----------------------|
+| Capa | Prototipo inicial | Stack propio (tesis) |
+|------|-------------------|----------------------|
 | Framework | React 18 + Vite (SPA) | **Next.js (App Router) + TypeScript** |
 | UI | Tailwind + shadcn/ui | Tailwind + shadcn/ui *(se reutiliza)* |
 | Formularios | React Hook Form + Zod | React Hook Form + Zod *(se reutiliza)* |
 | Gráficos | Recharts | Recharts *(se reutiliza)* |
 | Datos cliente | TanStack React Query | TanStack Query + Server Actions |
-| Base de datos | Entidades base44 (BaaS) | **PostgreSQL + `pg` (node-postgres), SQL a mano** |
+| Base de datos | Entidades del diseño preliminar | **PostgreSQL + `pg` (node-postgres), SQL a mano** |
 | Migraciones | — (gestionado) | `node-pg-migrate` (o runner de `.sql` numerados) |
 | Validación / tipos | — | Zod en el borde + interfaces TypeScript por entidad |
-| Autenticación | `User` built-in | **Auth.js (NextAuth v5)** credenciales + JWT, 6 roles |
-| Almacenamiento | URLs gestionadas por base44 | Storage propio (S3/UploadThing) + tabla `documento` |
+| Autenticación | Usuario simple (admin/user) | **Auth.js (NextAuth v5)** credenciales + JWT, 6 roles |
+| Almacenamiento | URLs gestionadas por el prototipo | Storage propio (S3/UploadThing) + tabla `documento` |
 | Idiomas | Solo es-ES | **next-intl** (es / en) |
-| IA | Integración base44 | Capa propia de servicios IA |
+| IA | Integración del prototipo | Capa propia de servicios IA |
 
-> Regla de oro de la migración: **conservar el front (shadcn, RHF, Zod, Recharts) y reemplazar el BaaS** por PostgreSQL + `pg` + Auth.js + next-intl.
+> Regla de oro del proyecto: **conservar el front (shadcn, RHF, Zod, Recharts) y consolidar la capa de datos** sobre PostgreSQL + `pg` + Auth.js + next-intl.
 
 ### Por qué `pg` y no un ORM (para la defensa)
 
@@ -35,12 +35,12 @@ Fecha: 2026-06-22
 
 ---
 
-## 2. Lo que base44 te daba gratis y ahora debes construir
+## 2. Lo que el prototipo resolvía de forma básica y ahora se construye a medida
 
-1. **Identidad y acceso (RBAC).** base44 solo tenía `admin/user`. Tu sistema necesita 6 roles reales y permisos granulares por módulo.
+1. **Identidad y acceso (RBAC).** El prototipo solo tenía `admin/user`. Tu sistema necesita 6 roles reales y permisos granulares por módulo.
 2. **Gestión de usuarios.** Alta, invitación, activación/desactivación, asociación usuario↔estudiante / usuario↔psicólogo.
-3. **Almacenamiento de archivos.** Los campos `foto_url`, `expediente_url`, `archivo_url`, `imagen_habitudes_url` apuntaban a storage de base44. Hay que montar storage propio + tabla `documento`.
-4. **Campos de auditoría.** base44 inyectaba `id`, `created_date`, `updated_date`, `created_by_id` automáticamente. Aquí se declaran en el DDL; `updated_at` se mantiene con un trigger (§3.2) y las acciones sensibles van a `audit_log`.
+3. **Almacenamiento de archivos.** Los campos `foto_url`, `expediente_url`, `archivo_url`, `imagen_habitudes_url` apuntaban a un storage externo del prototipo. Hay que montar storage propio + tabla `documento`.
+4. **Campos de auditoría.** En el prototipo `id`, `created_date`, `updated_date`, `created_by_id` se inyectaban automáticamente; ahora se declaran explícitamente en el DDL. `updated_at` se mantiene con un trigger (§3.2) y las acciones sensibles van a `audit_log`.
 5. **Notificaciones internas.** El inventario las menciona ("Se enviará notificación a…"); requieren tabla `notificacion`.
 6. **i18n.** Textos en varios idiomas (es/en) — relevante porque los patrocinadores son internacionales.
 
@@ -50,7 +50,7 @@ Fecha: 2026-06-22
 
 ### 3.1 Decisiones de normalización
 
-- **Eliminar duplicación `id` + `nombre`.** Donde base44 guardaba `estudiante_id` *y* `estudiante_nombre`, se deja **solo la FK** (`estudiante_id`); el nombre se obtiene por `JOIN`. Igual para `curso_*`, `patrocinador_*`, `academia_*`.
+- **Eliminar duplicación `id` + `nombre`.** Donde el prototipo guardaba `estudiante_id` *y* `estudiante_nombre`, se deja **solo la FK** (`estudiante_id`); el nombre se obtiene por `JOIN`. Igual para `curso_*`, `patrocinador_*`, `academia_*`.
 - **`tarea.proyecto` (por nombre) → `proyecto_id` (FK).**
 - **Partir `estudiante` (75 campos)** en tablas hijas: `familiar`, `perfil_vivienda`, `perfil_salud`, `perfil_socioeconomico`.
 - **Sacar `observaciones_psicologia` del perfil** y llevarlo al dominio Psicología (`nota_psicologica`), con acceso restringido a rol Psicólogo/Súper Admin.
@@ -154,7 +154,7 @@ CREATE TABLE familiar (
 CREATE INDEX idx_familiar_estudiante ON familiar(estudiante_id);
 ```
 
-Las 20+ columnas `padre_*`, `madre_*`, `tutor_*`, `madrastra_*`, `padrastro_*` de base44 colapsan en **una sola tabla `familiar`** con un enum `parentesco`. Misma idea, como tablas hijas 1:1 (`estudiante_id UNIQUE`):
+Las 20+ columnas `padre_*`, `madre_*`, `tutor_*`, `madrastra_*`, `padrastro_*` del diseño preliminar colapsan en **una sola tabla `familiar`** con un enum `parentesco`. Misma idea, como tablas hijas 1:1 (`estudiante_id UNIQUE`):
 
 - `perfil_vivienda`: con_quien_vive, casa_propia, tipo_casa, bano_dentro, habitaciones, camas, quienes_duermen_cama, direccion, comunidad, ciudad, pais.
 - `perfil_salud`: enfermedades, alergias, contacto_emergencia_nombre, contacto_emergencia_telefono.
@@ -270,7 +270,7 @@ global-effect-nexus/
 └─ package.json
 ```
 
-Mapeo directo: cada `pages/*.jsx` de base44 se vuelve una ruta dentro de `(portal)`; los `PortalX.jsx` se vuelven el `dashboard` que cambia según el rol; los `components/ui` de shadcn se copian tal cual.
+Mapeo directo: cada `pages/*.jsx` del prototipo inicial se vuelve una ruta dentro de `(portal)`; los `PortalX.jsx` se vuelven el `dashboard` que cambia según el rol; los `components/ui` de shadcn se copian tal cual.
 
 ### 5.1 Pool de conexiones
 
@@ -349,7 +349,7 @@ erDiagram
 
 ## 7. Impacto en el plan de 14 sprints
 
-"Usuarios y todo eso" no era gratis: al salir de base44, las fases de fundación crecen.
+"Usuarios y todo eso" no era trivial: al construir la capa propia de identidad y datos, las fases de fundación crecen.
 
 - **Sprint 0 — Fundaciones:** setup Next.js + TS, conexión `pg` a PostgreSQL, runner de migraciones (`node-pg-migrate`), **diseño del ERD completo**, DDL de identidad (`rol`/`permiso`/`usuario`), scaffolding de **i18n (next-intl)**, design tokens + shadcn.
 - **Sprint 1 — Identidad y acceso:** Auth.js (credenciales + JWT), **RBAC real** (6 roles + permisos por módulo), pantalla de **Configuración** (gestión de usuarios y roles), storage de archivos + tabla `documento`, `audit_log`.

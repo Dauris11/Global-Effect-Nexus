@@ -2,14 +2,14 @@
    - GLOBAL EFFECT NEXUS & GLOBALEFFECT.ORG
   Fecha de extracción: 15 de junio de 2026
   Fuentes:
-    [1] https://rational-global-nexus-core.base44.app
+    [1] Prototipo inicial de Global Effect Nexus Core
     [2] https://www.globaleffect.org/
 ================================================================================
 
 
 ════════════════════════════════════════════════════════════════════════════════
  SECCIÓN 1: GLOBAL EFFECT NEXUS CORE
- (https://rational-global-nexus-core.base44.app)
+ (Prototipo inicial del sistema)
 ════════════════════════════════════════════════════════════════════════════════
 
 DESCRIPCIÓN GENERAL

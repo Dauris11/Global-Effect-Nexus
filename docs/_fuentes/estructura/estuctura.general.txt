@@ -9,8 +9,7 @@ ESTADÍSTICAS:
 
 ESTRUCTURA:
 
-📁 base44/
-  📁 entities/                          ← Esquemas de la base de datos
+📁 entities/                          ← Esquemas de la base de datos (modelo de datos inicial)
     📄 Academia.jsonc
     📄 Calificacion.jsonc
     📄 CitaPsicologia.jsonc
@@ -31,7 +30,7 @@ ESTRUCTURA:
 
 📁 src/
   📁 api/
-    📄 base44Client.js                  ← Cliente SDK de Base44 (pre-inicializado)
+    📄 dataClient.js                    ← Cliente de datos (pre-inicializado)
 
   📁 components/
     📁 expedientes/
@@ -185,7 +184,7 @@ ESTRUCTURA:
   • Tailwind CSS + shadcn/ui
   • React Router DOM
   • TanStack React Query
-  • Base44 BaaS (auth, entities, integrations)
+  • Capa de datos propia (auth, entities, integrations)
   • Lucide React (iconos)
   • Recharts (gráficos)
   • Framer Motion (animaciones)

@@ -1,0 +1,20 @@
+# 03 · Modelo de Datos — Global Effect Nexus
+
+Documentación del modelo de datos relacional (PostgreSQL 17 / Supabase), desplegado y verificado.
+
+## Contenido
+
+| Documento | Descripción |
+|---|---|
+| [Diagrama Entidad-Relación](diagrama-entidad-relacion.md) | ERD en Mermaid: diagrama global + por dominio, con atributos y cardinalidades. |
+| [Diccionario de Datos](diccionario-de-datos.md) | Definición completa de las 36 tablas, columnas, tipos, constraints e índices. |
+| [Normalización y Escalabilidad](normalizacion-y-escalabilidad.md) | Justificación SMART, formas normales (1NF–3NF), escalabilidad y soporte de IA. |
+
+## Resumen
+
+- **36 tablas** en 11 dominios funcionales.
+- **7 tipos ENUM**, **44 claves foráneas**, **88 índices**, **20 triggers** de auditoría de fecha.
+- **Extensiones:** `pgcrypto` (UUID), `citext` (emails), `pg_trgm` (búsqueda difusa), `vector`/pgvector (IA/RAG).
+- **Normalizado a 3NF** con expediente estudiantil descompuesto y aislamiento de datos confidenciales de psicología.
+
+El DDL fuente son las migraciones en [`db/migrations/`](../../db/migrations/); la guía de despliegue está en [`db/README.md`](../../db/README.md).

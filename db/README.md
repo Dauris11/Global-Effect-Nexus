@@ -1,0 +1,69 @@
+# Base de datos — Global Effect Nexus
+
+Base de datos relacional del sistema, en **PostgreSQL 17** (desplegada en **Supabase**). SQL escrito a mano (sin ORM), en migraciones `.sql` numeradas por dominio.
+
+## Estructura
+
+```
+db/
+├─ migrations/
+│  ├─ 0001_extensiones_y_utilidades.sql   # pgcrypto, citext, pg_trgm, vector + función updated_at
+│  ├─ 0002_identidad_rbac.sql             # rol, permiso, rol_permiso, usuario
+│  ├─ 0003_transversal.sql                # documento, notificacion, audit_log
+│  ├─ 0004_patrocinio.sql                 # patrocinador
+│  ├─ 0005_estudiantes.sql                # estudiante + perfiles + familiar + asignacion_beca
+│  ├─ 0006_academico.sql                  # periodo, materia, curso, inscripcion, calificacion, historial
+│  ├─ 0007_academias.sql                  # academia, material
+│  ├─ 0008_psicologia.sql                 # cita_psicologia, nota_psicologica, perfil_psicologico
+│  ├─ 0009_operaciones.sql                # proyecto, tarea, tarea_asignado, evento, registro_servicio
+│  ├─ 0010_bienestar.sql                  # inscripcion_comida
+│  ├─ 0011_finanzas.sql                   # transaccion
+│  ├─ 0012_ia.sql                         # conversacion_ia, mensaje_ia, extraccion_ocr, fragmento_conocimiento (pgvector)
+│  └─ 0013_extensibilidad_metadata.sql    # columna metadata JSONB en entidades principales
+├─ seed.sql                               # roles, permisos, admin maestro y datos de prueba
+└─ README.md
+```
+
+## Estado actual
+
+✅ **Desplegada y verificada** en Supabase: 36 tablas, 7 enums, 20 triggers, 88 índices, 44 claves foráneas. Extensiones activas: `pgcrypto`, `citext`, `pg_trgm`, `vector 0.8.0`.
+
+## Despliegue
+
+### Opción A — con `psql` (recomendada)
+
+Requiere las variables de entorno de `.env.local` (ver `.env.example`). Las migraciones se aplican en orden y luego el seed:
+
+```bash
+set -a; source .env.local; set +a       # carga DATABASE_URL / PG*
+for f in db/migrations/00*.sql; do
+  echo ">>> $f"; psql -v ON_ERROR_STOP=1 -f "$f" || break
+done
+psql -v ON_ERROR_STOP=1 -f db/seed.sql
+```
+
+### Opción B — SQL Editor de Supabase
+
+1. Abre **SQL Editor** en la consola de Supabase.
+2. Ejecuta el contenido de cada archivo `db/migrations/0001…0012` **en orden**.
+3. Ejecuta `db/seed.sql`.
+
+Ambas opciones son idempotentes en lo posible (extensiones `IF NOT EXISTS`, seed con `ON CONFLICT`). Las migraciones crean objetos nuevos; para re-crear desde cero, elimina el esquema `public` antes.
+
+## Credenciales semilla
+
+- **Email:** `admin@globaleffect.org`
+- **Password:** `admin123` (hash bcrypt en el seed — cámbialo en producción)
+- **Rol:** `super_admin`
+
+## Notas técnicas
+
+- **Auditoría de fecha:** la función `set_updated_at()` mantiene `updated_at` vía trigger; no hace falta setearla en los `UPDATE`.
+- **Privacidad de psicología:** `nota_psicologica` y `perfil_psicologico` están aisladas del expediente general; nunca hacer `JOIN` a ellas sin el permiso `psicologia.leer`.
+- **IA / RAG:** `fragmento_conocimiento.embedding` es `vector(1536)` con índice HNSW (coseno). Ajusta la dimensión al modelo de embeddings del servicio de IA.
+- **Verificación rápida:**
+  ```sql
+  SELECT count(*) FROM pg_tables WHERE schemaname='public';           -- 36
+  SELECT extname, extversion FROM pg_extension
+   WHERE extname IN ('pgcrypto','citext','pg_trgm','vector');
+  ```
