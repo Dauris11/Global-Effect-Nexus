@@ -16,6 +16,7 @@ Toda la documentación del proyecto vive en esta carpeta, organizada para las en
 
 ### 03 · Modelo de datos
 - [Diagrama Entidad-Relación](03-modelo-de-datos/diagrama-entidad-relacion.md) — ERD Mermaid (global + por dominio) y matriz de relaciones.
+- [Diagrama de Flujo de Datos (DFD)](03-modelo-de-datos/diagrama-flujo-datos.md) — contexto y procesos (Cuarta Entrega).
 - [Diccionario de Datos](03-modelo-de-datos/diccionario-de-datos.md) — 36 tablas, 333 columnas, generado desde la BD real.
 - [Normalización y Escalabilidad](03-modelo-de-datos/normalizacion-y-escalabilidad.md) — SMART, 1NF–3NF, escalabilidad e IA.
 

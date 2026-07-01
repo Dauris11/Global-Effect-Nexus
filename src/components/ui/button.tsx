@@ -1,3 +1,9 @@
+/**
+ * Componente Button (shadcn/ui). Botón accesible con variantes de estilo
+ * (default, destructive, outline, secondary, ghost, link) y tamaños,
+ * gestionadas con class-variance-authority. `asChild` permite renderizar
+ * otro elemento (p. ej. un enlace) conservando los estilos.
+ */
 import * as React from "react";
 import { Slot } from "@radix-ui/react-slot";
 import { cva, type VariantProps } from "class-variance-authority";

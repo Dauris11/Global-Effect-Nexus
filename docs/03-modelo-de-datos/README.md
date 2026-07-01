@@ -7,6 +7,7 @@ Documentación del modelo de datos relacional (PostgreSQL 17 / Supabase), desple
 | Documento | Descripción |
 |---|---|
 | [Diagrama Entidad-Relación](diagrama-entidad-relacion.md) | ERD en Mermaid: diagrama global + por dominio, con atributos y cardinalidades. |
+| [Diagrama de Flujo de Datos (DFD)](diagrama-flujo-datos.md) | Contexto (Nivel 0) y procesos (Nivel 1): entidades externas, procesos y almacenes. |
 | [Diccionario de Datos](diccionario-de-datos.md) | Definición completa de las 36 tablas, columnas, tipos, constraints e índices. |
 | [Normalización y Escalabilidad](normalizacion-y-escalabilidad.md) | Justificación SMART, formas normales (1NF–3NF), escalabilidad y soporte de IA. |
 

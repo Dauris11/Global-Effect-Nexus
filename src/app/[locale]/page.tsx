@@ -1,3 +1,8 @@
+/**
+ * Página de inicio (placeholder del Sprint 0). Muestra el título y estado
+ * del proyecto usando textos traducidos. Se reemplazará por la landing
+ * pública y los portales por rol en sprints posteriores.
+ */
 import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 

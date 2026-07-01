@@ -1,3 +1,8 @@
+/**
+ * Layout raíz por idioma. Envuelve toda el área localizada (/es, /en),
+ * valida el locale de la ruta y provee las traducciones (next-intl) a los
+ * componentes cliente. Define <html>/<body> y los estilos globales.
+ */
 import type { Metadata } from "next";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";

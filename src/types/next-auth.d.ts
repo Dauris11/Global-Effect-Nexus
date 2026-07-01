@@ -1,3 +1,7 @@
+/**
+ * Extensiones de tipos de Auth.js: añade el campo `rol` a User, Session y
+ * JWT para que el rol del usuario esté tipado en toda la aplicación (RBAC).
+ */
 import type { DefaultSession } from "next-auth";
 
 declare module "next-auth" {
