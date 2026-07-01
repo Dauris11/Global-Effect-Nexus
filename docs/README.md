@@ -1,24 +1,32 @@
 # Documentación — Global Effect Nexus
 
 Plataforma integral de gestión académica y administrativa de la **Fundación Global Effect**.
-Toda la documentación del proyecto vive en esta carpeta, organizada para las entregas y para guiar el desarrollo por **sprints**.
+Toda la documentación del proyecto está centralizada en esta carpeta: **un archivo por tema**, sin duplicados.
 
 ## Índice
 
 | # | Documento | Contenido |
 |---|---|---|
-| 01 | [Visión y Alcance](01-vision-y-alcance.md) | Propósito, stack, roles, módulos y estado del proyecto. |
+| 01 | [Visión y Alcance](01-vision-y-alcance.md) | Propósito, stack, roles, alcance y estado del proyecto. |
 | 02 | [Arquitectura Técnica](02-arquitectura-tecnica.md) | Capas, estructura de carpetas y decisiones de arquitectura. |
-| 03 | [Modelo de Datos](03-modelo-de-datos/) | ERD, diccionario de datos y normalización/escalabilidad. |
-| 04 | [Plan de Trabajo](04-plan-de-trabajo.md) | Cronograma general y próximos pasos. |
-| 05 | [Backlog de Sprints](05-sprints/README.md) | Los 14 sprints con sus tareas (estado por sprint). |
-| — | [`_fuentes/`](_fuentes/) | Documentos fuente originales (módulos, planes, inventarios, entregas). |
+| 03 | [Módulos Funcionales](03-modulos-funcionales.md) | Catálogo de los 27 módulos, portales y flujos automatizados. |
+| 04 | [Modelo de Datos](04-modelo-de-datos/) | ERD, DFD, diccionario de datos y normalización. |
+| 05 | [Plan de Trabajo](05-plan-de-trabajo.md) | Cronograma, próximos pasos y backlog de los 14 sprints. |
+| 06 | [Plan de Entregas](06-plan-de-entregas.md) | Guía para producir las entregas de la tesis (E2–E6). |
 
-### 03 · Modelo de datos
-- [Diagrama Entidad-Relación](03-modelo-de-datos/diagrama-entidad-relacion.md) — ERD Mermaid (global + por dominio) y matriz de relaciones.
-- [Diagrama de Flujo de Datos (DFD)](03-modelo-de-datos/diagrama-flujo-datos.md) — contexto y procesos (Cuarta Entrega).
-- [Diccionario de Datos](03-modelo-de-datos/diccionario-de-datos.md) — 36 tablas, 333 columnas, generado desde la BD real.
-- [Normalización y Escalabilidad](03-modelo-de-datos/normalizacion-y-escalabilidad.md) — SMART, 1NF–3NF, escalabilidad e IA.
+### 04 · Modelo de datos
+- [Diagrama Entidad-Relación](04-modelo-de-datos/diagrama-entidad-relacion.md) — ERD Mermaid (global + por dominio) y matriz de relaciones.
+- [Diagrama de Flujo de Datos (DFD)](04-modelo-de-datos/diagrama-flujo-datos.md) — contexto y procesos (Cuarta Entrega).
+- [Diccionario de Datos](04-modelo-de-datos/diccionario-de-datos.md) — 36 tablas, 333 columnas, generado desde la BD real.
+- [Normalización y Escalabilidad](04-modelo-de-datos/normalizacion-y-escalabilidad.md) — SMART, 1NF–3NF, escalabilidad e IA.
+- Formatos de diagrama: [`esquema.dbml`](04-modelo-de-datos/esquema.dbml) (dbdiagram.io) · [`diagrama-flujo-datos.drawio`](04-modelo-de-datos/diagrama-flujo-datos.drawio) (draw.io).
+
+## Otras carpetas
+
+| Carpeta | Contenido |
+|---|---|
+| [`entregables/`](entregables/) | Documentos formales de la tesis: guía de entregas, primera entrega, análisis académico, plan de entregas (PDF). |
+| [`fuentes-datos/`](fuentes-datos/) | Datos crudos de origen (planificación de sprints en CSV). |
 
 ## Artefactos de base de datos (código)
 
@@ -31,20 +39,11 @@ Toda la documentación del proyecto vive en esta carpeta, organizada para las en
 
 ## Estado del proyecto (2026-07-01)
 
-- ✅ **S0–S3 (Base de datos):** diseñada, normalizada (1NF–3NF), desplegada y verificada en Supabase — 36 tablas, RBAC, pgvector para IA.
-- ✅ **Documentación de cimientos** completa (visión, arquitectura, ERD, diccionario, normalización, backlog).
-- ▶️ **S4 — Backend núcleo (siguiente):** inicializar Next.js, Auth.js (credenciales + JWT), RBAC, i18n y capa de datos por dominio.
+- ✅ **S0–S3 (Base de datos):** diseñada, normalizada (1NF–3NF), desplegada y verificada en Supabase — 36 tablas, RBAC, pgvector.
+- ✅ **Documentación de cimientos** completa (visión, arquitectura, módulos, ERD, DFD, diccionario, normalización, plan).
+- ▶️ **S4 — Backend núcleo (siguiente):** login + Auth.js, RBAC en middleware, i18n y primer vertical (Expedientes).
 
-## Cómo arrancar el backend (siguiente sprint)
-
-Ver el detalle en [Backlog de Sprints — S4](05-sprints/README.md#s4--backend-nucleo-auth-rbac-i18n). Resumen:
-
-1. Inicializar proyecto Next.js + TypeScript (`package.json`, Tailwind, shadcn/ui).
-2. Configurar `.env.local` (ya existe) y el pool `pg` en `src/lib/db.ts`.
-3. Auth.js con credenciales + JWT, cargando `rol`/`permisos` en el token.
-4. `middleware.ts` (protección de rutas por rol) + `rbac.ts` (`can(usuario, permiso)`).
-5. i18n con next-intl (`messages/es.json`, `messages/en.json`) y rutas `/[locale]`.
-6. Primer vertical end-to-end (Expedientes): queries parametrizadas → Zod → Server Actions → UI.
+Ver los próximos pasos en [Plan de Trabajo](05-plan-de-trabajo.md).
 
 ## Resumen de la base de datos
 

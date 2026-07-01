@@ -10,17 +10,17 @@ El proyecto ya cuenta con una base de datos PostgreSQL en producción (Supabase)
 
 | Entrega | Sección Requerida (según PDF) | Recurso Existente en el Proyecto | Estado / Acción |
 | :--- | :--- | :--- | :--- |
-| **Primera** | *Ya entregada y aprobada* | [docs/01-vision-y-alcance.md](file:///Users/daurissantana/Documents/Global%20Effect/docs/01-vision-y-alcance.md) | ✅ Completada |
+| **Primera** | *Ya entregada y aprobada* | [docs/01-vision-y-alcance.md](01-vision-y-alcance.md) | ✅ Completada |
 | **Segunda** | 1. Limitaciones del Proyecto | Reglas del negocio y limitaciones de hardware/servicios. | 📝 Generar (Fronteras de la app) |
-| | 2. Planificación (Camino Crítico, Costes, etc.) | [docs/04-plan-de-trabajo.md](file:///Users/daurissantana/Documents/Global%20Effect/docs/04-plan-de-trabajo.md) y [docs/05-sprints/README.md](file:///Users/daurissantana/Documents/Global%20Effect/docs/05-sprints/README.md) | 📝 Generar (Formato académico) |
+| | 2. Planificación (Camino Crítico, Costes, etc.) | [docs/05-plan-de-trabajo.md](05-plan-de-trabajo.md) y [docs/05-plan-de-trabajo.md](05-plan-de-trabajo.md) | 📝 Generar (Formato académico) |
 | | 3. Visualización o Plan de Marketing | Propuesta de valor en la visión general. | 📝 Generar (Asociación emocional) |
 | | 4. Objetivo General | Propósito central del proyecto. | 📝 Redactar (Ver guía abajo) |
 | **Tercera** | 1. Objetivos Específicos | Módulos del proyecto. | 📝 Generar (Mapeados a sprints/capas) |
 | | 2. Marco Teórico | Conceptos de Next.js, PostgreSQL (sin ORM), RBAC y RAG. | 📝 Generar |
 | | 3. Vulnerabilidad del Sistema | Parámetros de seguridad de la BD y la API. | 📝 Generar (Matriz de riesgos de TI) |
-| **Cuarta** | 1. Diagrama Entidad-Relación | [docs/03-modelo-de-datos/diagrama-entidad-relacion.md](file:///Users/daurissantana/Documents/Global%20Effect/docs/03-modelo-de-datos/diagrama-entidad-relacion.md) | ✅ Copiar Mermaid / Generar imagen |
+| **Cuarta** | 1. Diagrama Entidad-Relación | [docs/04-modelo-de-datos/diagrama-entidad-relacion.md](04-modelo-de-datos/diagrama-entidad-relacion.md) | ✅ Copiar Mermaid / Generar imagen |
 | | 2. Diagrama de Flujo de Datos (DFD) | Flujos clave descritos en la Visión. | 📝 Generar (Nivel 0 y Nivel 1 en Mermaid) |
-| | 3. Diccionario de Datos | [docs/03-modelo-de-datos/diccionario-de-datos.md](file:///Users/daurissantana/Documents/Global%20Effect/docs/03-modelo-de-datos/diccionario-de-datos.md) | ✅ Copiar diccionario completo |
+| | 3. Diccionario de Datos | [docs/04-modelo-de-datos/diccionario-de-datos.md](04-modelo-de-datos/diccionario-de-datos.md) | ✅ Copiar diccionario completo |
 | **Quinta** | 1. Estándares del Sistema | Convenciones de bases de datos y clean code. | 📝 Generar |
 | | 2. Reglas de Negocio | Triggers de PostgreSQL y validaciones de código. | 📝 Generar (Detalle de constraints y flujos) |
 | | 3. Diseño de Reportes | Módulo de contabilidad y reportes de la visión. | 📝 Generar (Mockups en Markdown) |
@@ -101,7 +101,7 @@ Escribe las siguientes secciones:
 ---
 
 ### 📌 Prompt 3: Generar la CUARTA ENTREGA
-> **Contexto:** Esta entrega es de diagramación. Los diccionarios y diagramas relacionales ya existen en la carpeta `docs/03-modelo-de-datos/`. Este prompt le pide a Claude generar los diagramas de flujo de datos (DFD) faltantes y estructurar la entrega.
+> **Contexto:** Esta entrega es de diagramación. Los diccionarios y diagramas relacionales ya existen en la carpeta `docs/04-modelo-de-datos/`. Este prompt le pide a Claude generar los diagramas de flujo de datos (DFD) faltantes y estructurar la entrega.
 
 ```markdown
 Actúa como un Analista de Sistemas de Software. Genera la "Cuarta Entrega" del proyecto "Global Effect Nexus".
@@ -112,7 +112,7 @@ Esta entrega consta de tres partes:
 3. Diccionario de Datos.
 
 Para realizarla:
-- Toma como entrada el código Mermaid y las relaciones descritas en los archivos 'docs/03-modelo-de-datos/diagrama-entidad-relacion.md' y el diccionario en 'docs/03-modelo-de-datos/diccionario-de-datos.md'.
+- Toma como entrada el código Mermaid y las relaciones descritas en los archivos 'docs/04-modelo-de-datos/diagrama-entidad-relacion.md' y el diccionario en 'docs/04-modelo-de-datos/diccionario-de-datos.md'.
 - Tu tarea principal es:
   1. Diseñar el Diagrama de Flujo de Datos (DFD) en dos niveles usando notación Mermaid:
      - DFD Nivel 0 (Diagrama de Contexto): Muestra la interacción de los actores externos (Estudiante, Docente, Patrocinador, Psicólogo, Administrador) con el sistema central "Global Effect Nexus".
@@ -184,5 +184,5 @@ Actúa como un Académico de Ciencias de la Computación. Genera la "Sexta Entre
 Para que tu experiencia con Claude sea óptima y no excedas los límites de contexto, sigue estos pasos:
 
 1. **Mantén una única conversación de Claude** para generar los documentos si quieres que retenga el estilo técnico, o abre una nueva para cada entrega utilizando los prompts anteriores.
-2. Si utilizas una herramienta interactiva, puedes pasarle como contexto adicional los archivos de documentación actuales (`docs/01-vision-y-alcance.md` y `docs/03-modelo-de-datos/diagrama-entidad-relacion.md`) para asegurar que el contenido teórico coincida exactamente con lo programado.
+2. Si utilizas una herramienta interactiva, puedes pasarle como contexto adicional los archivos de documentación actuales (`docs/01-vision-y-alcance.md` y `docs/04-modelo-de-datos/diagrama-entidad-relacion.md`) para asegurar que el contenido teórico coincida exactamente con lo programado.
 3. Guarda cada entrega generada en archivos de Markdown dentro de `docs/entregas/` (ej. `docs/entregas/segunda-entrega.md`, etc.) antes de compilarlas a PDF para su entrega a la universidad.

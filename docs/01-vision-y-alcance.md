@@ -69,8 +69,8 @@ Cada usuario ve un menú lateral distinto según su rol. Los usuarios se **invit
 
 ## 5. Estado del proyecto (2026-07-01)
 
-- ✅ **Base de datos:** diseñada, normalizada (1NF–3NF), desplegada y verificada en Supabase (36 tablas, soporte de IA con pgvector). Ver [modelo de datos](03-modelo-de-datos/).
+- ✅ **Base de datos:** diseñada, normalizada (1NF–3NF), desplegada y verificada en Supabase (36 tablas, soporte de IA con pgvector). Ver [modelo de datos](04-modelo-de-datos/).
 - ✅ **Documentación de cimientos:** ERD, diccionario de datos, normalización/escalabilidad y guía de despliegue.
 - ⏳ **Aplicación Next.js:** por iniciar (scaffolding, Auth.js, i18n, capa de datos por dominio).
 
-Ver el [plan de trabajo](04-plan-de-trabajo.md) para el detalle de sprints y próximos pasos.
+Ver el [plan de trabajo](05-plan-de-trabajo.md) para el detalle de sprints y próximos pasos.

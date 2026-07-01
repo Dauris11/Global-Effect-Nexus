@@ -1,6 +1,6 @@
 # Arquitectura Técnica — Global Effect Nexus
 
-> Arquitectura de la aplicación: capas, estructura de carpetas y decisiones clave. La base de datos se detalla en [03 · Modelo de datos](03-modelo-de-datos/).
+> Arquitectura de la aplicación: capas, estructura de carpetas y decisiones clave. La base de datos se detalla en [03 · Modelo de datos](04-modelo-de-datos/).
 
 ## 1. Capas del sistema
 
@@ -56,4 +56,4 @@ global-effect-nexus/
 - **Almacenamiento:** archivos en Storage; sus metadatos en la tabla `documento` (una FK en vez de URLs sueltas).
 - **IA:** servicio propio para chat y OCR; contexto recuperado por búsqueda semántica (pgvector/RAG). Historial y extracciones persistidos y auditables.
 
-> Detalle ampliado de arquitectura y racional en [`_fuentes/ESTRUCTURA_SOLIDA_Global_Effect_Nexus.md`](_fuentes/ESTRUCTURA_SOLIDA_Global_Effect_Nexus.md).
+> La implementación concreta (pool `pg`, Auth.js, RBAC, i18n) está en `src/lib/` y `src/i18n/`; el detalle del esquema en [Modelo de datos](04-modelo-de-datos/).
