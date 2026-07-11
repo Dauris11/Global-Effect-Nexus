@@ -4,11 +4,32 @@
  * componentes cliente. Define <html>/<body> y los estilos globales.
  */
 import type { Metadata } from "next";
+import { Montserrat, Fraunces, JetBrains_Mono } from "next/font/google";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
 import { notFound } from "next/navigation";
-import { routing } from "@/i18n/routing";
+import { routing, type Locale } from "@/i18n/routing";
 import "../globals.css";
+
+// Sistema tipográfico (auto-hospedado por next/font, expuesto a Tailwind):
+//  • Montserrat — fuente oficial (UI/cuerpo).
+//  • Fraunces — serif óptica de titulares (calidez editorial).
+//  • JetBrains Mono — eyebrows, cifras y etiquetas (precisión).
+const montserrat = Montserrat({
+  subsets: ["latin"],
+  variable: "--font-montserrat",
+  display: "swap",
+});
+const fraunces = Fraunces({
+  subsets: ["latin"],
+  variable: "--font-fraunces",
+  display: "swap",
+});
+const mono = JetBrains_Mono({
+  subsets: ["latin"],
+  variable: "--font-mono",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   title: "Global Effect Nexus",
@@ -27,12 +48,16 @@ export default async function LocaleLayout({
   params: Promise<{ locale: string }>;
 }) {
   const { locale } = await params;
-  if (!routing.locales.includes(locale as "es" | "en")) notFound();
+  if (!routing.locales.includes(locale as Locale)) notFound();
 
   const messages = await getMessages();
 
   return (
-    <html lang={locale} suppressHydrationWarning>
+    <html
+      lang={locale}
+      className={`${montserrat.variable} ${fraunces.variable} ${mono.variable}`}
+      suppressHydrationWarning
+    >
       <body className="min-h-screen bg-background text-foreground antialiased">
         <NextIntlClientProvider messages={messages}>
           {children}

@@ -1,0 +1,83 @@
+/**
+ * Proxy (antes "middleware") — internacionalización + sesión + protección de
+ * rutas (RBAC). En Next.js 16 la convención `middleware.ts` se renombró a
+ * `proxy.ts`; la API y el `config.matcher` son equivalentes.
+ *
+ * 1. next-intl resuelve el prefijo de idioma (/es, /en, /fr, /it).
+ * 2. Supabase refresca la sesión (renueva cookies del token) en cada petición.
+ * 3. Las rutas del área autenticada exigen sesión; si no hay, se redirige al
+ *    login conservando el destino. La autorización fina por permiso se aplica
+ *    en las Server Actions con `requirePermission()`.
+ */
+import createMiddleware from "next-intl/middleware";
+import { createServerClient } from "@supabase/ssr";
+import { NextResponse, type NextRequest } from "next/server";
+import { routing, type Locale } from "./i18n/routing";
+
+const intlMiddleware = createMiddleware(routing);
+
+/** Segmentos (sin prefijo de idioma) que requieren sesión iniciada. */
+const RUTAS_PROTEGIDAS = [
+  "/dashboard",
+  "/expedientes",
+  "/academico",
+  "/academias",
+  "/patrocinadores",
+  "/contabilidad",
+  "/psicologia",
+  "/calendario",
+  "/reportes",
+  "/configuracion",
+  "/inscripcion-comida",
+  "/portal",
+];
+
+export async function proxy(request: NextRequest) {
+  // 1. Respuesta base de i18n (rewrite/redirect con el locale resuelto).
+  const response = intlMiddleware(request);
+
+  // 2. Refresco de sesión: enlazamos Supabase a las cookies de esta petición.
+  const supabase = createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!,
+    {
+      cookies: {
+        getAll() {
+          return request.cookies.getAll();
+        },
+        setAll(cookiesToSet) {
+          cookiesToSet.forEach(({ name, value, options }) =>
+            response.cookies.set(name, value, options),
+          );
+        },
+      },
+    },
+  );
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  // 3. Protección de rutas del portal.
+  const segments = request.nextUrl.pathname.split("/").filter(Boolean);
+  const hasLocale = routing.locales.includes(segments[0] as Locale);
+  const locale = hasLocale ? (segments[0] as Locale) : routing.defaultLocale;
+  const rutaSinLocale = "/" + segments.slice(hasLocale ? 1 : 0).join("/");
+
+  const esProtegida = RUTAS_PROTEGIDAS.some(
+    (p) => rutaSinLocale === p || rutaSinLocale.startsWith(p + "/"),
+  );
+
+  if (esProtegida && !user) {
+    const url = request.nextUrl.clone();
+    url.pathname = `/${locale}/login`;
+    url.searchParams.set("redirectTo", request.nextUrl.pathname);
+    return NextResponse.redirect(url);
+  }
+
+  return response;
+}
+
+export const config = {
+  matcher: ["/((?!api|_next|_vercel|.*\\..*).*)"],
+};

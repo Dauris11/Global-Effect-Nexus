@@ -24,3 +24,7 @@ Thumbs.db
 
 # Temporales de edición (Office)
 ~$*
+
+# Cache de Python de skills
+__pycache__/
+*.pyc

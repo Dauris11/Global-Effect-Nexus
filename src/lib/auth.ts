@@ -1,43 +1,69 @@
-import NextAuth from "next-auth";
-import Credentials from "next-auth/providers/credentials";
-import bcrypt from "bcryptjs";
-import { pool } from "./db";
+/**
+ * Autenticación — Supabase Auth.
+ *
+ * Supabase gestiona las credenciales (tabla `auth.users`); nuestra tabla
+ * `usuario` guarda el perfil de aplicación y el rol, enlazada por
+ * `usuario.auth_user_id → auth.users.id` (ver migración 0014). Estas
+ * funciones resuelven el usuario autenticado y su rol para el RBAC.
+ */
+import { createClient } from "./supabase/server";
+import { query } from "./db";
+
+/** Perfil del usuario autenticado combinando Supabase Auth + tabla usuario. */
+export interface UsuarioActual {
+  id: string;
+  authUserId: string;
+  email: string;
+  nombre: string;
+  idioma: string;
+  activo: boolean;
+  rol: string;
+}
 
 /**
- * Configuración de Auth.js (NextAuth v5): proveedor de credenciales
- * (email + contraseña) con sesiones JWT. El rol viaja en el token para
- * que middleware y rbac.ts decidan el acceso.
+ * Usuario de Supabase Auth (verificado contra el servidor de Auth vía JWKS).
+ * Devuelve `null` si no hay sesión válida.
  */
-export const { handlers, auth, signIn, signOut } = NextAuth({
-  session: { strategy: "jwt" },
-  pages: { signIn: "/login" },
-  providers: [
-    Credentials({
-      credentials: { email: {}, password: {} },
-      async authorize(creds) {
-        if (!creds?.email || !creds?.password) return null;
-        const { rows } = await pool.query(
-          `SELECT u.id, u.email, u.nombre, u.password_hash, u.activo, r.nombre AS rol
-             FROM usuario u JOIN rol r ON r.id = u.rol_id
-            WHERE u.email = $1`,
-          [String(creds.email)],
-        );
-        const u = rows[0];
-        if (!u || !u.activo) return null;
-        const ok = await bcrypt.compare(String(creds.password), u.password_hash);
-        if (!ok) return null;
-        return { id: u.id, email: u.email, name: u.nombre, rol: u.rol };
-      },
-    }),
-  ],
-  callbacks: {
-    async jwt({ token, user }) {
-      if (user) token.rol = (user as { rol?: string }).rol;
-      return token;
-    },
-    async session({ session, token }) {
-      if (session.user) (session.user as { rol?: string }).rol = token.rol as string;
-      return session;
-    },
-  },
-});
+export async function getAuthUser() {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  return user;
+}
+
+/**
+ * Usuario de aplicación (perfil + rol) del usuario autenticado. Devuelve
+ * `null` si no hay sesión, si el usuario no está enlazado en `usuario` o si
+ * está inactivo. El rol se usa en `rbac.ts` para autorizar acciones.
+ */
+export async function currentUser(): Promise<UsuarioActual | null> {
+  const authUser = await getAuthUser();
+  if (!authUser) return null;
+
+  const { rows } = await query(
+    `SELECT u.id, u.auth_user_id, u.email, u.nombre, u.idioma, u.activo, r.nombre AS rol
+       FROM usuario u
+       JOIN rol r ON r.id = u.rol_id
+      WHERE u.auth_user_id = $1 AND u.activo = TRUE`,
+    [authUser.id],
+  );
+  const u = rows[0];
+  if (!u) return null;
+
+  return {
+    id: u.id,
+    authUserId: u.auth_user_id,
+    email: u.email,
+    nombre: u.nombre,
+    idioma: u.idioma,
+    activo: u.activo,
+    rol: u.rol,
+  };
+}
+
+/** Cierra la sesión activa en Supabase (usar dentro de una Server Action). */
+export async function signOut() {
+  const supabase = await createClient();
+  await supabase.auth.signOut();
+}

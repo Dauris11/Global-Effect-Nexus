@@ -6,19 +6,22 @@
 
 **Global Effect Nexus** es la plataforma integral de gestión académica y administrativa de la **Fundación Global Effect** (República Dominicana). Centraliza en un solo sistema todos los flujos de trabajo de la fundación: estudiantes, docentes, patrocinadores, finanzas, psicología, tareas y comunicación institucional.
 
-El sistema se construye con arquitectura propia de extremo a extremo: frontend **Next.js (App Router)** y backend sobre **PostgreSQL** con SQL parametrizado (sin ORM), autenticación con control de acceso por roles (RBAC), almacenamiento de archivos, asistentes de IA, envío de correos e internacionalización (español/inglés).
+El sistema se construye con arquitectura propia de extremo a extremo: frontend **Next.js 16 (App Router)** y backend sobre **PostgreSQL** (Supabase) con SQL parametrizado (sin ORM), autenticación con **Supabase Auth** y control de acceso por roles (RBAC) propio, almacenamiento de archivos, asistentes de IA, envío de correos e internacionalización (es/en/fr/it).
 
 ## 2. Stack tecnológico
 
-- **Frontend:** Next.js (App Router) + React + TypeScript + Tailwind CSS + shadcn/ui
+- **Frontend:** Next.js 16 (App Router) + React 19 + TypeScript + Tailwind CSS 4 + Radix UI + componentes propios
 - **Estado/datos:** TanStack React Query + Server Actions
-- **Base de datos:** PostgreSQL 17 (Supabase) con `pg` (node-postgres) y SQL parametrizado a mano
-- **Autenticación:** Auth.js (NextAuth v5) — credenciales + sesiones JWT + RBAC (6 roles)
-- **Internacionalización:** next-intl (es / en), ruta por locale `/[locale]/...`
+- **Base de datos:** PostgreSQL 17 (Supabase, PostGIS) con `pg` (node-postgres) y SQL parametrizado a mano
+- **Autenticación:** Supabase Auth (`@supabase/ssr`) — email + contraseña, sesión en cookies + RBAC propio (6 roles)
+- **Internacionalización:** next-intl (es / en / fr / it), ruta por locale `/[locale]/...`
 - **Validación:** React Hook Form + Zod
-- **UI/gráficos/fechas:** Lucide React · Recharts · date-fns (locale español)
-- **IA:** servicio propio (OCR, chat, extracción de datos) + pgvector para búsqueda semántica/RAG
-- **Archivos:** storage propio (Supabase Storage / S3) + tabla `documento`
+- **UI/gráficos/fechas/mapas:** Lucide React · Recharts · date-fns · Leaflet + react-leaflet (OpenStreetMap) · motion
+- **IA:** Anthropic (OCR, chat, traducción) + pgvector para búsqueda semántica/RAG
+- **Archivos:** Supabase Storage + `sharp` + tabla `documento`
+- **Integraciones:** n8n (webhooks/CRM) · Resend (emails) · GENIALiA (CRM)
+
+> Detalle completo y versiones en [08 · Stack Tecnológico](08-stack-tecnologico.md).
 
 ### ¿Por qué SQL a mano y no un ORM?
 - Se documenta y justifica cada tabla, índice y constraint (relevante para la defensa académica).
@@ -70,7 +73,7 @@ Cada usuario ve un menú lateral distinto según su rol. Los usuarios se **invit
 ## 5. Estado del proyecto (2026-07-01)
 
 - ✅ **Base de datos:** diseñada, normalizada (1NF–3NF), desplegada y verificada en Supabase (36 tablas, soporte de IA con pgvector). Ver [modelo de datos](04-modelo-de-datos/).
-- ✅ **Documentación de cimientos:** ERD, diccionario de datos, normalización/escalabilidad y guía de despliegue.
-- ⏳ **Aplicación Next.js:** por iniciar (scaffolding, Auth.js, i18n, capa de datos por dominio).
+- ✅ **Documentación de cimientos:** ERD, diccionario de datos, normalización/escalabilidad, guía de despliegue, [stack](08-stack-tecnologico.md) y [diseño](09-guia-de-diseno.md).
+- ▶️ **Aplicación Next.js (S4 en curso):** Supabase Auth + RBAC, i18n (es/en/fr/it), capa `server/` por dominio, Storage y layout del portal. Build/lint en verde.
 
 Ver el [plan de trabajo](05-plan-de-trabajo.md) para el detalle de sprints y próximos pasos.

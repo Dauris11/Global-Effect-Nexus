@@ -1,52 +1,139 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+/**
+ * Estilos globales — Tailwind CSS 4 (CSS-first).
+ *
+ * Sistema "Impact Editorial": papel frío como base, teal (#2096BA) de marca,
+ * coral (#FF6B5C) como acento humano y tinta (#0F1E2E) para texto/superficies
+ * oscuras. Tipografía: Fraunces (display), Montserrat (UI), JetBrains Mono
+ * (datos). Tokens en hex expuestos como utilidades vía @theme inline.
+ * Ver docs/09-guia-de-diseno.md.
+ */
+@import "tailwindcss";
+@import "tw-animate-css";
 
-@layer base {
-  :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-    --primary: 221.2 83.2% 53.3%;
-    --primary-foreground: 210 40% 98%;
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 221.2 83.2% 53.3%;
-    --radius: 0.5rem;
-  }
+@custom-variant dark (&:is(.dark *));
 
-  .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-    --primary: 217.2 91.2% 59.8%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 224.3 76.3% 48%;
+:root {
+  --background: #f7f9fb;
+  --foreground: #0f1e2e;
+  --card: #ffffff;
+  --card-foreground: #0f1e2e;
+  --popover: #ffffff;
+  --popover-foreground: #0f1e2e;
+  --primary: #2096ba;
+  --primary-foreground: #ffffff;
+  --secondary: #e6eef2;
+  --secondary-foreground: #0f1e2e;
+  --muted: #eef3f6;
+  --muted-foreground: #4a5b68;
+  --accent: #eef3f6;
+  --accent-foreground: #0f1e2e;
+  --destructive: #ba1a1a;
+  --destructive-foreground: #ffffff;
+  --border: #dbe4ea;
+  --input: #dbe4ea;
+  --ring: #2096ba;
+  --radius: 0.9rem;
+
+  /* Marca (Impact Editorial) */
+  --brand-charcoal: #0f1e2e; /* tinta: superficies oscuras (hero foto, sidebar) */
+  --brand-deep: #0a1620;
+  --brand-teal: #2096ba; /* primario */
+  --brand-teal-dark: #12657d;
+  --brand-accent: #ff6b5c; /* coral (acento humano) */
+  --brand-gold: #f59e0b; /* ámbar (comida) */
+}
+
+.dark {
+  --background: #0a1620;
+  --foreground: #eef3f6;
+  --card: #0f1e2e;
+  --card-foreground: #eef3f6;
+  --popover: #0f1e2e;
+  --popover-foreground: #eef3f6;
+  --primary: #58c6e6;
+  --primary-foreground: #04222c;
+  --secondary: #1c2c3a;
+  --secondary-foreground: #eef3f6;
+  --muted: #1c2c3a;
+  --muted-foreground: #a7b6c2;
+  --accent: #1c2c3a;
+  --accent-foreground: #eef3f6;
+  --destructive: #ffb4ab;
+  --destructive-foreground: #690005;
+  --border: #26384a;
+  --input: #26384a;
+  --ring: #58c6e6;
+
+  --brand-charcoal: #0a1620;
+  --brand-teal: #58c6e6;
+  --brand-teal-dark: #2096ba;
+  --brand-accent: #ff8377;
+  --brand-gold: #f59e0b;
+}
+
+@theme inline {
+  --font-sans: var(--font-montserrat), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-fraunces), Georgia, "Times New Roman", serif;
+  --font-mono: var(--font-mono), ui-monospace, "SFMono-Regular", monospace;
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --color-brand-charcoal: var(--brand-charcoal);
+  --color-brand-deep: var(--brand-deep);
+  --color-brand-teal: var(--brand-teal);
+  --color-brand-teal-dark: var(--brand-teal-dark);
+  --color-brand-accent: var(--brand-accent);
+  --color-brand-gold: var(--brand-gold);
+
+  --radius-lg: var(--radius);
+  --radius-md: calc(var(--radius) - 4px);
+  --radius-sm: calc(var(--radius) - 8px);
+}
+
+/* Cinta marquee de la promesa institucional (firma). */
+@keyframes marquee {
+  from {
+    transform: translateX(0);
   }
+  to {
+    transform: translateX(-50%);
+  }
+}
+.animate-marquee {
+  animation: marquee 32s linear infinite;
+}
+
+/* Firma: subrayado de marcador que se "dibuja" al cargar. */
+@keyframes marker-draw {
+  from {
+    stroke-dashoffset: 300;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+.marker-path {
+  stroke-dasharray: 300;
+  stroke-dashoffset: 300;
+  animation: marker-draw 0.9s cubic-bezier(0.23, 1, 0.32, 1) 0.35s forwards;
 }
 
 @layer base {
@@ -55,5 +142,20 @@
   }
   body {
     @apply bg-background text-foreground;
+    font-family: var(--font-sans);
+  }
+  /* Accesibilidad: reducir movimiento (mantiene opacidad/color, quita motion). */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    ::before,
+    ::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+      scroll-behavior: auto !important;
+    }
+    .animate-marquee {
+      animation: none !important;
+    }
   }
 }

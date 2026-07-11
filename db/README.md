@@ -19,7 +19,9 @@ db/
 │  ├─ 0010_bienestar.sql                  # inscripcion_comida
 │  ├─ 0011_finanzas.sql                   # transaccion
 │  ├─ 0012_ia.sql                         # conversacion_ia, mensaje_ia, extraccion_ocr, fragmento_conocimiento (pgvector)
-│  └─ 0013_extensibilidad_metadata.sql    # columna metadata JSONB en entidades principales
+│  ├─ 0013_extensibilidad_metadata.sql    # columna metadata JSONB en entidades principales
+│  ├─ 0014_supabase_auth.sql              # enlace usuario.auth_user_id ↔ auth.users + trigger + idioma es/en/fr/it
+│  └─ 0015_landing.sql                    # landing_slide (hero configurable) + permiso landing.administrar
 ├─ seed.sql                               # roles, permisos, admin maestro y datos de prueba
 └─ README.md
 ```
@@ -45,16 +47,18 @@ psql -v ON_ERROR_STOP=1 -f db/seed.sql
 ### Opción B — SQL Editor de Supabase
 
 1. Abre **SQL Editor** en la consola de Supabase.
-2. Ejecuta el contenido de cada archivo `db/migrations/0001…0012` **en orden**.
+2. Ejecuta el contenido de cada archivo `db/migrations/0001…0015` **en orden**.
 3. Ejecuta `db/seed.sql`.
 
 Ambas opciones son idempotentes en lo posible (extensiones `IF NOT EXISTS`, seed con `ON CONFLICT`). Las migraciones crean objetos nuevos; para re-crear desde cero, elimina el esquema `public` antes.
 
-## Credenciales semilla
+## Autenticación (Supabase Auth)
 
-- **Email:** `admin@globaleffect.org`
-- **Password:** `admin123` (hash bcrypt en el seed — cámbialo en producción)
-- **Rol:** `super_admin`
+Desde la migración `0014`, las credenciales las gestiona **Supabase Auth** (`auth.users`); la tabla `usuario` conserva el perfil + `rol_id`, enlazada por `usuario.auth_user_id`. Un trigger enlaza automáticamente por email al crear la identidad en Auth (los usuarios se **invitan**, no se registran).
+
+- **Admin maestro:** `admin@globaleffect.org` — rol `super_admin` (ya sembrado en `usuario`).
+- Para habilitar su login, crea su identidad en **Supabase → Authentication → Add user** (o Admin API); el trigger la enlazará por email.
+- El `password_hash` bcrypt del seed queda obsoleto (Supabase almacena la contraseña).
 
 ## Notas técnicas
 

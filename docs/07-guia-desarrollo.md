@@ -12,8 +12,8 @@ Convenciones y flujos de trabajo del proyecto. Léela antes de escribir código.
 - **Nomenclatura:** `camelCase` en código TS; `snake_case`, en español y en singular, en la base de datos (`estudiante`, no `students`).
 - **Sin ORM.** El acceso a datos se escribe a mano con `pg` y **parámetros posicionales** (`$1, $2…`). **Nunca** concatenar entrada del usuario en el SQL (defensa contra inyección).
 - **Validación con Zod** en la frontera (formularios / Server Actions). Tipos por entidad en `types.ts`.
-- **i18n:** los textos de interfaz van en `messages/{es,en}.json`. Los valores de estado se guardan como **código** en la BD y se traducen solo en la UI.
-- **Estilos:** Tailwind + shadcn/ui, usando `cn()` de `src/lib/utils.ts` para componer clases.
+- **i18n:** los textos de interfaz van en `messages/{es,en,fr,it}.json`. Los valores de estado se guardan como **código** en la BD y se traducen solo en la UI.
+- **Estilos:** Tailwind CSS 4 (config CSS-first en `globals.css`, sin `tailwind.config.ts`) + Radix UI + componentes propios, usando `cn()` de `src/lib/utils.ts`.
 - **Secretos:** solo en `.env.local` (nunca en el repo).
 
 ---
@@ -56,15 +56,13 @@ export async function getEstudiante(id: string): Promise<Estudiante | null> {
 "use server";
 import { z } from "zod";
 import { query } from "@/lib/db";
-import { auth } from "@/lib/auth";
-import { can } from "@/lib/rbac";
+import { requirePermission } from "@/lib/rbac";
 
 const CrearEstudiante = z.object({ nombre: z.string().min(1), cedula: z.string().optional() });
 
 export async function crearEstudiante(input: unknown) {
-  const session = await auth();
-  const rol = session?.user?.rol;
-  if (!rol || !(await can(rol, "expedientes.escribir"))) throw new Error("No autorizado");
+  // Exige el permiso y, de paso, devuelve el usuario autenticado.
+  await requirePermission("expedientes.escribir");
 
   const data = CrearEstudiante.parse(input);
   const { rows } = await query(
@@ -75,14 +73,17 @@ export async function crearEstudiante(input: unknown) {
 }
 ```
 
+> Referencia real del patrón: `src/server/estudiantes/` (types · schema · queries · actions) y `src/server/storage.ts`.
+
 ---
 
 ## 3. Autenticación y RBAC
 
-- Configuración de Auth.js: `src/lib/auth.ts` (credenciales + JWT; el `rol` viaja en el token).
-- Helpers de permisos: `src/lib/rbac.ts` → `can(rol, "codigo.permiso")` y `permisosDeRol(rol)`.
+- **Supabase Auth** gestiona las credenciales (`auth.users`); la tabla `usuario` guarda perfil + `rol_id`, enlazada por `usuario.auth_user_id` (migración `0014`).
+- Clientes: `src/lib/supabase/{server,client}.ts` (`@supabase/ssr`). Sesión y rol: `src/lib/auth.ts` → `getAuthUser()`, `currentUser()`, `signOut()`.
+- Helpers de permisos: `src/lib/rbac.ts` → `can(rol, "codigo.permiso")`, `permisosDeRol(rol)` y `requirePermission("codigo.permiso")` (usar al inicio de cada Server Action).
 - `super_admin` siempre pasa `can()`.
-- En **S4** se integrará la protección por rol en `src/middleware.ts` (hoy solo hace i18n).
+- La protección por rutas vive en `src/proxy.ts` (antes `middleware.ts`): i18n + refresco de sesión + guard del área `(portal)`. La autorización fina se aplica en las Server Actions.
 
 Permisos disponibles (ver `db/seed.sql`): `expedientes.*`, `academico.*`, `calificaciones.registrar`, `patrocinadores.*`, `finanzas.*`, `psicologia.*`, `operaciones.*`, `usuarios.administrar`, `ia.usar`, `ia.administrar`.
 
@@ -93,8 +94,8 @@ Las tablas `cita_psicologia`, `nota_psicologica` y `perfil_psicologico` están *
 
 ## 4. Internacionalización (i18n)
 
-- Componentes de servidor/cliente: `const t = useTranslations("home");  t("title")`.
-- Agregar textos en `messages/es.json` **y** `messages/en.json` (mismas claves).
+- Componentes de servidor/cliente: `const t = useTranslations("home");  t("title")` (o `getTranslations` en el servidor).
+- Agregar textos en los **cuatro** diccionarios `messages/{es,en,fr,it}.json` (mismas claves). `es` es el idioma por defecto.
 - Navegación con prefijo de idioma: usar `Link`, `redirect`, `useRouter` de `src/i18n/navigation.ts` (no los de `next/navigation`).
 
 ---
@@ -103,7 +104,7 @@ Las tablas `cita_psicologia`, `nota_psicologica` y `perfil_psicologico` están *
 
 - El esquema son archivos `.sql` numerados en `db/migrations/`. **No editar** una migración ya aplicada; crear una nueva.
 - Crear un cambio de esquema:
-  1. Nuevo archivo `db/migrations/0014_<descripcion>.sql`.
+  1. Nuevo archivo `db/migrations/0015_<descripcion>.sql` (la última aplicada es `0014_supabase_auth.sql`).
   2. `npm run db:migrate` (aplica solo lo pendiente; registra en la tabla `_migracion`).
 - Convenciones del esquema: PK `id uuid` (`gen_random_uuid()`), `created_at`/`updated_at` con trigger `set_updated_at()`, FKs con `ON DELETE` explícito, `CHECK`/`UNIQUE` de negocio.
 - Extensibilidad: las entidades principales tienen `metadata JSONB` para campos futuros sin alterar el esquema.
@@ -119,7 +120,7 @@ Agregar un componente:
 npx shadcn@latest add card input dialog table   # etc.
 ```
 
-Se instala en `src/components/ui/`. Ya está configurado `components.json`. Componente base incluido: `button`.
+Se instala en `src/components/ui/`. Ya está configurado `components.json` (Tailwind 4, `config: ""`). Componente base incluido: `button`. Los tokens de color/tema viven en `src/app/globals.css` (`@theme inline`).
 
 ---
 
@@ -147,8 +148,10 @@ Para cambios de BD, probar `npm run db:migrate` contra una base de prueba y veri
 | Necesito… | Está en… |
 |---|---|
 | Conexión a la BD | `src/lib/db.ts` (`query`, `pool`) |
-| Login / sesión | `src/lib/auth.ts` |
-| Permisos | `src/lib/rbac.ts` |
+| Clientes Supabase (Auth/Storage) | `src/lib/supabase/{server,client}.ts` |
+| Login / sesión | `src/lib/auth.ts` · login: `src/app/[locale]/(auth)/login/` |
+| Permisos | `src/lib/rbac.ts` (`requirePermission`, `can`) |
+| Lógica por dominio | `src/server/<dominio>/` · subida de archivos: `src/server/storage.ts` |
 | Traducciones | `messages/*.json` + `src/i18n/` |
 | Esquema / tablas | `db/migrations/` · [diccionario](04-modelo-de-datos/diccionario-de-datos.md) |
 | Qué hace cada módulo | [03-modulos-funcionales.md](03-modulos-funcionales.md) |

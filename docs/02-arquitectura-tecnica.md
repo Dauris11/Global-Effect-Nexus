@@ -11,8 +11,8 @@
 └───────────────┬────────────────────────────────────────────┘
                 │  Server Actions / Route Handlers
 ┌───────────────▼────────────────────────────────────────────┐
-│  Servidor (Next.js)                                          │
-│  • Auth.js (credenciales + JWT) + middleware RBAC + i18n     │
+│  Servidor (Next.js 16)                                       │
+│  • Supabase Auth + proxy (RBAC por ruta) + i18n              │
 │  • Capa de dominio: queries.ts (SQL parametrizado) +         │
 │    actions.ts + schema.ts (Zod) + types.ts                   │
 │  • Servicios de IA (chat, OCR, embeddings/RAG)               │
@@ -30,30 +30,29 @@
 global-effect-nexus/
 ├─ db/                        # migraciones .sql, seed.sql, README (✅ implementado)
 ├─ docs/                      # documentación / entregas (✅ este directorio)
-├─ messages/                  # i18n: es.json, en.json
+├─ messages/                  # i18n: es.json, en.json, fr.json, it.json
 ├─ src/
 │  ├─ app/[locale]/
-│  │  ├─ (auth)/              # login (sin sidebar)
-│  │  ├─ (portal)/            # área autenticada: dashboard, expedientes, academico,
+│  │  ├─ (auth)/login/        # login (Supabase Auth, sin sidebar) ✅
+│  │  ├─ (portal)/            # área autenticada: dashboard ✅, expedientes, academico,
 │  │  │                       #   academias, administrativo, patrocinadores, contabilidad,
 │  │  │                       #   psicologia, calendario, reportes, configuracion
-│  │  ├─ (public)/            # landing, inscripción comida
-│  │  └─ api/auth/[...nextauth]/route.ts
-│  ├─ components/             # ui/ (shadcn) · layout/ · shared/ · expedientes/
-│  ├─ lib/                    # db.ts (pool pg) · auth.ts · rbac.ts · i18n.ts · utils.ts
-│  ├─ server/                 # lógica por dominio: queries + actions + schema (zod) + types
-│  ├─ hooks/  · middleware.ts (i18n + protección por rol)  · types/
+│  │  └─ (public)/            # landing, inscripción comida (S10)
+│  ├─ components/             # ui/ (Radix + propios) · layout/ (sidebar, topbar) ✅
+│  ├─ lib/                    # db.ts (pool pg) · supabase/ · auth.ts · rbac.ts · nav.ts · utils.ts
+│  ├─ server/                 # lógica por dominio: queries + actions + schema (zod) + types · storage.ts
+│  ├─ i18n/  ·  proxy.ts (i18n + sesión + protección por rol)  · types/
 ├─ .env.local  ·  .env.example
-├─ next.config.mjs · tailwind.config.ts · package.json
+├─ next.config.mjs · globals.css (Tailwind 4 CSS-first) · package.json
 ```
 
 ## 3. Decisiones de arquitectura
 
 - **Acceso a datos sin ORM:** SQL a mano con `pg` y consultas parametrizadas; control total del DDL/DML y defensa contra inyección. Tipado con interfaces TypeScript + validación Zod en el borde.
-- **Autenticación:** Auth.js con proveedor de credenciales y sesiones JWT. Los `rol`/`permisos` viajan en el token; `middleware.ts` y `rbac.ts` deciden el acceso por ruta/acción. No se requiere adaptador de BD: basta la tabla `usuario`.
-- **RBAC granular:** roles + permisos por módulo (`rol`, `permiso`, `rol_permiso`), evaluados con `can(usuario, 'expedientes.editar')`.
-- **Internacionalización:** segmento de ruta `/[locale]`, diccionarios `messages/{es,en}.json`. Los enums se guardan como código y se traducen en la UI (no en la BD).
-- **Almacenamiento:** archivos en Storage; sus metadatos en la tabla `documento` (una FK en vez de URLs sueltas).
+- **Autenticación:** **Supabase Auth** (email + contraseña, sesión en cookies). Las credenciales viven en `auth.users`; la tabla `usuario` guarda perfil + `rol_id`, enlazada por `usuario.auth_user_id` (migración `0014`). `src/proxy.ts` y `rbac.ts` deciden el acceso por ruta/acción.
+- **RBAC granular:** roles + permisos por módulo (`rol`, `permiso`, `rol_permiso`), evaluados con `can(rol, 'expedientes.escribir')` y exigidos con `requirePermission(...)` en las Server Actions.
+- **Internacionalización:** segmento de ruta `/[locale]`, diccionarios `messages/{es,en,fr,it}.json`. Los enums se guardan como código y se traducen en la UI (no en la BD).
+- **Almacenamiento:** archivos en Supabase Storage; sus metadatos en la tabla `documento` (una FK en vez de URLs sueltas). Helper: `src/server/storage.ts`.
 - **IA:** servicio propio para chat y OCR; contexto recuperado por búsqueda semántica (pgvector/RAG). Historial y extracciones persistidos y auditables.
 
-> La implementación concreta (pool `pg`, Auth.js, RBAC, i18n) está en `src/lib/` y `src/i18n/`; el detalle del esquema en [Modelo de datos](04-modelo-de-datos/).
+> La implementación concreta (pool `pg`, Supabase Auth, RBAC, i18n) está en `src/lib/` y `src/i18n/`; el detalle del esquema en [Modelo de datos](04-modelo-de-datos/) y el stack completo en [08 · Stack Tecnológico](08-stack-tecnologico.md).

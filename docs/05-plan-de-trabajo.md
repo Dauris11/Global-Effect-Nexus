@@ -31,11 +31,11 @@ La **capa de base de datos está adelantada** respecto al cronograma: el diseño
 
 ## 3. Próximos pasos
 
-### Inmediatos (S1 → S4: backend)
-1. **Inicializar el proyecto Next.js:** `package.json`, TypeScript, Tailwind + shadcn, next-intl, pool `pg` en `src/lib/db.ts`.
-2. **Auth.js** con credenciales + JWT; cargar `rol`/`permisos` en el token; `rbac.ts` + `middleware.ts`.
-3. **Scaffolding i18n** (`messages/es.json`, `messages/en.json`) y rutas `/[locale]`.
-4. **Runner de migraciones** integrado al repo (script npm) para reproducibilidad.
+### Inmediatos (S1 → S4: backend) — ✅ hechos
+1. ✅ **Proyecto Next.js 16** con TypeScript, Tailwind 4 (CSS-first), next-intl y pool `pg` en `src/lib/db.ts`.
+2. ✅ **Supabase Auth** (email + contraseña, sesión en cookies); `rol` resuelto desde `usuario`; `rbac.ts` (`requirePermission`) + `proxy.ts`.
+3. ✅ **Scaffolding i18n** (`messages/{es,en,fr,it}.json`) y rutas `/[locale]`.
+4. ✅ **Runner de migraciones** integrado al repo (script npm) para reproducibilidad.
 
 ### Corto plazo (S5+)
 5. **Primer vertical end-to-end** (Expedientes): queries parametrizadas → Zod → Server Actions → UI.
@@ -67,18 +67,39 @@ Cada módulo = migración (ya lista) + queries parametrizadas + validación Zod 
 | **S1** | BD Identidad y transversales | 2026-07-20 → 2026-07-31 | ✅ Hecho |
 | **S2** | BD Estudiante y Academico | 2026-08-03 → 2026-08-14 | ✅ Hecho |
 | **S3** | BD Dominios restantes | 2026-08-17 → 2026-08-28 | ✅ Hecho |
-| **S4** | Backend nucleo (auth, RBAC, i18n) | 2026-08-31 → 2026-09-11 | ▶️ Siguiente |
-| **S5** | Expedientes y Dashboard | 2026-09-14 → 2026-09-25 | ⏳ Pendiente |
-| **S6** | Academico (modulos) y portales | 2026-09-28 → 2026-10-09 | ⏳ Pendiente |
-| **S7** | Patrocinio y Finanzas | 2026-10-12 → 2026-10-23 | ⏳ Pendiente |
-| **S8** | Psicologia | 2026-10-26 → 2026-11-06 | ⏳ Pendiente |
-| **S9** | Administrativo y Calendario | 2026-11-09 → 2026-11-20 | ⏳ Pendiente |
-| **S10** | Modulos restantes y paginas publicas | 2026-11-23 → 2026-12-04 | ⏳ Pendiente |
-| **S11** | IA y Reportes | 2026-12-07 → 2026-12-18 | ⏳ Pendiente |
+| **S4** | Backend nucleo (auth, RBAC, i18n) | 2026-08-31 → 2026-09-11 | ▶️ En curso |
+| **S5** | Expedientes y Dashboard | 2026-09-14 → 2026-09-25 | 🟦 Backend listo · UI pendiente |
+| **S6** | Academico (modulos) y portales | 2026-09-28 → 2026-10-09 | 🟦 Backend listo · UI pendiente |
+| **S7** | Patrocinio y Finanzas | 2026-10-12 → 2026-10-23 | 🟦 Backend listo · UI pendiente |
+| **S8** | Psicologia | 2026-10-26 → 2026-11-06 | 🟦 Backend listo · UI pendiente |
+| **S9** | Administrativo y Calendario | 2026-11-09 → 2026-11-20 | 🟦 Backend listo · UI pendiente |
+| **S10** | Modulos restantes y paginas publicas | 2026-11-23 → 2026-12-04 | 🟦 Backend listo · UI pendiente |
+| **S11** | IA y Reportes | 2026-12-07 → 2026-12-18 | 🟦 Backend listo · UI pendiente |
 | **S12** | Migracion, QA y Seguridad | 2026-12-21 → 2027-01-01 | ⏳ Pendiente |
 | **S13** | Despliegue y Tesis | 2027-01-04 → 2027-01-15 | ⏳ Pendiente |
 
-> **Estado del backend:** la fundación de datos (S0–S3) está lista. El siguiente paso es **S4 — Backend núcleo (Auth.js, RBAC, i18n)**.
+> **Estado del backend:** S0–S3 (BD) ✅. S4 (núcleo) ✅ en curso. **La capa de dominio backend de S5–S11 está construida** (`src/server/*`): consultas parametrizadas + Server Actions con `requirePermission` por módulo. Falta la **UI** de cada módulo (pantallas, formularios, gráficos) y aplicar la migración `0014` en Supabase.
+
+### Capa `server/` construida (backend por dominio)
+
+| Dominio | Carpeta | Contenido | Permiso |
+|---|---|---|---|
+| Expedientes | `server/estudiantes/` | lista, expediente completo (perfiles + familiares + GPA), crear | `expedientes.*` |
+| Dashboard | `server/dashboard/` | métricas, próximos eventos, tareas prioritarias | (sesión) |
+| Académico | `server/academico/` | períodos, materias, cursos, inscripción, calificaciones, historial | `academico.*` · `calificaciones.registrar` |
+| Patrocinio | `server/patrocinadores/` | patrocinadores + estadísticas, asignación de becas | `patrocinadores.*` |
+| Finanzas | `server/finanzas/` | transacciones, balance, evolución mensual | `finanzas.*` |
+| Psicología | `server/psicologia/` | citas, notas confidenciales, solicitud de cita (acceso estricto) | `psicologia.*` |
+| Operaciones | `server/operaciones/` | proyectos, tareas (Kanban) + automatización email/evento, calendario, servicios | `operaciones.*` |
+| Academias | `server/academias/` | programas y materiales | `academico.escribir` |
+| Comida | `server/comida/` | inscripción pública (≤ 8:30 AM, no duplicado), conteo, lista admin | público / `operaciones.leer` |
+| Landing | `server/landing/` | **hero configurable** (CRUD slides), estadísticas en vivo, eventos públicos | público / `landing.administrar` |
+| Usuarios | `server/usuarios/` | personal, invitar, cambiar rol/estado | `usuarios.administrar` |
+| IA | `server/ia/` | chat con contexto (Anthropic), conversaciones, OCR | `ia.usar` |
+| Reportes | `server/reportes/` | agregaciones Proyectos/Académico/Contabilidad | `operaciones/academico/finanzas.leer` |
+| Storage | `server/storage.ts` | subida a Supabase Storage + tabla `documento` | (sesión) |
+
+Integraciones backend: `lib/anthropic.ts` (chat/traducción/OCR), `lib/email.ts` (Resend), `lib/integrations.ts` (webhook n8n → CRM GENIALiA).
 
 ---
 
@@ -159,16 +180,19 @@ Cada módulo = migración (ya lista) + queries parametrizadas + validación Zod 
 ---
 
 ## S4 — Backend nucleo (auth, RBAC, i18n)
-**Fase:** Backend · **Fechas:** 2026-08-31 → 2026-09-11 · **Estimado:** 12 días
+**Fase:** Backend · **Fechas:** 2026-08-31 → 2026-09-11 · **Estimado:** 12 días · **Estado: ▶️ EN CURSO**
 
-> META SMART Especifico: Montar autenticacion, control de acceso y la base transversal sobre la BD. Medible: Login con Auth.js (credenciales+JWT), middleware por rol, helper can(), capa de queries, i18n operativo y subida de archivos. Alcanzable: equipo de 2, stack Next.js+pg+PostgreSQL. Relevante: avanza el entregable de tesis. Temporal: 2 semanas.
+> META SMART Especifico: Montar autenticacion, control de acceso y la base transversal sobre la BD. Medible: Login con Supabase Auth, proteccion por rol en proxy, helper requirePermission()/can(), capa de queries, i18n operativo y subida de archivos. Alcanzable: equipo de 2, stack Next.js 16 + Supabase + pg. Relevante: avanza el entregable de tesis. Temporal: 2 semanas.
 
-- [ ] Auth.js (credenciales + JWT)
-- [ ] Middleware por rol + helper can()
-- [ ] Capa base de queries pg
-- [ ] i18n operativo (es/en) + selector
-- [ ] Subida de archivos + tabla documento
-- [ ] Layout: AppLayout + Sidebar por rol + TopBar
+- [x] Supabase Auth (email + contraseña, sesión en cookies) — `lib/supabase/*`, `lib/auth.ts`
+- [x] Proteccion por rol en `proxy.ts` + helpers `can()` / `requirePermission()`
+- [x] Migración `0014`: enlace `usuario.auth_user_id ↔ auth.users` + trigger de sincronización
+- [x] Capa base de queries pg (`lib/db.ts`) + patrón `server/<dominio>` (vertical de referencia: Estudiantes)
+- [x] i18n operativo (es/en/fr/it) + login localizado
+- [x] Subida de archivos (Supabase Storage) + tabla `documento` — `server/storage.ts`
+- [x] Layout: AppLayout + Sidebar por rol + TopBar (`components/layout/*`)
+- [ ] Página de login pulida + página pública de landing (pendiente de UI de S5+)
+- [ ] Crear identidad del admin maestro en Supabase Auth (enlace automático por email)
 
 ---
 
@@ -240,11 +264,11 @@ Cada módulo = migración (ya lista) + queries parametrizadas + validación Zod 
 
 > META SMART Especifico: Cerrar los modulos restantes y las paginas publicas. Medible: Academias/Materiales, Servicios mensuales (PDF), Comida (publica), Configuracion, Sitemap y Landing. Alcanzable: equipo de 2, stack Next.js+pg+PostgreSQL. Relevante: avanza el entregable de tesis. Temporal: 2 semanas.
 
-- [ ] Academias/Programas + Materiales
-- [ ] Servicios mensuales (toggles + PDF)
-- [ ] Inscripcion de comida (publica)
-- [ ] Configuracion + Sitemap
-- [ ] Landing publica (Inicio)
+- [x] Backend Academias/Programas + Materiales (`server/academias/`)
+- [ ] Servicios mensuales (toggles + PDF) — backend en `server/operaciones/`
+- [x] **Inscripcion de comida (publica)** — `/comida` con **pre-registro multi-día** + lista **imprimible** por día para el admin (`/inscripcion-comida`)
+- [x] **Landing publica (Inicio)** con **hero configurable por el admin** — `/` + `/configuracion/landing`
+- [ ] Configuracion (hub) + Sitemap — hub inicial creado
 
 ---
 

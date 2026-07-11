@@ -14,6 +14,8 @@ Toda la documentación del proyecto está centralizada en esta carpeta: **un arc
 | 05 | [Plan de Trabajo](05-plan-de-trabajo.md) | Cronograma, próximos pasos y backlog de los 14 sprints. |
 | 06 | [Plan de Entregas](06-plan-de-entregas.md) | Guía para producir las entregas de la tesis (E2–E6). |
 | 07 | [Guía de Desarrollo](07-guia-desarrollo.md) | Convenciones, patrón de módulos, RBAC, i18n, migraciones y flujo de Git (para desarrollar). |
+| 08 | [Stack Tecnológico](08-stack-tecnologico.md) | Stack definitivo (fuente de verdad): framework, Supabase Auth, integraciones, versiones. |
+| 09 | [Guía de Diseño](09-guia-de-diseno.md) | Referencias visuales de marca, tipografía Montserrat, paleta y tokens. |
 
 ### 04 · Modelo de datos
 - [Diagrama Entidad-Relación](04-modelo-de-datos/diagrama-entidad-relacion.md) — ERD Mermaid (global + por dominio) y matriz de relaciones.
@@ -33,16 +35,17 @@ Toda la documentación del proyecto está centralizada en esta carpeta: **un arc
 
 | Ubicación | Contenido |
 |---|---|
-| [`../db/migrations/`](../db/migrations/) | Migraciones SQL numeradas por dominio (`0001`–`0013`). |
+| [`../db/migrations/`](../db/migrations/) | Migraciones SQL numeradas por dominio (`0001`–`0014`; `0014` = integración con Supabase Auth). |
 | [`../db/seed.sql`](../db/seed.sql) | Datos semilla: roles, permisos, usuario maestro, datos de prueba. |
 | [`../db/README.md`](../db/README.md) | Guía de despliegue y verificación de la base de datos. |
 | `../.env.example` | Plantilla de variables de entorno. |
 
-## Estado del proyecto (2026-07-01)
+## Estado del proyecto (2026-07-11)
 
 - ✅ **S0–S3 (Base de datos):** diseñada, normalizada (1NF–3NF), desplegada y verificada en Supabase — 36 tablas, RBAC, pgvector.
-- ✅ **Documentación de cimientos** completa (visión, arquitectura, módulos, ERD, DFD, diccionario, normalización, plan).
-- ▶️ **S4 — Backend núcleo (siguiente):** login + Auth.js, RBAC en middleware, i18n y primer vertical (Expedientes).
+- ✅ **Documentación de cimientos** completa (visión, arquitectura, módulos, ERD, DFD, diccionario, normalización, plan) + [stack definitivo](08-stack-tecnologico.md) y [guía de diseño](09-guia-de-diseno.md).
+- ✅ **Migración de stack:** Next.js 16, Tailwind CSS 4 (CSS-first), Supabase Auth, i18n `es/en/fr/it`, y libs nuevas (Leaflet, motion, sharp, Resend).
+- ▶️ **S4 — Backend núcleo (en curso):** Supabase Auth + RBAC (`proxy.ts` + `requirePermission`), login, capa `server/` por dominio, Storage y layout del portal. Build y lint en verde.
 
 Ver los próximos pasos en [Plan de Trabajo](05-plan-de-trabajo.md).
 

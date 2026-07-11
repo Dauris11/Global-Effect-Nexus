@@ -55,8 +55,10 @@ no se registran directamente.
 Página pública de presentación de la fundación. No requiere login.
 
 Funcionalidades:
-- Hero slider rotativo (3 slides cada 6 segundos) con anuncios:
-  becas universitarias, reuniones de coordinación, cursos técnicos.
+- Hero slider rotativo (cada 6 segundos) con anuncios **configurables por el
+  administrador** (tabla `landing_slide`, gestión en `/configuracion/landing`):
+  título, subtítulo, texto, imagen, botón (CTA), orden y activo/oculto.
+  Si no hay diapositivas, muestra una por defecto traducida. *(Implementado)*
 - Barra de estadísticas: estudiantes activos, materias, patrocinadores.
 - Selector de portales: 6 tarjetas con accesos directos:
   - Administración Global
@@ -408,16 +410,24 @@ Funcionalidades:
 ## MÓDULO 25: INSCRIPCIÓN DE COMIDA
 *Ruta: /comida (pública, sin login) | /inscripcion-comida (con layout)*
 
-Sistema diario de inscripción para el almuerzo.
+Sistema de inscripción para el almuerzo con pre-registro semanal. *(Implementado)*
 
 Funcionalidades:
 - Acceso público (ruta /comida) — no requiere autenticación.
-- Límite horario: inscripción abierta solo hasta las 8:30 AM.
-- Validación: no duplicar inscripciones del mismo día.
-- Confirmación visual al inscribirse.
-- Vista de admin: lista completa de inscritos + impresión de lista.
-- Vista de usuario: contador de inscritos (sin nombres visibles).
-- Actualización automática cada 30 segundos.
+- **Inscripción de varios días de una vez** (pre-registro semanal): el usuario
+  elige varios días hábiles y se crea una fila por fecha; cada día, la lista
+  del administrador muestra automáticamente a quienes tienen fila para esa
+  fecha (sin re-inscribirse). Backend: `inscribirVariosDias`.
+- Límite horario: el **día en curso** cierra a las 8:30 AM; los **días futuros**
+  se pueden pre-registrar en cualquier momento. Días pasados y hoy-cerrado se
+  rechazan por día (desglose confirmados/duplicados/rechazados).
+- Validación: no duplicar inscripciones del mismo día (`UNIQUE (nombre, fecha)`).
+- **Vista de administración imprimible** (`/inscripcion-comida`, requiere
+  `operaciones.leer`): lista por fecha con navegación entre días, indicador
+  **Cerrado/Abierto** (tras las 8:30) y botón **Imprimir** (limpio, sin sidebar).
+- Notificación de cierre a administradores (`notificarListaComida`), pensada
+  para dispararse por tarea programada (n8n / pg_cron) tras las 8:30 AM.
+- Vista pública: contador de inscritos de hoy (sin nombres visibles).
 
 ## MÓDULO 26: CONFIGURACIÓN
 *Ruta: /configuracion*

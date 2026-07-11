@@ -2,13 +2,13 @@
 
 Plataforma web integral para la gestión académica y administrativa de la **Fundación Global Effect** (La Vega, República Dominicana). Proyecto final de grado — UCATECI.
 
-> **Estado (2026-07-01):** cimientos completos. Base de datos diseñada, normalizada y **desplegada en Supabase** (36 tablas, RBAC, pgvector); proyecto Next.js inicializado y compilando. **Siguiente sprint: S4 — backend núcleo** (login, RBAC en middleware, primer módulo).
+> **Estado (2026-07-11):** cimientos completos y **backend núcleo (S4) en curso**. BD desplegada en Supabase (36 tablas, RBAC, pgvector); app en **Next.js 16 + Tailwind 4** con **Supabase Auth + RBAC**, i18n `es/en/fr/it`, capa `server/` por dominio, Storage y layout del portal. Build y lint en verde.
 
 ---
 
 ## Puesta en marcha (para desarrollo)
 
-Requisitos: **Node.js 20+**, **npm 10+**, Git. (Opcional: `psql` para SQL manual.)
+Requisitos: **Node.js 20.9+**, **npm 10+**, Git. (Opcional: `psql` para SQL manual.)
 
 ```bash
 # 1. Clonar e instalar dependencias
@@ -17,11 +17,11 @@ npm install
 
 # 2. Configurar variables de entorno
 cp .env.example .env.local
-#    -> pedir a un compañero los valores reales (DATABASE_URL, llaves Supabase, AUTH_SECRET)
+#    -> pedir a un compañero los valores reales (DATABASE_URL, llaves Supabase, Resend, Anthropic)
 #       El .env.local NO está en git.
 
 # 3. (Solo para una BD nueva/vacía) aplicar esquema y datos semilla
-npm run db:migrate      # aplica db/migrations/0001..0013
+npm run db:migrate      # aplica db/migrations/0001..0014
 npm run db:seed         # roles, permisos, usuario admin, datos de prueba
 #    La BD compartida ya está desplegada: db:migrate dirá "Base de datos al día".
 
@@ -29,7 +29,7 @@ npm run db:seed         # roles, permisos, usuario admin, datos de prueba
 npm run dev             # http://localhost:3000  (redirige a /es)
 ```
 
-Usuario semilla: **`admin@globaleffect.org` / `admin123`** (rol `super_admin`).
+Admin: **`admin@globaleffect.org`** (rol `super_admin`). El login es vía **Supabase Auth**; crea su identidad en Supabase → Authentication (el trigger la enlaza por email). Ver [db/README.md](db/README.md).
 
 > Lista completa de dependencias y comandos de instalación en [`dependencias.txt`](dependencias.txt).
 
@@ -41,23 +41,25 @@ Usuario semilla: **`admin@globaleffect.org` / `admin123`** (rol `super_admin`).
 Global Effect/
 ├─ src/
 │  ├─ app/[locale]/            # rutas por idioma (App Router)
-│  │  ├─ layout.tsx · page.tsx
-│  │  └─ api/auth/[...nextauth]/route.ts
-│  ├─ components/ui/           # componentes shadcn/ui (base: button)
+│  │  ├─ (auth)/login/         # login (Supabase Auth)
+│  │  ├─ (portal)/dashboard/   # área autenticada (Sidebar + TopBar por rol)
+│  │  ├─ layout.tsx · page.tsx · globals.css (Tailwind 4)
+│  ├─ components/ui/           # componentes base (Radix + propios; base: button)
+│  ├─ components/layout/       # sidebar · topbar
 │  ├─ i18n/                    # next-intl: routing, request, navigation
-│  ├─ lib/                     # db.ts (pool pg) · auth.ts · rbac.ts · utils.ts
-│  ├─ types/                   # tipos globales (next-auth.d.ts)
-│  └─ middleware.ts            # i18n (RBAC se integra en S4)
-├─ messages/                   # es.json · en.json (traducciones)
+│  ├─ lib/                     # db.ts (pg) · supabase/ · auth.ts · rbac.ts · nav.ts · utils.ts
+│  ├─ server/                  # capa por dominio (estudiantes/…) · storage.ts · auth/
+│  └─ proxy.ts                 # i18n + sesión Supabase + protección por rol
+├─ messages/                   # es · en · fr · it (traducciones)
 ├─ scripts/                    # migrate.mjs · seed.mjs (runners de BD)
 ├─ db/
-│  ├─ migrations/              # 0001..0013 (.sql por dominio)
+│  ├─ migrations/              # 0001..0014 (.sql por dominio)
 │  ├─ seed.sql
 │  └─ README.md                # guía de despliegue de la BD
 ├─ docs/                       # TODA la documentación (ver docs/README.md)
 ├─ .env.example               # plantilla de entorno
-├─ dependencias.txt           # dependencias + comandos
-└─ package.json · tsconfig.json · next.config.mjs · tailwind.config.ts
+├─ eslint.config.mjs · postcss.config.mjs
+└─ package.json · tsconfig.json · next.config.mjs
 ```
 
 ## Scripts
@@ -84,22 +86,26 @@ Todo está en **[`docs/`](docs/)** — un archivo por tema. Empieza por [`docs/R
 | Modelo de datos (ERD, DFD, diccionario) | [docs/04-modelo-de-datos/](docs/04-modelo-de-datos/) |
 | Plan de trabajo y sprints | [docs/05-plan-de-trabajo.md](docs/05-plan-de-trabajo.md) |
 | **Guía de desarrollo (convenciones)** | [docs/07-guia-desarrollo.md](docs/07-guia-desarrollo.md) |
+| **Stack tecnológico (definitivo)** | [docs/08-stack-tecnologico.md](docs/08-stack-tecnologico.md) |
+| Guía de diseño (marca, Montserrat, paleta) | [docs/09-guia-de-diseno.md](docs/09-guia-de-diseno.md) |
 
 Diagramas editables: `docs/04-modelo-de-datos/*.drawio` (draw.io) y `esquema.dbml` (dbdiagram.io).
 
 ---
 
-## Cómo continuar (Sprint 4 — backend núcleo)
+## Cómo continuar (Sprint 5 — Expedientes y Dashboard)
 
-1. Pantalla de **login** que use `signIn` de Auth.js (`src/lib/auth.ts` ya configurado).
-2. Integrar **RBAC en `middleware.ts`** (proteger rutas del área autenticada por rol/permiso con `can()` de `src/lib/rbac.ts`).
-3. Primer **módulo vertical end-to-end** (Expedientes): `src/server/estudiantes/` con `queries.ts` + `actions.ts` + `schema.ts` (Zod) + `types.ts`, y su UI.
+El núcleo de S4 ya está: **Supabase Auth + RBAC** (`src/lib/`, `src/proxy.ts`), **login**, capa `server/` por dominio, **Storage** y **layout del portal**. Lo siguiente:
+
+1. Completar el **módulo vertical Expedientes** (UI): consumir `src/server/estudiantes/` (queries + actions + schema + types) con buscador, formulario de 6 pestañas y detalle con GPA.
+2. **OCR → Expediente** con Anthropic (usar `documento` + `extraccion_ocr`).
+3. **Dashboard** con tarjetas y gráficos (Recharts).
 
 Detalle y convenciones en la [guía de desarrollo](docs/07-guia-desarrollo.md). Backlog en [docs/05-plan-de-trabajo.md](docs/05-plan-de-trabajo.md).
 
 ## Stack
 
-Next.js 15 (App Router) · React 19 · TypeScript · Tailwind + shadcn/ui · PostgreSQL 17 (Supabase, `pg` sin ORM) · Auth.js v5 (JWT + RBAC) · next-intl (es/en) · Zod · TanStack Query · Recharts · pgvector (IA/RAG).
+Next.js 16 (App Router) · React 19 · TypeScript · Tailwind 4 + Radix UI · PostgreSQL 17 (Supabase, PostGIS, `pg` sin ORM) · **Supabase Auth** + RBAC propio · next-intl (es/en/fr/it) · Zod · TanStack Query · Recharts · Leaflet · motion · Resend · Anthropic · pgvector (IA/RAG). Detalle completo en [docs/08-stack-tecnologico.md](docs/08-stack-tecnologico.md).
 
 ## Equipo
 
