@@ -35,6 +35,31 @@ export async function metricasDashboard(): Promise<DashboardMetricas> {
   };
 }
 
+export interface PuntoBalance {
+  mes: string; // 'YYYY-MM'
+  ingresos: number;
+  egresos: number;
+}
+
+/** Serie de ingresos/egresos de los últimos `meses` meses (para la gráfica). */
+export async function balanceMensual(meses = 6): Promise<PuntoBalance[]> {
+  const { rows } = await query(
+    `SELECT to_char(date_trunc('month', fecha), 'YYYY-MM') AS mes,
+            COALESCE(SUM(monto) FILTER (WHERE tipo='ingreso'), 0) AS ingresos,
+            COALESCE(SUM(monto) FILTER (WHERE tipo='egreso'), 0)  AS egresos
+       FROM transaccion
+      WHERE fecha >= date_trunc('month', CURRENT_DATE) - ($1::int - 1) * INTERVAL '1 month'
+      GROUP BY 1
+      ORDER BY 1`,
+    [meses],
+  );
+  return rows.map((r) => ({
+    mes: r.mes as string,
+    ingresos: Number(r.ingresos),
+    egresos: Number(r.egresos),
+  }));
+}
+
 /** Próximos eventos (desde hoy). */
 export async function proximosEventos(limite = 5) {
   const { rows } = await query(

@@ -80,7 +80,11 @@ export async function crearEstudiante(input: unknown) {
 ## 3. Autenticación y RBAC
 
 - **Supabase Auth** gestiona las credenciales (`auth.users`); la tabla `usuario` guarda perfil + `rol_id`, enlazada por `usuario.auth_user_id` (migración `0014`).
-- Clientes: `src/lib/supabase/{server,client}.ts` (`@supabase/ssr`). Sesión y rol: `src/lib/auth.ts` → `getAuthUser()`, `currentUser()`, `signOut()`.
+- **Login (S4):** dos vías, ambas **solo para usuarios invitados** (existentes y activos en `usuario`) y con **redirección por rol** (`rutaPorRol` en `lib/nav.ts`):
+  1. **Google (OAuth, para todos):** botón en `login-form.tsx` → `signInWithOAuth` (cliente) → `src/app/auth/callback/route.ts` (intercambia el code, valida invitación, redirige).
+  2. **Correo + contraseña:** Server Action `login` (`(auth)/login/actions.ts`).
+- **Invitación (no registro):** `resolverUsuario()` enlaza la identidad de Auth con un `usuario` existente por email y lo devuelve; si no existe/está inactivo, se **cierra la sesión y se rechaza**. El trigger de `0016` solo enlaza (no auto-crea). Habilita el proveedor **Google** en Supabase → Authentication (redirect `{SITIO}/auth/callback`).
+- Clientes: `src/lib/supabase/{server,client}.ts` (`@supabase/ssr`). Sesión y rol: `src/lib/auth.ts` → `getAuthUser()`, `currentUser()`, `resolverUsuario()`, `signOut()`.
 - Helpers de permisos: `src/lib/rbac.ts` → `can(rol, "codigo.permiso")`, `permisosDeRol(rol)` y `requirePermission("codigo.permiso")` (usar al inicio de cada Server Action).
 - `super_admin` siempre pasa `can()`.
 - La protección por rutas vive en `src/proxy.ts` (antes `middleware.ts`): i18n + refresco de sesión + guard del área `(portal)`. La autorización fina se aplica en las Server Actions.

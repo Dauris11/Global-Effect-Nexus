@@ -1,73 +1,27 @@
 /**
- * Barra lateral del portal. Recibe ya filtrados los ítems permitidos para el
- * rol (el layout aplica el RBAC) y resalta la ruta activa. Los iconos son de
- * lucide-react (sin emojis, por convención del proyecto).
+ * Barra lateral del portal (escritorio). Superficie de tinta (charcoal) de
+ * marca: sobria y premium (referencia Linear/Notion), con el wordmark blanco
+ * arriba y la navegación filtrada por rol (el RBAC lo aplica el layout). La
+ * franja inferior recuerda que es la plataforma de la Fundación.
  */
-"use client";
-
-import {
-  LayoutDashboard,
-  Users,
-  GraduationCap,
-  HeartHandshake,
-  Wallet,
-  Brain,
-  Calendar,
-  BarChart3,
-  Settings,
-  Utensils,
-  type LucideIcon,
-} from "lucide-react";
-import { useTranslations } from "next-intl";
-import { Link, usePathname } from "@/i18n/navigation";
-import { cn } from "@/lib/utils";
 import { Logo } from "@/components/brand/logo";
+import { NavList } from "./nav-list";
 import type { NavItem } from "@/lib/nav";
 
-const ICONS: Record<string, LucideIcon> = {
-  LayoutDashboard,
-  Users,
-  GraduationCap,
-  HeartHandshake,
-  Wallet,
-  Brain,
-  Calendar,
-  BarChart3,
-  Settings,
-  Utensils,
-};
-
 export function Sidebar({ items }: { items: NavItem[] }) {
-  const t = useTranslations("nav");
-  const pathname = usePathname();
-
   return (
-    <aside className="hidden w-60 shrink-0 border-r border-border bg-card md:block">
-      <div className="flex h-14 items-center bg-brand-charcoal px-5">
-        <Logo className="h-5 w-auto" />
+    <aside className="hidden w-64 shrink-0 flex-col bg-brand-charcoal md:flex">
+      <div className="flex h-16 items-center px-6">
+        <Logo className="h-6 w-auto" />
       </div>
-      <nav className="space-y-1 px-3 py-2">
-        {items.map((item) => {
-          const Icon = ICONS[item.icon];
-          const active =
-            pathname === item.href || pathname.startsWith(item.href + "/");
-          return (
-            <Link
-              key={item.href}
-              href={item.href}
-              className={cn(
-                "flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors",
-                active
-                  ? "bg-primary text-primary-foreground"
-                  : "text-muted-foreground hover:bg-muted hover:text-foreground",
-              )}
-            >
-              {Icon && <Icon className="size-4 shrink-0" />}
-              {t(item.labelKey)}
-            </Link>
-          );
-        })}
-      </nav>
+      <div className="flex-1 overflow-y-auto px-3 py-2">
+        <NavList items={items} tone="dark" />
+      </div>
+      <div className="border-t border-white/10 px-6 py-4">
+        <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-slate-500">
+          Fundación Global Effect
+        </p>
+      </div>
     </aside>
   );
 }

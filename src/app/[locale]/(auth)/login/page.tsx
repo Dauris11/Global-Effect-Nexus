@@ -1,17 +1,40 @@
 /**
- * Página de inicio de sesión. Envuelve el formulario (cliente) en un
- * `Suspense` porque usa `useSearchParams`, requisito de Next para el
- * renderizado estático.
+ * Página de inicio de sesión (Impact Editorial). Panel de marca (tinta) a la
+ * izquierda en desktop + formulario a la derecha. El formulario usa
+ * `useSearchParams`, por eso va dentro de un `Suspense`.
  */
 import { Suspense } from "react";
 import { LoginForm } from "./login-form";
+import { Logo } from "@/components/brand/logo";
 
 export default function LoginPage() {
   return (
-    <main className="flex min-h-screen items-center justify-center bg-muted px-4">
-      <Suspense>
-        <LoginForm />
-      </Suspense>
+    <main className="grid min-h-screen lg:grid-cols-2">
+      {/* Panel de marca (desktop) */}
+      <div className="relative hidden flex-col justify-between overflow-hidden bg-brand-charcoal p-12 text-white lg:flex">
+        <div
+          aria-hidden
+          className="pointer-events-none absolute -right-24 top-1/4 size-80 rounded-full"
+          style={{ background: "radial-gradient(closest-side, rgba(32,150,186,.45), transparent)" }}
+        />
+        <Logo className="relative h-8 w-auto" />
+        <p className="relative max-w-md font-display text-3xl italic leading-snug text-white/90">
+          Bringing Hope · Changing Lives · Transforming Communities
+        </p>
+        <p className="relative font-mono text-xs uppercase tracking-[0.2em] text-white/50">
+          Global Effect Foundation
+        </p>
+      </div>
+
+      {/* Formulario */}
+      <div className="flex flex-col items-center justify-center bg-background px-6 py-12">
+        <span className="mb-10 flex items-center rounded-xl bg-brand-charcoal px-3 py-2 lg:hidden">
+          <Logo className="h-6 w-auto" priority />
+        </span>
+        <Suspense>
+          <LoginForm />
+        </Suspense>
+      </div>
     </main>
   );
 }

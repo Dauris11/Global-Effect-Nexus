@@ -12,6 +12,24 @@ export interface NavItem {
   icon: string;
 }
 
+/**
+ * Ruta de inicio tras el login según el rol. Hoy todos aterrizan en el panel
+ * (la navegación se filtra por permisos); cuando existan los portales por rol
+ * (S6+), aquí se enrutará a cada uno (p. ej. estudiante → /portal/estudiante).
+ */
+const HOME_POR_ROL: Record<string, string> = {
+  super_admin: "/dashboard",
+  admin: "/dashboard",
+  docente: "/dashboard",
+  estudiante: "/dashboard",
+  psicologo: "/dashboard",
+  contabilidad: "/dashboard",
+};
+
+export function rutaPorRol(rol: string): string {
+  return HOME_POR_ROL[rol] ?? "/dashboard";
+}
+
 export const NAV_ITEMS: NavItem[] = [
   { href: "/dashboard", labelKey: "dashboard", icon: "LayoutDashboard" },
   { href: "/expedientes", labelKey: "records", permiso: "expedientes.leer", icon: "Users" },

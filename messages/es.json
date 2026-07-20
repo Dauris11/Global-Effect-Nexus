@@ -16,7 +16,12 @@
     "signIn": "Entrar",
     "signOut": "Cerrar sesión",
     "invalidCredentials": "Credenciales inválidas",
-    "required": "Este campo es obligatorio"
+    "required": "Este campo es obligatorio",
+    "inviteOnly": "Acceso solo para usuarios invitados.",
+    "continueWithGoogle": "Continuar con Google",
+    "orEmail": "o con tu correo",
+    "notRegistered": "Tu cuenta no está registrada. Contacta al administrador.",
+    "oauth": "No se pudo iniciar sesión con Google. Inténtalo de nuevo."
   },
   "nav": {
     "dashboard": "Panel",
@@ -122,5 +127,29 @@
     "nobody": "Nadie inscrito para esta fecha.",
     "prevDay": "Día anterior",
     "nextDay": "Día siguiente"
+  },
+  "portal": {
+    "toggleTheme": "Cambiar tema",
+    "openMenu": "Abrir menú",
+    "closeMenu": "Cerrar menú",
+    "menu": "Menú"
+  },
+  "dashboard": {
+    "overview": "Panel general",
+    "greeting": "Hola, {name}",
+    "summary": "Resumen de la actividad de la Fundación.",
+    "students": "Estudiantes activos",
+    "scholarships": "Becados",
+    "courses": "Cursos activos",
+    "balance": "Balance del mes",
+    "thisMonth": "este mes",
+    "financeTitle": "Ingresos y egresos",
+    "financeSubtitle": "Últimos 6 meses",
+    "eventsTitle": "Próximos eventos",
+    "eventsEmpty": "No hay eventos programados",
+    "tasksTitle": "Tareas prioritarias",
+    "tasksEmpty": "Todo al día",
+    "tasksEmptyHint": "No hay tareas pendientes.",
+    "noData": "Sin datos todavía"
   }
 }

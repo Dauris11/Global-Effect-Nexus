@@ -1,12 +1,16 @@
 /**
- * Server Actions de autenticación (login). Inicia sesión con Supabase Auth
- * (email + contraseña); las cookies del token las escribe el cliente de
- * servidor. En éxito redirige al destino solicitado o al panel.
+ * Server Actions de autenticación (login por correo + contraseña).
+ * Solo pueden entrar usuarios YA invitados (existentes y activos en `usuario`):
+ * tras validar credenciales con Supabase Auth se comprueba con
+ * `resolverUsuario`; si no está registrado, se cierra la sesión y se rechaza.
+ * En éxito redirige a la ruta correspondiente a su rol.
  */
 "use server";
 
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import { resolverUsuario } from "@/lib/auth";
+import { rutaPorRol } from "@/lib/nav";
 
 export interface LoginState {
   error?: string;
@@ -19,7 +23,6 @@ export async function login(
   const email = String(formData.get("email") ?? "").trim();
   const password = String(formData.get("password") ?? "");
   const locale = String(formData.get("locale") ?? "es");
-  const redirectTo = String(formData.get("redirectTo") ?? "");
 
   if (!email || !password) return { error: "required" };
 
@@ -27,6 +30,12 @@ export async function login(
   const { error } = await supabase.auth.signInWithPassword({ email, password });
   if (error) return { error: "invalidCredentials" };
 
-  // redirect() lanza internamente para cortar la ejecución (patrón de Next).
-  redirect(`/${locale}${redirectTo || "/dashboard"}`);
+  // Refuerzo de invitación: debe existir un `usuario` activo enlazable.
+  const usuario = await resolverUsuario();
+  if (!usuario) {
+    await supabase.auth.signOut();
+    return { error: "notRegistered" };
+  }
+
+  redirect(`/${locale}${rutaPorRol(usuario.rol)}`);
 }

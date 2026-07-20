@@ -58,6 +58,16 @@ export default async function LocaleLayout({
       className={`${montserrat.variable} ${fraunces.variable} ${mono.variable}`}
       suppressHydrationWarning
     >
+      <head>
+        {/* Aplica el tema guardado antes de pintar para evitar el parpadeo
+            (FOUC). El predeterminado es claro (base blanca); solo pasa a
+            oscuro si el usuario lo eligió explícitamente. */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `try{if(localStorage.getItem('theme')==='dark')document.documentElement.classList.add('dark')}catch(e){}`,
+          }}
+        />
+      </head>
       <body className="min-h-screen bg-background text-foreground antialiased">
         <NextIntlClientProvider messages={messages}>
           {children}

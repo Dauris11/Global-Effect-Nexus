@@ -21,7 +21,8 @@ db/
 │  ├─ 0012_ia.sql                         # conversacion_ia, mensaje_ia, extraccion_ocr, fragmento_conocimiento (pgvector)
 │  ├─ 0013_extensibilidad_metadata.sql    # columna metadata JSONB en entidades principales
 │  ├─ 0014_supabase_auth.sql              # enlace usuario.auth_user_id ↔ auth.users + trigger + idioma es/en/fr/it
-│  └─ 0015_landing.sql                    # landing_slide (hero configurable) + permiso landing.administrar
+│  ├─ 0015_landing.sql                    # landing_slide (hero configurable) + permiso landing.administrar
+│  └─ 0016_auth_invitacion.sql            # login solo por invitación (trigger solo-enlaza) + OAuth Google
 ├─ seed.sql                               # roles, permisos, admin maestro y datos de prueba
 └─ README.md
 ```
@@ -59,6 +60,12 @@ Desde la migración `0014`, las credenciales las gestiona **Supabase Auth** (`au
 - **Admin maestro:** `admin@globaleffect.org` — rol `super_admin` (ya sembrado en `usuario`).
 - Para habilitar su login, crea su identidad en **Supabase → Authentication → Add user** (o Admin API); el trigger la enlazará por email.
 - El `password_hash` bcrypt del seed queda obsoleto (Supabase almacena la contraseña).
+
+### Login por invitación + Google (migración 0016)
+
+- **Solo entran usuarios ya creados** en `usuario` (activos). El trigger `handle_new_auth_user` **solo enlaza** por email; **no** crea perfiles nuevos. Si un email de Google no está invitado, la app cierra la sesión y muestra "no registrado".
+- **Google (para todos):** habilita **Authentication → Providers → Google** (Client ID/Secret) y añade la Redirect URL `{SITIO}/auth/callback` (p. ej. `http://localhost:3000/auth/callback`).
+- **Redirección por rol** tras el login (`rutaPorRol`). Roles: `super_admin`, `admin`, `docente`, `estudiante`, `psicologo`, `contabilidad`.
 
 ## Notas técnicas
 

@@ -16,7 +16,12 @@
     "signIn": "Sign in",
     "signOut": "Sign out",
     "invalidCredentials": "Invalid credentials",
-    "required": "This field is required"
+    "required": "This field is required",
+    "inviteOnly": "Access for invited users only.",
+    "continueWithGoogle": "Continue with Google",
+    "orEmail": "or with your email",
+    "notRegistered": "Your account is not registered. Contact the administrator.",
+    "oauth": "Could not sign in with Google. Please try again."
   },
   "nav": {
     "dashboard": "Dashboard",
@@ -122,5 +127,29 @@
     "nobody": "No one signed up for this date.",
     "prevDay": "Previous day",
     "nextDay": "Next day"
+  },
+  "portal": {
+    "toggleTheme": "Toggle theme",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu",
+    "menu": "Menu"
+  },
+  "dashboard": {
+    "overview": "Overview",
+    "greeting": "Hi, {name}",
+    "summary": "Summary of the Foundation's activity.",
+    "students": "Active students",
+    "scholarships": "Scholarships",
+    "courses": "Active courses",
+    "balance": "Monthly balance",
+    "thisMonth": "this month",
+    "financeTitle": "Income and expenses",
+    "financeSubtitle": "Last 6 months",
+    "eventsTitle": "Upcoming events",
+    "eventsEmpty": "No events scheduled",
+    "tasksTitle": "Priority tasks",
+    "tasksEmpty": "All caught up",
+    "tasksEmptyHint": "No pending tasks.",
+    "noData": "No data yet"
   }
 }
