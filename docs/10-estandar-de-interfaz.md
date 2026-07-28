@@ -11,7 +11,7 @@
 
 ## 1. Por qué existe este documento
 
-La plataforma tiene 27 módulos, seis roles y cuatro idiomas, y la construyen dos personas
+La plataforma tiene 27 módulos, seis roles y dos idiomas, y la construyen dos personas
 a lo largo de catorce sprints. Sin un estándar escrito, cada módulo termina inventando su
 propio verde para "aprobado" y su propia forma de mostrar una fecha vencida. El resultado no
 es feo: es **ilegible**, porque el usuario tiene que reaprender el código de colores en cada
@@ -251,7 +251,7 @@ Un error dice **qué pasó y qué hacer**, en la voz del sistema. Ni disculpas, 
 - Una acción conserva su nombre en todo el flujo: si el botón dice "Publicar", el aviso dice
   "Publicado".
 - Mayúscula inicial de frase, no de título. Sin punto final en botones ni etiquetas.
-- Todo texto visible pasa por `next-intl` (es · en · fr · it). Cero cadenas literales en JSX.
+- Todo texto visible pasa por `next-intl` (es · en). Cero cadenas literales en JSX.
 
 ---
 
@@ -383,7 +383,7 @@ Al construir una pantalla:
 4. Cualquier color de significado sale de la capa 3 (§3.2). Si no existe, añádelo allí.
 5. Espacios de la escala de §6. Cifras en mono tabular.
 6. Estado vacío, estado de carga (`skeleton`) y estado de error: los tres, siempre.
-7. Textos por `next-intl`, en los cuatro idiomas.
+7. Textos por `next-intl`, en los dos idiomas.
 8. Recorre la pantalla solo con teclado antes de darla por hecha.
 
 ### Lista de revisión

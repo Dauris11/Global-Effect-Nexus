@@ -85,7 +85,7 @@ src/
 │  ├─ psicologia/ · operaciones/ · academias/ · comida/
 │  ├─ usuarios/ · ia/ · reportes/ · dashboard/ · landing/   # types · schema · queries · actions
 │  └─ (S5–S11: backend por dominio construido; UI pendiente)
-├─ i18n/                       # routing · request · navigation (es/en/fr/it)
+├─ i18n/                       # routing · request · navigation (es/en)
 └─ middleware.ts               # i18n + sesión + protección de rutas
 messages/                      # es.json · en.json · fr.json · it.json
 db/                            # migraciones .sql (0001–0014) + seed + README
@@ -97,7 +97,7 @@ docs/                          # esta documentación
 - **Sin ORM:** `pg` con parámetros posicionales (`$1,$2…`); nunca interpolar entrada del usuario.
 - **Patrón por dominio:** cada módulo en `src/server/<dominio>/` con `types.ts` · `schema.ts` (Zod) · `queries.ts` (lectura) · `actions.ts` (escritura + `requirePermission`).
 - **Tailwind 4 CSS-first:** los tokens viven en `globals.css` (`@theme inline`); no hay `tailwind.config.ts`.
-- **i18n:** textos en `messages/{es,en,fr,it}.json` (mismas claves); enums como código en BD, traducidos solo en la UI. Navegación con los helpers de `src/i18n/navigation.ts`.
+- **i18n:** textos en `messages/{es,en}.json` (mismas claves); enums como código en BD, traducidos solo en la UI. Navegación con los helpers de `src/i18n/navigation.ts`.
 - **Iconos:** solo `lucide-react`. **Emojis prohibidos** como iconos.
 - **Documentación:** comentario de cabecera por archivo y en funciones no triviales (proyecto de tesis).
 

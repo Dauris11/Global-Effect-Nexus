@@ -6,7 +6,7 @@
 
 **Global Effect Nexus** es la plataforma integral de gestión académica y administrativa de la **Fundación Global Effect** (República Dominicana). Centraliza en un solo sistema todos los flujos de trabajo de la fundación: estudiantes, docentes, patrocinadores, finanzas, psicología, tareas y comunicación institucional.
 
-El sistema se construye con arquitectura propia de extremo a extremo: frontend **Next.js 16 (App Router)** y backend sobre **PostgreSQL** (Supabase) con SQL parametrizado (sin ORM), autenticación con **Supabase Auth** y control de acceso por roles (RBAC) propio, almacenamiento de archivos, asistentes de IA, envío de correos e internacionalización (es/en/fr/it).
+El sistema se construye con arquitectura propia de extremo a extremo: frontend **Next.js 16 (App Router)** y backend sobre **PostgreSQL** (Supabase) con SQL parametrizado (sin ORM), autenticación con **Supabase Auth** y control de acceso por roles (RBAC) propio, almacenamiento de archivos, asistentes de IA, envío de correos e internacionalización (es/en).
 
 ## 2. Stack tecnológico
 
@@ -74,6 +74,6 @@ Cada usuario ve un menú lateral distinto según su rol. Los usuarios se **invit
 
 - ✅ **Base de datos:** diseñada, normalizada (1NF–3NF), desplegada y verificada en Supabase (36 tablas, soporte de IA con pgvector). Ver [modelo de datos](04-modelo-de-datos/).
 - ✅ **Documentación de cimientos:** ERD, diccionario de datos, normalización/escalabilidad, guía de despliegue, [stack](08-stack-tecnologico.md) y [diseño](09-guia-de-diseno.md).
-- ▶️ **Aplicación Next.js (S4 en curso):** Supabase Auth + RBAC, i18n (es/en/fr/it), capa `server/` por dominio, Storage y layout del portal. Build/lint en verde.
+- ▶️ **Aplicación Next.js (S4 en curso):** Supabase Auth + RBAC, i18n (es/en), capa `server/` por dominio, Storage y layout del portal. Build/lint en verde.
 
 Ver el [plan de trabajo](05-plan-de-trabajo.md) para el detalle de sprints y próximos pasos.

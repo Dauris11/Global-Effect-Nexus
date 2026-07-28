@@ -14,7 +14,7 @@ const InvitarUsuario = z.object({
   email: z.string().email(),
   nombre: z.string().min(1),
   rol_id: z.string().uuid(),
-  idioma: z.enum(["es", "en", "fr", "it"]).default("es"),
+  idioma: z.enum(["es", "en"]).default("es"),
 });
 
 const CambiarRol = z.object({

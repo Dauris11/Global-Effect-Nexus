@@ -34,7 +34,7 @@ La **capa de base de datos está adelantada** respecto al cronograma: el diseño
 ### Inmediatos (S1 → S4: backend) — ✅ hechos
 1. ✅ **Proyecto Next.js 16** con TypeScript, Tailwind 4 (CSS-first), next-intl y pool `pg` en `src/lib/db.ts`.
 2. ✅ **Supabase Auth** (email + contraseña, sesión en cookies); `rol` resuelto desde `usuario`; `rbac.ts` (`requirePermission`) + `proxy.ts`.
-3. ✅ **Scaffolding i18n** (`messages/{es,en,fr,it}.json`) y rutas `/[locale]`.
+3. ✅ **Scaffolding i18n** (`messages/{es,en}.json`) y rutas `/[locale]`.
 4. ✅ **Runner de migraciones** integrado al repo (script npm) para reproducibilidad.
 
 ### Corto plazo (S5+)
@@ -190,7 +190,7 @@ Integraciones backend: `lib/anthropic.ts` (chat/traducción/OCR), `lib/email.ts`
 - [x] Proteccion por rol en `proxy.ts` + helpers `can()` / `requirePermission()`
 - [x] Migración `0014`: enlace `usuario.auth_user_id ↔ auth.users` + trigger de sincronización
 - [x] Capa base de queries pg (`lib/db.ts`) + patrón `server/<dominio>` (vertical de referencia: Estudiantes)
-- [x] i18n operativo (es/en/fr/it) + login localizado
+- [x] i18n operativo (es/en) + login localizado
 - [x] Subida de archivos (Supabase Storage) + tabla `documento` — `server/storage.ts`
 - [x] Layout: AppLayout + Sidebar por rol + TopBar (`components/layout/*`)
 - [ ] Página de login pulida + página pública de landing (pendiente de UI de S5+)

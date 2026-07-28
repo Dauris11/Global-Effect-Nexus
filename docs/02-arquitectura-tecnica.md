@@ -51,7 +51,7 @@ global-effect-nexus/
 - **Acceso a datos sin ORM:** SQL a mano con `pg` y consultas parametrizadas; control total del DDL/DML y defensa contra inyección. Tipado con interfaces TypeScript + validación Zod en el borde.
 - **Autenticación:** **Supabase Auth** (email + contraseña, sesión en cookies). Las credenciales viven en `auth.users`; la tabla `usuario` guarda perfil + `rol_id`, enlazada por `usuario.auth_user_id` (migración `0014`). `src/proxy.ts` y `rbac.ts` deciden el acceso por ruta/acción.
 - **RBAC granular:** roles + permisos por módulo (`rol`, `permiso`, `rol_permiso`), evaluados con `can(rol, 'expedientes.escribir')` y exigidos con `requirePermission(...)` en las Server Actions.
-- **Internacionalización:** segmento de ruta `/[locale]`, diccionarios `messages/{es,en,fr,it}.json`. Los enums se guardan como código y se traducen en la UI (no en la BD).
+- **Internacionalización:** segmento de ruta `/[locale]`, diccionarios `messages/{es,en}.json`. Los enums se guardan como código y se traducen en la UI (no en la BD).
 - **Almacenamiento:** archivos en Supabase Storage; sus metadatos en la tabla `documento` (una FK en vez de URLs sueltas). Helper: `src/server/storage.ts`.
 - **IA:** servicio propio para chat y OCR; contexto recuperado por búsqueda semántica (pgvector/RAG). Historial y extracciones persistidos y auditables.
 

@@ -3,7 +3,7 @@
  * rutas (RBAC). En Next.js 16 la convención `middleware.ts` se renombró a
  * `proxy.ts`; la API y el `config.matcher` son equivalentes.
  *
- * 1. next-intl resuelve el prefijo de idioma (/es, /en, /fr, /it).
+ * 1. next-intl resuelve el prefijo de idioma (/es, /en).
  * 2. Supabase refresca la sesión (renueva cookies del token) en cada petición.
  * 3. Las rutas del área autenticada exigen sesión; si no hay, se redirige al
  *    login conservando el destino. La autorización fina por permiso se aplica

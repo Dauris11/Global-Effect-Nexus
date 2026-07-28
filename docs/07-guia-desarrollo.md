@@ -12,7 +12,7 @@ Convenciones y flujos de trabajo del proyecto. Léela antes de escribir código.
 - **Nomenclatura:** `camelCase` en código TS; `snake_case`, en español y en singular, en la base de datos (`estudiante`, no `students`).
 - **Sin ORM.** El acceso a datos se escribe a mano con `pg` y **parámetros posicionales** (`$1, $2…`). **Nunca** concatenar entrada del usuario en el SQL (defensa contra inyección).
 - **Validación con Zod** en la frontera (formularios / Server Actions). Tipos por entidad en `types.ts`.
-- **i18n:** los textos de interfaz van en `messages/{es,en,fr,it}.json`. Los valores de estado se guardan como **código** en la BD y se traducen solo en la UI.
+- **i18n:** los textos de interfaz van en `messages/{es,en}.json`. Los valores de estado se guardan como **código** en la BD y se traducen solo en la UI.
 - **Estilos:** Tailwind CSS 4 (config CSS-first en `globals.css`, sin `tailwind.config.ts`) + Radix UI + componentes propios, usando `cn()` de `src/lib/utils.ts`.
 - **Secretos:** solo en `.env.local` (nunca en el repo).
 
@@ -99,7 +99,7 @@ Las tablas `cita_psicologia`, `nota_psicologica` y `perfil_psicologico` están *
 ## 4. Internacionalización (i18n)
 
 - Componentes de servidor/cliente: `const t = useTranslations("home");  t("title")` (o `getTranslations` en el servidor).
-- Agregar textos en los **cuatro** diccionarios `messages/{es,en,fr,it}.json` (mismas claves). `es` es el idioma por defecto.
+- Agregar textos en **los dos** diccionarios `messages/{es,en}.json` (mismas claves). `es` es el idioma por defecto.
 - Navegación con prefijo de idioma: usar `Link`, `redirect`, `useRouter` de `src/i18n/navigation.ts` (no los de `next/navigation`).
 
 ---

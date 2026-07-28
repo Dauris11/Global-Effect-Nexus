@@ -2,7 +2,7 @@
 
 Plataforma web integral para la gestión académica y administrativa de la **Fundación Global Effect** (La Vega, República Dominicana). Proyecto final de grado — UCATECI.
 
-> **Estado (2026-07-28):** base de datos desplegada en Supabase (36 tablas, RBAC, pgvector) y app en **Next.js 16 + Tailwind 4** con **Supabase Auth + RBAC**, i18n `es/en/fr/it` y capa `server/` por dominio.
+> **Estado (2026-07-28):** base de datos desplegada en Supabase (36 tablas, RBAC, pgvector) y app en **Next.js 16 + Tailwind 4** con **Supabase Auth + RBAC**, i18n `es/en` y capa `server/` por dominio.
 > **Sistema de interfaz** definido y normado en [docs/10](docs/10-estandar-de-interfaz.md), con 25 componentes en `src/components/ui/`.
 > **Pantallas terminadas:** landing, login por invitación, panel, inscripción de comida y el **módulo Administrativo completo (S9)** — tareas (Kanban), proyectos, personal y calendario.
 > Build, tipos y lint en verde.
@@ -109,7 +109,7 @@ Los tres seeds son **idempotentes**: se pueden repetir sin duplicar nada.
 npm run dev
 ```
 
-Abrir **http://localhost:3000**. Redirige a `/es`; la app está en español, inglés, francés e italiano (cambiar el prefijo: `/en`, `/fr`, `/it`).
+Abrir **http://localhost:3000**. Redirige a `/es`. La app está en **español** (por defecto) e **inglés**: para ver la versión en inglés, cambiar el prefijo a `/en` (p. ej. http://localhost:3000/en/dashboard).
 
 ---
 
@@ -147,7 +147,7 @@ Para invitar a alguien más: agregarlo a la lista `USUARIOS` de [`scripts/seed-u
 | `ECONNREFUSED` o timeout de la BD | Revisar `DATABASE_URL` en `.env.local` y que la IP tenga acceso en Supabase |
 | Pantallas vacías con todo bien configurado | Faltan los datos de demostración: `npm run db:seed` y `npm run db:seed:operaciones` |
 | El puerto 3000 está ocupado | `npm run dev -- -p 3001` |
-| Cambié `messages/*.json` y sale el nombre de la clave | Falta esa clave en alguno de los cuatro idiomas. Las cuatro deben tener exactamente las mismas |
+| Cambié `messages/*.json` y sale el nombre de la clave | Falta esa clave en uno de los dos idiomas. `es.json` y `en.json` deben tener exactamente las mismas |
 
 > Lista completa de dependencias y comandos de instalación en [`dependencias.txt`](dependencias.txt).
 
@@ -167,7 +167,7 @@ npm run build    # compila y valida tipos
 ```
 
 - **Antes de tocar una pantalla**, leer [docs/10 · Estándar de Interfaz](docs/10-estandar-de-interfaz.md). Es normativo: una pantalla que no lo cumple no está terminada.
-- Todo texto visible pasa por `next-intl` y va en los **cuatro** idiomas (`messages/es|en|fr|it.json`). Cero cadenas literales en JSX.
+- Todo texto visible pasa por `next-intl` y va en **los dos** idiomas (`messages/es.json` y `messages/en.json`). Cero cadenas literales en JSX.
 - Convenciones de código, patrón de módulo, RBAC y migraciones: [docs/07 · Guía de Desarrollo](docs/07-guia-desarrollo.md).
 
 ---
@@ -194,7 +194,7 @@ Global Effect/
 │  ├─ lib/                             # db · supabase/ · auth · rbac · nav · estados · email · utils
 │  ├─ server/                          # capa por dominio (queries + actions + schema + types)
 │  └─ proxy.ts                         # i18n + sesión Supabase + protección por rol
-├─ messages/                           # es · en · fr · it (mismas claves en los cuatro)
+├─ messages/                           # es · en (mismas claves en los dos)
 ├─ scripts/                            # migrate · seed · seed-usuarios · seed-operaciones · limpiar-iconos
 ├─ db/
 │  ├─ migrations/                      # 0001..0016 (.sql por dominio)
@@ -255,7 +255,7 @@ Backlog completo y estado por sprint en [docs/05-plan-de-trabajo.md](docs/05-pla
 
 ## Stack
 
-Next.js 16 (App Router) · React 19 · TypeScript · Tailwind 4 + Radix UI · PostgreSQL 17 (Supabase, PostGIS, `pg` sin ORM) · **Supabase Auth** + RBAC propio · next-intl (es/en/fr/it) · Zod · TanStack Query · Recharts · Leaflet · motion · Resend · Anthropic · pgvector (IA/RAG). Detalle completo en [docs/08-stack-tecnologico.md](docs/08-stack-tecnologico.md).
+Next.js 16 (App Router) · React 19 · TypeScript · Tailwind 4 + Radix UI · PostgreSQL 17 (Supabase, PostGIS, `pg` sin ORM) · **Supabase Auth** + RBAC propio · next-intl (es/en) · Zod · TanStack Query · Recharts · Leaflet · motion · Resend · Anthropic · pgvector (IA/RAG). Detalle completo en [docs/08-stack-tecnologico.md](docs/08-stack-tecnologico.md).
 
 ## Equipo
 

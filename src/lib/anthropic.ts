@@ -50,13 +50,17 @@ export async function chatAnthropic(
     .trim();
 }
 
-/** Traduce un texto al idioma destino (es/en/fr/it) con IA. */
+/**
+ * Traduce un texto al idioma destino con IA.
+ *
+ * Los idiomas de la interfaz son es/en, pero esta función acepta cualquiera:
+ * se usa para traducir contenido puntual (una carta a un patrocinador, un
+ * documento recibido), no para generar los diccionarios de `messages/`.
+ */
 export async function traducir(texto: string, idiomaDestino: string): Promise<string> {
   const nombres: Record<string, string> = {
     es: "español",
     en: "inglés",
-    fr: "francés",
-    it: "italiano",
   };
   return chatAnthropic([{ role: "user", content: texto }], {
     system: `Traduce el siguiente texto al ${
