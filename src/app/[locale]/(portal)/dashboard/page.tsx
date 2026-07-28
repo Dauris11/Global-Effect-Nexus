@@ -6,9 +6,11 @@
  * (ver docs/09-guia-de-diseno.md §5). Resiliente: si la BD no responde, muestra
  * ceros/estados vacíos en lugar de romper.
  */
-import { GraduationCap, HeartHandshake, BookOpen, Wallet, CalendarClock, ListChecks } from "lucide-react";
+import { Wallet, CalendarClock, ListChecks } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import { currentUser } from "@/lib/auth";
+import { bandaDePrioridad, paletaDe } from "@/lib/estados";
+import { cn } from "@/lib/utils";
 import {
   metricasDashboard,
   balanceMensual,
@@ -20,7 +22,7 @@ import {
 import { PageHeader } from "@/components/ui/page-header";
 import { StatCard } from "@/components/ui/stat-card";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+import { ChipEstado } from "@/components/ui/chip-estado";
 import { EmptyState } from "@/components/ui/empty-state";
 import { BalanceChart } from "./balance-chart";
 
@@ -31,13 +33,6 @@ type Tarea = {
   prioridad: string;
   estado: string;
   fecha_limite: string | null;
-};
-
-const PRIORIDAD_VARIANT: Record<string, "danger" | "warning" | "info" | "neutral"> = {
-  urgente: "danger",
-  alta: "warning",
-  media: "info",
-  baja: "neutral",
 };
 
 /** Carga tolerante a fallos: la vista de diseño no debe romperse sin BD. */
@@ -87,11 +82,13 @@ export default async function DashboardPage({
 
   const fechaCorta = new Intl.DateTimeFormat(locale, { day: "2-digit", month: "short" });
 
+  // Los iconos van por nombre: StatCard es un componente cliente y React no
+  // serializa componentes a través de esa frontera (ver components/ui/icono.tsx).
   const cards = [
-    { label: t("students"), value: metricas.estudiantes_activos, icon: GraduationCap, accent: "teal" as const },
-    { label: t("scholarships"), value: metricas.becados, icon: HeartHandshake, accent: "coral" as const },
-    { label: t("courses"), value: metricas.cursos_activos, icon: BookOpen, accent: "teal" as const },
-    { label: t("balance"), value: metricas.balance_mes, icon: Wallet, accent: "gold" as const, format: "currency" as const, hint: t("thisMonth") },
+    { label: t("students"), value: metricas.estudiantes_activos, icon: "GraduationCap", accent: "teal" as const },
+    { label: t("scholarships"), value: metricas.becados, icon: "HeartHandshake", accent: "coral" as const },
+    { label: t("courses"), value: metricas.cursos_activos, icon: "BookOpen", accent: "teal" as const },
+    { label: t("balance"), value: metricas.balance_mes, icon: "Wallet", accent: "gold" as const, format: "currency" as const, hint: t("thisMonth") },
   ];
 
   return (
@@ -177,14 +174,19 @@ export default async function DashboardPage({
         <CardContent className="space-y-1">
           {tareas.length > 0 ? (
             tareas.map((tarea) => (
+              /* Riel de prioridad a la izquierda: la firma del portal (§5). */
               <div
                 key={tarea.id}
-                className="flex items-center justify-between gap-3 rounded-md px-2 py-2.5 transition-colors hover:bg-muted/60"
+                className={cn(
+                  "flex items-center justify-between gap-3 rounded-md border-l-[3px] px-3 py-2.5",
+                  paletaDe(bandaDePrioridad(tarea.prioridad)).riel,
+                  "transition-colors hover:bg-muted/60",
+                )}
               >
                 <div className="flex min-w-0 items-center gap-3">
-                  <Badge variant={PRIORIDAD_VARIANT[tarea.prioridad] ?? "neutral"} className="capitalize">
-                    {tarea.prioridad}
-                  </Badge>
+                  <ChipEstado estado={bandaDePrioridad(tarea.prioridad)} punto className="shrink-0">
+                    {t(`priority.${tarea.prioridad}` as never)}
+                  </ChipEstado>
                   <p className="truncate text-sm font-medium text-foreground">{tarea.titulo}</p>
                 </div>
                 {tarea.fecha_limite && (

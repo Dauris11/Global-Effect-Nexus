@@ -72,13 +72,15 @@ Cada módulo = migración (ya lista) + queries parametrizadas + validación Zod 
 | **S6** | Academico (modulos) y portales | 2026-09-28 → 2026-10-09 | 🟦 Backend listo · UI pendiente |
 | **S7** | Patrocinio y Finanzas | 2026-10-12 → 2026-10-23 | 🟦 Backend listo · UI pendiente |
 | **S8** | Psicologia | 2026-10-26 → 2026-11-06 | 🟦 Backend listo · UI pendiente |
-| **S9** | Administrativo y Calendario | 2026-11-09 → 2026-11-20 | 🟦 Backend listo · UI pendiente |
+| **S9** | Administrativo y Calendario | 2026-11-09 → 2026-11-20 | ✅ Hecho |
 | **S10** | Modulos restantes y paginas publicas | 2026-11-23 → 2026-12-04 | 🟦 Backend listo · UI pendiente |
 | **S11** | IA y Reportes | 2026-12-07 → 2026-12-18 | 🟦 Backend listo · UI pendiente |
 | **S12** | Migracion, QA y Seguridad | 2026-12-21 → 2027-01-01 | ⏳ Pendiente |
 | **S13** | Despliegue y Tesis | 2027-01-04 → 2027-01-15 | ⏳ Pendiente |
 
-> **Estado del backend:** S0–S3 (BD) ✅. S4 (núcleo) ✅ en curso. **La capa de dominio backend de S5–S11 está construida** (`src/server/*`): consultas parametrizadas + Server Actions con `requirePermission` por módulo. Falta la **UI** de cada módulo (pantallas, formularios, gráficos) y aplicar la migración `0014` en Supabase.
+> **Estado del backend:** S0–S3 (BD) ✅. S4 (núcleo) ✅ en curso. **La capa de dominio backend de S5–S11 está construida** (`src/server/*`): consultas parametrizadas + Server Actions con `requirePermission` por módulo. Falta la **UI** de la mayoría de los módulos (pantallas, formularios, gráficos) y aplicar la migración `0014` en Supabase.
+
+> **Estado de la UI:** el **sistema de interfaz** está definido y normado en [10 · Estándar de Interfaz](10-estandar-de-interfaz.md) (tokens en tres capas, riel de estado, inventario de componentes en `src/components/ui/`). Sobre él ya están construidos el **login**, el **panel**, la **landing**, `/comida` y el **módulo Administrativo completo (S9)**. Los módulos restantes reutilizan esos mismos componentes: lo que falta es pantalla, no sistema.
 
 ### Capa `server/` construida (backend por dominio)
 
@@ -251,11 +253,13 @@ Integraciones backend: `lib/anthropic.ts` (chat/traducción/OCR), `lib/email.ts`
 
 > META SMART Especifico: Entregar tareas (Kanban + automatizaciones), proyectos, personal y calendario. Medible: Kanban con email + evento automatico, proyectos con progreso, personal y calendario mensual + agenda. Alcanzable: equipo de 2, stack Next.js+pg+PostgreSQL. Relevante: avanza el entregable de tesis. Temporal: 2 semanas.
 
-- [ ] Tareas (Kanban) + asignacion multiple
-- [ ] Automatizaciones al crear tarea
-- [ ] Proyectos + Gestion de personal
-- [ ] Calendario mensual + agenda 30 dias
-- [ ] Portal Administrativo
+- [x] **Tareas (Kanban) + asignacion multiple** — `/administrativo/tareas`: tablero de tres columnas con arrastre y menú "Mover a" (alternativa por teclado), tarjeta compacta con avatares apilados y panel lateral de detalle.
+- [x] **Automatizaciones al crear tarea** — correo a cada asignado (Resend), evento espejo en el calendario cuando hay fecha límite, webhook a n8n y revalidación de las cinco vistas que dependen del estado de una tarea.
+- [x] **Proyectos + Gestion de personal** — `/administrativo/proyectos` con avance calculado desde las tareas cerradas (no un porcentaje escrito a mano) y `/administrativo/personal` con cifras del equipo, reparto por rol y carga de trabajo por persona.
+- [x] **Calendario mensual + agenda 30 dias** — `/calendario`: rejilla del mes con indicadores por día y panel del día, más agenda cronológica de 30 días que mezcla eventos y tareas. Navegación por `?mes=YYYY-MM` (funciona sin JavaScript).
+- [x] **Portal Administrativo** — `/administrativo`: cuatro cifras del día, ocho accesos y las tareas que apremian (vencidas o de prioridad alta).
+
+> **Sobre el calendario:** las tareas con fecha límite generan un evento espejo, así que la consulta de calendario descarta los eventos con `tarea_id` y muestra la tarea. Si no, cada tarea se vería dos veces el mismo día; y la tarea es la que conserva su estado vivo (completada, vencida) y su prioridad.
 
 ---
 

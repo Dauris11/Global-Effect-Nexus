@@ -5,36 +5,11 @@
  */
 "use client";
 
-import {
-  LayoutDashboard,
-  Users,
-  GraduationCap,
-  HeartHandshake,
-  Wallet,
-  Brain,
-  Calendar,
-  BarChart3,
-  Settings,
-  Utensils,
-  type LucideIcon,
-} from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Link, usePathname } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
 import type { NavItem } from "@/lib/nav";
-
-const ICONS: Record<string, LucideIcon> = {
-  LayoutDashboard,
-  Users,
-  GraduationCap,
-  HeartHandshake,
-  Wallet,
-  Brain,
-  Calendar,
-  BarChart3,
-  Settings,
-  Utensils,
-};
+import { iconoPorNombre } from "@/components/ui/icono";
 
 export function NavList({
   items,
@@ -53,7 +28,7 @@ export function NavList({
   return (
     <nav className="space-y-0.5">
       {items.map((item) => {
-        const Icon = ICONS[item.icon];
+        const Icon = iconoPorNombre(item.icon);
         const active =
           pathname === item.href || pathname.startsWith(item.href + "/");
         return (

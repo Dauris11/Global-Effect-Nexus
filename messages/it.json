@@ -33,7 +33,10 @@
     "calendar": "Calendario",
     "reports": "Report",
     "settings": "Impostazioni",
-    "meals": "Pasti"
+    "meals": "Pasti",
+    "admin": "Operazioni",
+    "tasks": "Attività",
+    "staff": "Personale"
   },
   "landing": {
     "enter": "Accedi",
@@ -150,6 +153,224 @@
     "tasksTitle": "Attività prioritarie",
     "tasksEmpty": "Tutto in ordine",
     "tasksEmptyHint": "Nessuna attività in sospeso.",
-    "noData": "Ancora nessun dato"
+    "noData": "Ancora nessun dato",
+    "priority": {
+      "baja": "Bassa",
+      "media": "Media",
+      "alta": "Alta",
+      "urgente": "Urgente"
+    }
+  },
+  "admin": {
+    "eyebrow": "Operazioni",
+    "hub": {
+      "title": "Operazioni",
+      "description": "Progetti, attività e calendario della Fondazione.",
+      "openTasks": "Attività aperte",
+      "overdueTasks": "Scadute",
+      "activeProjects": "Progetti attivi",
+      "activeStudents": "Studenti attivi",
+      "shortcuts": "Scorciatoie",
+      "link_tasks": "Attività",
+      "link_projects": "Progetti",
+      "link_calendar": "Calendario",
+      "link_meals": "Mensa",
+      "link_records": "Fascicoli",
+      "link_services": "Servizio mensile",
+      "urgent": "Richiedono attenzione",
+      "urgentEmpty": "Nulla di urgente al momento",
+      "urgentEmptyHint": "Qui compaiono le attività scadute e ad alta priorità.",
+      "link_staff": "Personale",
+      "link_reports": "Report"
+    },
+    "tasks": {
+      "title": "Attività",
+      "description": "Trascina una scheda per cambiarne lo stato, oppure usa il menu della scheda.",
+      "new": "Nuova attività"
+    },
+    "projects": {
+      "title": "Progetti",
+      "description": "Iniziative in corso e il loro avanzamento reale.",
+      "new": "Nuovo progetto",
+      "empty": "Nessun progetto ancora",
+      "emptyHint": "Crea il primo per raggruppare le attività del team."
+    },
+    "board": {
+      "empty": "Nessuna attività",
+      "emptyHint": "Aggiungi la prima con il pulsante qui sotto.",
+      "add": "Aggiungi attività",
+      "moveTo": "Sposta in",
+      "noProject": "Senza progetto",
+      "unassigned": "Non assegnata",
+      "overdue": "Scaduta",
+      "today": "Oggi",
+      "moveError": "Non è stato possibile spostare l'attività. Riprova.",
+      "moved": "Attività spostata"
+    },
+    "task": {
+      "title": "Titolo",
+      "titlePlaceholder": "Cosa bisogna fare?",
+      "description": "Descrizione",
+      "project": "Progetto",
+      "priority": "Priorità",
+      "visibility": "Visibilità",
+      "dueDate": "Scadenza",
+      "assignees": "Assegnatari",
+      "close": "Chiudi"
+    },
+    "newTask": {
+      "title": "Nuova attività",
+      "subtitle": "Al salvataggio ogni assegnatario riceve un'email e la scadenza va nel calendario.",
+      "assigneesHint": "Scegli a chi tocca. Ognuno riceve un'email.",
+      "create": "Crea attività",
+      "creating": "Creazione…",
+      "cancel": "Annulla",
+      "titleRequired": "Inserisci un titolo per l'attività.",
+      "error": "Non è stato possibile creare l'attività. Controlla i dati e riprova."
+    },
+    "project": {
+      "name": "Nome",
+      "description": "Descrizione",
+      "lead": "Responsabile",
+      "status": "Stato",
+      "start": "Inizio",
+      "end": "Fine",
+      "dates": "Date",
+      "progress": "Avanzamento",
+      "tasksDone": "{done} di {total} attività",
+      "noTasks": "Nessuna attività"
+    },
+    "newProject": {
+      "title": "Nuovo progetto",
+      "subtitle": "Raggruppa le attività del team sotto un'iniziativa.",
+      "namePlaceholder": "Nome del progetto",
+      "progressHint": "L'avanzamento si calcola da solo, dalle attività completate.",
+      "create": "Crea progetto",
+      "creating": "Creazione…",
+      "nameRequired": "Inserisci un nome per il progetto.",
+      "error": "Non è stato possibile creare il progetto. Controlla i dati e riprova."
+    },
+    "priority": {
+      "baja": "Bassa",
+      "media": "Media",
+      "alta": "Alta",
+      "urgente": "Urgente"
+    },
+    "visibility": {
+      "todos": "Tutto il team",
+      "asignados": "Solo assegnatari"
+    },
+    "taskStatus": {
+      "pendiente": "Da fare",
+      "en_progreso": "In corso",
+      "completada": "Completata",
+      "cancelada": "Annullata"
+    },
+    "projectStatus": {
+      "planificacion": "Pianificazione",
+      "en_curso": "In corso",
+      "completado": "Completato",
+      "pausado": "In pausa"
+    }
+  },
+  "calendar": {
+    "eyebrow": "Operazioni",
+    "title": "Calendario",
+    "description": "Gli eventi della Fondazione e le attività con scadenza, in un unico posto.",
+    "monthNav": "Cambia mese",
+    "previousMonth": "Mese precedente",
+    "nextMonth": "Mese successivo",
+    "today": "Oggi",
+    "tomorrow": "Domani",
+    "agenda": "Prossimi 30 giorni",
+    "agendaEmpty": "Niente in programma nei prossimi 30 giorni",
+    "agendaEmptyHint": "Gli eventi che crei e le attività con scadenza compariranno qui.",
+    "gridHint": "Seleziona un giorno per vedere tutto ciò che accade.",
+    "dayLabel": "{fecha}, {n} voci",
+    "daySummary": "{n} voci",
+    "dayEmpty": "Questo giorno è libero",
+    "allDay": "Tutto il giorno",
+    "overdue": "Scaduta",
+    "close": "Chiudi",
+    "origin": {
+      "event": "Evento",
+      "task": "Attività"
+    },
+    "eventType": {
+      "academico": "Accademico",
+      "administrativo": "Amministrativo",
+      "social": "Sociale",
+      "reunion": "Riunione",
+      "otro": "Altro"
+    },
+    "priority": {
+      "baja": "Bassa",
+      "media": "Media",
+      "alta": "Alta",
+      "urgente": "Urgente"
+    },
+    "event": {
+      "title": "Titolo",
+      "description": "Descrizione",
+      "type": "Tipo",
+      "date": "Data",
+      "start": "Ora di inizio",
+      "end": "Ora di fine",
+      "place": "Luogo",
+      "lead": "Responsabile"
+    },
+    "newEvent": {
+      "action": "Nuovo evento",
+      "title": "Nuovo evento",
+      "subtitle": "Resta nel calendario di tutta la squadra.",
+      "titlePlaceholder": "Che cosa si organizza?",
+      "timeHint": "Lascia vuoto se dura tutto il giorno.",
+      "create": "Crea evento",
+      "creating": "Creazione…",
+      "cancel": "Annulla",
+      "titleRequired": "Scrivi un titolo per l’evento.",
+      "dateRequired": "Scegli la data dell’evento.",
+      "error": "Non è stato possibile creare l’evento. Controlla i dati e riprova."
+    }
+  },
+  "staff": {
+    "eyebrow": "Operazioni",
+    "title": "Personale",
+    "description": "Chi compone la squadra, con quale ruolo e quanto carico ha addosso.",
+    "stats": {
+      "total": "Persone",
+      "active": "Attive",
+      "inactive": "Inattive",
+      "neverSignedIn": "Mai entrate"
+    },
+    "roles": "Distribuzione per ruolo",
+    "roleName": {
+      "super_admin": "Amministrazione totale",
+      "admin": "Coordinamento",
+      "docente": "Docente",
+      "estudiante": "Studente",
+      "psicologo": "Psicologia",
+      "contabilidad": "Contabilità"
+    },
+    "people": "Squadra",
+    "column": {
+      "person": "Persona",
+      "role": "Ruolo",
+      "load": "Attività aperte",
+      "lastAccess": "Ultimo accesso",
+      "status": "Stato"
+    },
+    "overdue": "{count, plural, =1 {# scaduta} other {# scadute}}",
+    "never": "Mai",
+    "status": {
+      "active": "Attiva",
+      "inactive": "Inattiva"
+    },
+    "empty": "Non c’è ancora nessuno nella squadra",
+    "emptyHint": "Invita la prima persona con lo script degli utenti.",
+    "inviteHint": "Il sistema è solo su invito: nessuno si registra da solo.",
+    "forbidden": "Non hai accesso alla gestione del personale",
+    "forbiddenHint": "Serve il permesso «usuarios.administrar». Chiedilo al coordinamento.",
+    "backToHub": "Torna al portale amministrativo"
   }
 }

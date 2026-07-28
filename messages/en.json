@@ -33,7 +33,10 @@
     "calendar": "Calendar",
     "reports": "Reports",
     "settings": "Settings",
-    "meals": "Meals"
+    "meals": "Meals",
+    "admin": "Operations",
+    "tasks": "Tasks",
+    "staff": "Staff"
   },
   "landing": {
     "enter": "Enter",
@@ -150,6 +153,224 @@
     "tasksTitle": "Priority tasks",
     "tasksEmpty": "All caught up",
     "tasksEmptyHint": "No pending tasks.",
-    "noData": "No data yet"
+    "noData": "No data yet",
+    "priority": {
+      "baja": "Low",
+      "media": "Medium",
+      "alta": "High",
+      "urgente": "Urgent"
+    }
+  },
+  "admin": {
+    "eyebrow": "Operations",
+    "hub": {
+      "title": "Operations",
+      "description": "The foundation's projects, tasks and calendar.",
+      "openTasks": "Open tasks",
+      "overdueTasks": "Overdue",
+      "activeProjects": "Active projects",
+      "activeStudents": "Active students",
+      "shortcuts": "Shortcuts",
+      "link_tasks": "Tasks",
+      "link_projects": "Projects",
+      "link_calendar": "Calendar",
+      "link_meals": "Meals",
+      "link_records": "Student records",
+      "link_services": "Monthly service",
+      "urgent": "Needs attention",
+      "urgentEmpty": "Nothing needs attention right now",
+      "urgentEmptyHint": "Overdue and high-priority tasks show up here.",
+      "link_staff": "Staff",
+      "link_reports": "Reports"
+    },
+    "tasks": {
+      "title": "Tasks",
+      "description": "Drag a card to change its status, or use the card menu.",
+      "new": "New task"
+    },
+    "projects": {
+      "title": "Projects",
+      "description": "Ongoing initiatives and their real progress.",
+      "new": "New project",
+      "empty": "No projects yet",
+      "emptyHint": "Create the first one to group the team's tasks."
+    },
+    "board": {
+      "empty": "No tasks",
+      "emptyHint": "Add the first one with the button below.",
+      "add": "Add task",
+      "moveTo": "Move to",
+      "noProject": "No project",
+      "unassigned": "Unassigned",
+      "overdue": "Overdue",
+      "today": "Today",
+      "moveError": "The task could not be moved. Try again.",
+      "moved": "Task moved"
+    },
+    "task": {
+      "title": "Title",
+      "titlePlaceholder": "What needs to be done?",
+      "description": "Description",
+      "project": "Project",
+      "priority": "Priority",
+      "visibility": "Visibility",
+      "dueDate": "Due date",
+      "assignees": "Assignees",
+      "close": "Close"
+    },
+    "newTask": {
+      "title": "New task",
+      "subtitle": "On save, each assignee gets an email and the due date is added to the calendar.",
+      "assigneesHint": "Pick who takes it. Each person gets an email.",
+      "create": "Create task",
+      "creating": "Creating…",
+      "cancel": "Cancel",
+      "titleRequired": "Enter a title for the task.",
+      "error": "The task could not be created. Check the details and try again."
+    },
+    "project": {
+      "name": "Name",
+      "description": "Description",
+      "lead": "Lead",
+      "status": "Status",
+      "start": "Start",
+      "end": "End",
+      "dates": "Dates",
+      "progress": "Progress",
+      "tasksDone": "{done} of {total} tasks",
+      "noTasks": "No tasks"
+    },
+    "newProject": {
+      "title": "New project",
+      "subtitle": "Group the team's tasks under one initiative.",
+      "namePlaceholder": "Project name",
+      "progressHint": "Progress is calculated automatically from completed tasks.",
+      "create": "Create project",
+      "creating": "Creating…",
+      "nameRequired": "Enter a name for the project.",
+      "error": "The project could not be created. Check the details and try again."
+    },
+    "priority": {
+      "baja": "Low",
+      "media": "Medium",
+      "alta": "High",
+      "urgente": "Urgent"
+    },
+    "visibility": {
+      "todos": "Whole team",
+      "asignados": "Assignees only"
+    },
+    "taskStatus": {
+      "pendiente": "To do",
+      "en_progreso": "In progress",
+      "completada": "Done",
+      "cancelada": "Cancelled"
+    },
+    "projectStatus": {
+      "planificacion": "Planning",
+      "en_curso": "In progress",
+      "completado": "Completed",
+      "pausado": "Paused"
+    }
+  },
+  "calendar": {
+    "eyebrow": "Operations",
+    "title": "Calendar",
+    "description": "Foundation events and tasks with due dates, all in one place.",
+    "monthNav": "Change month",
+    "previousMonth": "Previous month",
+    "nextMonth": "Next month",
+    "today": "Today",
+    "tomorrow": "Tomorrow",
+    "agenda": "Next 30 days",
+    "agendaEmpty": "Nothing scheduled in the next 30 days",
+    "agendaEmptyHint": "Events you create and tasks with due dates will show up here.",
+    "gridHint": "Select a day to see everything happening on it.",
+    "dayLabel": "{fecha}, {n} entries",
+    "daySummary": "{n} entries",
+    "dayEmpty": "This day is free",
+    "allDay": "All day",
+    "overdue": "Overdue",
+    "close": "Close",
+    "origin": {
+      "event": "Event",
+      "task": "Task"
+    },
+    "eventType": {
+      "academico": "Academic",
+      "administrativo": "Administrative",
+      "social": "Social",
+      "reunion": "Meeting",
+      "otro": "Other"
+    },
+    "priority": {
+      "baja": "Low",
+      "media": "Medium",
+      "alta": "High",
+      "urgente": "Urgent"
+    },
+    "event": {
+      "title": "Title",
+      "description": "Description",
+      "type": "Type",
+      "date": "Date",
+      "start": "Start time",
+      "end": "End time",
+      "place": "Location",
+      "lead": "Owner"
+    },
+    "newEvent": {
+      "action": "New event",
+      "title": "New event",
+      "subtitle": "It goes on the whole team's calendar.",
+      "titlePlaceholder": "What is being held or met about?",
+      "timeHint": "Leave empty if it lasts all day.",
+      "create": "Create event",
+      "creating": "Creating…",
+      "cancel": "Cancel",
+      "titleRequired": "Enter a title for the event.",
+      "dateRequired": "Pick the event date.",
+      "error": "The event could not be created. Check the details and try again."
+    }
+  },
+  "staff": {
+    "eyebrow": "Operations",
+    "title": "Staff",
+    "description": "Who is on the team, in what role, and how much they are carrying.",
+    "stats": {
+      "total": "People",
+      "active": "Active",
+      "inactive": "Inactive",
+      "neverSignedIn": "Never signed in"
+    },
+    "roles": "Breakdown by role",
+    "roleName": {
+      "super_admin": "Full administration",
+      "admin": "Coordination",
+      "docente": "Teacher",
+      "estudiante": "Student",
+      "psicologo": "Psychology",
+      "contabilidad": "Accounting"
+    },
+    "people": "Team",
+    "column": {
+      "person": "Person",
+      "role": "Role",
+      "load": "Open tasks",
+      "lastAccess": "Last access",
+      "status": "Status"
+    },
+    "overdue": "{count} overdue",
+    "never": "Never",
+    "status": {
+      "active": "Active",
+      "inactive": "Inactive"
+    },
+    "empty": "No one on the team yet",
+    "emptyHint": "Invite the first person with the users script.",
+    "inviteHint": "The system is invitation-only: no one signs up on their own.",
+    "forbidden": "You do not have access to staff management",
+    "forbiddenHint": "It requires the “usuarios.administrar” permission. Ask coordination for it.",
+    "backToHub": "Back to the admin hub"
   }
 }

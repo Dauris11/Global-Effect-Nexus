@@ -38,7 +38,7 @@ export async function crearProyecto(input: unknown): Promise<string> {
       d.progreso,
     ],
   );
-  revalidatePath("/administrativo/proyectos");
+  revalidatePath("/[locale]/administrativo/proyectos", "page");
   return rows[0].id as string;
 }
 
@@ -60,6 +60,17 @@ export async function crearTarea(input: unknown): Promise<string> {
   );
   const tareaId = rows[0].id as string;
 
+  // Evento de calendario con la fecha límite — ClickUp S9 · #446.
+  // Fuera del bloque de asignados a propósito: una tarea con fecha tiene que
+  // salir en el calendario aunque todavía no tenga a nadie encima.
+  if (d.fecha_limite) {
+    await query(
+      `INSERT INTO evento (titulo, tipo, fecha, estado, tarea_id)
+       VALUES ($1, 'administrativo', $2, 'programado', $3)`,
+      [`Tarea: ${d.titulo}`, d.fecha_limite, tareaId],
+    );
+  }
+
   if (d.asignados.length > 0) {
     // Asignación N:M (una sola sentencia con unnest).
     await query(
@@ -68,15 +79,6 @@ export async function crearTarea(input: unknown): Promise<string> {
        ON CONFLICT DO NOTHING`,
       [tareaId, d.asignados],
     );
-
-    // Evento de calendario con la fecha límite (si existe).
-    if (d.fecha_limite) {
-      await query(
-        `INSERT INTO evento (titulo, tipo, fecha, estado, tarea_id)
-         VALUES ($1, 'administrativo', $2, 'programado', $3)`,
-        [`Tarea: ${d.titulo}`, d.fecha_limite, tareaId],
-      );
-    }
 
     // Correo a cada asignado (best-effort).
     const { rows: correos } = await query(
@@ -98,8 +100,9 @@ export async function crearTarea(input: unknown): Promise<string> {
     await dispararWebhook("tarea.creada", { tareaId, titulo: d.titulo, asignados: d.asignados });
   }
 
-  revalidatePath("/administrativo/tareas");
-  revalidatePath("/calendario");
+  // Invalidación de vistas — ClickUp S9 · #447. La tarea aparece en cuatro
+  // pantallas a la vez; si solo se refresca el tablero, el resto miente.
+  refrescarVistasDeTareas();
   return tareaId;
 }
 
@@ -107,7 +110,23 @@ export async function cambiarEstadoTarea(input: unknown): Promise<void> {
   await requirePermission("operaciones.escribir");
   const d = CambiarEstadoTarea.parse(input);
   await query(`UPDATE tarea SET estado = $2 WHERE id = $1`, [d.id, d.estado]);
-  revalidatePath("/administrativo/tareas");
+  refrescarVistasDeTareas();
+}
+
+/**
+ * Vistas que dependen del estado de las tareas — ClickUp S9 · #447.
+ *
+ * Cerrar una tarea mueve el avance de su proyecto, la carga de sus asignados,
+ * las cifras del portal y su marca en el calendario. Se listan en un solo sitio
+ * para que añadir una pantalla nueva no obligue a recordar cuatro llamadas
+ * sueltas repartidas por el archivo.
+ */
+function refrescarVistasDeTareas(): void {
+  revalidatePath("/[locale]/administrativo", "page");
+  revalidatePath("/[locale]/administrativo/tareas", "page");
+  revalidatePath("/[locale]/administrativo/proyectos", "page");
+  revalidatePath("/[locale]/administrativo/personal", "page");
+  revalidatePath("/[locale]/calendario", "page");
 }
 
 export async function crearEvento(input: unknown): Promise<string> {
@@ -127,7 +146,7 @@ export async function crearEvento(input: unknown): Promise<string> {
       d.responsable || null,
     ],
   );
-  revalidatePath("/calendario");
+  revalidatePath("/[locale]/calendario", "page");
   return rows[0].id as string;
 }
 
@@ -144,5 +163,5 @@ export async function upsertRegistroServicio(input: unknown): Promise<void> {
                    notas = EXCLUDED.notas`,
     [d.estudiante_id, d.mes, d.hizo_servicio, d.asistio_reunion, d.notas || null],
   );
-  revalidatePath("/servicios-mensuales");
+  revalidatePath("/[locale]/servicios-mensuales", "page");
 }

@@ -1,6 +1,9 @@
 # Guía de Diseño — Global Effect Nexus
 
-> Referencias visuales de marca y tokens de diseño de la interfaz. Alimenta la capa de estilos (Tailwind 4, `src/app/globals.css`). Última actualización: 2026-07-11.
+> **Marca y referencias visuales.** De dónde viene la identidad y cómo se ve.
+> Las reglas obligatorias de producto (tokens, componentes, densidad, accesibilidad)
+> están en **[10 · Estándar de Interfaz](10-estandar-de-interfaz.md)** — ese documento manda.
+> Última actualización: 2026-07-27.
 
 ## 1. Referencias de marca
 
@@ -11,9 +14,9 @@ La identidad se apoya en dos fuentes reales:
 | **Fundación Global Effect** | [globaleffect.org](https://www.globaleffect.org/) | Estética limpia y minimalista; **negro** como base y **acento dorado/ámbar** (sello Candid Gold); fotografía documental real (no stock); tono cálido, orientado a la misión y a la transformación comunitaria. |
 | **Urban Group** (marca corporativa, fuente oficial) | [urbangroup.do](https://urbangroup.do/) | Base **blanco / gris carbón** con acento **turquesa**; mucho espacio en blanco; retícula de tarjetas; tipografía geométrica sans-serif (**Montserrat**); aire sobrio, contemporáneo y premium. |
 
-**Síntesis para el producto:** dirección **"Impact Editorial"** — cálida, humana y moderna-institucional. **Papel frío** como base, **teal** (`#2096BA`) de marca, **coral** (`#FF6B5C`) como acento humano (el "riesgo" estético) y **tinta** (`#0F1E2E`) para texto/superficies oscuras. Prioriza legibilidad, contraste (AA) y jerarquía. Diseñada con las skills `frontend-design` (Anthropic), `ui-ux-pro-max`, `emil-design-eng` y `shadcn`.
+**Síntesis para el producto:** dirección **"Impact Editorial"** — cálida, humana y moderna-institucional. **Papel neutro** como base, **azul institucional** (`#1D5FD4`) como primario, **coral** (`#FF6B5C`) como acento humano de uso puntual (el "riesgo" estético) y **tinta** (`#171717`) para texto. Prioriza legibilidad, contraste (AA) y jerarquía. Diseñada con las skills `frontend-design` (Anthropic), `ui-ux-pro-max`, `emil-design-eng` y `shadcn`.
 
-> **Firma:** un **subrayado de marcador turquesa** que se dibuja bajo la última palabra del titular del hero (`components/brand/marker.tsx`), + el **bento grid** asimétrico de programas y la **cinta marquee** de la promesa. El resto se mantiene en calma (principio de "gastar la audacia en un solo lugar").
+> **Firmas:** en las páginas públicas, un **subrayado de marcador** que se dibuja bajo la última palabra del titular del hero (`components/brand/marker.tsx`), más el bento grid asimétrico de programas y la cinta marquee de la promesa. En el portal, el **riel de estado** ([10 · §5](10-estandar-de-interfaz.md#5-la-firma-el-riel-de-estado)). El resto se mantiene en calma: principio de gastar la audacia en un solo lugar.
 
 ## 2. Tipografía (pareja deliberada)
 
@@ -31,26 +34,31 @@ Definida en `src/app/globals.css` como variables **hex** (tema claro + `.dark`) 
 
 | Token | Hex (claro) | Rol |
 |---|---|---|
-| `--brand-charcoal` | `#0F1E2E` | **Tinta base** — superficies oscuras (foto del hero, marquee, footer, chip del logo) |
-| `--brand-teal` / `--primary` | `#2096BA` | **Primario** — acciones, enlaces, foco, tile destacado, firma del marcador |
-| `--brand-teal-dark` | `#12657D` | Hover del primario |
+| `--brand-charcoal` | `#1A2230` | **Tinta base** — superficies oscuras (foto del hero, marquee, footer, chip del logo) |
+| `--brand-teal` / `--primary` | `#1D5FD4` | **Primario** — acciones, enlaces, foco, tile destacado, firma del marcador |
+| `--brand-teal-dark` | `#123A86` | Hover del primario |
 | `--brand-accent` | `#FF6B5C` | **Coral** (acento humano) — separadores del marquee, chip de dato |
-| `--brand-gold` | `#F59E0B` | Ámbar — botón de comida |
-| `--background` | `#F7F9FB` | Papel frío (fondo) |
-| `--foreground` | `#0F1E2E` | Texto principal |
-| `--muted` / `--muted-foreground` | `#EEF3F6` / `#4A5B68` | Fondos sutiles y texto secundario |
-| `--border` / `--input` | `#DBE4EA` | Bordes y campos |
+| `--brand-gold` | `#F59E0B` | Ámbar — comida (y solo comida) |
+| `--background` | `#F5F5F5` | Papel neutro (fondo) |
+| `--foreground` | `#171717` | Texto principal |
+| `--muted` / `--muted-foreground` | `#F5F5F5` / `#5F6B76` | Fondos sutiles y texto secundario |
+| `--border` / `--input` | `#E5E5E5` | Bordes y campos |
 | `--destructive` | `#BA1A1A` | Errores (semántico, tal cual) |
 
-**Tema oscuro** (`.dark`): papel → tinta `#0A1620`, texto `#EEF3F6`, `--primary` a cian claro `#58C6E6`. Contrastes AA cuidados.
+> El nombre `--brand-teal` es histórico: el token pasó de turquesa a azul institucional, pero se conservó el nombre para no romper las utilidades ya en uso. El valor autoritativo es el de `globals.css`.
+
+**Tema oscuro** (`.dark`): papel → `#121316`, texto `#F2F3F5`, `--primary` a azul claro `#5B9BF5`. Contrastes AA cuidados.
+
+**Colores de dominio** (notas, finanzas, confidencialidad, tareas y prioridad): definidos como capa 3 de tokens en [10 · §3.2](10-estandar-de-interfaz.md#32-capa-3--dominio). No los redefinas por módulo.
 
 **Logo:** wordmark **blanco** en `public/logo-white.png` (`components/brand/logo.tsx`) e **icono** en `public/icon.png` (`components/brand/icon-mark.tsx`); favicon compuesto (icono blanco sobre tinta) en `src/app/icon.png`. Se usan **solo sobre fondos oscuros**.
 
 ### Colores semánticos de datos (del dominio)
-De [03 · Módulos](03-modulos-funcionales.md), a respetar en tablas/gráficas:
-- **Calificaciones:** verde ≥90 · azul 70–89 · amarillo 60–69 · rojo <60.
+De [03 · Módulos](03-modulos-funcionales.md), implementados como tokens de capa 3:
+- **Calificaciones:** verde ≥90 · azul 70–89 · ámbar 60–69 · rojo <60.
 - **Finanzas:** verde ingresos · rojo egresos.
-- **Confidencialidad (psicología):** indicadores de nivel alto/medio/bajo y de riesgo.
+- **Confidencialidad (psicología):** nivel alto / medio / bajo.
+- **Tareas y prioridad:** ver [10 · §3.2](10-estandar-de-interfaz.md#32-capa-3--dominio).
 
 ## 4. Layout y componentes
 
@@ -73,4 +81,5 @@ De [03 · Módulos](03-modulos-funcionales.md), a respetar en tablas/gráficas:
 
 ---
 
+> **Reglas obligatorias de producto:** [10 · Estándar de Interfaz](10-estandar-de-interfaz.md).
 > Referencia técnica del stack: [08 · Stack Tecnológico](08-stack-tecnologico.md). Convenciones de código: [07 · Guía de Desarrollo](07-guia-desarrollo.md).

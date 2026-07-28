@@ -15,7 +15,8 @@ Toda la documentación del proyecto está centralizada en esta carpeta: **un arc
 | 06 | [Plan de Entregas](06-plan-de-entregas.md) | Guía para producir las entregas de la tesis (E2–E6). |
 | 07 | [Guía de Desarrollo](07-guia-desarrollo.md) | Convenciones, patrón de módulos, RBAC, i18n, migraciones y flujo de Git (para desarrollar). |
 | 08 | [Stack Tecnológico](08-stack-tecnologico.md) | Stack definitivo (fuente de verdad): framework, Supabase Auth, integraciones, versiones. |
-| 09 | [Guía de Diseño](09-guia-de-diseno.md) | Referencias visuales de marca, tipografía Montserrat, paleta y tokens. |
+| 09 | [Guía de Diseño](09-guia-de-diseno.md) | Referencias visuales de marca, tipografía y paleta. |
+| 10 | [**Estándar de Interfaz**](10-estandar-de-interfaz.md) | **Normativo.** Tokens en tres capas, componentes, densidad, movimiento, accesibilidad y dirección por superficie. |
 
 ### 04 · Modelo de datos
 - [Diagrama Entidad-Relación](04-modelo-de-datos/diagrama-entidad-relacion.md) — ERD Mermaid (global + por dominio) y matriz de relaciones.

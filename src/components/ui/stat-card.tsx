@@ -8,10 +8,10 @@
 
 import * as React from "react";
 import { useEffect, useRef, useState } from "react";
-import type { LucideIcon } from "lucide-react";
 import { ArrowDownRight, ArrowUpRight } from "lucide-react";
 import { useReducedMotion } from "motion/react";
 import { Card } from "./card";
+import { Icono } from "./icono";
 import { cn } from "@/lib/utils";
 
 const ACCENTS = {
@@ -54,7 +54,7 @@ export function StatCard({
   value,
   format = "number",
   locale = "es",
-  icon: Icon,
+  icon,
   accent = "teal",
   delta,
   hint,
@@ -64,7 +64,12 @@ export function StatCard({
   value: number;
   format?: "number" | "currency";
   locale?: string;
-  icon?: LucideIcon;
+  /**
+   * Nombre del icono en el registro (`components/ui/icono.tsx`), no el
+   * componente: este es un componente cliente y React no serializa funciones
+   * a través de la frontera del servidor.
+   */
+  icon?: string;
   accent?: keyof typeof ACCENTS;
   /** Variación respecto al periodo anterior (%). Positivo sube, negativo baja. */
   delta?: number;
@@ -86,9 +91,9 @@ export function StatCard({
     <Card className={cn("p-5", className)}>
       <div className="flex items-start justify-between">
         <p className="text-sm font-medium text-muted-foreground">{label}</p>
-        {Icon && (
+        {icon && (
           <span className={cn("flex size-9 items-center justify-center rounded-lg", ACCENTS[accent])}>
-            <Icon className="size-4" />
+            <Icono nombre={icon} className="size-4" />
           </span>
         )}
       </div>
@@ -101,7 +106,7 @@ export function StatCard({
             <span
               className={cn(
                 "inline-flex items-center gap-0.5 font-medium",
-                up ? "text-emerald-600 dark:text-emerald-400" : "text-destructive",
+                up ? "text-flujo-ingreso" : "text-flujo-egreso",
               )}
             >
               {up ? <ArrowUpRight className="size-3.5" /> : <ArrowDownRight className="size-3.5" />}

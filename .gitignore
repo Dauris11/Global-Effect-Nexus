@@ -17,6 +17,10 @@ yarn-error.log*
 # Sistema
 .DS_Store
 Thumbs.db
+# Icono de carpeta personalizado de macOS (el nombre lleva un \r final).
+# Rompe Turbopack y las refs de git si se versiona.
+Icon?
+Icon
 
 # Temporales de sincronización de Google Drive
 .tmp.driveupload/

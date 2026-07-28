@@ -1,7 +1,13 @@
 /**
- * Badge — etiqueta compacta de estado. Incluye las variantes semánticas del
- * dominio (calificaciones y finanzas, ver docs/09-guia-de-diseno.md §3) para
- * que tablas y listas usen siempre el mismo código de color.
+ * Badge — etiqueta compacta de categoría o estado genérico.
+ *
+ * Para un estado del dominio (nota, flujo, prioridad, tarea) usa `ChipEstado`,
+ * que sale del mapa único de `lib/estados.ts`. Este componente cubre el resto:
+ * conteos, categorías y estados sin color propio en el sistema.
+ *
+ * Las variantes semánticas de abajo se apoyan en los tokens de dominio, no en
+ * la paleta cruda de Tailwind, para que un "success" aquí sea exactamente el
+ * mismo verde que un aprobado en una tabla de notas.
  */
 import * as React from "react";
 import { cva, type VariantProps } from "class-variance-authority";
@@ -16,11 +22,11 @@ const badgeVariants = cva(
         neutral: "border-border bg-muted text-muted-foreground",
         outline: "border-border text-foreground",
         accent: "border-transparent bg-brand-accent/12 text-brand-accent",
-        // Semánticos — calificaciones
-        success: "border-transparent bg-emerald-500/12 text-emerald-600 dark:text-emerald-400",
-        info: "border-transparent bg-sky-500/12 text-sky-600 dark:text-sky-400",
-        warning: "border-transparent bg-amber-500/14 text-amber-600 dark:text-amber-400",
-        danger: "border-transparent bg-destructive/12 text-destructive",
+        // Semánticos — alineados con los tokens de dominio (capa 3).
+        success: "border-transparent bg-nota-excelente-suave text-nota-excelente",
+        info: "border-transparent bg-nota-buena-suave text-nota-buena",
+        warning: "border-transparent bg-nota-riesgo-suave text-nota-riesgo",
+        danger: "border-transparent bg-nota-critica-suave text-nota-critica",
       },
     },
     defaultVariants: { variant: "default" },

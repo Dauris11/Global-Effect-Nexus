@@ -5,8 +5,15 @@
  * institucional (#1D5FD4) como color dominante de marca/primario, coral
  * (#FF6B5C) como acento humano puntual y tinta (#171717) para texto.
  * Tipografía: Fraunces (display), Montserrat (UI), JetBrains Mono
- * (datos). Tokens en hex expuestos como utilidades vía @theme inline.
- * Ver docs/09-guia-de-diseno.md.
+ * (datos).
+ *
+ * Los tokens se organizan en tres capas (ver docs/10-estandar-de-interfaz.md):
+ *   1. Primitivos  — rampas de color crudas. No se usan en componentes.
+ *   2. Semánticos  — rol en la interfaz (--background, --primary, --border…).
+ *   3. De dominio  — significado del negocio (--nota-*, --flujo-*, --tarea-*).
+ *
+ * Regla: un componente NUNCA escribe un hex ni un primitivo. Solo usa las
+ * utilidades derivadas de las capas 2 y 3.
  */
 @import "tailwindcss";
 @import "tw-animate-css";
@@ -43,9 +50,78 @@
   --brand-accent: #ff6b5c; /* coral (acento humano, uso puntual) */
   --brand-gold: #f59e0b; /* ámbar (comida) */
 
+  /* --- Superficies (capa 2) ---
+     Tres niveles de profundidad. Nunca se apilan más de dos. */
+  --surface-sunken: #ededed; /* fondos de columna, celdas vacías, wells */
+  --surface: #ffffff; /* tarjetas, filas, paneles */
+  --surface-raised: #ffffff; /* popovers, diálogos, tarjeta arrastrada */
+
+  /* --- Colores de dominio (capa 3) ---
+     Significado del negocio, no rol de interfaz. Definidos aquí una sola vez
+     para que todos los módulos pinten lo mismo del mismo color.
+     Cada par: color de texto/riel (--x) y fondo suave del chip (--x-suave). */
+
+  /* Calificaciones — bandas de docs/03-modulos-funcionales.md. */
+  --nota-excelente: #15803d; /* >= 90 */
+  --nota-excelente-suave: #e8f5ed;
+  --nota-buena: #1d5fd4; /* 70–89 */
+  --nota-buena-suave: #eaf1fd;
+  --nota-riesgo: #b45309; /* 60–69 */
+  --nota-riesgo-suave: #fdf3e3;
+  --nota-critica: #ba1a1a; /* < 60 */
+  --nota-critica-suave: #fdecec;
+
+  /* Finanzas — signo del movimiento. */
+  --flujo-ingreso: #15803d;
+  --flujo-ingreso-suave: #e8f5ed;
+  --flujo-egreso: #ba1a1a;
+  --flujo-egreso-suave: #fdecec;
+
+  /* Psicología — nivel de confidencialidad / riesgo. */
+  --confid-alto: #ba1a1a;
+  --confid-alto-suave: #fdecec;
+  --confid-medio: #b45309;
+  --confid-medio-suave: #fdf3e3;
+  --confid-bajo: #15803d;
+  --confid-bajo-suave: #e8f5ed;
+
+  /* Operaciones — estado de tarea. Los nombres siguen el enum de la BD
+     (pendiente · en_progreso · completada · cancelada), no una invención
+     de la interfaz. */
+  --tarea-pendiente: #5f6b76;
+  --tarea-pendiente-suave: #eeeff1;
+  --tarea-progreso: #1d5fd4;
+  --tarea-progreso-suave: #eaf1fd;
+  --tarea-completada: #15803d;
+  --tarea-completada-suave: #e8f5ed;
+  --tarea-cancelada: #8b949e;
+  --tarea-cancelada-suave: #f2f3f4;
+
+  /* Operaciones — prioridad de tarea. */
+  --prioridad-baja: #5f6b76;
+  --prioridad-baja-suave: #eeeff1;
+  --prioridad-media: #1d5fd4;
+  --prioridad-media-suave: #eaf1fd;
+  --prioridad-alta: #b45309;
+  --prioridad-alta-suave: #fdf3e3;
+  --prioridad-urgente: #ba1a1a;
+  --prioridad-urgente-suave: #fdecec;
+
+  /* --- Elevación ---
+     Sombras cortas y de baja opacidad: el portal es plano salvo lo que
+     realmente flota. `arrastre` es la única sombra grande del sistema. */
+  --sombra-plana: 0 1px 2px 0 rgb(15 22 32 / 0.05);
+  --sombra-flotante: 0 4px 12px -2px rgb(15 22 32 / 0.1), 0 2px 4px -2px rgb(15 22 32 / 0.06);
+  --sombra-arrastre: 0 12px 28px -6px rgb(15 22 32 / 0.22);
+
+  /* --- Ancho del riel de estado (firma del portal) ---
+     Franja vertical en el borde izquierdo de tarjetas y filas que codifica
+     el estado principal del registro. Ver docs/10-estandar-de-interfaz.md §5. */
+  --riel: 3px;
+
   /* Curvas de easing (vocabulario de movimiento del portal).
      Las nativas de CSS son "flojas"; estas dan intención. Ver
-     docs/09-guia-de-diseno.md §5. */
+     docs/10-estandar-de-interfaz.md §7. */
   --ease-out: cubic-bezier(0.23, 1, 0.32, 1); /* entradas/salidas: arranque rápido */
   --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1); /* movimiento en pantalla */
   --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1); /* rebote sutil (raro) */
@@ -77,6 +153,58 @@
   --brand-teal-dark: #1d5fd4;
   --brand-accent: #ff8377;
   --brand-gold: #f59e0b;
+
+  /* Superficies: en oscuro la profundidad se hace con luminosidad, no con
+     sombra (una sombra sobre fondo oscuro no se ve). */
+  --surface-sunken: #0e0f12;
+  --surface: #1a1b1e;
+  --surface-raised: #26282c;
+
+  /* Dominio — versiones claras para contraste AA sobre fondo oscuro.
+     Los "suave" son tintes translúcidos, no colores planos, para que el chip
+     se apoye en la superficie sobre la que cae. */
+  --nota-excelente: #4ade80;
+  --nota-excelente-suave: #16351f;
+  --nota-buena: #5b9bf5;
+  --nota-buena-suave: #14243f;
+  --nota-riesgo: #fbbf24;
+  --nota-riesgo-suave: #3a2a0c;
+  --nota-critica: #ffb4ab;
+  --nota-critica-suave: #43181a;
+
+  --flujo-ingreso: #4ade80;
+  --flujo-ingreso-suave: #16351f;
+  --flujo-egreso: #ffb4ab;
+  --flujo-egreso-suave: #43181a;
+
+  --confid-alto: #ffb4ab;
+  --confid-alto-suave: #43181a;
+  --confid-medio: #fbbf24;
+  --confid-medio-suave: #3a2a0c;
+  --confid-bajo: #4ade80;
+  --confid-bajo-suave: #16351f;
+
+  --tarea-pendiente: #a3aab3;
+  --tarea-pendiente-suave: #2a2c31;
+  --tarea-progreso: #5b9bf5;
+  --tarea-progreso-suave: #14243f;
+  --tarea-completada: #4ade80;
+  --tarea-completada-suave: #16351f;
+  --tarea-cancelada: #7c848e;
+  --tarea-cancelada-suave: #232529;
+
+  --prioridad-baja: #a3aab3;
+  --prioridad-baja-suave: #2a2c31;
+  --prioridad-media: #5b9bf5;
+  --prioridad-media-suave: #14243f;
+  --prioridad-alta: #fbbf24;
+  --prioridad-alta-suave: #3a2a0c;
+  --prioridad-urgente: #ffb4ab;
+  --prioridad-urgente-suave: #43181a;
+
+  --sombra-plana: 0 1px 2px 0 rgb(0 0 0 / 0.4);
+  --sombra-flotante: 0 4px 12px -2px rgb(0 0 0 / 0.5), 0 2px 4px -2px rgb(0 0 0 / 0.4);
+  --sombra-arrastre: 0 12px 28px -6px rgb(0 0 0 / 0.65);
 }
 
 @theme inline {
@@ -110,6 +238,57 @@
   --color-brand-teal-dark: var(--brand-teal-dark);
   --color-brand-accent: var(--brand-accent);
   --color-brand-gold: var(--brand-gold);
+
+  /* Superficies */
+  --color-surface: var(--surface);
+  --color-surface-sunken: var(--surface-sunken);
+  --color-surface-raised: var(--surface-raised);
+
+  /* Dominio — habilita bg-nota-critica-suave, text-flujo-ingreso,
+     border-l-tarea-progreso, etc., en cualquier módulo. */
+  --color-nota-excelente: var(--nota-excelente);
+  --color-nota-excelente-suave: var(--nota-excelente-suave);
+  --color-nota-buena: var(--nota-buena);
+  --color-nota-buena-suave: var(--nota-buena-suave);
+  --color-nota-riesgo: var(--nota-riesgo);
+  --color-nota-riesgo-suave: var(--nota-riesgo-suave);
+  --color-nota-critica: var(--nota-critica);
+  --color-nota-critica-suave: var(--nota-critica-suave);
+
+  --color-flujo-ingreso: var(--flujo-ingreso);
+  --color-flujo-ingreso-suave: var(--flujo-ingreso-suave);
+  --color-flujo-egreso: var(--flujo-egreso);
+  --color-flujo-egreso-suave: var(--flujo-egreso-suave);
+
+  --color-confid-alto: var(--confid-alto);
+  --color-confid-alto-suave: var(--confid-alto-suave);
+  --color-confid-medio: var(--confid-medio);
+  --color-confid-medio-suave: var(--confid-medio-suave);
+  --color-confid-bajo: var(--confid-bajo);
+  --color-confid-bajo-suave: var(--confid-bajo-suave);
+
+  --color-tarea-pendiente: var(--tarea-pendiente);
+  --color-tarea-pendiente-suave: var(--tarea-pendiente-suave);
+  --color-tarea-progreso: var(--tarea-progreso);
+  --color-tarea-progreso-suave: var(--tarea-progreso-suave);
+  --color-tarea-completada: var(--tarea-completada);
+  --color-tarea-completada-suave: var(--tarea-completada-suave);
+  --color-tarea-cancelada: var(--tarea-cancelada);
+  --color-tarea-cancelada-suave: var(--tarea-cancelada-suave);
+
+  --color-prioridad-baja: var(--prioridad-baja);
+  --color-prioridad-baja-suave: var(--prioridad-baja-suave);
+  --color-prioridad-media: var(--prioridad-media);
+  --color-prioridad-media-suave: var(--prioridad-media-suave);
+  --color-prioridad-alta: var(--prioridad-alta);
+  --color-prioridad-alta-suave: var(--prioridad-alta-suave);
+  --color-prioridad-urgente: var(--prioridad-urgente);
+  --color-prioridad-urgente-suave: var(--prioridad-urgente-suave);
+
+  /* Elevación */
+  --shadow-plana: var(--sombra-plana);
+  --shadow-flotante: var(--sombra-flotante);
+  --shadow-arrastre: var(--sombra-arrastre);
 
   --radius-lg: var(--radius);
   --radius-md: calc(var(--radius) - 4px);
