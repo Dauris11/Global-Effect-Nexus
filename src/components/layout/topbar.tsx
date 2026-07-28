@@ -12,6 +12,7 @@ import { cerrarSesion } from "@/server/auth/actions";
 import { IconMark } from "@/components/brand/icon-mark";
 import { MobileNav } from "./mobile-nav";
 import { ThemeToggle } from "./theme-toggle";
+import { SelectorIdioma } from "./selector-idioma";
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -54,6 +55,7 @@ export function TopBar({
       </div>
 
       <div className="flex items-center gap-1">
+        <SelectorIdioma className="mr-1" />
         <ThemeToggle />
         <DropdownMenu>
           <DropdownMenuTrigger className="flex items-center gap-2 rounded-full py-1 pl-1 pr-2 outline-none transition-colors hover:bg-muted focus-visible:ring-1 focus-visible:ring-ring">

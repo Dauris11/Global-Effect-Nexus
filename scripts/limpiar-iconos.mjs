@@ -14,8 +14,17 @@
 import { readdirSync, rmSync } from "node:fs";
 import { join } from "node:path";
 
-/** Carpetas que no vale la pena recorrer. */
-const IGNORAR = new Set(["node_modules", ".git"]);
+/**
+ * Carpetas que no vale la pena recorrer.
+ *
+ * `.git` **sí** se recorre, aunque cueste unos milisegundos más: es donde el
+ * problema hace verdadero daño. Con un `Icon\r` dentro de `.git/refs`, git lo
+ * lee como una referencia y todo `fetch` y `push` muere con
+ * `fatal: bad object refs/Icon?`; dentro de `.git/objects` aparece como
+ * "garbage found" en cada directorio. Excluirlo era dejar fuera el único sitio
+ * donde el síntoma bloquea el trabajo en vez de solo molestar.
+ */
+const IGNORAR = new Set(["node_modules"]);
 
 /** El nombre real lleva un retorno de carro final. */
 const NOMBRE = "Icon\r";

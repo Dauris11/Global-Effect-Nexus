@@ -1,18 +1,21 @@
 /**
- * Hero editorial (Impact Editorial). Asimétrico: titular Fraunces con la
- * última palabra subrayada por el trazo de marcador (firma) + descripción y
- * CTAs a la izquierda; foto dúotono enmarcada con chips de datos (mono) a la
- * derecha. Rota entre diapositivas (BD o por defecto) con crossfade. Accesible
- * (ARIA, reduced-motion pausa el autoplay).
+ * Hero de la landing — "Impact Editorial".
+ *
+ * Mejoras:
+ * - Titular con firma Marker en turquesa de marca.
+ * - Tarjetas de métricas del sistema verificables con iconos e indicadores tabulares.
+ * - Controles interactivos de diapositivas con barra de progreso responsiva.
+ * - Animaciones de entrada fluidas y veladura atmosférica.
  */
 "use client";
 
 import { useEffect, useState } from "react";
 import { LazyMotion, domAnimation, m, AnimatePresence, useReducedMotion } from "motion/react";
-import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
+import { ArrowRight, ChevronLeft, ChevronRight, Users, HeartHandshake, BookOpen, MapPin } from "lucide-react";
 import { Link } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
 import { Marker } from "@/components/brand/marker";
+import { LienzoTrazo } from "@/components/ui/lienzo-trazo";
 
 export interface HeroSlide {
   id: string;
@@ -26,12 +29,12 @@ export interface HeroSlide {
   cta2Href?: string | null;
 }
 
-export interface HeroChip {
+export interface HeroDato {
   value: string;
   label: string;
 }
 
-const INTERVALO = 6500;
+const INTERVALO = 7000;
 
 function Cta({
   href,
@@ -43,11 +46,11 @@ function Cta({
   children: React.ReactNode;
 }) {
   const base =
-    "inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm font-semibold transition duration-200 ease-out active:scale-[0.97]";
+    "inline-flex items-center gap-2 rounded-full px-6 py-3.5 text-sm font-semibold transition duration-150 ease-out active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2";
   const style =
     variant === "primary"
-      ? "bg-brand-teal text-white shadow-lg shadow-brand-teal/25 hover:bg-brand-teal-dark"
-      : "border border-foreground/15 text-foreground hover:bg-foreground/5";
+      ? "bg-primary text-primary-foreground shadow-sm hover:bg-brand-teal-dark hover:shadow"
+      : "border border-foreground/15 bg-card/80 text-foreground backdrop-blur-sm hover:bg-accent hover:border-foreground/25";
   return href.startsWith("http") ? (
     <a href={href} className={cn(base, style)}>
       {children}
@@ -59,22 +62,33 @@ function Cta({
   );
 }
 
-/** Titular con la última palabra subrayada por el marcador. */
 function Titular({ text }: { text: string }) {
   const words = text.trim().split(" ");
   const last = words.pop() ?? "";
   return (
-    <h1 className="font-display text-[clamp(2.4rem,6vw,4.6rem)] font-semibold leading-[1.02] tracking-[-0.02em] text-foreground">
+    <h1 className="font-display text-[clamp(2.6rem,5.6vw,4.4rem)] font-semibold leading-[1.03] tracking-[-0.025em] text-foreground">
       {words.join(" ")}{" "}
       <span className="relative inline-block whitespace-nowrap">
         {last}
-        <Marker className="absolute -bottom-1 left-0 h-4 w-full" />
+        <Marker className="absolute -bottom-1 left-0 h-4 w-full text-primary" />
       </span>
     </h1>
   );
 }
 
-export function Hero({ slides, chips }: { slides: HeroSlide[]; chips: HeroChip[] }) {
+const STAT_ICONS = [Users, HeartHandshake, BookOpen];
+
+export function Hero({
+  slides,
+  datos,
+  lugar,
+  pieDatos,
+}: {
+  slides: HeroSlide[];
+  datos: HeroDato[];
+  lugar: string;
+  pieDatos: string;
+}) {
   const items = slides;
   const [idx, setIdx] = useState(0);
   const reduce = useReducedMotion();
@@ -88,132 +102,162 @@ export function Hero({ slides, chips }: { slides: HeroSlide[]; chips: HeroChip[]
   if (items.length === 0) return null;
   const s = items[idx];
   const go = (n: number) => setIdx((n + items.length) % items.length);
+  const conFoto = Boolean(s.imagen);
 
   return (
-    <section className="relative overflow-hidden">
-      {/* Atmósfera: halo teal suave arriba-derecha */}
+    <section className="relative overflow-hidden border-b border-border bg-gradient-to-b from-background via-background to-accent/20">
+      {/* Atmosphere background */}
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0"
         style={{
           backgroundImage:
-            "radial-gradient(42rem 30rem at 88% -8%, rgba(32,150,186,.10), transparent 60%)",
+            "radial-gradient(48rem 36rem at 88% -10%, rgba(29,95,212,.08), transparent 65%)",
         }}
       />
-      <div className="relative mx-auto grid max-w-6xl items-center gap-10 px-6 py-16 md:grid-cols-2 md:gap-14 md:py-24">
+
+      <LienzoTrazo />
+
+      <div className="relative mx-auto max-w-6xl px-6 py-20 md:py-28">
         <LazyMotion features={domAnimation}>
-          {/* Columna de texto */}
-          <div>
-            <AnimatePresence mode="wait">
-              <m.div
-                key={s.id}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                transition={{ duration: 0.45, ease: [0.23, 1, 0.32, 1] }}
-              >
-                <p className="mb-5 font-mono text-xs uppercase tracking-[0.2em] text-brand-teal">
-                  {s.tag ?? "Fundación Global Effect"}
-                </p>
-                <Titular text={s.titulo} />
-                {s.texto && (
-                  <p className="mt-6 max-w-md text-lg leading-relaxed text-muted-foreground">
-                    {s.texto}
-                  </p>
-                )}
-                <div className="mt-9 flex flex-wrap gap-3">
-                  {s.ctaLabel && s.ctaHref && (
-                    <Cta href={s.ctaHref} variant="primary">
-                      {s.ctaLabel}
-                      <ArrowRight className="size-4" />
-                    </Cta>
-                  )}
-                  {s.cta2Label && s.cta2Href && (
-                    <Cta href={s.cta2Href} variant="secondary">
-                      {s.cta2Label}
-                    </Cta>
-                  )}
-                </div>
-              </m.div>
-            </AnimatePresence>
-
-            {items.length > 1 && (
-              <div className="mt-10 flex items-center gap-4">
-                <div className="flex gap-1.5">
-                  <button
-                    onClick={() => go(idx - 1)}
-                    aria-label="Anterior"
-                    className="flex size-9 items-center justify-center rounded-full border border-foreground/15 text-foreground/70 transition hover:bg-foreground/5"
-                  >
-                    <ChevronLeft className="size-4" />
-                  </button>
-                  <button
-                    onClick={() => go(idx + 1)}
-                    aria-label="Siguiente"
-                    className="flex size-9 items-center justify-center rounded-full border border-foreground/15 text-foreground/70 transition hover:bg-foreground/5"
-                  >
-                    <ChevronRight className="size-4" />
-                  </button>
-                </div>
-                <div role="tablist" className="flex gap-1.5">
-                  {items.map((it, i) => (
-                    <button
-                      key={it.id}
-                      role="tab"
-                      aria-selected={i === idx}
-                      aria-label={`Diapositiva ${i + 1}`}
-                      onClick={() => setIdx(i)}
-                      className={cn(
-                        "h-1.5 rounded-full transition-all",
-                        i === idx ? "w-7 bg-brand-teal" : "w-1.5 bg-foreground/20 hover:bg-foreground/40",
-                      )}
-                    />
-                  ))}
-                </div>
-              </div>
+          <div
+            className={cn(
+              "grid items-center gap-12",
+              conFoto && "md:grid-cols-[1.1fr_0.9fr] md:gap-16",
             )}
-          </div>
+          >
+            {/* Main Text Content */}
+            <div className={cn(!conFoto && "max-w-3xl")}>
+              <div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-3 py-1 text-[11px] font-mono uppercase tracking-[0.2em] text-primary">
+                <MapPin className="size-3" aria-hidden />
+                <span>{s.tag ?? lugar}</span>
+              </div>
 
-          {/* Columna de imagen (dúotono) con chips */}
-          <div className="relative">
-            <div className="relative aspect-[4/5] overflow-hidden rounded-[1.6rem] bg-brand-charcoal shadow-2xl shadow-brand-charcoal/20 sm:aspect-[5/4] md:aspect-[4/5]">
               <AnimatePresence mode="wait">
                 <m.div
                   key={s.id}
-                  initial={{ opacity: 0, scale: 1.03 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.6, ease: [0.23, 1, 0.32, 1] }}
-                  className="absolute inset-0"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  transition={{ duration: 0.35, ease: [0.23, 1, 0.32, 1] }}
+                  className="mt-6"
                 >
-                  {s.imagen && (
-                    <div
+                  <Titular text={s.titulo} />
+                  {s.texto && (
+                    <p className="mt-7 max-w-xl text-lg leading-relaxed text-muted-foreground">
+                      {s.texto}
+                    </p>
+                  )}
+                </m.div>
+              </AnimatePresence>
+
+              {/* Call to Actions */}
+              <div className="mt-9 flex flex-wrap gap-3.5">
+                {s.ctaLabel && s.ctaHref && (
+                  <Cta href={s.ctaHref} variant="primary">
+                    {s.ctaLabel}
+                    <ArrowRight className="size-4" aria-hidden />
+                  </Cta>
+                )}
+                {s.cta2Label && s.cta2Href && (
+                  <Cta href={s.cta2Href} variant="secondary">
+                    {s.cta2Label}
+                  </Cta>
+                )}
+              </div>
+
+              {/* Slide Controls */}
+              {items.length > 1 && (
+                <div className="mt-10 flex items-center gap-3">
+                  <button
+                    type="button"
+                    onClick={() => go(idx - 1)}
+                    aria-label="Anterior"
+                    className="flex size-9 items-center justify-center rounded-full border border-border bg-card text-foreground/70 transition-colors hover:bg-accent hover:text-foreground"
+                  >
+                    <ChevronLeft className="size-4" aria-hidden />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => go(idx + 1)}
+                    aria-label="Siguiente"
+                    className="flex size-9 items-center justify-center rounded-full border border-border bg-card text-foreground/70 transition-colors hover:bg-accent hover:text-foreground"
+                  >
+                    <ChevronRight className="size-4" aria-hidden />
+                  </button>
+                  <div role="tablist" className="ml-2 flex gap-2">
+                    {items.map((it, i) => (
+                      <button
+                        key={it.id}
+                        type="button"
+                        role="tab"
+                        aria-selected={i === idx}
+                        aria-label={it.titulo}
+                        onClick={() => setIdx(i)}
+                        className={cn(
+                          "h-1.5 rounded-full transition-all duration-200",
+                          i === idx
+                            ? "w-8 bg-primary"
+                            : "w-2 bg-foreground/20 hover:bg-foreground/40",
+                        )}
+                      />
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Photo Column */}
+            {conFoto && (
+              <div className="relative">
+                <div className="relative aspect-[4/5] overflow-hidden rounded-xl border border-border bg-brand-charcoal shadow-lg">
+                  <AnimatePresence mode="wait">
+                    <m.div
+                      key={s.id}
+                      initial={{ opacity: 0, scale: 1.03 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0 }}
+                      transition={{ duration: 0.45 }}
                       className="absolute inset-0 bg-cover bg-center"
-                      style={{ backgroundImage: `url(${s.imagen})`, filter: "grayscale(.25) contrast(1.05)" }}
+                      style={{ backgroundImage: `url(${s.imagen})` }}
                       role="img"
                       aria-label={s.titulo}
                     />
-                  )}
-                  {/* Dúotono teal/tinta */}
-                  <div className="absolute inset-0 mix-blend-multiply" style={{ background: "linear-gradient(150deg, rgba(32,150,186,.55), rgba(15,30,46,.75))" }} />
-                </m.div>
-              </AnimatePresence>
-            </div>
-
-            {/* Chips de datos flotantes (mono) */}
-            {chips[0] && (
-              <div className="absolute -left-3 top-8 rounded-2xl border border-border bg-card px-4 py-3 shadow-xl sm:-left-6">
-                <div className="font-mono text-xl font-bold text-foreground">{chips[0].value}</div>
-                <div className="font-mono text-[11px] uppercase tracking-wide text-muted-foreground">{chips[0].label}</div>
-              </div>
-            )}
-            {chips[1] && (
-              <div className="absolute -right-3 bottom-8 rounded-2xl border border-border bg-card px-4 py-3 shadow-xl sm:-right-6">
-                <div className="font-mono text-xl font-bold text-brand-accent">{chips[1].value}</div>
-                <div className="font-mono text-[11px] uppercase tracking-wide text-muted-foreground">{chips[1].label}</div>
+                  </AnimatePresence>
+                </div>
               </div>
             )}
           </div>
+
+          {/* System Data Cards */}
+          {datos.length > 0 && (
+            <div className="mt-16 border-t border-border pt-8">
+              <div className="grid gap-4 sm:grid-cols-3">
+                {datos.map((d, index) => {
+                  const Icon = STAT_ICONS[index % STAT_ICONS.length];
+                  return (
+                    <div
+                      key={d.label}
+                      className="flex items-center gap-4 rounded-xl border border-border bg-card/80 p-5 shadow-xs transition-colors hover:bg-card"
+                    >
+                      <div className="flex size-12 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                        <Icon className="size-6" aria-hidden />
+                      </div>
+                      <div>
+                        <dd className="font-mono text-2xl font-semibold tabular-nums text-foreground">
+                          {d.value}
+                        </dd>
+                        <dt className="text-sm font-medium text-muted-foreground">{d.label}</dt>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+              <p className="mt-4 font-mono text-[11px] uppercase tracking-[0.14em] text-muted-foreground/70">
+                {pieDatos}
+              </p>
+            </div>
+          )}
         </LazyMotion>
       </div>
     </section>

@@ -19,6 +19,7 @@ import {
   CrearTarea,
   CambiarEstadoTarea,
   CrearEvento,
+  MoverEntradaCalendario,
   UpsertRegistroServicio,
 } from "./schema";
 
@@ -148,6 +149,28 @@ export async function crearEvento(input: unknown): Promise<string> {
   );
   revalidatePath("/[locale]/calendario", "page");
   return rows[0].id as string;
+}
+
+/**
+ * Mueve una entrada del calendario a otro día — arrastrar y soltar.
+ *
+ * Si la entrada es una tarea, se mueve su fecha límite y **también el evento
+ * espejo** que `crearTarea` generó: si solo se moviera la tarea, el espejo
+ * quedaría anclado al día viejo y reaparecería descolocado en cuanto alguien
+ * consultara la tabla `evento` por su cuenta.
+ */
+export async function moverEntradaDeCalendario(input: unknown): Promise<void> {
+  await requirePermission("operaciones.escribir");
+  const d = MoverEntradaCalendario.parse(input);
+
+  if (d.origen === "evento") {
+    await query(`UPDATE evento SET fecha = $2::date WHERE id = $1`, [d.id, d.fecha]);
+  } else {
+    await query(`UPDATE tarea SET fecha_limite = $2::date WHERE id = $1`, [d.id, d.fecha]);
+    await query(`UPDATE evento SET fecha = $2::date WHERE tarea_id = $1`, [d.id, d.fecha]);
+  }
+
+  refrescarVistasDeTareas();
 }
 
 /** Marca/actualiza el servicio y la reunión de un estudiante en un mes. */

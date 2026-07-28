@@ -39,7 +39,10 @@ SELECT r.id, p.id
    AND p.codigo = 'landing.administrar'
 ON CONFLICT DO NOTHING;
 
--- Diapositivas por defecto (editables o desactivables desde el panel)
+-- Diapositivas de ejemplo, para que el panel tenga algo que editar.
+-- NOTA: la migración 0018 las desactiva. La landing tiene su propio hero
+-- escrito y estas rotaban solas en la página pública sin decir nada.
+-- Se conservan aquí para no reescribir el historial de migraciones.
 INSERT INTO landing_slide (titulo, subtitulo, texto, cta_texto, cta_enlace, orden) VALUES
   ('Becas universitarias', 'Transformando vidas a través de la educación',
    'Apoyamos a jóvenes con potencial para que alcancen su título universitario.',

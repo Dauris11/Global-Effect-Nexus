@@ -16,9 +16,19 @@ import { routing, type Locale } from "./i18n/routing";
 
 const intlMiddleware = createMiddleware(routing);
 
-/** Segmentos (sin prefijo de idioma) que requieren sesión iniciada. */
+/**
+ * Segmentos (sin prefijo de idioma) que requieren sesión iniciada.
+ *
+ * La lista cubre prefijos: `/administrativo` protege también
+ * `/administrativo/personal`. Es la primera barrera, no la única —la
+ * autorización por permiso la aplica cada pantalla y cada Server Action con
+ * `requirePermission()`—, pero una ruta que falte aquí llega hasta el
+ * componente sin sesión y depende de que ese componente se acuerde de
+ * comprobarla.
+ */
 const RUTAS_PROTEGIDAS = [
   "/dashboard",
+  "/administrativo",
   "/expedientes",
   "/academico",
   "/academias",
@@ -29,6 +39,7 @@ const RUTAS_PROTEGIDAS = [
   "/reportes",
   "/configuracion",
   "/inscripcion-comida",
+  "/servicios-mensuales",
   "/portal",
 ];
 

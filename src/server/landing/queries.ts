@@ -34,10 +34,20 @@ export async function estadisticasLanding(): Promise<LandingEstadisticas> {
   };
 }
 
-/** Próximos eventos públicos (desde hoy). */
+/**
+ * Próximos eventos públicos (desde hoy).
+ *
+ * La fecha se formatea en SQL. El tipo `EventoPublico` declara `fecha: string`,
+ * pero una columna `DATE` la devuelve el driver como `Date`, así que el tipo era
+ * mentira y el primer `fecha.split()` de la interfaz reventaba. Devolver texto
+ * `YYYY-MM-DD` hace que el tipo sea cierto y evita de paso que la zona horaria
+ * corra el día al construir el `Date` en el cliente.
+ */
 export async function eventosPublicos(limite = 4): Promise<EventoPublico[]> {
   const { rows } = await query(
-    `SELECT id, titulo, tipo, fecha, ubicacion
+    `SELECT id, titulo, tipo,
+            to_char(fecha, 'YYYY-MM-DD') AS fecha,
+            ubicacion
        FROM evento
       WHERE fecha >= CURRENT_DATE AND estado <> 'cancelado'
       ORDER BY fecha

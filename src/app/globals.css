@@ -20,7 +20,27 @@
 
 @custom-variant dark (&:is(.dark *));
 
-:root {
+/*
+ * `.tema-claro` — subárbol que ignora el modo oscuro.
+ *
+ * El conmutador de tema escribe `dark` en <html>, y los tokens se heredan, así
+ * que sin esto el modo oscuro del portal se colaría en las páginas públicas.
+ * No debe: la landing y las inscripciones abiertas son la cara de la Fundación
+ * ante patrocinadores y familias, y su base de papel neutro es parte de la
+ * identidad (docs/10-estandar-de-interfaz.md §9). Nadie elige "modo oscuro"
+ * para un folleto.
+ *
+ * Funciona porque una declaración directa sobre el elemento siempre gana a un
+ * valor heredado: da igual que `<html>` tenga `.dark`. Los valores claros se
+ * declaran una sola vez, compartidos con `:root`, para que no haya dos listas
+ * de tokens que mantener sincronizadas.
+ *
+ * Aviso: las utilidades `dark:*` sí seguirían aplicándose dentro del subárbol
+ * (su condición es un ancestro `.dark`). Las páginas públicas no usan ninguna;
+ * si algún día hace falta, la solución es un token, no un `dark:`.
+ */
+:root,
+.tema-claro {
   --background: #f5f5f5; /* papel neutro: superficie base dominante */
   --foreground: #171717;
   --card: #ffffff; /* blanco puro para tarjetas y contenido */
@@ -295,17 +315,22 @@
   --radius-sm: calc(var(--radius) - 8px);
 }
 
-/* Cinta marquee de la promesa institucional (firma). */
-@keyframes marquee {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(-50%);
-  }
-}
-.animate-marquee {
-  animation: marquee 32s linear infinite;
+/*
+ * Trama de registro — textura de la banda de patrocinadores.
+ *
+ * Rayado horizontal muy tenue, como el de un libro de cuentas. Le da cuerpo a
+ * un rectángulo de tinta que si no queda plano, y lo hace con el material del
+ * propio asunto: este sistema es un registro. No es un degradado de marca, que
+ * el estándar prohíbe como fondo (docs/10-estandar-de-interfaz.md §2).
+ */
+.trama-registro {
+  background-image: repeating-linear-gradient(
+    to bottom,
+    rgb(255 255 255 / 0.045) 0px,
+    rgb(255 255 255 / 0.045) 1px,
+    transparent 1px,
+    transparent 2rem
+  );
 }
 
 /* Firma: subrayado de marcador que se "dibuja" al cargar. */
@@ -368,6 +393,13 @@
     @apply bg-background text-foreground;
     font-family: var(--font-sans);
   }
+  /* El subárbol claro se pinta a sí mismo: el <body> ya está pintado con los
+     tokens oscuros y hay que taparlo, no solo redefinir variables. */
+  .tema-claro {
+    background-color: var(--background);
+    color: var(--foreground);
+    color-scheme: light; /* controles nativos: date, time, scrollbar */
+  }
   /* Accesibilidad: reducir movimiento (mantiene opacidad/color, quita motion). */
   @media (prefers-reduced-motion: reduce) {
     *,
@@ -377,9 +409,6 @@
       animation-iteration-count: 1 !important;
       transition-duration: 0.001ms !important;
       scroll-behavior: auto !important;
-    }
-    .animate-marquee {
-      animation: none !important;
     }
   }
 }

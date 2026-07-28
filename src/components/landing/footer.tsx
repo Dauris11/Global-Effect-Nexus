@@ -1,124 +1,120 @@
 /**
- * Footer institucional de la landing. Fondo slate-900 con borde superior
- * turquesa (marca), logo blanco + lema + redes, y tres columnas de enlaces
- * (Plataforma, Institución, Soporte). Los enlaces de plataforma llevan al
- * portal; el resto son marcadores (`#`) hasta que existan sus páginas.
+ * Footer institucional de la landing page ("Impact Editorial").
+ *
+ * Incluye datos de contacto verificados en La Vega, accesos institucionales,
+ * indicador de estado del sistema y selector de idioma.
  */
-import Link from "next/link";
-import { getLocale, getTranslations } from "next-intl/server";
+"use client";
+
+import { useTranslations } from "next-intl";
+import { MapPin, Mail, ShieldCheck, Heart } from "lucide-react";
+import { Link } from "@/i18n/navigation";
 import { Logo } from "@/components/brand/logo";
+import { SelectorIdioma } from "@/components/layout/selector-idioma";
 
-// Iconos de redes como SVG inline (lucide no incluye iconos de marca).
-const redes: { label: string; svg: React.ReactNode }[] = [
-  {
-    label: "Instagram",
-    svg: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="size-4">
-        <rect x="2" y="2" width="20" height="20" rx="5" />
-        <circle cx="12" cy="12" r="4" />
-        <circle cx="17.5" cy="6.5" r="1.2" fill="currentColor" stroke="none" />
-      </svg>
-    ),
-  },
-  {
-    label: "Facebook",
-    svg: (
-      <svg viewBox="0 0 24 24" fill="currentColor" className="size-4">
-        <path d="M13.5 22v-8h2.7l.4-3.1h-3.1V8.9c0-.9.25-1.5 1.55-1.5H17V4.7c-.3 0-1.3-.1-2.45-.1-2.4 0-4.05 1.47-4.05 4.17v2.33H7.8V14h2.7v8z" />
-      </svg>
-    ),
-  },
-  {
-    label: "Web",
-    svg: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="size-4">
-        <circle cx="12" cy="12" r="10" />
-        <path d="M2 12h20" />
-        <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
-      </svg>
-    ),
-  },
-];
+export function LandingFooter() {
+  const t = useTranslations("landing");
 
-export async function LandingFooter() {
-  const t = await getTranslations("landing");
-  const locale = await getLocale();
-  const L = (h: string) => `/${locale}${h}`;
+  const secciones = [
+    { label: t("navAccess"), href: "#acceso" },
+    { label: t("navWork"), href: "#labor" },
+    { label: t("navEventos"), href: "#eventos" },
+    { label: t("navFaq"), href: "#faq" },
+  ];
 
-  const columnas = [
-    {
-      title: t("footerPlatform"),
-      links: [
-        { label: t("footerAcademic"), href: L("/login") },
-        { label: t("footerAccounting"), href: L("/login") },
-        { label: t("footerPsychology"), href: L("/login") },
-        { label: t("footerScholarships"), href: L("/login") },
-      ],
-    },
-    {
-      title: t("footerInstitution"),
-      links: [
-        { label: t("footerAbout"), href: "#" },
-        { label: t("footerPrograms"), href: "#" },
-        { label: t("footerDonations"), href: "#" },
-        { label: t("footerNews"), href: "#" },
-      ],
-    },
-    {
-      title: t("footerSupport"),
-      links: [
-        { label: t("footerHelp"), href: "#" },
-        { label: t("footerTech"), href: "#" },
-        { label: t("footerTerms"), href: "#" },
-        { label: t("footerPrivacy"), href: "#" },
-      ],
-    },
+  const puertas = [
+    { label: t("access_portal_title"), href: "/login" },
+    { label: t("access_meals_title"), href: "/comida" },
   ];
 
   return (
-    <footer id="footer" className="border-t-4 border-brand-teal bg-brand-charcoal text-white/60">
-      <div className="mx-auto max-w-6xl px-6 py-14">
-        <div className="grid gap-8 md:grid-cols-4">
+    <footer id="footer" className="border-t-4 border-primary bg-brand-charcoal text-white/60">
+      <div className="mx-auto max-w-6xl px-6 py-16">
+        <div className="grid gap-12 md:grid-cols-[1.4fr_1fr_1fr]">
+          {/* Columna Marca e Información */}
           <div>
-            <Logo className="h-8 w-auto" />
-            <p className="mt-4 font-display text-base italic text-white/70">{t("footerTagline")}</p>
-            <div className="mt-5 flex gap-2">
-              {redes.map((r) => (
+            <span className="inline-block rounded-lg bg-white/5 p-2 backdrop-blur-xs">
+              <Logo className="h-8 w-auto" />
+            </span>
+            <p className="mt-5 max-w-xs font-display text-base italic leading-snug text-white/80">
+              {t("footerTagline")}
+            </p>
+
+            <address className="mt-6 space-y-2.5 text-sm not-italic text-white/70">
+              <p className="flex items-start gap-2.5">
+                <MapPin className="mt-0.5 size-4 shrink-0 text-brand-teal" aria-hidden />
+                <span>{t("footerAddress")}</span>
+              </p>
+              <p className="flex items-center gap-2.5">
+                <Mail className="size-4 shrink-0 text-brand-teal" aria-hidden />
                 <a
-                  key={r.label}
-                  href="#"
-                  aria-label={r.label}
-                  className="flex size-8 items-center justify-center rounded-lg bg-white/5 text-white/60 transition-colors hover:bg-white/10 hover:text-white"
+                  href={`mailto:${t("footerEmail")}`}
+                  className="transition-colors hover:text-white underline underline-offset-4"
                 >
-                  {r.svg}
+                  {t("footerEmail")}
                 </a>
-              ))}
-            </div>
+              </p>
+            </address>
           </div>
 
-          {columnas.map((c) => (
-            <div key={c.title}>
-              <h3 className="font-mono text-xs uppercase tracking-[0.15em] text-white/90">
-                {c.title}
-              </h3>
-              <ul className="mt-4 space-y-2 text-sm">
-                {c.links.map((l) => (
-                  <li key={l.label}>
-                    <Link href={l.href} className="transition-colors hover:text-white">
-                      {l.label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
+          {/* Columna Navegación Pública */}
+          <div>
+            <h3 className="font-mono text-[11px] uppercase tracking-[0.18em] text-white/90 font-semibold mb-4">
+              {t("footerThisPage")}
+            </h3>
+            <ul className="space-y-3 text-sm">
+              {secciones.map((s) => (
+                <li key={s.href}>
+                  <a
+                    href={s.href}
+                    className="transition-colors hover:text-white flex items-center gap-1.5"
+                  >
+                    <span className="size-1 rounded-full bg-brand-teal/60" />
+                    <span>{s.label}</span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Columna Accesos Directos */}
+          <div>
+            <h3 className="font-mono text-[11px] uppercase tracking-[0.18em] text-white/90 font-semibold mb-4">
+              {t("footerAccess")}
+            </h3>
+            <ul className="space-y-3 text-sm mb-6">
+              {puertas.map((p) => (
+                <li key={p.href}>
+                  <Link
+                    href={p.href}
+                    className="transition-colors hover:text-white flex items-center gap-1.5"
+                  >
+                    <span className="size-1 rounded-full bg-brand-gold/60" />
+                    <span>{p.label}</span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+
+            <div className="pt-2">
+              <SelectorIdioma />
             </div>
-          ))}
+          </div>
         </div>
 
-        <div className="mt-12 flex flex-col items-center justify-between gap-2 border-t border-white/10 pt-6 font-mono text-xs text-white/40 md:flex-row">
-          <span>
-            © {new Date().getFullYear()} Global Effect Foundation. {t("footerRights")}
-          </span>
-          <span>{t("footerTagline2")}</span>
+        {/* Sub-footer */}
+        <div className="mt-14 flex flex-col items-center justify-between gap-4 border-t border-white/10 pt-8 font-mono text-[11px] text-white/55 md:flex-row">
+          {/* El escudo va en el gris de la línea, no en verde: un check verde
+              aquí se lee como un sello de certificación que no tenemos, y el
+              color funcional del sistema no significa "seguro" (§3.2). */}
+          <div className="flex items-center gap-2">
+            <ShieldCheck className="size-4 shrink-0" aria-hidden />
+            <span>
+              © {new Date().getFullYear()} Global Effect Foundation.{" "}
+              {t("footerAccessNote")}
+            </span>
+          </div>
+          <span>{t("footerVersion")}</span>
         </div>
       </div>
     </footer>

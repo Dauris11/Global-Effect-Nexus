@@ -9,7 +9,8 @@ import { Logo } from "@/components/brand/logo";
 
 export default function LoginPage() {
   return (
-    <main className="grid min-h-screen lg:grid-cols-2">
+    // `tema-claro`: la puerta del sistema es pública, nunca en oscuro.
+    <main className="tema-claro grid min-h-screen lg:grid-cols-2">
       {/* Panel de marca (desktop) */}
       <div className="relative hidden flex-col justify-between overflow-hidden bg-brand-charcoal p-12 text-white lg:flex">
         <div

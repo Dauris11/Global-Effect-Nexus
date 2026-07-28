@@ -43,6 +43,19 @@ export const CrearEvento = z.object({
   responsable: z.string().trim().optional(),
 });
 
+/**
+ * Mover una entrada del calendario a otro día (arrastrar y soltar).
+ *
+ * `origen` decide la tabla: un evento cambia `evento.fecha`, una tarea cambia
+ * `tarea.fecha_limite`. Son dos columnas de dos tablas distintas y el usuario
+ * las arrastra igual, así que la distinción viaja en el propio dato.
+ */
+export const MoverEntradaCalendario = z.object({
+  id: z.string().uuid(),
+  origen: z.enum(["evento", "tarea"]),
+  fecha: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+});
+
 export const UpsertRegistroServicio = z.object({
   estudiante_id: z.string().uuid(),
   mes: z.string().regex(/^\d{4}-\d{2}$/),
