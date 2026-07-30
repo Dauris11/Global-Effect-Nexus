@@ -12,7 +12,13 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { query } from "@/lib/db";
 import { requirePermission } from "@/lib/rbac";
-import { chatAnthropic, type MensajeIA } from "@/lib/anthropic";
+import {
+  chatAnthropic,
+  ocrExpediente,
+  type CamposExpedienteOcr,
+  type MensajeIA,
+} from "@/lib/anthropic";
+import { subirDocumento } from "@/server/storage";
 import { contextoInstitucional, mensajesDeConversacion } from "./queries";
 
 const EnviarMensaje = z.object({
@@ -86,4 +92,95 @@ export async function registrarOcr(input: unknown): Promise<string> {
     [d.documento_id, d.estudiante_id || null, user.id],
   );
   return rows[0].id as string;
+}
+
+/** Tope de tamaño del archivo a extraer. */
+const MAX_BYTES = 10 * 1024 * 1024;
+
+const MIMES_OCR = [
+  "image/jpeg",
+  "image/png",
+  "image/webp",
+  "image/gif",
+  "application/pdf",
+];
+
+/**
+ * Sube un documento del expediente y le pasa el OCR — ClickUp S5 · #209.
+ *
+ * El flujo completo en una sola acción, porque los tres pasos solo tienen
+ * sentido juntos:
+ *   1. Sube el archivo a Storage y lo registra en `documento`.
+ *   2. Abre la traza en `extraccion_ocr` como 'procesando'.
+ *   3. Llama al modelo y cierra la traza como 'completado' o 'error'.
+ *
+ * El paso 2 existe para que un fallo del modelo quede **escrito**. Si la traza
+ * se creara al final, un error de la IA no dejaría rastro: el documento estaría
+ * subido y nadie sabría que su extracción se cayó.
+ *
+ * La IA propone, la persona confirma: esto NO escribe en el expediente. Los
+ * campos quedan en `datos_extraidos` para que alguien los revise antes.
+ */
+export async function procesarOcr(formData: FormData): Promise<{
+  extraccionId: string;
+  confianza: number;
+  campos: CamposExpedienteOcr;
+}> {
+  // Dos permisos, a propósito: usar la IA y poder escribir en el expediente al
+  // que se adjunta el documento.
+  await requirePermission("expedientes.escribir");
+  const user = await requirePermission("ia.usar");
+
+  const archivo = formData.get("archivo");
+  const estudianteId = formData.get("estudiante_id");
+
+  if (!(archivo instanceof File) || archivo.size === 0) {
+    throw new Error("No se recibió ningún archivo");
+  }
+  if (archivo.size > MAX_BYTES) {
+    throw new Error("El archivo pasa de 10 MB");
+  }
+  if (!MIMES_OCR.includes(archivo.type)) {
+    throw new Error(`Formato no admitido: ${archivo.type || "desconocido"}`);
+  }
+  if (typeof estudianteId !== "string" || !estudianteId) {
+    throw new Error("Falta el expediente de destino");
+  }
+
+  // 1. Archivo en Storage + fila en `documento`.
+  const { id: documentoId } = await subirDocumento(archivo, {
+    tipo: "expediente_escaneado",
+  });
+
+  // 2. Traza abierta antes de llamar al modelo.
+  const { rows } = await query(
+    `INSERT INTO extraccion_ocr (documento_id, estudiante_id, estado, modelo, creado_por_id)
+     VALUES ($1, $2, 'procesando', $3, $4) RETURNING id`,
+    [documentoId, estudianteId, process.env.ANTHROPIC_MODEL ?? "claude-sonnet-5", user.id],
+  );
+  const extraccionId = rows[0].id as string;
+
+  try {
+    // 3. Extracción. El base64 va sin saltos de línea (Buffer no los mete).
+    const base64 = Buffer.from(await archivo.arrayBuffer()).toString("base64");
+    const { campos, confianza } = await ocrExpediente(base64, archivo.type);
+
+    await query(
+      `UPDATE extraccion_ocr
+          SET estado = 'completado', confianza = $2, datos_extraidos = $3, mensaje_error = NULL
+        WHERE id = $1`,
+      [extraccionId, confianza, JSON.stringify(campos)],
+    );
+
+    revalidatePath(`/expedientes/${estudianteId}`);
+    return { extraccionId, confianza, campos };
+  } catch (e) {
+    const mensaje = (e as Error).message.slice(0, 500);
+    await query(
+      `UPDATE extraccion_ocr SET estado = 'error', mensaje_error = $2 WHERE id = $1`,
+      [extraccionId, mensaje],
+    ).catch(() => {});
+    revalidatePath(`/expedientes/${estudianteId}`);
+    throw new Error(mensaje);
+  }
 }

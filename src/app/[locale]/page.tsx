@@ -77,7 +77,7 @@ export default async function LandingPage() {
   )
     .filter((d) => d.valor > 0)
     .map((d) => ({
-      value: new Intl.NumberFormat(locale).format(d.valor),
+      valor: d.valor,
       label: t(d.clave, { n: d.valor }),
     }));
 

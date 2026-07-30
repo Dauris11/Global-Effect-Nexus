@@ -55,10 +55,10 @@ export const NAV_ITEMS: NavItem[] = [
   { href: "/administrativo/personal", labelKey: "staff", permiso: "usuarios.administrar", icon: "UserCog" },
   { href: "/calendario", labelKey: "calendar", permiso: "operaciones.leer", icon: "Calendar" },
   { href: "/inscripcion-comida", labelKey: "meals", permiso: "operaciones.leer", icon: "Utensils" },
+  { href: "/expedientes", labelKey: "records", permiso: "expedientes.leer", icon: "Users" },
   { href: "/configuracion", labelKey: "settings", permiso: "landing.administrar", icon: "Settings" },
 
-  // Pantallas pendientes (S5–S11). El backend ya está en `src/server/*`.
-  { href: "/expedientes", labelKey: "records", permiso: "expedientes.leer", icon: "Users", disponible: false },
+  // Pantallas pendientes (S6–S11). El backend ya está en `src/server/*`.
   { href: "/academico/materias", labelKey: "academic", permiso: "academico.leer", icon: "GraduationCap", disponible: false },
   { href: "/patrocinadores", labelKey: "sponsors", permiso: "patrocinadores.leer", icon: "HeartHandshake", disponible: false },
   { href: "/contabilidad", labelKey: "accounting", permiso: "finanzas.leer", icon: "Wallet", disponible: false },

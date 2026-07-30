@@ -28,6 +28,7 @@ import { ArrowRight, Receipt, GraduationCap, User, ShieldCheck, Check } from "lu
 import { Link } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
 import { SeccionEncabezado } from "./seccion";
+import { Revelar } from "./revelar";
 
 /** Los tres compromisos verificables, no promesas de marketing. */
 const COMPROMISOS = ["traceability", "records", "reports"] as const;
@@ -51,13 +52,15 @@ export async function Patrocinio() {
       <div aria-hidden className="trama-registro absolute inset-0" />
 
       <div className="relative mx-auto max-w-6xl px-6">
-        <SeccionEncabezado
-          idTitulo="patrocinio-title"
-          tono="oscuro"
-          eyebrow={t("sponsorEyebrow")}
-          titulo={t("sponsorTitle")}
-          intro={t("sponsorIntro")}
-        />
+        <Revelar>
+          <SeccionEncabezado
+            idTitulo="patrocinio-title"
+            tono="oscuro"
+            eyebrow={t("sponsorEyebrow")}
+            titulo={t("sponsorTitle")}
+            intro={t("sponsorIntro")}
+          />
+        </Revelar>
 
         <div className="mt-14">
           <p className="mb-4 flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.2em] text-white/60">
@@ -67,11 +70,11 @@ export async function Patrocinio() {
 
           <ol className="grid gap-4 sm:grid-cols-3">
             {CADENA.map(({ clave, icono: Icono, humano }, i) => (
-              <li key={clave} className="group relative">
+              <Revelar key={clave} como="li" retardo={0.08 * i} className="group relative">
                 <div
                   className={cn(
                     "flex h-full flex-col justify-between rounded-xl border p-6",
-                    "transition-colors duration-200 ease-out",
+                    "transition-all duration-200 ease-out hover:-translate-y-0.5",
                     humano
                       ? "border-brand-accent/40 bg-brand-accent/[0.09] hover:bg-brand-accent/[0.14]"
                       : "border-white/15 bg-white/[0.04] hover:bg-white/[0.08]",
@@ -114,12 +117,12 @@ export async function Patrocinio() {
                     aria-hidden
                     className="absolute -right-3 top-1/2 z-10 hidden -translate-y-1/2 sm:block"
                   >
-                    <div className="flex size-6 items-center justify-center rounded-full border border-white/20 bg-brand-charcoal text-white/60">
+                    <div className="flex size-6 items-center justify-center rounded-full border border-white/20 bg-brand-charcoal text-white/60 transition-transform duration-200 ease-out group-hover:translate-x-0.5 group-hover:text-white">
                       <ArrowRight className="size-3" />
                     </div>
                   </div>
                 )}
-              </li>
+              </Revelar>
             ))}
           </ol>
         </div>

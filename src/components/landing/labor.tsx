@@ -17,10 +17,17 @@
  * solo el borde. Una interacción que promete algo y no lo entrega cuesta
  * accesibilidad y no da nada a cambio. El realce quedó en CSS puro, y con eso
  * el componente vuelve a ser de servidor: cero JavaScript en el cliente.
+ *
+ * Ese criterio se mantiene. Lo que sí se añadió es respuesta al puntero que no
+ * promete nada que no cumpla —la ficha se levanta, el riel engorda de 3px a 5px y
+ * los tres hechos se separan— y la entrada en cascada de `Revelar` al aparecer en
+ * pantalla. El contenido sigue renderizándose en el servidor: `Revelar` es un
+ * envoltorio, no un dueño del contenido.
  */
 import { getTranslations } from "next-intl/server";
 import { GraduationCap, Wrench, Brain, Utensils, Check, type LucideIcon } from "lucide-react";
 import { SeccionEncabezado } from "./seccion";
+import { Revelar } from "./revelar";
 
 const PROGRAMAS: { clave: string; icono: LucideIcon }[] = [
   { clave: "scholarships", icono: GraduationCap },
@@ -38,25 +45,28 @@ export async function Labor() {
   return (
     <section id="labor" aria-labelledby="labor-title" className="bg-background py-20 md:py-28">
       <div className="mx-auto max-w-6xl px-6">
-        <SeccionEncabezado
-          idTitulo="labor-title"
-          eyebrow={t("workEyebrow")}
-          titulo={t("workTitle")}
-          intro={t("workIntro")}
-        />
+        <Revelar>
+          <SeccionEncabezado
+            idTitulo="labor-title"
+            eyebrow={t("workEyebrow")}
+            titulo={t("workTitle")}
+            intro={t("workIntro")}
+          />
+        </Revelar>
 
         <ul className="mt-14 grid gap-5 md:grid-cols-2">
-          {PROGRAMAS.map(({ clave, icono: Icono }) => (
-            <li key={clave}>
+          {PROGRAMAS.map(({ clave, icono: Icono }, i) => (
+            <Revelar key={clave} como="li" retardo={0.06 * i}>
               <article
                 className={[
                   "group flex h-full flex-col rounded-xl border border-border bg-card p-7",
                   "border-l-[3px] border-l-primary",
-                  "transition-colors duration-200 ease-out hover:bg-accent/40",
+                  "transition-all duration-200 ease-out",
+                  "hover:-translate-y-0.5 hover:border-l-[5px] hover:bg-accent/40 hover:shadow-flotante",
                 ].join(" ")}
               >
                 <div className="flex items-start justify-between gap-4">
-                  <span className="flex size-12 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                  <span className="flex size-12 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary transition-transform duration-200 ease-out group-hover:scale-105">
                     <Icono className="size-6" strokeWidth={1.7} aria-hidden />
                   </span>
                   <span className="rounded-full border border-border bg-muted px-3 py-1 font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
@@ -88,7 +98,7 @@ export async function Labor() {
                   ))}
                 </ul>
               </article>
-            </li>
+            </Revelar>
           ))}
         </ul>
       </div>
