@@ -333,6 +333,31 @@
   );
 }
 
+/*
+ * Cuadrícula de maqueta — textura del hero público.
+ *
+ * La retícula tenue de una plancha de imprenta: dice "esto está compuesto, no
+ * volcado". Se usa en lugar de un degradado de marca, que el estándar prohíbe
+ * como fondo (docs/10-estandar-de-interfaz.md §2), y se desvanece con una
+ * máscara radial para que no compita con el titular.
+ */
+.trama-cuadricula {
+  background-image:
+    linear-gradient(
+      to right,
+      color-mix(in oklab, var(--foreground) 6%, transparent) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      to bottom,
+      color-mix(in oklab, var(--foreground) 6%, transparent) 1px,
+      transparent 1px
+    );
+  background-size: 4.5rem 4.5rem;
+  -webkit-mask-image: radial-gradient(75% 60% at 50% 0%, #000 0%, transparent 78%);
+  mask-image: radial-gradient(75% 60% at 50% 0%, #000 0%, transparent 78%);
+}
+
 /* Firma: subrayado de marcador que se "dibuja" al cargar. */
 @keyframes marker-draw {
   from {
@@ -392,6 +417,24 @@
   body {
     @apply bg-background text-foreground;
     font-family: var(--font-sans);
+  }
+  /*
+   * Navegación por ancla de las páginas públicas.
+   *
+   * El desplazamiento suave convierte los enlaces `#seccion` de la landing en un
+   * movimiento continuo en vez de un salto: el visitante no pierde el sitio. Y
+   * `scroll-margin-top` es la corrección que faltaba — la cabecera es `sticky`,
+   * así que sin margen de anclaje el titular de la sección aterrizaba debajo de
+   * ella. 6rem = aviso superior + barra.
+   *
+   * La regla global de `prefers-reduced-motion` de más abajo devuelve
+   * `scroll-behavior: auto`, así que esto no se le impone a nadie.
+   */
+  html {
+    scroll-behavior: smooth;
+  }
+  section[id] {
+    scroll-margin-top: 6rem;
   }
   /* El subárbol claro se pinta a sí mismo: el <body> ya está pintado con los
      tokens oscuros y hay que taparlo, no solo redefinir variables. */

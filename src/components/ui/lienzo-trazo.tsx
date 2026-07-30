@@ -37,9 +37,16 @@ const FISICA = {
   friccion: 0.5,
   amortiguacion: 0.025,
   tension: 0.99,
-  grosor: 9,
-  /** Opacidad de cada línea. Muy baja: el trazo nace de la acumulación. */
-  alfa: 0.035,
+  grosor: 10,
+  /**
+   * Opacidad de cada línea. Muy baja: el trazo nace de la acumulación de las 40.
+   *
+   * Estuvo en 0.035 y sobre el papel neutro (#f5f5f5) no se veía: el efecto
+   * existía y nadie lo notaba, que en la práctica es no tenerlo. 0.055 es el
+   * punto en el que el trazo se lee como tinta y todavía deja el titular
+   * completamente legible por encima.
+   */
+  alfa: 0.055,
 } as const;
 
 interface Nodo {
@@ -168,6 +175,8 @@ export function LienzoTrazo({
 
       ctx.clearRect(0, 0, width / dpr, height / dpr);
       ctx.lineWidth = FISICA.grosor;
+      ctx.lineCap = "round";
+      ctx.lineJoin = "round";
       ctx.strokeStyle = `rgba(${rgb}, ${FISICA.alfa})`;
 
       for (const linea of lineas) {
