@@ -30,17 +30,19 @@
 global-effect-nexus/
 ├─ db/                        # migraciones .sql, seed.sql, README (✅ implementado)
 ├─ docs/                      # documentación / entregas (✅ este directorio)
-├─ messages/                  # i18n: es.json, en.json, fr.json, it.json
+├─ messages/                  # i18n: es.json, en.json
 ├─ src/
 │  ├─ app/[locale]/
 │  │  ├─ (auth)/login/        # login (Supabase Auth, sin sidebar) ✅
-│  │  ├─ (portal)/            # área autenticada: dashboard ✅, expedientes, academico,
-│  │  │                       #   academias, administrativo, patrocinadores, contabilidad,
-│  │  │                       #   psicologia, calendario, reportes, configuracion
+│  │  ├─ (portal)/            # área autenticada: dashboard ✅, expedientes ✅, academico ✅,
+│  │  │                       #   portal/estudiante ✅, portal/profesor ✅, administrativo ✅,
+│  │  │                       #   calendario ✅, configuracion ✅, academias, patrocinadores,
+│  │  │                       #   contabilidad, psicologia, reportes
 │  │  └─ (public)/            # landing, inscripción comida (S10)
 │  ├─ components/             # ui/ (Radix + propios) · layout/ (sidebar, topbar) ✅
 │  ├─ lib/                    # db.ts (pool pg) · supabase/ · auth.ts · rbac.ts · nav.ts · utils.ts
 │  ├─ server/                 # lógica por dominio: queries + actions + schema (zod) + types · storage.ts
+│  │                          #   `portales/` es la excepción: solo lectura, recortada a quien mira
 │  ├─ i18n/  ·  proxy.ts (i18n + sesión + protección por rol)  · types/
 ├─ .env.local  ·  .env.example
 ├─ next.config.mjs · globals.css (Tailwind 4 CSS-first) · package.json

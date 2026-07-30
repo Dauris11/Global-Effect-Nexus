@@ -466,7 +466,8 @@ Materias académicas (becados universitarios).
 | `descripcion` | text | Sí | — | Descripción. |
 | `periodo_id` | uuid | Sí | FK | Referencia a periodo. |
 | `creditos` | integer | Sí | — | Créditos académicos. |
-| `profesor_nombre` | text | Sí | — | Nombre del profesor. |
+| `profesor_nombre` | text | Sí | — | Nombre visible del profesor; puede ser alguien externo al sistema. |
+| `profesor_usuario_id` | uuid | Sí | FK | El profesor como usuario del sistema, si lo es. Decide qué materias son suyas en el Portal Profesor. |
 | `estado` | text | No | — | Estado del registro. |
 | `horario` | text | Sí | — | Horario de clases. |
 | `aula` | text | Sí | — | Aula asignada. |
@@ -476,12 +477,14 @@ Materias académicas (becados universitarios).
 
 **Claves foráneas:**
 - `periodo_id` → `periodo(id)` · ON DELETE SET NULL
+- `profesor_usuario_id` → `usuario(id)` · ON DELETE SET NULL
 
 **Restricciones CHECK / UNIQUE:**
 - CHECK ((creditos >= 0))
 
 **Índices:**
 - `idx_materia_periodo`: btree (periodo_id)
+- `idx_materia_profesor_usuario`: btree (profesor_usuario_id)
 - `materia_pkey`: btree (id)
 
 ---
@@ -496,7 +499,8 @@ Cursos técnicos.
 | `id` | uuid | No | PK | Identificador único del registro. |
 | `nombre` | text | No | — | Nombre. |
 | `descripcion` | text | Sí | — | Descripción. |
-| `docente` | text | Sí | — | Nombre del docente. |
+| `docente` | text | Sí | — | Nombre visible del docente; puede ser alguien externo al sistema. |
+| `docente_usuario_id` | uuid | Sí | FK | El docente como usuario del sistema, si lo es. Decide qué cursos son suyos en el Portal Profesor. |
 | `periodo_id` | uuid | Sí | FK | Referencia a periodo. |
 | `estado` | text | No | — | Estado del registro. |
 | `capacidad` | integer | Sí | — | Cupo máximo. |
@@ -509,6 +513,7 @@ Cursos técnicos.
 
 **Claves foráneas:**
 - `periodo_id` → `periodo(id)` · ON DELETE SET NULL
+- `docente_usuario_id` → `usuario(id)` · ON DELETE SET NULL
 
 **Restricciones CHECK / UNIQUE:**
 - CHECK ((inscritos >= 0))
@@ -516,6 +521,7 @@ Cursos técnicos.
 
 **Índices:**
 - `curso_pkey`: btree (id)
+- `idx_curso_docente_usuario`: btree (docente_usuario_id)
 - `idx_curso_periodo`: btree (periodo_id)
 
 ---

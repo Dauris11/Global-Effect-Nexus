@@ -30,7 +30,14 @@ export interface Materia {
   /** Nombre del período (viene del JOIN); `null` si la materia no tiene uno. */
   periodo_nombre: string | null;
   creditos: number;
+  /** Nombre visible del profesor (puede ser alguien externo al sistema). */
   profesor_nombre: string | null;
+  /**
+   * El profesor como usuario del sistema, si lo es (migración 0019).
+   * Es lo que decide "esta materia es mía" en el Portal Profesor; el nombre
+   * de arriba solo decide qué se imprime en pantalla.
+   */
+  profesor_usuario_id: string | null;
   estado: string;
   horario: string | null;
   aula: string | null;
@@ -40,7 +47,10 @@ export interface Curso {
   id: string;
   nombre: string;
   descripcion: string | null;
+  /** Nombre visible del docente (puede ser alguien externo al sistema). */
   docente: string | null;
+  /** El docente como usuario del sistema, si lo es. Ver `Materia.profesor_usuario_id`. */
+  docente_usuario_id: string | null;
   periodo_id: string | null;
   /** Nombre del período (viene del JOIN); `null` si el curso no tiene uno. */
   periodo_nombre: string | null;

@@ -93,15 +93,16 @@ npm run db:migrate      # dirá "Base de datos al día" si no falta ninguna migr
 Solo si se trabaja contra una base **nueva y vacía**:
 
 ```bash
-npm run db:migrate            # crea el esquema (db/migrations/0001..0016)
+npm run db:migrate            # crea el esquema (db/migrations/0001..0019)
 npm run db:seed               # roles, permisos, períodos y catálogos
 npm run db:seed:usuarios      # los seis usuarios de prueba de más abajo
 npm run db:seed:operaciones   # 3 proyectos, 10 tareas y 9 eventos de demostración
+npm run db:seed:portales      # expediente del estudiante de prueba y curso del docente
 ```
 
-Los tres seeds son **idempotentes**: se pueden repetir sin duplicar nada.
+Los cuatro seeds son **idempotentes**: se pueden repetir sin duplicar nada.
 
-> `db:seed:operaciones` es el que llena el tablero y el calendario. Sin él ambas pantallas se ven vacías —correctamente, pero no se puede revisar nada—.
+> `db:seed:operaciones` es el que llena el tablero y el calendario, y `db:seed:portales` el que llena los portales de estudiante y docente. Sin ellos esas pantallas se ven vacías —correctamente, pero no se puede revisar nada—.
 
 ## Paso 5 — Arrancar
 
@@ -145,7 +146,8 @@ Para invitar a alguien más: agregarlo a la lista `USUARIOS` de [`scripts/seed-u
 | `invalidCredentials` al entrar | La contraseña no coincide o el usuario no existe en Supabase Auth. Correr `npm run db:seed:usuarios` |
 | `notRegistered` al entrar | Las credenciales son correctas pero el correo no está invitado en la tabla `usuario`. Agregarlo al script de usuarios |
 | `ECONNREFUSED` o timeout de la BD | Revisar `DATABASE_URL` en `.env.local` y que la IP tenga acceso en Supabase |
-| Pantallas vacías con todo bien configurado | Faltan los datos de demostración: `npm run db:seed` y `npm run db:seed:operaciones` |
+| Pantallas vacías con todo bien configurado | Faltan los datos de demostración: `npm run db:seed`, `npm run db:seed:operaciones` y `npm run db:seed:portales` |
+| "Todavía no tienes expediente enlazado" en `/portal/estudiante` | El usuario no tiene fila en `estudiante` con su `usuario_id`. Es el estado correcto; para la demo, `npm run db:seed:portales` |
 | El puerto 3000 está ocupado | `npm run dev -- -p 3001` |
 | Cambié `messages/*.json` y sale el nombre de la clave | Falta esa clave en uno de los dos idiomas. `es.json` y `en.json` deben tener exactamente las mismas |
 
@@ -218,6 +220,7 @@ Global Effect/
 | `npm run db:seed` | Roles, permisos, períodos y catálogos (`db/seed.sql`) |
 | `npm run db:seed:usuarios` | Crea/actualiza los seis usuarios de demostración |
 | `npm run db:seed:operaciones` | Proyectos, tareas y eventos de demostración (tablero y calendario) |
+| `npm run db:seed:portales` | Expediente del estudiante de prueba y curso del docente (portales por rol) |
 
 ---
 

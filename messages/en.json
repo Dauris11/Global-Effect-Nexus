@@ -41,7 +41,9 @@
     "comingSoon": "Soon",
     "comingSoonGroup": "In progress",
     "courses": "Technical courses",
-    "grades": "Grades"
+    "grades": "Grades",
+    "studentPortal": "My portal",
+    "teacherPortal": "My courses"
   },
   "landing": {
     "enter": "Sign in",
@@ -782,6 +784,117 @@
       "error": "The grade could not be recorded. Check the data and try again.",
       "noCourses": "No active courses",
       "noStudents": "No active students"
+    },
+    "teacherPicker": {
+      "unassigned": "Unassigned",
+      "external": "Someone else (external)",
+      "externalName": "Name of who teaches it",
+      "externalHint": "For people who aren't system users; only the name is stored."
     }
+  },
+  "studentPortal": {
+    "eyebrow": "My portal",
+    "greeting": "Hi, {name}",
+    "summary": "Your subjects, your grades and what's coming up.",
+    "toDashboard": "Go to dashboard",
+    "noRecord": "You don't have a student record linked yet",
+    "noRecordHint": "Your account exists, but it isn't linked to a student record yet. Contact the Foundation's coordination team so they can link it.",
+    "type": {
+      "becado": "Scholarship",
+      "regular": "Regular"
+    },
+    "gpaLabel": "Grade point average",
+    "gpaScale": "/ 4.00",
+    "gpaEmpty": "No completed terms in your record yet.",
+    "gpaHint": {
+      "nota-excelente": "You're above what the scholarship requires. Keep it up.",
+      "nota-buena": "You're doing well. Keep the pace this term.",
+      "nota-riesgo": "You're close to the minimum. Talk to coordination before the term closes.",
+      "nota-critica": "Your GPA is below the minimum. Request a meeting with coordination.",
+      "neutral": "There isn't enough history yet to compute your GPA."
+    },
+    "stats": {
+      "average": "Average",
+      "passed": "Passed",
+      "enrolled": "In progress",
+      "credits": "Credits"
+    },
+    "subjectsTitle": "Current subjects",
+    "subjectsEmpty": "You have no subjects enrolled",
+    "subjectsEmptyHint": "Once coordination closes your pre-registration, your subjects will show up here.",
+    "creditsShort": "{count} cr.",
+    "gradesTitle": "My grades",
+    "gradesEmpty": "No grades recorded yet",
+    "gradesEmptyHint": "Your grades will appear once the first term closes.",
+    "termSummary": "GPA {gpa} · average {average}",
+    "table": {
+      "subject": "Subject",
+      "grade": "Grade",
+      "letter": "Letter",
+      "gpa": "GPA"
+    },
+    "standingTitle": "My standing at the Foundation",
+    "standingSummary": "{services} of {months} months with service and {meetings} with a meeting.",
+    "standingEmpty": "No records for the past months",
+    "service": "Service",
+    "noService": "No service",
+    "meeting": "Meeting",
+    "noMeeting": "No meeting",
+    "notRecorded": "Not recorded",
+    "eventsTitle": "Upcoming events",
+    "eventsEmpty": "No events scheduled",
+    "browseCatalog": "Browse the subject catalog"
+  },
+  "teacherPortal": {
+    "eyebrow": "Teacher portal",
+    "greeting": "Hi, {name}",
+    "summary": "Your courses, your students and what's left to grade.",
+    "stats": {
+      "courses": "Active courses",
+      "students": "Enrolled",
+      "grades": "Grades recorded",
+      "subjects": "Subjects in your name"
+    },
+    "shortcutsTitle": "Quick links",
+    "shortcuts": {
+      "courses": {
+        "label": "Technical courses",
+        "hint": "Catalog and capacity"
+      },
+      "subjects": {
+        "label": "Subjects",
+        "hint": "Catalog by term"
+      },
+      "grades": {
+        "label": "Grades",
+        "hint": "Record a grade"
+      },
+      "calendar": {
+        "label": "Calendar",
+        "hint": "Foundation agenda"
+      }
+    },
+    "coursesTitle": "My courses",
+    "coursesEmpty": "You have no courses assigned yet",
+    "coursesEmptyHint": "Coordination assigns courses from the catalog. If one is missing, let them know.",
+    "courseStatus": {
+      "activo": "Active",
+      "planificado": "Planned",
+      "finalizado": "Finished"
+    },
+    "courseMode": {
+      "presencial": "In person",
+      "virtual": "Online",
+      "mixto": "Hybrid"
+    },
+    "occupancy": "Occupancy",
+    "mode": "Mode",
+    "term": "Term",
+    "schedule": "Schedule",
+    "gradesCount": "{count, plural, =0 {No grades} =1 {# grade} other {# grades}}",
+    "averageShort": "Avg. {value}",
+    "noGradesYet": "Not graded",
+    "subjectsTitle": "Subjects in my name",
+    "enrolledCount": "{count, plural, =1 {# enrolled} other {# enrolled}}"
   }
 }

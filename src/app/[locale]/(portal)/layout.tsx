@@ -25,6 +25,10 @@ export default async function PortalLayout({
   // super_admin ve todo; el resto según sus permisos.
   const permisos = user.rol === "super_admin" ? null : await permisosDeRol(user.rol);
   const items = NAV_ITEMS.filter((i) => {
+    // `roles` se comprueba antes que nada y también para super_admin: un portal
+    // por rol no es un módulo con permiso, es la pantalla de una persona
+    // concreta (ver lib/nav.ts).
+    if (i.roles && !i.roles.includes(user.rol)) return false;
     if (permisos === null) return true;
     // `permiso` es obligatorio; `permisos` es "basta con uno" (ver lib/nav.ts).
     if (i.permiso && !permisos.includes(i.permiso)) return false;

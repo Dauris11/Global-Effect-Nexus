@@ -34,6 +34,13 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import {
+  DOCENTE_SIN,
+  SelectorDocente,
+  resolverDocente,
+  type DocenteOpcion,
+  type TextosSelectorDocente,
+} from "../selector-docente";
 
 export interface TextosNuevaMateria {
   titulo: string;
@@ -45,7 +52,6 @@ export interface TextosNuevaMateria {
   periodo: string;
   sinPeriodo: string;
   creditos: string;
-  profesor: string;
   estado: string;
   horario: string;
   horarioPlaceholder: string;
@@ -57,6 +63,7 @@ export interface TextosNuevaMateria {
   errorNombre: string;
   errorGeneral: string;
   estados: Record<string, string>;
+  selectorDocente: TextosSelectorDocente;
 }
 
 const ESTADOS = ["activa", "inactiva"];
@@ -68,11 +75,13 @@ export function DialogoNuevaMateria({
   onCambio,
   textos,
   periodos,
+  docentes,
 }: {
   abierto: boolean;
   onCambio: (v: boolean) => void;
   textos: TextosNuevaMateria;
   periodos: { id: string; nombre: string }[];
+  docentes: DocenteOpcion[];
 }) {
   const router = useRouter();
   const [enviando, setEnviando] = React.useState(false);
@@ -84,7 +93,8 @@ export function DialogoNuevaMateria({
   const [descripcion, setDescripcion] = React.useState("");
   const [periodo, setPeriodo] = React.useState(SIN_PERIODO);
   const [creditos, setCreditos] = React.useState("3");
-  const [profesor, setProfesor] = React.useState("");
+  const [profesor, setProfesor] = React.useState(DOCENTE_SIN);
+  const [profesorExterno, setProfesorExterno] = React.useState("");
   const [estado, setEstado] = React.useState("activa");
   const [horario, setHorario] = React.useState("");
   const [aula, setAula] = React.useState("");
@@ -95,7 +105,8 @@ export function DialogoNuevaMateria({
     setDescripcion("");
     setPeriodo(SIN_PERIODO);
     setCreditos("3");
-    setProfesor("");
+    setProfesor(DOCENTE_SIN);
+    setProfesorExterno("");
     setEstado("activa");
     setHorario("");
     setAula("");
@@ -114,6 +125,7 @@ export function DialogoNuevaMateria({
     }
 
     setEnviando(true);
+    const quienImparte = resolverDocente(profesor, profesorExterno, docentes);
     try {
       await crearMateria({
         nombre: nombre.trim(),
@@ -121,7 +133,8 @@ export function DialogoNuevaMateria({
         descripcion: descripcion.trim() || undefined,
         periodo_id: periodo === SIN_PERIODO ? undefined : periodo,
         creditos: creditos || 0,
-        profesor_nombre: profesor.trim() || undefined,
+        profesor_nombre: quienImparte.nombre,
+        profesor_usuario_id: quienImparte.usuarioId,
         estado,
         horario: horario.trim() || undefined,
         aula: aula.trim() || undefined,
@@ -218,11 +231,14 @@ export function DialogoNuevaMateria({
               )}
             </Field>
 
-            <Field label={textos.profesor}>
-              {(p) => (
-                <Input {...p} value={profesor} onChange={(e) => setProfesor(e.target.value)} />
-              )}
-            </Field>
+            <SelectorDocente
+              docentes={docentes}
+              textos={textos.selectorDocente}
+              seleccion={profesor}
+              onSeleccion={setProfesor}
+              nombreExterno={profesorExterno}
+              onNombreExterno={setProfesorExterno}
+            />
 
             <Field label={textos.aula}>
               {(p) => <Input {...p} value={aula} onChange={(e) => setAula(e.target.value)} />}
@@ -276,10 +292,12 @@ export function BotonNuevaMateria({
   etiqueta,
   textos,
   periodos,
+  docentes,
 }: {
   etiqueta: string;
   textos: TextosNuevaMateria;
   periodos: { id: string; nombre: string }[];
+  docentes: DocenteOpcion[];
 }) {
   const [abierto, setAbierto] = React.useState(false);
   return (
@@ -293,6 +311,7 @@ export function BotonNuevaMateria({
         onCambio={setAbierto}
         textos={textos}
         periodos={periodos}
+        docentes={docentes}
       />
     </>
   );

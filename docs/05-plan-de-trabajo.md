@@ -69,7 +69,7 @@ Cada módulo = migración (ya lista) + queries parametrizadas + validación Zod 
 | **S3** | BD Dominios restantes | 2026-08-17 → 2026-08-28 | ✅ Hecho |
 | **S4** | Backend nucleo (auth, RBAC, i18n) | 2026-08-31 → 2026-09-11 | ▶️ En curso |
 | **S5** | Expedientes y Dashboard | 2026-09-14 → 2026-09-25 | ✅ Hecho |
-| **S6** | Academico (modulos) y portales | 2026-09-28 → 2026-10-09 | 🟦 Backend listo · UI pendiente |
+| **S6** | Academico (modulos) y portales | 2026-09-28 → 2026-10-09 | ✅ Hecho |
 | **S7** | Patrocinio y Finanzas | 2026-10-12 → 2026-10-23 | 🟦 Backend listo · UI pendiente |
 | **S8** | Psicologia | 2026-10-26 → 2026-11-06 | 🟦 Backend listo · UI pendiente |
 | **S9** | Administrativo y Calendario | 2026-11-09 → 2026-11-20 | ✅ Hecho |
@@ -78,9 +78,9 @@ Cada módulo = migración (ya lista) + queries parametrizadas + validación Zod 
 | **S12** | Migracion, QA y Seguridad | 2026-12-21 → 2027-01-01 | ⏳ Pendiente |
 | **S13** | Despliegue y Tesis | 2027-01-04 → 2027-01-15 | ⏳ Pendiente |
 
-> **Estado del backend:** S0–S3 (BD) ✅. S4 (núcleo) ✅ en curso. **La capa de dominio backend de S5–S11 está construida** (`src/server/*`): consultas parametrizadas + Server Actions con `requirePermission` por módulo. Falta la **UI** de la mayoría de los módulos (pantallas, formularios, gráficos) y aplicar la migración `0014` en Supabase.
+> **Estado del backend:** S0–S3 (BD) ✅. S4 (núcleo) ✅ en curso. **La capa de dominio backend de S5–S11 está construida** (`src/server/*`): consultas parametrizadas + Server Actions con `requirePermission` por módulo. Falta la **UI** de los módulos de S7, S8, S10 y S11 (pantallas, formularios, gráficos).
 
-> **Estado de la UI:** el **sistema de interfaz** está definido y normado en [10 · Estándar de Interfaz](10-estandar-de-interfaz.md) (tokens en tres capas, riel de estado, inventario de componentes en `src/components/ui/`). Sobre él ya están construidos el **login**, el **panel**, la **landing**, `/comida` y el **módulo Administrativo completo (S9)**. Los módulos restantes reutilizan esos mismos componentes: lo que falta es pantalla, no sistema.
+> **Estado de la UI:** el **sistema de interfaz** está definido y normado en [10 · Estándar de Interfaz](10-estandar-de-interfaz.md) (tokens en tres capas, riel de estado, inventario de componentes en `src/components/ui/`). Sobre él ya están construidos el **login**, el **panel**, la **landing**, `/comida`, **Expedientes (S5)**, el **módulo Administrativo completo (S9)** y el **módulo Académico con los portales por rol (S6)**. Los módulos restantes reutilizan esos mismos componentes: lo que falta es pantalla, no sistema.
 
 ### Capa `server/` construida (backend por dominio)
 
@@ -89,6 +89,7 @@ Cada módulo = migración (ya lista) + queries parametrizadas + validación Zod 
 | Expedientes | `server/estudiantes/` | lista, expediente completo (perfiles + familiares + GPA), crear | `expedientes.*` |
 | Dashboard | `server/dashboard/` | métricas, próximos eventos, tareas prioritarias | (sesión) |
 | Académico | `server/academico/` | períodos, materias, cursos, inscripción, calificaciones, historial | `academico.*` · `calificaciones.registrar` |
+| Portales | `server/portales/` | lectura recortada a una persona: expediente propio del estudiante y cursos propios del docente | (sesión + propiedad de la fila) |
 | Patrocinio | `server/patrocinadores/` | patrocinadores + estadísticas, asignación de becas | `patrocinadores.*` |
 | Finanzas | `server/finanzas/` | transacciones, balance, evolución mensual | `finanzas.*` |
 | Psicología | `server/psicologia/` | citas, notas confidenciales, solicitud de cita (acceso estricto) | `psicologia.*` |
@@ -224,9 +225,13 @@ Integraciones backend: `lib/anthropic.ts` (chat/traducción/OCR), `lib/email.ts`
 > **Sobre el acceso a esta pantalla:** el permiso obvio, `academico.leer`, es el equivocado. El rol `estudiante` lo tiene (lo necesita para el catálogo de materias), así que gatear con él le dejaría ver las notas de sus compañeros. Se exige **`calificaciones.registrar` o `expedientes.leer`**: el docente entra por el primero (no lleva expedientes), quien lleva expedientes por el segundo (no registra notas), y el estudiante por ninguno — sus notas van en su portal. Para esto se añadió `permisos?: string[]` ("basta con uno") a `NavItem`.
 >
 > Además: en `db/seed.sql`, `calificaciones.registrar` lo tienen solo `docente` y `super_admin` — **`admin` no**. El botón de registrar lo respeta: quien califica es quien da clase.
-- [ ] Historial + Prematricula + Periodos
-- [ ] Portal Estudiante
-- [ ] Portal Profesor
+- [x] **Historial + Prematricula + Periodos** — `/academico/historial`: una fila por estudiante con GPA, promedio y reparto aprobadas/reprobadas/en prueba, filtrable por cuatrimestre. `/academico/prematricula`: inscripción por desplegables (estudiante × materia × período) con resumen del período. `/academico/periodos`: cada período con lo que cuelga de él, contado por subconsulta y no con tres `JOIN` a la vez, que multiplicarían las filas entre sí (*fan-out*).
+- [x] **Portal Estudiante** — `/portal/estudiante`: banner con el GPA a tamaño de titular y coloreado por banda (es el número del que depende su beca), materias en curso, historial agrupado por cuatrimestre con letra A–F, condición en la Fundación de los últimos tres meses y próximos eventos. Sin comparativas con otros becados: un portal que ranquea convierte una ayuda en una competencia.
+- [x] **Portal Profesor** — `/portal/profesor`: banner de cursos activos, inscritos, notas y materias; accesos rápidos comprobados contra el permiso real; y sus cursos —también los cerrados, detrás de los activos— con ocupación y lo que falta por calificar.
+
+> **Sobre "de quién es un curso":** el Portal Profesor no podía construirse sobre el esquema tal como estaba. `curso.docente` y `materia.profesor_nombre` son TEXT libres: sirven para imprimir un nombre, no para decidir identidad. Cruzar por texto le habría enseñado a un homónimo los cursos de otro, y a "Juan A. Pérez" ninguno de los suyos. La **migración 0019** añade `curso.docente_usuario_id` y `materia.profesor_usuario_id` (FK a `usuario`, `ON DELETE SET NULL`) con backfill conservador —solo coincidencias exactas y únicas de nombre—, y **conserva** las columnas de texto: no todo docente es usuario del sistema (un tallerista externo nunca inicia sesión) y el nombre de quien dio el curso el año pasado no debe desaparecer al borrarse un usuario. Regla de lectura: la FK dice de quién es, el texto dice qué nombre se muestra.
+>
+> **Sobre el acceso a un portal:** no lo da un permiso, lo da la propiedad de la fila. El Portal Estudiante no lee nada que un permiso pueda nombrar — lee `estudiante.usuario_id = <yo>`. Por eso `NavItem` gana `roles?: string[]`, una lista exacta que **también aplica a `super_admin`**: enseñarle "Mi portal" a quien no tiene expediente solo le ofrece una pantalla que no puede contener nada suyo. Y por eso `HOME_POR_ROL` cambia: el estudiante y el docente aterrizan en su portal, no en el panel general, cuyas cifras (becados, balance del mes) se les recortan hasta dejarlo casi vacío.
 
 ---
 

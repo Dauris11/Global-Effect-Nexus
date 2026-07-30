@@ -31,6 +31,13 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import {
+  DOCENTE_SIN,
+  SelectorDocente,
+  resolverDocente,
+  type DocenteOpcion,
+  type TextosSelectorDocente,
+} from "../selector-docente";
 
 export interface TextosNuevoCurso {
   titulo: string;
@@ -38,7 +45,6 @@ export interface TextosNuevoCurso {
   nombre: string;
   nombrePlaceholder: string;
   descripcion: string;
-  docente: string;
   periodo: string;
   sinPeriodo: string;
   estado: string;
@@ -55,6 +61,7 @@ export interface TextosNuevoCurso {
   errorGeneral: string;
   estados: Record<string, string>;
   modalidades: Record<string, string>;
+  selectorDocente: TextosSelectorDocente;
 }
 
 const ESTADOS = ["activo", "planificado", "finalizado"];
@@ -66,11 +73,13 @@ export function DialogoNuevoCurso({
   onCambio,
   textos,
   periodos,
+  docentes,
 }: {
   abierto: boolean;
   onCambio: (v: boolean) => void;
   textos: TextosNuevoCurso;
   periodos: { id: string; nombre: string }[];
+  docentes: DocenteOpcion[];
 }) {
   const router = useRouter();
   const [enviando, setEnviando] = React.useState(false);
@@ -79,7 +88,8 @@ export function DialogoNuevoCurso({
 
   const [nombre, setNombre] = React.useState("");
   const [descripcion, setDescripcion] = React.useState("");
-  const [docente, setDocente] = React.useState("");
+  const [docente, setDocente] = React.useState(DOCENTE_SIN);
+  const [docenteExterno, setDocenteExterno] = React.useState("");
   const [periodo, setPeriodo] = React.useState(SIN_PERIODO);
   const [estado, setEstado] = React.useState("activo");
   const [capacidad, setCapacidad] = React.useState("30");
@@ -89,7 +99,8 @@ export function DialogoNuevoCurso({
   function limpiar() {
     setNombre("");
     setDescripcion("");
-    setDocente("");
+    setDocente(DOCENTE_SIN);
+    setDocenteExterno("");
     setPeriodo(SIN_PERIODO);
     setEstado("activo");
     setCapacidad("30");
@@ -110,11 +121,13 @@ export function DialogoNuevoCurso({
     }
 
     setEnviando(true);
+    const quienImparte = resolverDocente(docente, docenteExterno, docentes);
     try {
       await crearCurso({
         nombre: nombre.trim(),
         descripcion: descripcion.trim() || undefined,
-        docente: docente.trim() || undefined,
+        docente: quienImparte.nombre,
+        docente_usuario_id: quienImparte.usuarioId,
         periodo_id: periodo === SIN_PERIODO ? undefined : periodo,
         estado,
         capacidad: capacidad || 0,
@@ -159,11 +172,14 @@ export function DialogoNuevoCurso({
           </Field>
 
           <div className="grid gap-4 sm:grid-cols-2">
-            <Field label={textos.docente}>
-              {(p) => (
-                <Input {...p} value={docente} onChange={(e) => setDocente(e.target.value)} />
-              )}
-            </Field>
+            <SelectorDocente
+              docentes={docentes}
+              textos={textos.selectorDocente}
+              seleccion={docente}
+              onSeleccion={setDocente}
+              nombreExterno={docenteExterno}
+              onNombreExterno={setDocenteExterno}
+            />
 
             <Field label={textos.capacidad} ayuda={textos.ayudaInscritos}>
               {(p) => (
@@ -278,10 +294,12 @@ export function BotonNuevoCurso({
   etiqueta,
   textos,
   periodos,
+  docentes,
 }: {
   etiqueta: string;
   textos: TextosNuevoCurso;
   periodos: { id: string; nombre: string }[];
+  docentes: DocenteOpcion[];
 }) {
   const [abierto, setAbierto] = React.useState(false);
   return (
@@ -295,6 +313,7 @@ export function BotonNuevoCurso({
         onCambio={setAbierto}
         textos={textos}
         periodos={periodos}
+        docentes={docentes}
       />
     </>
   );

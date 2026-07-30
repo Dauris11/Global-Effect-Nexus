@@ -22,6 +22,8 @@ export const CrearMateria = z.object({
   periodo_id: z.string().uuid().optional(),
   creditos: z.coerce.number().int().min(0).default(3),
   profesor_nombre: z.string().trim().optional(),
+  /** Enlace al usuario del sistema; se omite si el profesor es externo (0019). */
+  profesor_usuario_id: z.string().uuid().optional(),
   estado: z.enum(["activa", "inactiva"]).default("activa"),
   horario: z.string().trim().optional(),
   aula: z.string().trim().optional(),
@@ -31,6 +33,8 @@ export const CrearCurso = z.object({
   nombre: z.string().min(1),
   descripcion: z.string().trim().optional(),
   docente: z.string().trim().optional(),
+  /** Enlace al usuario del sistema; se omite si el docente es externo (0019). */
+  docente_usuario_id: z.string().uuid().optional(),
   periodo_id: z.string().uuid().optional(),
   estado: z.enum(["activo", "finalizado", "planificado"]).default("activo"),
   capacidad: z.coerce.number().int().min(0).default(30),

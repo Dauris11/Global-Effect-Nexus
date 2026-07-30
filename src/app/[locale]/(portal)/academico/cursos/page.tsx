@@ -19,7 +19,12 @@ import { getTranslations } from "next-intl/server";
 import { ArrowLeft, GraduationCap, Lock, User } from "lucide-react";
 import { currentUser } from "@/lib/auth";
 import { can } from "@/lib/rbac";
-import { listarCursos, listarPeriodos, resumenCursos } from "@/server/academico/queries";
+import {
+  docentesParaSelector,
+  listarCursos,
+  listarPeriodos,
+  resumenCursos,
+} from "@/server/academico/queries";
 import type { Curso } from "@/server/academico/types";
 import type { EstadoDominio } from "@/lib/estados";
 import { paletaDe } from "@/lib/estados";
@@ -59,19 +64,26 @@ function bandaDeCupo(inscritos: number, capacidad: number): EstadoDominio {
   return "tarea-progreso";
 }
 
-async function cargar(buscar?: string) {
+/**
+ * `conDocentes` solo es cierto para quien puede crear cursos: la lista de
+ * personas del sistema es para llenar el desplegable del alta, no para quien
+ * solo consulta el catálogo (mismo criterio que en Materias).
+ */
+async function cargar(buscar: string | undefined, conDocentes: boolean) {
   try {
-    const [cursos, resumen, periodos] = await Promise.all([
+    const [cursos, resumen, periodos, docentes] = await Promise.all([
       listarCursos(buscar),
       resumenCursos(),
       listarPeriodos(),
+      conDocentes ? docentesParaSelector() : Promise.resolve([]),
     ]);
-    return { cursos, resumen, periodos, error: false };
+    return { cursos, resumen, periodos, docentes, error: false };
   } catch {
     return {
       cursos: [] as Curso[],
       resumen: { total: 0, activos: 0, inscritos: 0, cupos: 0 },
       periodos: [] as { id: string; nombre: string }[],
+      docentes: [] as { id: string; nombre: string }[],
       error: true,
     };
   }
@@ -117,7 +129,10 @@ export default async function CursosPage({
   }
 
   const q = (qBruto ?? "").trim();
-  const { cursos, resumen, periodos, error } = await cargar(q || undefined);
+  const { cursos, resumen, periodos, docentes, error } = await cargar(
+    q || undefined,
+    puedeEscribir,
+  );
 
   const textosDialogo: TextosNuevoCurso = {
     titulo: t("newCourse.title"),
@@ -125,7 +140,6 @@ export default async function CursosPage({
     nombre: t("course.name"),
     nombrePlaceholder: t("newCourse.namePlaceholder"),
     descripcion: t("course.description"),
-    docente: t("course.teacher"),
     periodo: t("course.term"),
     sinPeriodo: t("noTerm"),
     estado: t("course.status"),
@@ -149,6 +163,13 @@ export default async function CursosPage({
       presencial: t("courseMode.presencial"),
       virtual: t("courseMode.virtual"),
       mixto: t("courseMode.mixto"),
+    },
+    selectorDocente: {
+      etiqueta: t("course.teacher"),
+      sinAsignar: t("teacherPicker.unassigned"),
+      externo: t("teacherPicker.external"),
+      nombreExterno: t("teacherPicker.externalName"),
+      ayudaExterno: t("teacherPicker.externalHint"),
     },
   };
 
@@ -175,6 +196,7 @@ export default async function CursosPage({
                 etiqueta={t("courses.new")}
                 textos={textosDialogo}
                 periodos={periodos}
+                docentes={docentes}
               />
             )
           }
@@ -229,6 +251,7 @@ export default async function CursosPage({
                   etiqueta={t("courses.new")}
                   textos={textosDialogo}
                   periodos={periodos}
+                  docentes={docentes}
                 />
               )
             )

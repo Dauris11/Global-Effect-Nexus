@@ -32,8 +32,8 @@ export async function crearMateria(input: unknown): Promise<string> {
   const d = CrearMateria.parse(input);
   const { rows } = await query(
     `INSERT INTO materia (nombre, codigo, descripcion, periodo_id, creditos,
-                          profesor_nombre, estado, horario, aula)
-     VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING id`,
+                          profesor_nombre, profesor_usuario_id, estado, horario, aula)
+     VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING id`,
     [
       d.nombre,
       d.codigo || null,
@@ -41,6 +41,7 @@ export async function crearMateria(input: unknown): Promise<string> {
       d.periodo_id || null,
       d.creditos,
       d.profesor_nombre || null,
+      d.profesor_usuario_id || null,
       d.estado,
       d.horario || null,
       d.aula || null,
@@ -54,13 +55,14 @@ export async function crearCurso(input: unknown): Promise<string> {
   await requirePermission("academico.escribir");
   const d = CrearCurso.parse(input);
   const { rows } = await query(
-    `INSERT INTO curso (nombre, descripcion, docente, periodo_id, estado,
-                        capacidad, horario, modalidad)
-     VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING id`,
+    `INSERT INTO curso (nombre, descripcion, docente, docente_usuario_id, periodo_id,
+                        estado, capacidad, horario, modalidad)
+     VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING id`,
     [
       d.nombre,
       d.descripcion || null,
       d.docente || null,
+      d.docente_usuario_id || null,
       d.periodo_id || null,
       d.estado,
       d.capacidad,
