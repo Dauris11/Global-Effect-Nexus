@@ -542,7 +542,10 @@
       "requiredHint": "Falta el nombre del joven, en la pestaña de identidad.",
       "progress": "Sección {current} de {total}",
       "next": "Siguiente",
-      "previous": "Anterior"
+      "previous": "Anterior",
+      "titleEdit": "Editar expediente",
+      "subtitleEdit": "Los cambios se guardan de una vez, incluidas las secciones que no toques.",
+      "saveEdit": "Guardar cambios"
     },
     "tab": {
       "identity": "Identidad",
@@ -652,6 +655,28 @@
         "error": "Error"
       },
       "reviewHint": "La IA propone; la persona confirma. Revisa siempre antes de dar por bueno un dato."
+    },
+    "close": "Cerrar",
+    "backToRecord": "Volver al expediente",
+    "rowActions": {
+      "menu": "Acciones",
+      "edit": "Editar expediente",
+      "delete": "Eliminar expediente",
+      "deleting": "Eliminando…",
+      "confirmTitle": "¿Eliminar el expediente de {name}?",
+      "deleteHint": "Se borra la ficha completa: datos personales, familia, vivienda, salud y situación. No se puede deshacer.",
+      "inUseTitle": "El expediente de {name} tiene historial",
+      "inUseHint": "Hay registros de otros módulos sobre esta persona y borrarla se los llevaría por delante. Cámbiale el estado a inactivo, graduado o suspendido: sale del trabajo diario y no se pierde nada.",
+      "understood": "Entendido",
+      "error": "No se pudo eliminar. Inténtalo de nuevo.",
+      "deps": {
+        "enrollments": "Inscripciones",
+        "grades": "Calificaciones",
+        "history": "Historial académico",
+        "appointments": "Citas de psicología",
+        "notes": "Notas de seguimiento",
+        "service": "Servicio y reuniones"
+      }
     }
   },
   "academic": {

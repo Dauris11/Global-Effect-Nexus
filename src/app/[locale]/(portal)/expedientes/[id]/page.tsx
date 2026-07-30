@@ -33,6 +33,7 @@ import { obtenerExpedienteCompleto } from "@/server/estudiantes/queries";
 import { bandaDeGpa, paletaDe } from "@/lib/estados";
 import { cn } from "@/lib/utils";
 import { PageHeader } from "@/components/ui/page-header";
+import { AccionesExpediente } from "./acciones-expediente";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ChipEstado } from "@/components/ui/chip-estado";
@@ -148,9 +149,10 @@ export default async function ExpedientePage({
   const user = await currentUser();
   if (!user) redirect(`/${locale}/login`);
 
-  const [puedeLeer, puedeEscribir, t] = await Promise.all([
+  const [puedeLeer, puedeEscribir, puedeEliminar, t] = await Promise.all([
     can(user.rol, "expedientes.leer"),
     can(user.rol, "expedientes.escribir"),
+    can(user.rol, "expedientes.eliminar"),
     getTranslations("records"),
   ]);
 
@@ -206,12 +208,36 @@ export default async function ExpedientePage({
           title={e.nombre}
           description={e.programa ?? undefined}
           actions={
-            <Button variant="ghost" asChild>
-              <Link href={`/${locale}/expedientes`}>
-                <ArrowLeft aria-hidden />
-                {t("backToList")}
-              </Link>
-            </Button>
+            <>
+              <Button variant="ghost" asChild>
+                <Link href={`/${locale}/expedientes`}>
+                  <ArrowLeft aria-hidden />
+                  {t("backToList")}
+                </Link>
+              </Button>
+              <AccionesExpediente
+                id={id}
+                nombre={e.nombre}
+                rutaListado={`/${locale}/expedientes`}
+                puedeEditar={puedeEscribir}
+                puedeEliminar={puedeEliminar}
+                textos={{
+                  menu: t("rowActions.menu"),
+                  editar: t("rowActions.edit"),
+                  eliminar: t("rowActions.delete"),
+                  confirmarTitulo: t("rowActions.confirmTitle"),
+                  confirmarTexto: t("rowActions.deleteHint"),
+                  enUsoTitulo: t("rowActions.inUseTitle"),
+                  enUsoTexto: t("rowActions.inUseHint"),
+                  dependencias: t.raw("rowActions.deps"),
+                  eliminando: t("rowActions.deleting"),
+                  entendido: t("rowActions.understood"),
+                  cancelar: t("form.cancel"),
+                  cerrar: t("close"),
+                  errorGeneral: t("rowActions.error"),
+                }}
+              />
+            </>
           }
         />
       </div>

@@ -155,4 +155,18 @@ export const CrearExpediente = z.object({
   notas_adicionales: texto,
 });
 
+/**
+ * Actualización del expediente: los mismos campos más el `id`.
+ *
+ * Derivado del alta y no escrito aparte, para que un campo nuevo en la ficha no
+ * pueda quedarse fuera de la edición sin que nadie lo note.
+ */
+export const ActualizarExpediente = CrearExpediente.extend({
+  id: z.string().uuid(),
+});
+
+/** Borrado de expediente: solo el id. */
+export const EliminarExpediente = z.object({ id: z.string().uuid() });
+
 export type CrearExpedienteInput = z.infer<typeof CrearExpediente>;
+export type ActualizarExpedienteInput = z.infer<typeof ActualizarExpediente>;

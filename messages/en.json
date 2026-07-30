@@ -542,7 +542,10 @@
       "requiredHint": "The student's name is missing, on the identity tab.",
       "progress": "Section {current} of {total}",
       "next": "Next",
-      "previous": "Previous"
+      "previous": "Previous",
+      "titleEdit": "Edit record",
+      "subtitleEdit": "Everything saves at once, including the sections you don't touch.",
+      "saveEdit": "Save changes"
     },
     "tab": {
       "identity": "Identity",
@@ -652,6 +655,28 @@
         "error": "Error"
       },
       "reviewHint": "AI proposes; a person confirms. Always review before accepting a value."
+    },
+    "close": "Close",
+    "backToRecord": "Back to record",
+    "rowActions": {
+      "menu": "Actions",
+      "edit": "Edit record",
+      "delete": "Delete record",
+      "deleting": "Deleting…",
+      "confirmTitle": "Delete {name}'s record?",
+      "deleteHint": "The whole file goes: personal details, family, housing, health and situation. This can't be undone.",
+      "inUseTitle": "{name}'s record has history",
+      "inUseHint": "Other modules hold records about this person and deleting them would take those down too. Change their status to inactive, graduated or suspended: they leave day-to-day work and nothing is lost.",
+      "understood": "Got it",
+      "error": "Couldn't delete it. Try again.",
+      "deps": {
+        "enrollments": "Enrollments",
+        "grades": "Grades",
+        "history": "Academic history",
+        "appointments": "Counseling appointments",
+        "notes": "Follow-up notes",
+        "service": "Service and meetings"
+      }
     }
   },
   "academic": {
