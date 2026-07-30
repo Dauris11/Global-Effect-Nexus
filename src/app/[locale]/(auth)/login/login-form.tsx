@@ -3,7 +3,13 @@
  * invitados. Dos vías, ambas restringidas y con redirección por rol:
  *   • Google (OAuth, para todos) — cliente Supabase → /auth/callback.
  *   • Correo + contraseña — Server Action `login`.
- * Muestra errores traducibles, incluidos los devueltos por el callback (?error=).
+ *
+ * Los controles salen del inventario del estándar (`Field` + `Input` + `Button`),
+ * no de inputs con clases propias: la puerta del sistema es la primera pantalla
+ * que se ve y tiene que verse como el resto (docs/10-estandar-de-interfaz.md §6).
+ *
+ * Los errores se muestran traducidos y vienen de tres sitios: la Server Action,
+ * el callback de OAuth (`?error=`) y el fallo al abrir el diálogo de Google.
  */
 "use client";
 
@@ -13,6 +19,8 @@ import { useSearchParams } from "next/navigation";
 import { login, type LoginState } from "./actions";
 import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
+import { Field } from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
 
 const initialState: LoginState = {};
 
@@ -48,12 +56,14 @@ export function LoginForm() {
   const urlError = params.get("error") ?? "";
   const [state, formAction, pending] = useActionState(login, initialState);
   const [googleLoading, setGoogleLoading] = useState(false);
+  const [googleError, setGoogleError] = useState("");
 
-  // Mensaje de error: prioriza el de la Server Action; si no, el de la URL (callback).
-  const errorKey = state.error || urlError;
+  // Orden de precedencia: lo que acaba de fallar manda sobre lo que traía la URL.
+  const errorKey = state.error || googleError || urlError;
 
   async function loginConGoogle() {
     setGoogleLoading(true);
+    setGoogleError("");
     const supabase = createClient();
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "google",
@@ -61,7 +71,12 @@ export function LoginForm() {
         redirectTo: `${window.location.origin}/auth/callback?locale=${locale}`,
       },
     });
-    if (error) setGoogleLoading(false);
+    // Si `signInWithOAuth` falla no hay redirección: sin este aviso el botón
+    // solo dejaría de girar y el usuario no sabría qué pasó.
+    if (error) {
+      setGoogleError("oauth");
+      setGoogleLoading(false);
+    }
   }
 
   return (
@@ -74,15 +89,17 @@ export function LoginForm() {
       </div>
 
       {/* Google (para todos) */}
-      <button
+      <Button
         type="button"
+        variant="outline"
+        size="lg"
         onClick={loginConGoogle}
         disabled={googleLoading}
-        className="inline-flex w-full items-center justify-center gap-2.5 rounded-full border border-input bg-card px-4 py-3 text-sm font-semibold text-foreground transition duration-150 ease-out hover:bg-muted active:scale-[0.98] disabled:opacity-60"
+        className="w-full px-4 font-semibold"
       >
         <GoogleIcon />
         {t("continueWithGoogle")}
-      </button>
+      </Button>
 
       <div className="flex items-center gap-3 text-xs text-muted-foreground">
         <span className="h-px flex-1 bg-border" />
@@ -94,32 +111,24 @@ export function LoginForm() {
       <form action={formAction} className="space-y-4">
         <input type="hidden" name="locale" value={locale} />
         <input type="hidden" name="redirectTo" value={redirectTo} />
-        <div className="space-y-1.5">
-          <label htmlFor="email" className="text-sm font-medium">
-            {t("email")}
-          </label>
-          <input
-            id="email"
-            name="email"
-            type="email"
-            autoComplete="email"
-            required
-            className="flex h-11 w-full rounded-xl border border-input bg-card px-3 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-teal"
-          />
-        </div>
-        <div className="space-y-1.5">
-          <label htmlFor="password" className="text-sm font-medium">
-            {t("password")}
-          </label>
-          <input
-            id="password"
-            name="password"
-            type="password"
-            autoComplete="current-password"
-            required
-            className="flex h-11 w-full rounded-xl border border-input bg-card px-3 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-teal"
-          />
-        </div>
+
+        <Field label={t("email")} requerido>
+          {(campo) => (
+            <Input {...campo} name="email" type="email" autoComplete="email" required />
+          )}
+        </Field>
+
+        <Field label={t("password")} requerido>
+          {(campo) => (
+            <Input
+              {...campo}
+              name="password"
+              type="password"
+              autoComplete="current-password"
+              required
+            />
+          )}
+        </Field>
 
         {errorKey && (
           <p role="alert" className="text-sm font-medium text-destructive">
@@ -127,7 +136,7 @@ export function LoginForm() {
           </p>
         )}
 
-        <Button type="submit" className="h-11 w-full rounded-xl" disabled={pending}>
+        <Button type="submit" size="lg" className="w-full" disabled={pending}>
           {t("signIn")}
         </Button>
       </form>

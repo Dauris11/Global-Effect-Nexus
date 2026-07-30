@@ -13,10 +13,15 @@ export default function LoginPage() {
     <main className="tema-claro grid min-h-screen lg:grid-cols-2">
       {/* Panel de marca (desktop) */}
       <div className="relative hidden flex-col justify-between overflow-hidden bg-brand-charcoal p-12 text-white lg:flex">
+        {/* Halo de marca. El color sale del token, no de un rgba escrito aquí
+            (docs/10-estandar-de-interfaz.md §3: un componente nunca escribe un color). */}
         <div
           aria-hidden
           className="pointer-events-none absolute -right-24 top-1/4 size-80 rounded-full"
-          style={{ background: "radial-gradient(closest-side, rgba(32,150,186,.45), transparent)" }}
+          style={{
+            background:
+              "radial-gradient(closest-side, color-mix(in oklab, var(--brand-teal) 45%, transparent), transparent)",
+          }}
         />
         <Logo className="relative h-8 w-auto" />
         <p className="relative max-w-md font-display text-3xl italic leading-snug text-white/90">

@@ -13,6 +13,7 @@
     "lint": "eslint .",
     "db:migrate": "node scripts/migrate.mjs",
     "db:seed": "node scripts/seed.mjs",
+    "db:admin": "node scripts/crear-admin-maestro.mjs",
     "db:seed:usuarios": "node scripts/seed-usuarios.mjs",
     "db:seed:operaciones": "node scripts/seed-operaciones.mjs"
   },

@@ -68,7 +68,7 @@ Cada módulo = migración (ya lista) + queries parametrizadas + validación Zod 
 | **S2** | BD Estudiante y Academico | 2026-08-03 → 2026-08-14 | ✅ Hecho |
 | **S3** | BD Dominios restantes | 2026-08-17 → 2026-08-28 | ✅ Hecho |
 | **S4** | Backend nucleo (auth, RBAC, i18n) | 2026-08-31 → 2026-09-11 | ▶️ En curso |
-| **S5** | Expedientes y Dashboard | 2026-09-14 → 2026-09-25 | 🟦 Backend listo · UI pendiente |
+| **S5** | Expedientes y Dashboard | 2026-09-14 → 2026-09-25 | ✅ Hecho |
 | **S6** | Academico (modulos) y portales | 2026-09-28 → 2026-10-09 | 🟦 Backend listo · UI pendiente |
 | **S7** | Patrocinio y Finanzas | 2026-10-12 → 2026-10-23 | 🟦 Backend listo · UI pendiente |
 | **S8** | Psicologia | 2026-10-26 → 2026-11-06 | 🟦 Backend listo · UI pendiente |
@@ -193,21 +193,23 @@ Integraciones backend: `lib/anthropic.ts` (chat/traducción/OCR), `lib/email.ts`
 - [x] i18n operativo (es/en) + login localizado
 - [x] Subida de archivos (Supabase Storage) + tabla `documento` — `server/storage.ts`
 - [x] Layout: AppLayout + Sidebar por rol + TopBar (`components/layout/*`)
-- [ ] Página de login pulida + página pública de landing (pendiente de UI de S5+)
-- [ ] Crear identidad del admin maestro en Supabase Auth (enlace automático por email)
+- [x] **Página de login pulida** — controles del inventario (`Field` + `Input` + `Button`) en vez de inputs con clases propias, halo de marca por token y el fallo de Google ya avisa (antes el botón solo dejaba de girar). Landing pública: ver S10.
+- [x] **Identidad del admin maestro** — `npm run db:admin` (`scripts/crear-admin-maestro.mjs`): crea el perfil `super_admin`, la identidad en Auth y el enlace por email, en ese orden. Sin contraseña genera enlace de invitación; es idempotente y verifica el enlace al terminar.
 
 ---
 
 ## S5 — Expedientes y Dashboard
-**Fase:** Implementacion · **Fechas:** 2026-09-14 → 2026-09-25 · **Estimado:** 10 días
+**Fase:** Implementacion · **Fechas:** 2026-09-14 → 2026-09-25 · **Estimado:** 10 días · **Estado: ✅ COMPLETADO**
 
 > META SMART Especifico: Entregar el modulo mas grande (Expedientes) y el Dashboard. Medible: CRUD con formulario de 6 pestanas, detalle con GPA, OCR, y Dashboard con tarjetas y graficos. Alcanzable: equipo de 2, stack Next.js+pg+PostgreSQL. Relevante: avanza el entregable de tesis. Temporal: 2 semanas.
 
-- [ ] CRUD de expedientes + buscador
-- [ ] Formulario por pestanas (6 secciones)
-- [ ] Vista de detalle con GPA y graficos
-- [ ] OCR con IA (subir documento)
-- [ ] Dashboard principal
+- [x] **CRUD de expedientes + buscador** — `/expedientes`: cifras de la cartera, filtros en la URL (`?q=`, `?tipo=`, `?estado=`, funcionan sin JavaScript) y tabla con el riel coloreado por **banda de GPA**, no por estado administrativo: recorriendo la lista lo que hay que detectar es a quién se le cae el rendimiento. Sin historial no hay riel — un gris se leería como nota mala.
+- [x] **Formulario por pestanas (6 secciones)** — `/expedientes/nuevo`: identidad, académico, familia (1:N), vivienda, salud y situación de vida, en el orden de la entrevista. Solo el nombre es obligatorio: la ficha se completa en semanas y exigirla entera haría que el personal invente datos. Escribe las cinco tablas en **una transacción** (`transaction()` en `lib/db.ts`).
+- [x] **Vista de detalle con GPA y graficos** — `/expedientes/[id]`: GPA con su banda, evolución por cuatrimestre (cada punto con el color de *su* banda, eje fijo 0–4 y línea de prueba académica en 2.0) y las secciones de la ficha. Una sección sin llenar lo dice, en vez de mostrar una lista de guiones. Psicología no aparece: es confidencial y vive detrás de su permiso.
+- [x] **OCR con IA (subir documento)** — subida + extracción con visión y **salida estructurada** (`output_config.format`), así el modelo queda obligado por el esquema y no hay que rescatar JSON de entre texto. La traza en `extraccion_ocr` se abre *antes* de llamar al modelo para que un fallo quede escrito. **La IA propone, la persona confirma:** los campos se muestran para revisarlos y no se escriben en el expediente.
+- [x] **Dashboard principal** — cifras, serie financiera, próximos eventos y tareas que apremian, **armado según los permisos del rol**: el balance y la gráfica de ingresos/egresos exigen `finanzas.leer`, y lo que el rol no puede ver no se consulta (antes se mostraban a cualquiera con sesión, incluido un estudiante). Las fechas salen con `to_char` y el "vencida/hoy" lo decide `CURRENT_DATE` en SQL, no la zona horaria del navegador. Las cifras enlazan a su módulo con el filtro ya puesto.
+
+> **Sobre el panel y los permisos:** los cinco bloques del dashboard pertenecen a cuatro dominios distintos (expedientes, académico, operaciones, finanzas) y los seis roles tienen combinaciones distintas de permisos. Por eso el panel no es una pantalla fija con partes ocultas por CSS: cada bloque se consulta solo si el rol lo puede leer. Un rol sin ningún permiso de lectura ve un estado vacío que le dice que su portal llega después, no un panel en blanco.
 
 ---
 

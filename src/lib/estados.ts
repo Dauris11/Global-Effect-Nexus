@@ -167,6 +167,20 @@ export function paletaDe(estado: EstadoDominio): Paleta {
   return PALETA[estado] ?? PALETA.neutral;
 }
 
+/**
+ * El mismo color, pero como variable CSS en vez de clase de Tailwind.
+ *
+ * Hace falta para lo que se pinta en SVG —los puntos de un gráfico, un trazo—
+ * porque ahí el color va en un atributo (`fill`, `stroke`) y una clase de
+ * Tailwind no llega. Sigue saliendo del mismo mapa: un punto de GPA en riesgo
+ * y un chip de nota en riesgo son el mismo rojo, no dos rojos parecidos.
+ */
+export function variableDe(estado: EstadoDominio): string {
+  return estado === "neutral"
+    ? "var(--color-muted-foreground)"
+    : `var(--color-${estado})`;
+}
+
 // ---------------------------------------------------------------------------
 // Traductores: del valor que guarda la base de datos al estado visual.
 // ---------------------------------------------------------------------------
@@ -181,6 +195,18 @@ export function bandaDeNota(nota: number | null | undefined): EstadoDominio {
   if (nota >= 70) return "nota-buena";
   if (nota >= 60) return "nota-riesgo";
   return "nota-critica";
+}
+
+/**
+ * Banda de color de un GPA acumulado (escala 0–4, `historial_calificacion.gpa`).
+ *
+ * Reescala a 0–100 y delega en `bandaDeNota` para que un GPA de 3.9 y una nota
+ * de 97 se pinten del mismo verde: son la misma noticia contada en dos escalas,
+ * y el usuario ve las dos cosas en la misma pantalla del expediente.
+ */
+export function bandaDeGpa(gpa: number | null | undefined): EstadoDominio {
+  if (gpa == null || Number.isNaN(gpa)) return "neutral";
+  return bandaDeNota((gpa / 4) * 100);
 }
 
 /** Signo de un movimiento contable. */

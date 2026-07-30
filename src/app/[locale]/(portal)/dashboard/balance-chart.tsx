@@ -18,22 +18,36 @@ import {
 import { useReducedMotion } from "motion/react";
 import type { PuntoBalance } from "@/server/dashboard/queries";
 
-const MESES = ["ene", "feb", "mar", "abr", "may", "jun", "jul", "ago", "sep", "oct", "nov", "dic"];
-
-function etiquetaMes(mes: string) {
-  const m = Number(mes.split("-")[1]) - 1;
-  return MESES[m] ?? mes;
+/**
+ * Nombre corto del mes en el idioma activo.
+ *
+ * Antes había una lista de meses en español escrita a mano; con la interfaz en
+ * dos idiomas, `Intl` lo resuelve sin diccionario propio. El día 15 evita el
+ * clásico salto de mes al construir la fecha.
+ */
+function etiquetaMes(mes: string, locale: string) {
+  const [a, m] = mes.split("-").map(Number);
+  if (!a || !m) return mes;
+  return new Intl.DateTimeFormat(locale, { month: "short" }).format(new Date(a, m - 1, 15));
 }
 
-const fmt = new Intl.NumberFormat("es", {
-  style: "currency",
-  currency: "DOP",
-  maximumFractionDigits: 0,
-});
-
-export function BalanceChart({ data }: { data: PuntoBalance[] }) {
+export function BalanceChart({
+  data,
+  locale,
+  textos,
+}: {
+  data: PuntoBalance[];
+  locale: string;
+  /** Nombres de las series, traducidos en el servidor. */
+  textos: { ingresos: string; egresos: string };
+}) {
   const reduce = useReducedMotion();
-  const chartData = data.map((d) => ({ ...d, label: etiquetaMes(d.mes) }));
+  const chartData = data.map((d) => ({ ...d, label: etiquetaMes(d.mes, locale) }));
+  const fmt = new Intl.NumberFormat(locale, {
+    style: "currency",
+    currency: "DOP",
+    maximumFractionDigits: 0,
+  });
 
   return (
     <div className="h-64 w-full">
@@ -77,7 +91,7 @@ export function BalanceChart({ data }: { data: PuntoBalance[] }) {
           <Area
             type="monotone"
             dataKey="ingresos"
-            name="Ingresos"
+            name={textos.ingresos}
             stroke="var(--color-primary)"
             strokeWidth={2}
             fill="url(#fillIngresos)"
@@ -87,7 +101,7 @@ export function BalanceChart({ data }: { data: PuntoBalance[] }) {
           <Area
             type="monotone"
             dataKey="egresos"
-            name="Egresos"
+            name={textos.egresos}
             stroke="var(--color-brand-accent)"
             strokeWidth={2}
             fill="url(#fillEgresos)"
