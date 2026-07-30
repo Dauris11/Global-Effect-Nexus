@@ -163,14 +163,17 @@ export function Hero({
    */
   useEffect(() => {
     if (items.length < 2 || reduce || pausado) return;
-    setProgreso(0);
+    const frame = requestAnimationFrame(() => setProgreso(0));
     const inicio = Date.now();
     const id = setInterval(() => {
       const p = (Date.now() - inicio) / INTERVALO;
       if (p >= 1) setIdx((i) => (i + 1) % items.length);
       else setProgreso(p);
     }, 90);
-    return () => clearInterval(id);
+    return () => {
+      cancelAnimationFrame(frame);
+      clearInterval(id);
+    };
   }, [items.length, reduce, pausado, idx]);
 
   if (items.length === 0) return null;

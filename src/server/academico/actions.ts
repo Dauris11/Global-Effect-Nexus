@@ -11,6 +11,7 @@ import {
   ActualizarCurso,
   ActualizarMateria,
   ActualizarPeriodo,
+  ActualizarEstadoInscripcion,
   CrearPeriodo,
   CrearMateria,
   CrearCurso,
@@ -91,6 +92,18 @@ export async function crearInscripcion(input: unknown): Promise<string> {
   );
   revalidatePath("/academico/prematricula");
   return (rows[0]?.id as string) ?? "";
+}
+
+/** Prematrícula: cambia el estado de una inscripción (activa, retirada, aprobada, reprobada). */
+export async function actualizarEstadoInscripcion(input: unknown): Promise<void> {
+  await requirePermission("academico.escribir");
+  const d = ActualizarEstadoInscripcion.parse(input);
+  await query(
+    `UPDATE inscripcion SET estado = $2 WHERE id = $1`,
+    [d.id, d.estado],
+  );
+  revalidatePath("/academico/prematricula");
+  revalidatePath("/portal/estudiante");
 }
 
 // ---------------------------------------------------------------------------

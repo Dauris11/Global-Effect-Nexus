@@ -79,9 +79,15 @@ export const ActualizarCurso = CrearCurso.extend(ConId.shape);
 /** Borrado: solo hace falta el id. */
 export const EliminarPorId = ConId;
 
+export const ActualizarEstadoInscripcion = z.object({
+  id: z.string().uuid(),
+  estado: z.enum(["activa", "retirada", "aprobada", "reprobada"]),
+});
+
 export type ActualizarPeriodoInput = z.infer<typeof ActualizarPeriodo>;
 export type ActualizarMateriaInput = z.infer<typeof ActualizarMateria>;
 export type ActualizarCursoInput = z.infer<typeof ActualizarCurso>;
+export type ActualizarEstadoInscripcionInput = z.infer<typeof ActualizarEstadoInscripcion>;
 
 export type CrearPeriodoInput = z.infer<typeof CrearPeriodo>;
 export type CrearMateriaInput = z.infer<typeof CrearMateria>;

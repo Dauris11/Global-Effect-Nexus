@@ -53,9 +53,12 @@ export function PanelVivo({ evento }: { evento?: EventoResumen | null }) {
   const [ahora, setAhora] = React.useState<Date | null>(null);
 
   React.useEffect(() => {
-    setAhora(new Date());
+    const frame = requestAnimationFrame(() => setAhora(new Date()));
     const id = setInterval(() => setAhora(new Date()), 30_000);
-    return () => clearInterval(id);
+    return () => {
+      cancelAnimationFrame(frame);
+      clearInterval(id);
+    };
   }, []);
 
   const minutos = ahora ? ahora.getHours() * 60 + ahora.getMinutes() : null;
