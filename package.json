@@ -11,6 +11,7 @@
     "limpiar": "node scripts/limpiar-iconos.mjs",
     "start": "next start",
     "lint": "eslint .",
+    "i18n:check": "node scripts/auditar-i18n.mjs",
     "db:migrate": "node scripts/migrate.mjs",
     "db:seed": "node scripts/seed.mjs",
     "db:admin": "node scripts/crear-admin-maestro.mjs",
