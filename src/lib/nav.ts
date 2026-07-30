@@ -8,6 +8,17 @@ export interface NavItem {
   labelKey: string;
   /** Permiso requerido; si se omite, es visible para cualquier sesión. */
   permiso?: string;
+  /**
+   * Alternativa a `permiso`: basta con tener **uno** de estos.
+   *
+   * Existe por Calificaciones. Ver el listado completo de notas no encaja en un
+   * solo permiso: lo necesita el docente (que registra, pero no tiene
+   * `expedientes.leer`) y también quien lleva expedientes (que no registra
+   * notas). Un `permiso` único dejaría fuera a uno de los dos.
+   *
+   * Si se declaran ambos campos, se exige `permiso` **y** alguno de `permisos`.
+   */
+  permisos?: string[];
   /** Nombre del icono de lucide-react. */
   icon: string;
   /**
@@ -56,10 +67,19 @@ export const NAV_ITEMS: NavItem[] = [
   { href: "/calendario", labelKey: "calendar", permiso: "operaciones.leer", icon: "Calendar" },
   { href: "/inscripcion-comida", labelKey: "meals", permiso: "operaciones.leer", icon: "Utensils" },
   { href: "/expedientes", labelKey: "records", permiso: "expedientes.leer", icon: "Users" },
+  { href: "/academico/materias", labelKey: "academic", permiso: "academico.leer", icon: "GraduationCap" },
+  { href: "/academico/cursos", labelKey: "courses", permiso: "academico.leer", icon: "BookOpen" },
+  // Notas de todos los estudiantes: `academico.leer` no basta — el rol
+  // `estudiante` lo tiene para el catálogo. Ver la cabecera de la pantalla.
+  {
+    href: "/academico/calificaciones",
+    labelKey: "grades",
+    permisos: ["calificaciones.registrar", "expedientes.leer"],
+    icon: "ClipboardList",
+  },
   { href: "/configuracion", labelKey: "settings", permiso: "landing.administrar", icon: "Settings" },
 
   // Pantallas pendientes (S6–S11). El backend ya está en `src/server/*`.
-  { href: "/academico/materias", labelKey: "academic", permiso: "academico.leer", icon: "GraduationCap", disponible: false },
   { href: "/patrocinadores", labelKey: "sponsors", permiso: "patrocinadores.leer", icon: "HeartHandshake", disponible: false },
   { href: "/contabilidad", labelKey: "accounting", permiso: "finanzas.leer", icon: "Wallet", disponible: false },
   { href: "/psicologia", labelKey: "psychology", permiso: "psicologia.leer", icon: "Brain", disponible: false },

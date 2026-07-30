@@ -24,9 +24,13 @@ export default async function PortalLayout({
 
   // super_admin ve todo; el resto según sus permisos.
   const permisos = user.rol === "super_admin" ? null : await permisosDeRol(user.rol);
-  const items = NAV_ITEMS.filter(
-    (i) => !i.permiso || permisos === null || permisos.includes(i.permiso),
-  );
+  const items = NAV_ITEMS.filter((i) => {
+    if (permisos === null) return true;
+    // `permiso` es obligatorio; `permisos` es "basta con uno" (ver lib/nav.ts).
+    if (i.permiso && !permisos.includes(i.permiso)) return false;
+    if (i.permisos && !i.permisos.some((p) => permisos.includes(p))) return false;
+    return true;
+  });
 
   return (
     <div className="flex min-h-screen bg-background">

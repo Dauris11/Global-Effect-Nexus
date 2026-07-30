@@ -218,8 +218,12 @@ Integraciones backend: `lib/anthropic.ts` (chat/traducción/OCR), `lib/email.ts`
 
 > META SMART Especifico: Entregar el flujo academico y los portales de estudiante y profesor. Medible: Materias, Cursos, Calificaciones, Historial, Prematricula, Periodos + Portal Estudiante y Profesor. Alcanzable: equipo de 2, stack Next.js+pg+PostgreSQL. Relevante: avanza el entregable de tesis. Temporal: 2 semanas.
 
-- [ ] Materias y Cursos tecnicos
-- [ ] Calificaciones (color por nota)
+- [x] **Materias y Cursos tecnicos** — `/academico/materias`: tabla (superficie Académico, claridad sobre densidad) **sin riel**, porque en un catálogo sano casi toda materia está activa y un riel en cada fila no señalaría nada (§5); la inactiva se apaga. `/academico/cursos`: tarjetas con **barra de ocupación**, porque el dato que se consulta de un curso es el cupo y "18 / 30" en una celda no se lee de un vistazo. Reparto de señales: el riel lleva el ciclo de vida, la barra el cupo — y pasarse de capacidad es lo único en rojo (un curso lleno es la meta, no un fallo). Las consultas ahora hacen `LEFT JOIN periodo` para mostrar el nombre en vez de un UUID.
+- [x] **Calificaciones (color por nota)** — `/academico/calificaciones`: distribución por las cuatro bandas del estándar (≥90 · 70–89 · 60–69 · <60), promedio con su banda, tasa de aprobación (corte 70) y tabla con riel por banda. La nota se colorea **mientras se teclea** en el formulario: un 6 en lugar de un 60 se ve al instante. Cada color va con su nombre — el color nunca es el único portador del significado (§3.2).
+
+> **Sobre el acceso a esta pantalla:** el permiso obvio, `academico.leer`, es el equivocado. El rol `estudiante` lo tiene (lo necesita para el catálogo de materias), así que gatear con él le dejaría ver las notas de sus compañeros. Se exige **`calificaciones.registrar` o `expedientes.leer`**: el docente entra por el primero (no lleva expedientes), quien lleva expedientes por el segundo (no registra notas), y el estudiante por ninguno — sus notas van en su portal. Para esto se añadió `permisos?: string[]` ("basta con uno") a `NavItem`.
+>
+> Además: en `db/seed.sql`, `calificaciones.registrar` lo tienen solo `docente` y `super_admin` — **`admin` no**. El botón de registrar lo respeta: quien califica es quien da clase.
 - [ ] Historial + Prematricula + Periodos
 - [ ] Portal Estudiante
 - [ ] Portal Profesor

@@ -77,6 +77,27 @@ export async function listarEstudiantes(filtro?: {
   })) as EstudianteListItem[];
 }
 
+/**
+ * Estudiantes en una forma ligera, para desplegables.
+ *
+ * No reutiliza `listarEstudiantes` a propósito: esa lleva una subconsulta de GPA
+ * por fila, y calcular el promedio académico de doscientas personas para pintar
+ * un `<select>` es trabajo tirado (mismo criterio que `listarAsignables` en
+ * operaciones). Solo activos: no se registra una nota a quien ya no está.
+ */
+export async function estudiantesParaSelector(): Promise<
+  { id: string; nombre: string }[]
+> {
+  const { rows } = await query(
+    `SELECT id, nombre
+       FROM estudiante
+      WHERE estado = 'activo'
+      ORDER BY nombre
+      LIMIT 500`,
+  );
+  return rows as { id: string; nombre: string }[];
+}
+
 /** Conteos de la cabecera del listado. Una sola pasada sobre la tabla. */
 export async function resumenExpedientes(): Promise<ResumenExpedientes> {
   const { rows } = await query(
