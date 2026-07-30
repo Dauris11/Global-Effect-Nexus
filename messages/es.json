@@ -26,7 +26,7 @@
   "nav": {
     "dashboard": "Panel",
     "records": "Expedientes",
-    "academic": "Académico",
+    "academic": "Materias",
     "sponsors": "Patrocinadores",
     "accounting": "Contabilidad",
     "psychology": "Psicología",
@@ -39,7 +39,9 @@
     "staff": "Personal",
     "projects": "Proyectos",
     "comingSoon": "Pronto",
-    "comingSoonGroup": "En construcción"
+    "comingSoonGroup": "En construcción",
+    "courses": "Cursos técnicos",
+    "grades": "Calificaciones"
   },
   "landing": {
     "enter": "Acceder",
@@ -618,6 +620,168 @@
         "error": "Error"
       },
       "reviewHint": "La IA propone; la persona confirma. Revisa siempre antes de dar por bueno un dato."
+    }
+  },
+  "academic": {
+    "eyebrow": "Académico",
+    "search": "Buscar",
+    "apply": "Aplicar",
+    "clear": "Quitar búsqueda",
+    "cancel": "Cancelar",
+    "close": "Cerrar",
+    "noTerm": "Sin período",
+    "unassigned": "Sin asignar",
+    "noMatches": "Nada coincide con la búsqueda",
+    "noMatchesHint": "Prueba con otro nombre o quita la búsqueda.",
+    "loadError": "No se pudo cargar el catálogo",
+    "loadErrorHint": "Revisa la conexión con la base de datos y vuelve a intentarlo.",
+    "forbidden": "No tienes acceso al módulo académico",
+    "forbiddenHint": "Hace falta el permiso «academico.leer». Pídelo a la coordinación.",
+    "backToDashboard": "Volver al panel",
+    "limitHint": "Se muestran los primeros 200. Afina la búsqueda para ver el resto.",
+    "subjects": {
+      "title": "Materias",
+      "description": "Catálogo de materias por cuatrimestre.",
+      "new": "Nueva materia",
+      "count": "{count, plural, =1 {# materia} other {# materias}}",
+      "empty": "Todavía no hay materias",
+      "emptyHint": "Crea la primera para empezar a armar el cuatrimestre.",
+      "searchPlaceholder": "Nombre, código o profesor",
+      "stats": {
+        "total": "Total",
+        "active": "Activas",
+        "credits": "Créditos activos"
+      }
+    },
+    "subject": {
+      "name": "Nombre",
+      "code": "Código",
+      "description": "Descripción",
+      "term": "Período",
+      "credits": "Créditos",
+      "teacher": "Profesor",
+      "status": "Estado",
+      "schedule": "Horario",
+      "scheduleShort": "Horario y aula",
+      "room": "Aula"
+    },
+    "subjectStatus": {
+      "activa": "Activa",
+      "inactiva": "Inactiva"
+    },
+    "newSubject": {
+      "title": "Nueva materia",
+      "subtitle": "El período es opcional: se puede planificar antes de que exista.",
+      "namePlaceholder": "Programación I",
+      "scheduleHint": "Por ejemplo: Lun y Mié 6:00–8:00 PM",
+      "create": "Crear materia",
+      "creating": "Creando…",
+      "nameRequired": "El nombre es obligatorio",
+      "error": "No se pudo crear la materia. Revisa los datos e inténtalo de nuevo."
+    },
+    "courses": {
+      "title": "Cursos técnicos",
+      "description": "Cursos del Instituto de Carreras Técnicas y su ocupación.",
+      "new": "Nuevo curso",
+      "count": "{count, plural, =1 {# curso} other {# cursos}}",
+      "empty": "Todavía no hay cursos",
+      "emptyHint": "Crea el primero con su capacidad; los inscritos los pone la matrícula.",
+      "searchPlaceholder": "Nombre o docente",
+      "stats": {
+        "total": "Total",
+        "active": "Activos",
+        "enrolled": "Inscritos",
+        "occupancy": "Ocupación"
+      }
+    },
+    "course": {
+      "name": "Nombre",
+      "description": "Descripción",
+      "teacher": "Docente",
+      "term": "Período",
+      "status": "Estado",
+      "capacity": "Capacidad",
+      "schedule": "Horario",
+      "mode": "Modalidad",
+      "occupancy": "Ocupación",
+      "enrolledOf": "{enrolled} de {capacity}",
+      "overCapacity": "{over} por encima de la capacidad"
+    },
+    "courseStatus": {
+      "activo": "Activo",
+      "planificado": "Planificado",
+      "finalizado": "Finalizado"
+    },
+    "courseMode": {
+      "presencial": "Presencial",
+      "virtual": "Virtual",
+      "mixto": "Mixto"
+    },
+    "newCourse": {
+      "title": "Nuevo curso técnico",
+      "subtitle": "Se crea con su capacidad y en cero inscritos.",
+      "namePlaceholder": "Electricidad residencial",
+      "scheduleHint": "Por ejemplo: Sáb 8:00–12:00",
+      "enrolledHint": "Los inscritos los mueve la matrícula, no este formulario.",
+      "create": "Crear curso",
+      "creating": "Creando…",
+      "nameRequired": "El nombre es obligatorio",
+      "error": "No se pudo crear el curso. Revisa los datos e inténtalo de nuevo."
+    },
+    "choose": "Elegir…",
+    "grades": {
+      "title": "Calificaciones",
+      "description": "Notas registradas, con su banda de color y la tasa de aprobación.",
+      "new": "Registrar nota",
+      "count": "{count, plural, =1 {# nota} other {# notas}}",
+      "empty": "Todavía no hay notas registradas",
+      "emptyHint": "Registra la primera evaluación del período.",
+      "searchPlaceholder": "Estudiante o curso",
+      "distribution": "Distribución por banda",
+      "noAverage": "Sin notas todavía",
+      "passRateHint": "{passed} de {total} en 70 o más",
+      "limitHint": "Se muestran las 500 más recientes. Afina la búsqueda para ver el resto.",
+      "forbidden": "No tienes acceso a las calificaciones",
+      "forbiddenHint": "Ver las notas de todos los estudiantes exige registrar calificaciones o llevar expedientes. Si eres estudiante, tus notas están en tu portal.",
+      "stats": {
+        "total": "Notas registradas",
+        "average": "Promedio general",
+        "passRate": "Aprobación"
+      }
+    },
+    "grade": {
+      "student": "Estudiante",
+      "course": "Curso",
+      "term": "Período",
+      "type": "Evaluación",
+      "score": "Nota",
+      "band": "Banda",
+      "notes": "Observaciones"
+    },
+    "gradeBand": {
+      "excelente": "Excelente",
+      "buena": "Aprobada",
+      "riesgo": "En riesgo",
+      "critica": "Reprobada"
+    },
+    "gradeType": {
+      "examen": "Examen",
+      "tarea": "Tarea",
+      "proyecto": "Proyecto",
+      "participacion": "Participación",
+      "final": "Final"
+    },
+    "newGrade": {
+      "title": "Registrar calificación",
+      "subtitle": "Estudiante, curso, período y nota son obligatorios.",
+      "scoreHint": "De 0 a 100. El color confirma la banda mientras escribes.",
+      "create": "Registrar nota",
+      "creating": "Registrando…",
+      "fieldsRequired": "Falta el estudiante, el curso o el período.",
+      "scoreInvalid": "La nota debe estar entre 0 y 100",
+      "error": "No se pudo registrar la nota. Revisa los datos e inténtalo de nuevo.",
+      "noCourses": "No hay cursos activos",
+      "noStudents": "No hay estudiantes activos"
     }
   }
 }

@@ -26,7 +26,7 @@
   "nav": {
     "dashboard": "Dashboard",
     "records": "Records",
-    "academic": "Academic",
+    "academic": "Subjects",
     "sponsors": "Sponsors",
     "accounting": "Accounting",
     "psychology": "Psychology",
@@ -39,7 +39,9 @@
     "staff": "Staff",
     "projects": "Projects",
     "comingSoon": "Soon",
-    "comingSoonGroup": "In progress"
+    "comingSoonGroup": "In progress",
+    "courses": "Technical courses",
+    "grades": "Grades"
   },
   "landing": {
     "enter": "Sign in",
@@ -618,6 +620,168 @@
         "error": "Error"
       },
       "reviewHint": "AI proposes; a person confirms. Always review before accepting a value."
+    }
+  },
+  "academic": {
+    "eyebrow": "Academic",
+    "search": "Search",
+    "apply": "Apply",
+    "clear": "Clear search",
+    "cancel": "Cancel",
+    "close": "Close",
+    "noTerm": "No term",
+    "unassigned": "Unassigned",
+    "noMatches": "Nothing matches your search",
+    "noMatchesHint": "Try another name, or clear the search.",
+    "loadError": "The catalog could not be loaded",
+    "loadErrorHint": "Check the database connection and try again.",
+    "forbidden": "You don't have access to the academic module",
+    "forbiddenHint": "The «academico.leer» permission is required. Ask coordination for it.",
+    "backToDashboard": "Back to dashboard",
+    "limitHint": "Showing the first 200. Narrow your search to see the rest.",
+    "subjects": {
+      "title": "Subjects",
+      "description": "Subject catalog by term.",
+      "new": "New subject",
+      "count": "{count, plural, =1 {# subject} other {# subjects}}",
+      "empty": "No subjects yet",
+      "emptyHint": "Create the first one to start building the term.",
+      "searchPlaceholder": "Name, code or teacher",
+      "stats": {
+        "total": "Total",
+        "active": "Active",
+        "credits": "Active credits"
+      }
+    },
+    "subject": {
+      "name": "Name",
+      "code": "Code",
+      "description": "Description",
+      "term": "Term",
+      "credits": "Credits",
+      "teacher": "Teacher",
+      "status": "Status",
+      "schedule": "Schedule",
+      "scheduleShort": "Schedule and room",
+      "room": "Room"
+    },
+    "subjectStatus": {
+      "activa": "Active",
+      "inactiva": "Inactive"
+    },
+    "newSubject": {
+      "title": "New subject",
+      "subtitle": "The term is optional: you can plan before it exists.",
+      "namePlaceholder": "Programming I",
+      "scheduleHint": "For example: Mon & Wed 6:00–8:00 PM",
+      "create": "Create subject",
+      "creating": "Creating…",
+      "nameRequired": "The name is required",
+      "error": "The subject could not be created. Check the data and try again."
+    },
+    "courses": {
+      "title": "Technical courses",
+      "description": "Courses at the Technical Careers Institute and their occupancy.",
+      "new": "New course",
+      "count": "{count, plural, =1 {# course} other {# courses}}",
+      "empty": "No courses yet",
+      "emptyHint": "Create the first one with its capacity; enrollment fills the seats.",
+      "searchPlaceholder": "Name or teacher",
+      "stats": {
+        "total": "Total",
+        "active": "Active",
+        "enrolled": "Enrolled",
+        "occupancy": "Occupancy"
+      }
+    },
+    "course": {
+      "name": "Name",
+      "description": "Description",
+      "teacher": "Teacher",
+      "term": "Term",
+      "status": "Status",
+      "capacity": "Capacity",
+      "schedule": "Schedule",
+      "mode": "Mode",
+      "occupancy": "Occupancy",
+      "enrolledOf": "{enrolled} of {capacity}",
+      "overCapacity": "{over} over capacity"
+    },
+    "courseStatus": {
+      "activo": "Active",
+      "planificado": "Planned",
+      "finalizado": "Finished"
+    },
+    "courseMode": {
+      "presencial": "In person",
+      "virtual": "Online",
+      "mixto": "Hybrid"
+    },
+    "newCourse": {
+      "title": "New technical course",
+      "subtitle": "Created with its capacity and zero enrolled.",
+      "namePlaceholder": "Residential wiring",
+      "scheduleHint": "For example: Sat 8:00–12:00",
+      "enrolledHint": "Enrollment moves the seat count, not this form.",
+      "create": "Create course",
+      "creating": "Creating…",
+      "nameRequired": "The name is required",
+      "error": "The course could not be created. Check the data and try again."
+    },
+    "choose": "Choose…",
+    "grades": {
+      "title": "Grades",
+      "description": "Recorded grades, with their color band and the pass rate.",
+      "new": "Record grade",
+      "count": "{count, plural, =1 {# grade} other {# grades}}",
+      "empty": "No grades recorded yet",
+      "emptyHint": "Record the first assessment of the term.",
+      "searchPlaceholder": "Student or course",
+      "distribution": "Distribution by band",
+      "noAverage": "No grades yet",
+      "passRateHint": "{passed} of {total} at 70 or above",
+      "limitHint": "Showing the 500 most recent. Narrow your search to see the rest.",
+      "forbidden": "You don't have access to grades",
+      "forbiddenHint": "Seeing every student's grades requires recording grades or handling records. If you're a student, your grades are in your portal.",
+      "stats": {
+        "total": "Grades recorded",
+        "average": "Overall average",
+        "passRate": "Pass rate"
+      }
+    },
+    "grade": {
+      "student": "Student",
+      "course": "Course",
+      "term": "Term",
+      "type": "Assessment",
+      "score": "Score",
+      "band": "Band",
+      "notes": "Notes"
+    },
+    "gradeBand": {
+      "excelente": "Excellent",
+      "buena": "Passing",
+      "riesgo": "At risk",
+      "critica": "Failing"
+    },
+    "gradeType": {
+      "examen": "Exam",
+      "tarea": "Homework",
+      "proyecto": "Project",
+      "participacion": "Participation",
+      "final": "Final"
+    },
+    "newGrade": {
+      "title": "Record grade",
+      "subtitle": "Student, course, term and score are all required.",
+      "scoreHint": "From 0 to 100. The color confirms the band as you type.",
+      "create": "Record grade",
+      "creating": "Recording…",
+      "fieldsRequired": "The student, course or term is missing.",
+      "scoreInvalid": "The score must be between 0 and 100",
+      "error": "The grade could not be recorded. Check the data and try again.",
+      "noCourses": "No active courses",
+      "noStudents": "No active students"
     }
   }
 }
