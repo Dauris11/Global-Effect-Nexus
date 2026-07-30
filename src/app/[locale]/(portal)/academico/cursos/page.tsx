@@ -19,7 +19,12 @@ import { getTranslations } from "next-intl/server";
 import { ArrowLeft, GraduationCap, Lock, User } from "lucide-react";
 import { currentUser } from "@/lib/auth";
 import { can } from "@/lib/rbac";
-import { listarCursos, listarPeriodos, resumenCursos } from "@/server/academico/queries";
+import {
+  docentesParaSelector,
+  listarCursos,
+  listarPeriodos,
+  resumenCursos,
+} from "@/server/academico/queries";
 import type { Curso } from "@/server/academico/types";
 import type { EstadoDominio } from "@/lib/estados";
 import { paletaDe } from "@/lib/estados";
@@ -32,6 +37,8 @@ import { BarraProgreso } from "@/components/ui/barra-progreso";
 import { EmptyState } from "@/components/ui/empty-state";
 import { Buscador } from "../buscador";
 import { BotonNuevoCurso, type TextosNuevoCurso } from "./dialogo-nuevo-curso";
+import { AccionesCurso } from "./acciones-curso";
+import type { TextosAcciones } from "../acciones-registro";
 
 /** Estado del curso → color del sistema (mismo criterio que Proyectos). */
 function bandaDeCurso(estado: string): EstadoDominio {
@@ -59,19 +66,26 @@ function bandaDeCupo(inscritos: number, capacidad: number): EstadoDominio {
   return "tarea-progreso";
 }
 
-async function cargar(buscar?: string) {
+/**
+ * `conDocentes` solo es cierto para quien puede crear cursos: la lista de
+ * personas del sistema es para llenar el desplegable del alta, no para quien
+ * solo consulta el catálogo (mismo criterio que en Materias).
+ */
+async function cargar(buscar: string | undefined, conDocentes: boolean) {
   try {
-    const [cursos, resumen, periodos] = await Promise.all([
+    const [cursos, resumen, periodos, docentes] = await Promise.all([
       listarCursos(buscar),
       resumenCursos(),
       listarPeriodos(),
+      conDocentes ? docentesParaSelector() : Promise.resolve([]),
     ]);
-    return { cursos, resumen, periodos, error: false };
+    return { cursos, resumen, periodos, docentes, error: false };
   } catch {
     return {
       cursos: [] as Curso[],
       resumen: { total: 0, activos: 0, inscritos: 0, cupos: 0 },
       periodos: [] as { id: string; nombre: string }[],
+      docentes: [] as { id: string; nombre: string }[],
       error: true,
     };
   }
@@ -117,15 +131,19 @@ export default async function CursosPage({
   }
 
   const q = (qBruto ?? "").trim();
-  const { cursos, resumen, periodos, error } = await cargar(q || undefined);
+  const { cursos, resumen, periodos, docentes, error } = await cargar(
+    q || undefined,
+    puedeEscribir,
+  );
 
   const textosDialogo: TextosNuevoCurso = {
     titulo: t("newCourse.title"),
     subtitulo: t("newCourse.subtitle"),
+    tituloEditar: t("editCourse.title"),
+    subtituloEditar: t("editCourse.subtitle"),
     nombre: t("course.name"),
     nombrePlaceholder: t("newCourse.namePlaceholder"),
     descripcion: t("course.description"),
-    docente: t("course.teacher"),
     periodo: t("course.term"),
     sinPeriodo: t("noTerm"),
     estado: t("course.status"),
@@ -136,6 +154,8 @@ export default async function CursosPage({
     ayudaInscritos: t("newCourse.enrolledHint"),
     crear: t("newCourse.create"),
     creando: t("newCourse.creating"),
+    guardar: t("rowActions.save"),
+    guardando: t("rowActions.saving"),
     cancelar: t("cancel"),
     cerrar: t("close"),
     errorNombre: t("newCourse.nameRequired"),
@@ -150,6 +170,35 @@ export default async function CursosPage({
       virtual: t("courseMode.virtual"),
       mixto: t("courseMode.mixto"),
     },
+    selectorDocente: {
+      etiqueta: t("course.teacher"),
+      sinAsignar: t("teacherPicker.unassigned"),
+      externo: t("teacherPicker.external"),
+      nombreExterno: t("teacherPicker.externalName"),
+      ayudaExterno: t("teacherPicker.externalHint"),
+    },
+  };
+
+  const textosAcciones: TextosAcciones = {
+    menu: t("rowActions.menu"),
+    editar: t("rowActions.edit"),
+    eliminar: t("rowActions.delete"),
+    confirmarTitulo: t("rowActions.confirmTitle"),
+    confirmarTexto: t("courses.deleteHint"),
+    enUsoTitulo: t("rowActions.inUseTitle"),
+    enUsoTexto: t("courses.inUseHint"),
+    dependencias: {
+      enrollments: t("rowActions.deps.enrollments"),
+      grades: t("rowActions.deps.grades"),
+      subjects: t("rowActions.deps.subjects"),
+      courses: t("rowActions.deps.courses"),
+      enrolled: t("rowActions.deps.enrolled"),
+    },
+    eliminando: t("rowActions.deleting"),
+    entendido: t("rowActions.understood"),
+    cancelar: t("cancel"),
+    cerrar: t("close"),
+    errorGeneral: t("rowActions.error"),
   };
 
   const ocupacion =
@@ -175,6 +224,7 @@ export default async function CursosPage({
                 etiqueta={t("courses.new")}
                 textos={textosDialogo}
                 periodos={periodos}
+                docentes={docentes}
               />
             )
           }
@@ -229,6 +279,7 @@ export default async function CursosPage({
                   etiqueta={t("courses.new")}
                   textos={textosDialogo}
                   periodos={periodos}
+                  docentes={docentes}
                 />
               )
             )
@@ -258,9 +309,20 @@ export default async function CursosPage({
                 >
                   <div className="flex items-start justify-between gap-3">
                     <h3 className="text-lg font-semibold leading-tight">{c.nombre}</h3>
-                    <ChipEstado estado={banda} punto className="shrink-0">
-                      {t(`courseStatus.${c.estado}` as never)}
-                    </ChipEstado>
+                    <div className="flex shrink-0 items-center gap-1">
+                      <ChipEstado estado={banda} punto>
+                        {t(`courseStatus.${c.estado}` as never)}
+                      </ChipEstado>
+                      {puedeEscribir && (
+                        <AccionesCurso
+                          curso={c}
+                          textos={textosDialogo}
+                          textosAcciones={textosAcciones}
+                          periodos={periodos}
+                          docentes={docentes}
+                        />
+                      )}
+                    </div>
                   </div>
 
                   {c.descripcion && (

@@ -19,6 +19,18 @@ export interface NavItem {
    * Si se declaran ambos campos, se exige `permiso` **y** alguno de `permisos`.
    */
   permisos?: string[];
+  /**
+   * Roles exactos que ven el ítem. Si se omite, lo ve cualquiera que cumpla
+   * los permisos de arriba.
+   *
+   * Existe por los portales por rol (S6). Un portal no se protege con un
+   * permiso —el Portal Estudiante no lee nada que un permiso pueda nombrar,
+   * lee *tu propia fila*— así que el filtro tiene que ser el rol. Y a
+   * diferencia de `permiso`, esta lista **también aplica a `super_admin`**:
+   * enseñarle "Portal estudiante" a quien no tiene expediente solo le ofrece
+   * una pantalla que no puede contener nada suyo.
+   */
+  roles?: string[];
   /** Nombre del icono de lucide-react. */
   icon: string;
   /**
@@ -36,15 +48,21 @@ export interface NavItem {
 }
 
 /**
- * Ruta de inicio tras el login según el rol. Hoy todos aterrizan en el panel
- * (la navegación se filtra por permisos); cuando existan los portales por rol
- * (S6+), aquí se enrutará a cada uno (p. ej. estudiante → /portal/estudiante).
+ * Ruta de inicio tras el login según el rol.
+ *
+ * El estudiante y el docente aterrizan en su portal (S6) y no en el panel
+ * general: el panel muestra las cifras de la fundación —estudiantes activos,
+ * becados, balance del mes— y esas cifras se le recortan a un estudiante hasta
+ * dejarle una pantalla casi vacía. Su primera pantalla debe ser la suya.
+ *
+ * El resto de roles sí trabaja sobre la institución entera, y para ellos el
+ * panel es la portada correcta.
  */
 const HOME_POR_ROL: Record<string, string> = {
   super_admin: "/dashboard",
   admin: "/dashboard",
-  docente: "/dashboard",
-  estudiante: "/dashboard",
+  docente: "/portal/profesor",
+  estudiante: "/portal/estudiante",
   psicologo: "/dashboard",
   contabilidad: "/dashboard",
 };
@@ -59,6 +77,20 @@ export function rutaPorRol(rol: string): string {
  * sprint posterior (ver docs/05-plan-de-trabajo.md).
  */
 export const NAV_ITEMS: NavItem[] = [
+  // Los portales van primero y solo para su rol: son la portada de esas dos
+  // personas, no un módulo más del menú.
+  {
+    href: "/portal/estudiante",
+    labelKey: "studentPortal",
+    roles: ["estudiante"],
+    icon: "GraduationCap",
+  },
+  {
+    href: "/portal/profesor",
+    labelKey: "teacherPortal",
+    roles: ["docente"],
+    icon: "BookOpen",
+  },
   { href: "/dashboard", labelKey: "dashboard", icon: "LayoutDashboard" },
   { href: "/administrativo", labelKey: "admin", permiso: "operaciones.leer", icon: "FolderKanban" },
   { href: "/administrativo/tareas", labelKey: "tasks", permiso: "operaciones.leer", icon: "ListChecks" },

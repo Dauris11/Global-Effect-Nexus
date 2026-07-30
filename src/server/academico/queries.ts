@@ -43,7 +43,7 @@ export async function listarMaterias(buscar?: string): Promise<Materia[]> {
   }
   const { rows } = await query(
     `SELECT m.id, m.nombre, m.codigo, m.descripcion, m.periodo_id, m.creditos,
-            m.profesor_nombre, m.estado, m.horario, m.aula,
+            m.profesor_nombre, m.profesor_usuario_id, m.estado, m.horario, m.aula,
             p.nombre AS periodo_nombre
        FROM materia m
        LEFT JOIN periodo p ON p.id = m.periodo_id
@@ -80,7 +80,8 @@ export async function listarCursos(buscar?: string): Promise<Curso[]> {
     where = `WHERE c.nombre ILIKE $1 OR c.docente ILIKE $1`;
   }
   const { rows } = await query(
-    `SELECT c.id, c.nombre, c.descripcion, c.docente, c.periodo_id, c.estado,
+    `SELECT c.id, c.nombre, c.descripcion, c.docente, c.docente_usuario_id,
+            c.periodo_id, c.estado,
             c.capacidad, c.inscritos, c.horario, c.modalidad,
             p.nombre AS periodo_nombre
        FROM curso c
@@ -392,6 +393,37 @@ export async function resumenCalificaciones(): Promise<{
  * modalidad ni descripción, y arrastrarlos a un `<select>` es peso sin uso
  * (mismo criterio que `listarAsignables` en operaciones).
  */
+/**
+ * Quién puede figurar como docente de una materia o un curso.
+ *
+ * Todo el personal activo — todos los roles menos `estudiante`. La tentación
+ * era limitarlo al rol `docente`, y los datos de la propia fundación dicen que
+ * sería un error: el curso "Técnico en Contabilidad y Finanzas" lo imparte
+ * quien lleva la contabilidad, no un docente de plantilla. En una institución
+ * de este tamaño el rol dice de qué se ocupa alguien en el sistema, no si sabe
+ * dar una clase.
+ *
+ * El único excluido es `estudiante`, porque ahí sí hay una regla: un becado no
+ * imparte los cursos en los que se matricula.
+ *
+ * Quien no está aquí —un tallerista externo— se sigue escribiendo a mano en el
+ * formulario: la relación es opcional a propósito (ver migración 0019).
+ */
+export async function docentesParaSelector(): Promise<
+  { id: string; nombre: string }[]
+> {
+  const { rows } = await query(
+    `SELECT u.id, u.nombre
+       FROM usuario u
+       JOIN rol r ON r.id = u.rol_id
+      WHERE u.activo = TRUE
+        AND r.nombre <> 'estudiante'
+      ORDER BY u.nombre
+      LIMIT 200`,
+  );
+  return rows as { id: string; nombre: string }[];
+}
+
 export async function cursosParaSelector(): Promise<{ id: string; nombre: string }[]> {
   const { rows } = await query(
     `SELECT id, nombre FROM curso WHERE estado = 'activo' ORDER BY nombre LIMIT 300`,

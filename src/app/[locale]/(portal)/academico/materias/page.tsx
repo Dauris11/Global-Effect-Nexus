@@ -19,6 +19,7 @@ import { ArrowLeft, BookOpen, Lock } from "lucide-react";
 import { currentUser } from "@/lib/auth";
 import { can } from "@/lib/rbac";
 import {
+  docentesParaSelector,
   listarMaterias,
   listarPeriodos,
   resumenMaterias,
@@ -40,20 +41,32 @@ import {
 } from "@/components/ui/table";
 import { Buscador } from "../buscador";
 import { BotonNuevaMateria, type TextosNuevaMateria } from "./dialogo-nueva-materia";
+import { AccionesMateria } from "./acciones-materia";
+import type { TextosAcciones } from "../acciones-registro";
 
-async function cargar(buscar?: string) {
+/**
+ * `conDocentes` solo es cierto para quien puede crear materias.
+ *
+ * La lista de docentes es la lista de personas del sistema, y solo hace falta
+ * para llenar el desplegable del formulario de alta. Traerla también para quien
+ * únicamente lee el catálogo —un estudiante tiene `academico.leer`— sería
+ * mandarle al navegador nombres del personal que su pantalla no usa.
+ */
+async function cargar(buscar: string | undefined, conDocentes: boolean) {
   try {
-    const [materias, resumen, periodos] = await Promise.all([
+    const [materias, resumen, periodos, docentes] = await Promise.all([
       listarMaterias(buscar),
       resumenMaterias(),
       listarPeriodos(),
+      conDocentes ? docentesParaSelector() : Promise.resolve([]),
     ]);
-    return { materias, resumen, periodos, error: false };
+    return { materias, resumen, periodos, docentes, error: false };
   } catch {
     return {
       materias: [] as Materia[],
       resumen: { total: 0, activas: 0, creditos: 0 },
       periodos: [] as { id: string; nombre: string }[],
+      docentes: [] as { id: string; nombre: string }[],
       error: true,
     };
   }
@@ -99,11 +112,16 @@ export default async function MateriasPage({
   }
 
   const q = (qBruto ?? "").trim();
-  const { materias, resumen, periodos, error } = await cargar(q || undefined);
+  const { materias, resumen, periodos, docentes, error } = await cargar(
+    q || undefined,
+    puedeEscribir,
+  );
 
   const textosDialogo: TextosNuevaMateria = {
     titulo: t("newSubject.title"),
     subtitulo: t("newSubject.subtitle"),
+    tituloEditar: t("editSubject.title"),
+    subtituloEditar: t("editSubject.subtitle"),
     nombre: t("subject.name"),
     nombrePlaceholder: t("newSubject.namePlaceholder"),
     codigo: t("subject.code"),
@@ -111,13 +129,14 @@ export default async function MateriasPage({
     periodo: t("subject.term"),
     sinPeriodo: t("noTerm"),
     creditos: t("subject.credits"),
-    profesor: t("subject.teacher"),
     estado: t("subject.status"),
     horario: t("subject.schedule"),
     horarioPlaceholder: t("newSubject.scheduleHint"),
     aula: t("subject.room"),
     crear: t("newSubject.create"),
     creando: t("newSubject.creating"),
+    guardar: t("rowActions.save"),
+    guardando: t("rowActions.saving"),
     cancelar: t("cancel"),
     cerrar: t("close"),
     errorNombre: t("newSubject.nameRequired"),
@@ -126,6 +145,35 @@ export default async function MateriasPage({
       activa: t("subjectStatus.activa"),
       inactiva: t("subjectStatus.inactiva"),
     },
+    selectorDocente: {
+      etiqueta: t("subject.teacher"),
+      sinAsignar: t("teacherPicker.unassigned"),
+      externo: t("teacherPicker.external"),
+      nombreExterno: t("teacherPicker.externalName"),
+      ayudaExterno: t("teacherPicker.externalHint"),
+    },
+  };
+
+  const textosAcciones: TextosAcciones = {
+    menu: t("rowActions.menu"),
+    editar: t("rowActions.edit"),
+    eliminar: t("rowActions.delete"),
+    confirmarTitulo: t("rowActions.confirmTitle"),
+    confirmarTexto: t("subjects.deleteHint"),
+    enUsoTitulo: t("rowActions.inUseTitle"),
+    enUsoTexto: t("subjects.inUseHint"),
+    dependencias: {
+      enrollments: t("rowActions.deps.enrollments"),
+      grades: t("rowActions.deps.grades"),
+      subjects: t("rowActions.deps.subjects"),
+      courses: t("rowActions.deps.courses"),
+      enrolled: t("rowActions.deps.enrolled"),
+    },
+    eliminando: t("rowActions.deleting"),
+    entendido: t("rowActions.understood"),
+    cancelar: t("cancel"),
+    cerrar: t("close"),
+    errorGeneral: t("rowActions.error"),
   };
 
   const cifras = [
@@ -147,6 +195,7 @@ export default async function MateriasPage({
                 etiqueta={t("subjects.new")}
                 textos={textosDialogo}
                 periodos={periodos}
+                docentes={docentes}
               />
             )
           }
@@ -197,6 +246,7 @@ export default async function MateriasPage({
                   etiqueta={t("subjects.new")}
                   textos={textosDialogo}
                   periodos={periodos}
+                  docentes={docentes}
                 />
               )
             )
@@ -221,6 +271,11 @@ export default async function MateriasPage({
                     <TableHead scope="col">{t("subject.teacher")}</TableHead>
                     <TableHead scope="col">{t("subject.scheduleShort")}</TableHead>
                     <TableHead scope="col">{t("subject.status")}</TableHead>
+                    {puedeEscribir && (
+                      <TableHead scope="col" className="w-px">
+                        <span className="sr-only">{t("rowActions.menu")}</span>
+                      </TableHead>
+                    )}
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -267,6 +322,18 @@ export default async function MateriasPage({
                           {t(`subjectStatus.${m.estado}` as never)}
                         </ChipEstado>
                       </TableCell>
+
+                      {puedeEscribir && (
+                        <TableCell className="text-right">
+                          <AccionesMateria
+                            materia={m}
+                            textos={textosDialogo}
+                            textosAcciones={textosAcciones}
+                            periodos={periodos}
+                            docentes={docentes}
+                          />
+                        </TableCell>
+                      )}
                     </TableRow>
                   ))}
                 </TableBody>

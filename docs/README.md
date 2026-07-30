@@ -41,19 +41,22 @@ Toda la documentación del proyecto está centralizada en esta carpeta: **un arc
 | [`../db/README.md`](../db/README.md) | Guía de despliegue y verificación de la base de datos. |
 | `../.env.example` | Plantilla de variables de entorno. |
 
-## Estado del proyecto (2026-07-11)
+## Estado del proyecto (2026-07-30)
 
 - ✅ **S0–S3 (Base de datos):** diseñada, normalizada (1NF–3NF), desplegada y verificada en Supabase — 36 tablas, RBAC, pgvector.
 - ✅ **Documentación de cimientos** completa (visión, arquitectura, módulos, ERD, DFD, diccionario, normalización, plan) + [stack definitivo](08-stack-tecnologico.md) y [guía de diseño](09-guia-de-diseno.md).
 - ✅ **Migración de stack:** Next.js 16, Tailwind CSS 4 (CSS-first), Supabase Auth, i18n `es/en`, y libs nuevas (Leaflet, motion, sharp, Resend).
 - ▶️ **S4 — Backend núcleo (en curso):** Supabase Auth + RBAC (`proxy.ts` + `requirePermission`), login, capa `server/` por dominio, Storage y layout del portal. Build y lint en verde.
+- ✅ **S5 — Expedientes y Panel:** CRUD de expedientes por pestañas, detalle con GPA y gráficos, OCR con IA y panel principal armado por permisos.
+- ✅ **S9 — Administrativo y Calendario:** Kanban con automatizaciones (correo + evento espejo), proyectos con avance calculado, personal y calendario mensual.
+- ✅ **S6 — Académico y portales por rol:** materias, cursos, calificaciones, historial, prematrícula y períodos; **Portal Estudiante** y **Portal Profesor**, con el vínculo docente ↔ usuario resuelto por FK en la migración `0019`.
 
 Ver los próximos pasos en [Plan de Trabajo](05-plan-de-trabajo.md).
 
 ## Resumen de la base de datos
 
 - **Motor:** PostgreSQL 17 (Supabase). SQL a mano, sin ORM, consultas parametrizadas.
-- **36 tablas · 333 columnas · 7 enums · 44 FKs · 88+ índices · 20 triggers.**
+- **37 tablas · 347 columnas · 7 enums · 47 FKs · 94 índices · 20 triggers.** (Sin contar `_migracion`, tabla de control del runner.)
 - **Extensiones:** `pgcrypto`, `citext`, `pg_trgm`, `vector` (pgvector 0.8, índice HNSW).
 - **Extensibilidad:** columna `metadata JSONB` en las 14 entidades principales.
 - **Credenciales semilla:** `admin@globaleffect.org` / `admin123` (super_admin).

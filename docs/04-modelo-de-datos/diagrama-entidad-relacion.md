@@ -227,12 +227,14 @@ erDiagram
     uuid periodo_id FK
     int creditos
     text profesor_nombre
+    uuid profesor_usuario_id FK
     text estado
   }
   CURSO {
     uuid id PK
     text nombre
     text docente
+    uuid docente_usuario_id FK
     uuid periodo_id FK
     int capacidad
     int inscritos

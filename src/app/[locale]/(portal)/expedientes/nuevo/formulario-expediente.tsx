@@ -27,7 +27,8 @@
 import * as React from "react";
 import { useRouter } from "next/navigation";
 import { Plus, Trash2, Users } from "lucide-react";
-import { crearExpediente } from "@/server/estudiantes/actions";
+import { actualizarExpediente, crearExpediente } from "@/server/estudiantes/actions";
+import type { ExpedienteCompleto } from "@/server/estudiantes/types";
 import {
   ESTADOS_ESTUDIANTE,
   GENEROS,
@@ -246,16 +247,100 @@ function CampoSelect({
   );
 }
 
+/**
+ * Vuelca un expediente de la base de datos en el estado plano del formulario.
+ *
+ * Todo se convierte a cadena porque los `<input>` no aceptan `null` sin
+ * volverse no controlados —React avisa en consola y el campo deja de responder
+ * al estado—, y los números tampoco: se teclean como texto y el servidor los
+ * vuelve a convertir con Zod al guardar.
+ */
+function desdeExpediente(x: ExpedienteCompleto): {
+  campos: Campos;
+  familiares: FamiliarForm[];
+} {
+  const txt = (v: unknown) => (v === null || v === undefined ? "" : String(v));
+  const e = x.estudiante;
+  const v = x.vivienda;
+  const s = x.salud;
+  const so = x.socioeconomico;
+
+  return {
+    campos: {
+      ...CAMPOS_INICIALES,
+      nombre: txt(e.nombre),
+      cedula: txt(e.cedula),
+      email: txt(e.email),
+      telefono: txt(e.telefono),
+      fecha_nacimiento: txt(e.fecha_nacimiento),
+      lugar_nacimiento: txt(e.lugar_nacimiento),
+      nacionalidad: txt(e.nacionalidad),
+      genero: txt(e.genero),
+      religion: txt(e.religion),
+      tipo: txt(e.tipo) || "regular",
+      estado: txt(e.estado) || "activo",
+      programa: txt(e.programa),
+      donde_estudia: txt(e.donde_estudia),
+      universidad: txt(e.universidad),
+      fecha_ingreso: txt(e.fecha_ingreso),
+      centro_educativo: txt(e.centro_educativo),
+      facilitador_habitudes: txt(e.facilitador_habitudes),
+      breve_historia_habitudes: txt(e.breve_historia_habitudes),
+      notas_adicionales: txt(e.notas_adicionales),
+      con_quien_vive: txt(v?.con_quien_vive),
+      por_que_vive_con_esa_persona: txt(v?.por_que_vive_con_esa_persona),
+      hermanos_cantidad: txt(v?.hermanos_cantidad),
+      casa_propia: txt(v?.casa_propia),
+      tipo_casa: txt(v?.tipo_casa),
+      bano_dentro: txt(v?.bano_dentro),
+      habitaciones: txt(v?.habitaciones),
+      camas: txt(v?.camas),
+      quienes_duermen_cama: txt(v?.quienes_duermen_cama),
+      direccion: txt(v?.direccion),
+      comunidad: txt(v?.comunidad),
+      ciudad_residencia: txt(v?.ciudad_residencia),
+      enfermedades: txt(s?.enfermedades),
+      alergias: txt(s?.alergias),
+      contacto_emergencia_nombre: txt(s?.contacto_emergencia_nombre),
+      contacto_emergencia_telefono: txt(s?.contacto_emergencia_telefono),
+      historia_de_vida: txt(so?.historia_de_vida),
+      situacion_familiar: txt(so?.situacion_familiar),
+      situacion_economica: txt(so?.situacion_economica),
+      motivo_beca: txt(so?.motivo_beca),
+      metas_academicas: txt(so?.metas_academicas),
+    },
+    familiares: x.familiares.map((f) => ({
+      parentesco: f.parentesco,
+      nombre: f.nombre,
+      edad: txt(f.edad),
+      telefono: txt(f.telefono),
+      profesion: txt(f.profesion),
+    })),
+  };
+}
+
 export function FormularioExpediente({
   textos,
   rutaListado,
+  registro,
 }: {
   textos: TextosExpediente;
   rutaListado: string;
+  /** Presente ⇒ edición. Ausente ⇒ alta. */
+  registro?: ExpedienteCompleto;
 }) {
   const router = useRouter();
-  const [campos, setCampos] = React.useState<Campos>(CAMPOS_INICIALES);
-  const [familiares, setFamiliares] = React.useState<FamiliarForm[]>([]);
+  const edicion = registro !== undefined;
+  const iniciales = React.useMemo(
+    () =>
+      registro
+        ? desdeExpediente(registro)
+        : { campos: CAMPOS_INICIALES, familiares: [] as FamiliarForm[] },
+    [registro],
+  );
+
+  const [campos, setCampos] = React.useState<Campos>(iniciales.campos);
+  const [familiares, setFamiliares] = React.useState<FamiliarForm[]>(iniciales.familiares);
   const [pestana, setPestana] = React.useState("identity");
   const [enviando, setEnviando] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
@@ -299,7 +384,7 @@ export function FormularioExpediente({
 
     setEnviando(true);
     try {
-      const id = await crearExpediente({
+      const datos = {
         ...campos,
         // Los familiares sin nombre son filas que el usuario abrió y no llenó:
         // se descartan en silencio en vez de bloquear el guardado.
@@ -339,10 +424,17 @@ export function FormularioExpediente({
           motivo_beca: campos.motivo_beca,
           metas_academicas: campos.metas_academicas,
         },
-      });
-      // Al expediente recién creado, no de vuelta al listado: lo siguiente que
-      // se hace tras abrir una ficha es revisarla.
+      };
+
+      // En los dos casos se termina en la ficha: tras crearla, porque lo
+      // siguiente que se hace es revisarla; tras editarla, porque es de donde
+      // se venía y hay que ver el cambio aplicado.
+      const id = registro
+        ? (await actualizarExpediente({ ...datos, id: registro.estudiante.id }),
+          registro.estudiante.id)
+        : await crearExpediente(datos);
       router.push(`${rutaListado}/${id}`);
+      router.refresh();
     } catch {
       setError(textos.form.error);
       setEnviando(false);
@@ -679,9 +771,23 @@ export function FormularioExpediente({
           sección, no solo al llegar a la última. */}
       <div className="flex flex-wrap items-center gap-3 border-t border-border pt-6">
         <Button type="submit" disabled={enviando}>
-          {enviando ? textos.form.saving : textos.form.save}
+          {enviando
+            ? textos.form.saving
+            : edicion
+              ? textos.form.saveEdit
+              : textos.form.save}
         </Button>
-        <Button type="button" variant="ghost" onClick={() => router.push(rutaListado)}>
+        {/* Cancelar devuelve a donde se venía: al listado si se está creando,
+            a la ficha si se está editando. */}
+        <Button
+          type="button"
+          variant="ghost"
+          onClick={() =>
+            router.push(
+              registro ? `${rutaListado}/${registro.estudiante.id}` : rutaListado,
+            )
+          }
+        >
           {textos.form.cancel}
         </Button>
       </div>

@@ -45,6 +45,7 @@ import {
 } from "@/components/ui/table";
 import { FiltroPrematricula } from "./filtros";
 import { BotonInscribir, type TextosInscribir } from "./dialogo-inscribir";
+import { CambiadorEstadoInscripcion } from "./cambiar-estado";
 
 /** Estado de la inscripción → color del sistema. */
 function bandaDeInscripcion(estado: string): EstadoDominio {
@@ -166,6 +167,13 @@ export default async function PrematriculaPage({
     errorCampos: t("newEnrollment.fieldsRequired"),
     yaInscrito: t("newEnrollment.alreadyEnrolled"),
     errorGeneral: t("newEnrollment.error"),
+  };
+
+  const textosEstado: Record<string, string> = {
+    activa: t("enrollmentStatus.activa"),
+    aprobada: t("enrollmentStatus.aprobada"),
+    reprobada: t("enrollmentStatus.reprobada"),
+    retirada: t("enrollmentStatus.retirada"),
   };
 
   const boton = puedeEscribir && (
@@ -299,9 +307,13 @@ export default async function PrematriculaPage({
                           {i.periodo_nombre}
                         </TableCell>
                         <TableCell>
-                          <ChipEstado estado={banda} punto>
-                            {t(`enrollmentStatus.${i.estado}` as never)}
-                          </ChipEstado>
+                          <CambiadorEstadoInscripcion
+                            id={i.id}
+                            estadoActual={i.estado}
+                            banda={banda}
+                            textosEstado={textosEstado}
+                            puedeEditar={puedeEscribir}
+                          />
                         </TableCell>
                       </TableRow>
                     );

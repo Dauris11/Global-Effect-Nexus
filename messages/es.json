@@ -41,7 +41,9 @@
     "comingSoon": "Pronto",
     "comingSoonGroup": "En construcción",
     "courses": "Cursos técnicos",
-    "grades": "Calificaciones"
+    "grades": "Calificaciones",
+    "studentPortal": "Mi portal",
+    "teacherPortal": "Mis cursos"
   },
   "landing": {
     "enter": "Acceder",
@@ -148,7 +150,37 @@
     "access_appointment_tag": "Cita confidencial",
     "access_meals_hours": "6:00 – 8:30 AM",
     "footerAccessNote": "Acceso para estudiantes activos y personal autorizado.",
-    "footerVersion": "Portal institucional Nexus v1.0"
+    "footerVersion": "Portal institucional Nexus v1.0",
+    "heroPrev": "Anterior",
+    "heroNext": "Siguiente",
+    "heroPaused": "En pausa",
+    "heroScroll": "Cómo entrar",
+    "menuOpen": "Abrir menú",
+    "menuClose": "Cerrar menú",
+    "panelNow": "Ahora mismo",
+    "panelMeals": "Comedor",
+    "panelMealsOpen": "Abierto",
+    "panelMealsClosed": "Cerrado",
+    "panelMealsWindow": "Se inscribe de 6:00 a 8:30 AM",
+    "panelMealsLeft": "Quedan {n} min para inscribirse",
+    "panelMealsNext": "Vuelve a abrir mañana a las 6:00 AM",
+    "panelMealsSee": "Ver la inscripción",
+    "panelNextEvent": "Próximo evento",
+    "panelNoEvent": "No hay nada en el calendario por ahora.",
+    "panelInviteOnly": "El portal es solo por invitación. El comedor, no: esa página está abierta.",
+    "eventsFilterLabel": "Filtrar eventos por tipo",
+    "eventsToday": "Hoy",
+    "eventsTomorrow": "Mañana",
+    "eventsInDays": "En {n} días",
+    "eventsNoResults": "No hay eventos de ese tipo por ahora.",
+    "eventsClear": "Ver todos",
+    "eventsCount": "{n} de {total} eventos",
+    "accessIntro": "Tres puertas distintas, y no todas piden lo mismo. El portal es solo para quien ya está en el sistema; la inscripción al comedor está abierta a cualquiera.",
+    "eventType_academico": "Académico",
+    "eventType_administrativo": "Administrativo",
+    "eventType_social": "Social",
+    "eventType_reunion": "Reunión",
+    "eventType_otro": "Otro"
   },
   "comida": {
     "title": "Inscripción de comida",
@@ -510,7 +542,10 @@
       "requiredHint": "Falta el nombre del joven, en la pestaña de identidad.",
       "progress": "Sección {current} de {total}",
       "next": "Siguiente",
-      "previous": "Anterior"
+      "previous": "Anterior",
+      "titleEdit": "Editar expediente",
+      "subtitleEdit": "Los cambios se guardan de una vez, incluidas las secciones que no toques.",
+      "saveEdit": "Guardar cambios"
     },
     "tab": {
       "identity": "Identidad",
@@ -620,6 +655,28 @@
         "error": "Error"
       },
       "reviewHint": "La IA propone; la persona confirma. Revisa siempre antes de dar por bueno un dato."
+    },
+    "close": "Cerrar",
+    "backToRecord": "Volver al expediente",
+    "rowActions": {
+      "menu": "Acciones",
+      "edit": "Editar expediente",
+      "delete": "Eliminar expediente",
+      "deleting": "Eliminando…",
+      "confirmTitle": "¿Eliminar el expediente de {name}?",
+      "deleteHint": "Se borra la ficha completa: datos personales, familia, vivienda, salud y situación. No se puede deshacer.",
+      "inUseTitle": "El expediente de {name} tiene historial",
+      "inUseHint": "Hay registros de otros módulos sobre esta persona y borrarla se los llevaría por delante. Cámbiale el estado a inactivo, graduado o suspendido: sale del trabajo diario y no se pierde nada.",
+      "understood": "Entendido",
+      "error": "No se pudo eliminar. Inténtalo de nuevo.",
+      "deps": {
+        "enrollments": "Inscripciones",
+        "grades": "Calificaciones",
+        "history": "Historial académico",
+        "appointments": "Citas de psicología",
+        "notes": "Notas de seguimiento",
+        "service": "Servicio y reuniones"
+      }
     }
   },
   "academic": {
@@ -651,7 +708,9 @@
         "total": "Total",
         "active": "Activas",
         "credits": "Créditos activos"
-      }
+      },
+      "deleteHint": "Esta acción no se puede deshacer. El historial académico no se toca: guarda el nombre de la materia como texto, no como referencia.",
+      "inUseHint": "Tiene matrícula asociada, y borrarla se llevaría por delante esas inscripciones. Márcala como inactiva: desaparece del trabajo diario sin perder nada."
     },
     "subject": {
       "name": "Nombre",
@@ -692,7 +751,9 @@
         "active": "Activos",
         "enrolled": "Inscritos",
         "occupancy": "Ocupación"
-      }
+      },
+      "deleteHint": "Esta acción no se puede deshacer.",
+      "inUseHint": "Tiene gente inscrita o notas registradas, y borrarlo se llevaría por delante esas calificaciones. Márcalo como finalizado en vez de eliminarlo."
     },
     "course": {
       "name": "Nombre",
@@ -782,6 +843,258 @@
       "error": "No se pudo registrar la nota. Revisa los datos e inténtalo de nuevo.",
       "noCourses": "No hay cursos activos",
       "noStudents": "No hay estudiantes activos"
+    },
+    "teacherPicker": {
+      "unassigned": "Sin asignar",
+      "external": "Otra persona (externa)",
+      "externalName": "Nombre de quien imparte",
+      "externalHint": "Para quien no es usuario del sistema; se guarda solo el nombre."
+    },
+    "allTerms": "Todos los cuatrimestres",
+    "term": {
+      "name": "Nombre",
+      "start": "Fecha de inicio",
+      "end": "Fecha de fin",
+      "status": "Estado"
+    },
+    "termStatus": {
+      "planificado": "Planificado",
+      "activo": "Activo",
+      "completado": "Completado"
+    },
+    "terms": {
+      "title": "Períodos",
+      "description": "Los cuatrimestres de la Fundación y lo que cuelga de cada uno.",
+      "new": "Nuevo período",
+      "empty": "Todavía no hay períodos",
+      "emptyHint": "Crea el primer cuatrimestre para poder colgar de él materias, cursos y matrícula.",
+      "inProgress": "Hoy cae dentro",
+      "mismatchEnded": "Marcado activo, pero sus fechas ya pasaron. Ciérralo o corrige la fecha de fin.",
+      "mismatchStarted": "Marcado planificado, pero ya empezó. Actívalo para que las notas se registren aquí.",
+      "stats": {
+        "total": "Períodos",
+        "active": "Activos",
+        "planned": "Planificados",
+        "done": "Completados"
+      },
+      "counts": {
+        "subjects": "Materias",
+        "courses": "Cursos",
+        "enrollments": "Inscripciones"
+      },
+      "deleteHint": "Esta acción no se puede deshacer.",
+      "inUseHint": "Tiene registros colgando y borrarlo se los llevaría por delante. Márcalo como completado: el cuatrimestre se cierra y todo queda donde está."
+    },
+    "newTerm": {
+      "title": "Nuevo período",
+      "subtitle": "Un cuatrimestre con sus fechas. Después se le cuelgan materias y cursos.",
+      "nameHint": "Formato AAAA-N, como 2026-I. Ordena solo y se usa en todo el sistema.",
+      "create": "Crear período",
+      "creating": "Creando…",
+      "nameRequired": "Ponle nombre al período.",
+      "datesRequired": "Hacen falta la fecha de inicio y la de fin.",
+      "endBeforeStart": "La fecha de fin no puede ser anterior al inicio.",
+      "duplicate": "Ya existe un período con ese nombre.",
+      "error": "No se pudo guardar el período. Inténtalo de nuevo."
+    },
+    "history": {
+      "title": "Historial académico",
+      "description": "Una fila por estudiante: índice acumulado, promedio y cómo va cerrando.",
+      "searchPlaceholder": "Estudiante o materia",
+      "term": "Cuatrimestre",
+      "count": "{count, plural, =1 {# estudiante} other {# estudiantes}}",
+      "empty": "Todavía no hay historial",
+      "emptyHint": "El historial se llena al cerrar el primer cuatrimestre.",
+      "limitHint": "Se muestran los 300 primeros. Afina la búsqueda para ver el resto.",
+      "gpaShort": "Índice",
+      "gpaScale": "Escala 0–4",
+      "noGpa": "Sin índice todavía",
+      "average": "Promedio",
+      "subjects": "Materias",
+      "result": "Cómo va",
+      "lastTerm": "Último cuatrimestre",
+      "passedHint": "{passed} aprobadas",
+      "passedCount": "{count} aprobadas",
+      "failedCount": "{count} reprobadas",
+      "onProbation": "{count} en prueba académica",
+      "stats": {
+        "students": "Estudiantes",
+        "records": "Materias cursadas",
+        "gpa": "Índice general",
+        "failed": "Reprobadas"
+      }
+    },
+    "enrollment": {
+      "title": "Prematrícula",
+      "description": "Quién está inscrito en qué materia y en qué cuatrimestre.",
+      "new": "Inscribir",
+      "student": "Estudiante",
+      "subject": "Materia",
+      "term": "Período",
+      "status": "Estado",
+      "searchPlaceholder": "Estudiante o materia",
+      "count": "{count, plural, =1 {# inscripción} other {# inscripciones}}",
+      "empty": "Todavía no hay inscripciones",
+      "emptyHint": "Inscribe al primer estudiante en una materia del período.",
+      "limitHint": "Se muestran las 500 primeras. Afina la búsqueda para ver el resto.",
+      "stats": {
+        "students": "Estudiantes",
+        "active": "Activas",
+        "credits": "Créditos",
+        "closed": "Cerradas"
+      }
+    },
+    "enrollmentStatus": {
+      "activa": "Activa",
+      "retirada": "Retirada",
+      "aprobada": "Aprobada",
+      "reprobada": "Reprobada"
+    },
+    "newEnrollment": {
+      "title": "Inscribir en una materia",
+      "subtitle": "Elige estudiante, materia y período. La misma combinación no se repite.",
+      "create": "Inscribir",
+      "creating": "Inscribiendo…",
+      "fieldsRequired": "Elige estudiante, materia y período.",
+      "alreadyEnrolled": "Ese estudiante ya está inscrito en esa materia y período.",
+      "noSubjects": "No hay materias activas. Crea una en el catálogo.",
+      "error": "No se pudo inscribir. Inténtalo de nuevo."
+    },
+    "rowActions": {
+      "menu": "Acciones",
+      "edit": "Editar",
+      "delete": "Eliminar",
+      "save": "Guardar cambios",
+      "saving": "Guardando…",
+      "deleting": "Eliminando…",
+      "confirmTitle": "¿Eliminar «{name}»?",
+      "inUseTitle": "«{name}» está en uso",
+      "understood": "Entendido",
+      "error": "No se pudo eliminar. Inténtalo de nuevo.",
+      "deps": {
+        "enrollments": "Inscripciones",
+        "grades": "Calificaciones",
+        "subjects": "Materias",
+        "courses": "Cursos",
+        "enrolled": "Personas inscritas"
+      }
+    },
+    "editSubject": {
+      "title": "Editar materia",
+      "subtitle": "Los cambios se ven de inmediato en el catálogo y en el portal de quien la imparte."
+    },
+    "editCourse": {
+      "title": "Editar curso",
+      "subtitle": "Los inscritos no se editan aquí: esa cifra la mueve la matrícula."
+    },
+    "editTerm": {
+      "title": "Editar período",
+      "subtitle": "Cambiar el estado es lo que pone en marcha un cuatrimestre o lo cierra."
     }
+  },
+  "studentPortal": {
+    "eyebrow": "Mi portal",
+    "greeting": "Hola, {name}",
+    "summary": "Tus materias, tus notas y lo que viene.",
+    "toDashboard": "Ir al panel",
+    "noRecord": "Todavía no tienes expediente enlazado",
+    "noRecordHint": "Tu usuario existe, pero aún no está asociado a un expediente de estudiante. Escríbele a la coordinación de la Fundación para que lo enlace.",
+    "type": {
+      "becado": "Becado",
+      "regular": "Regular"
+    },
+    "gpaLabel": "Índice académico",
+    "gpaScale": "/ 4.00",
+    "gpaEmpty": "Aún no hay cuatrimestres cerrados en tu historial.",
+    "gpaHint": {
+      "nota-excelente": "Estás por encima de lo que la beca exige. Sigue así.",
+      "nota-buena": "Vas bien. Mantén el ritmo este cuatrimestre.",
+      "nota-riesgo": "Estás cerca del mínimo. Habla con la coordinación antes del cierre.",
+      "nota-critica": "Tu índice está por debajo del mínimo. Pide una cita con la coordinación.",
+      "neutral": "Aún no hay historial suficiente para calcular tu índice."
+    },
+    "stats": {
+      "average": "Promedio",
+      "passed": "Aprobadas",
+      "enrolled": "En curso",
+      "credits": "Créditos"
+    },
+    "subjectsTitle": "Materias en curso",
+    "subjectsEmpty": "No tienes materias inscritas",
+    "subjectsEmptyHint": "Cuando la coordinación cierre tu prematrícula, tus materias aparecerán aquí.",
+    "creditsShort": "{count} cr.",
+    "gradesTitle": "Mis calificaciones",
+    "gradesEmpty": "Todavía no tienes notas registradas",
+    "gradesEmptyHint": "Tus calificaciones aparecerán al cerrar el primer cuatrimestre.",
+    "termSummary": "Índice {gpa} · promedio {average}",
+    "table": {
+      "subject": "Materia",
+      "grade": "Nota",
+      "letter": "Letra",
+      "gpa": "Índice"
+    },
+    "standingTitle": "Mi condición en la Fundación",
+    "standingSummary": "{services} de {months} meses con servicio y {meetings} con reunión.",
+    "standingEmpty": "Sin registros de los últimos meses",
+    "service": "Servicio",
+    "noService": "Sin servicio",
+    "meeting": "Reunión",
+    "noMeeting": "Sin reunión",
+    "notRecorded": "Sin registrar",
+    "eventsTitle": "Próximos eventos",
+    "eventsEmpty": "No hay eventos programados",
+    "browseCatalog": "Ver el catálogo de materias"
+  },
+  "teacherPortal": {
+    "eyebrow": "Portal docente",
+    "greeting": "Hola, {name}",
+    "summary": "Tus cursos, tus inscritos y lo que falta por calificar.",
+    "stats": {
+      "courses": "Cursos activos",
+      "students": "Inscritos",
+      "grades": "Notas registradas",
+      "subjects": "Materias a tu nombre"
+    },
+    "shortcutsTitle": "Accesos rápidos",
+    "shortcuts": {
+      "courses": {
+        "label": "Cursos técnicos",
+        "hint": "Catálogo y cupos"
+      },
+      "subjects": {
+        "label": "Materias",
+        "hint": "Catálogo por cuatrimestre"
+      },
+      "grades": {
+        "label": "Calificaciones",
+        "hint": "Registrar una nota"
+      },
+      "calendar": {
+        "label": "Calendario",
+        "hint": "Agenda de la Fundación"
+      }
+    },
+    "coursesTitle": "Mis cursos",
+    "coursesEmpty": "Todavía no tienes cursos asignados",
+    "coursesEmptyHint": "La coordinación te asigna los cursos desde el catálogo. Si crees que falta alguno, avísale.",
+    "courseStatus": {
+      "activo": "Activo",
+      "planificado": "Planificado",
+      "finalizado": "Finalizado"
+    },
+    "courseMode": {
+      "presencial": "Presencial",
+      "virtual": "Virtual",
+      "mixto": "Mixto"
+    },
+    "occupancy": "Ocupación",
+    "mode": "Modalidad",
+    "term": "Período",
+    "schedule": "Horario",
+    "gradesCount": "{count, plural, =0 {Sin notas} =1 {# nota} other {# notas}}",
+    "averageShort": "Prom. {value}",
+    "noGradesYet": "Sin calificar",
+    "subjectsTitle": "Materias a mi nombre",
+    "enrolledCount": "{count, plural, =1 {# inscrito} other {# inscritos}}"
   }
 }

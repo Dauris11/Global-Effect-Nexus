@@ -29,6 +29,8 @@ import { Button } from "@/components/ui/button";
 import { ChipEstado } from "@/components/ui/chip-estado";
 import { EmptyState } from "@/components/ui/empty-state";
 import { BotonNuevoPeriodo, type TextosNuevoPeriodo } from "./dialogo-nuevo-periodo";
+import { AccionesPeriodo } from "./acciones-periodo";
+import type { TextosAcciones } from "../acciones-registro";
 
 /** Estado declarado del período → color del sistema. */
 function bandaDePeriodo(estado: string): EstadoDominio {
@@ -101,6 +103,8 @@ export default async function PeriodosPage({
   const textosDialogo: TextosNuevoPeriodo = {
     titulo: t("newTerm.title"),
     subtitulo: t("newTerm.subtitle"),
+    tituloEditar: t("editTerm.title"),
+    subtituloEditar: t("editTerm.subtitle"),
     nombre: t("term.name"),
     nombreAyuda: t("newTerm.nameHint"),
     inicio: t("term.start"),
@@ -108,6 +112,8 @@ export default async function PeriodosPage({
     estado: t("term.status"),
     crear: t("newTerm.create"),
     creando: t("newTerm.creating"),
+    guardar: t("rowActions.save"),
+    guardando: t("rowActions.saving"),
     cancelar: t("cancel"),
     cerrar: t("close"),
     errorNombre: t("newTerm.nameRequired"),
@@ -120,6 +126,28 @@ export default async function PeriodosPage({
       activo: t("termStatus.activo"),
       completado: t("termStatus.completado"),
     },
+  };
+
+  const textosAcciones: TextosAcciones = {
+    menu: t("rowActions.menu"),
+    editar: t("rowActions.edit"),
+    eliminar: t("rowActions.delete"),
+    confirmarTitulo: t("rowActions.confirmTitle"),
+    confirmarTexto: t("terms.deleteHint"),
+    enUsoTitulo: t("rowActions.inUseTitle"),
+    enUsoTexto: t("terms.inUseHint"),
+    dependencias: {
+      enrollments: t("rowActions.deps.enrollments"),
+      grades: t("rowActions.deps.grades"),
+      subjects: t("rowActions.deps.subjects"),
+      courses: t("rowActions.deps.courses"),
+      enrolled: t("rowActions.deps.enrolled"),
+    },
+    eliminando: t("rowActions.deleting"),
+    entendido: t("rowActions.understood"),
+    cancelar: t("cancel"),
+    cerrar: t("close"),
+    errorGeneral: t("rowActions.error"),
   };
 
   const boton = puedeEscribir && (
@@ -194,12 +222,23 @@ export default async function PeriodosPage({
                   <h2 className="font-mono text-xl font-semibold tabular-nums">
                     {p.nombre}
                   </h2>
-                  <div className="flex shrink-0 flex-col items-end gap-1">
-                    <ChipEstado estado={banda} punto>
-                      {t(`termStatus.${p.estado}` as never)}
-                    </ChipEstado>
-                    {p.en_curso && (
-                      <ChipEstado estado="nota-excelente">{t("terms.inProgress")}</ChipEstado>
+                  <div className="flex shrink-0 items-start gap-1">
+                    <div className="flex flex-col items-end gap-1">
+                      <ChipEstado estado={banda} punto>
+                        {t(`termStatus.${p.estado}` as never)}
+                      </ChipEstado>
+                      {p.en_curso && (
+                        <ChipEstado estado="nota-excelente">
+                          {t("terms.inProgress")}
+                        </ChipEstado>
+                      )}
+                    </div>
+                    {puedeEscribir && (
+                      <AccionesPeriodo
+                        periodo={p}
+                        textos={textosDialogo}
+                        textosAcciones={textosAcciones}
+                      />
                     )}
                   </div>
                 </div>

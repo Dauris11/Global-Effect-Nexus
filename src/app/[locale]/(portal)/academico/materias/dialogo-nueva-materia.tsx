@@ -1,5 +1,5 @@
 /**
- * Creación de materia — ClickUp S6 · #219.
+ * Alta y edición de materia — ClickUp S6 · #219 y #383.
  *
  * Diálogo y no página: son nueve campos y es una acción puntual que interrumpe
  * (estándar §6). El contraste con el expediente es deliberado — ese son seis
@@ -8,13 +8,20 @@
  * El período es opcional a propósito: el catálogo se arma antes de que el
  * período exista (se planifican materias para el cuatrimestre que viene), así
  * que exigirlo bloquearía el trabajo normal de coordinación.
+ *
+ * **Un solo componente para crear y para editar.** Son los mismos nueve campos
+ * con las mismas reglas; separarlos en dos diálogos duplicaría el formulario
+ * entero para cambiar la llamada final, y el día que se añada un campo se
+ * añadiría a uno de los dos. Lo que cambia con `registro` es el título, la
+ * etiqueta del botón y a qué acción se llama.
  */
 "use client";
 
 import * as React from "react";
 import { useRouter } from "next/navigation";
 import { Plus } from "lucide-react";
-import { crearMateria } from "@/server/academico/actions";
+import { actualizarMateria, crearMateria } from "@/server/academico/actions";
+import type { Materia } from "@/server/academico/types";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -34,10 +41,20 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import {
+  DOCENTE_SIN,
+  SelectorDocente,
+  resolverDocente,
+  seleccionInicial,
+  type DocenteOpcion,
+  type TextosSelectorDocente,
+} from "../selector-docente";
 
 export interface TextosNuevaMateria {
   titulo: string;
   subtitulo: string;
+  tituloEditar: string;
+  subtituloEditar: string;
   nombre: string;
   nombrePlaceholder: string;
   codigo: string;
@@ -45,60 +62,92 @@ export interface TextosNuevaMateria {
   periodo: string;
   sinPeriodo: string;
   creditos: string;
-  profesor: string;
   estado: string;
   horario: string;
   horarioPlaceholder: string;
   aula: string;
   crear: string;
   creando: string;
+  guardar: string;
+  guardando: string;
   cancelar: string;
   cerrar: string;
   errorNombre: string;
   errorGeneral: string;
   estados: Record<string, string>;
+  selectorDocente: TextosSelectorDocente;
 }
 
 const ESTADOS = ["activa", "inactiva"];
 /** Centinela: Radix Select reserva `""` para limpiar la selección. */
 const SIN_PERIODO = "__sin_periodo__";
 
-export function DialogoNuevaMateria({
+export function DialogoMateria({
   abierto,
   onCambio,
   textos,
   periodos,
+  docentes,
+  registro,
 }: {
   abierto: boolean;
   onCambio: (v: boolean) => void;
   textos: TextosNuevaMateria;
   periodos: { id: string; nombre: string }[];
+  docentes: DocenteOpcion[];
+  /** Presente ⇒ edición. Ausente ⇒ alta. */
+  registro?: Materia;
 }) {
   const router = useRouter();
+  const edicion = registro !== undefined;
+
   const [enviando, setEnviando] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
   const [errorNombre, setErrorNombre] = React.useState<string | null>(null);
 
-  const [nombre, setNombre] = React.useState("");
-  const [codigo, setCodigo] = React.useState("");
-  const [descripcion, setDescripcion] = React.useState("");
-  const [periodo, setPeriodo] = React.useState(SIN_PERIODO);
-  const [creditos, setCreditos] = React.useState("3");
-  const [profesor, setProfesor] = React.useState("");
-  const [estado, setEstado] = React.useState("activa");
-  const [horario, setHorario] = React.useState("");
-  const [aula, setAula] = React.useState("");
+  /** Valores de partida: los del registro si se edita, los de fábrica si no. */
+  const iniciales = React.useMemo(() => {
+    const docente = seleccionInicial(
+      registro?.profesor_usuario_id ?? null,
+      registro?.profesor_nombre ?? null,
+      docentes,
+    );
+    return {
+      nombre: registro?.nombre ?? "",
+      codigo: registro?.codigo ?? "",
+      descripcion: registro?.descripcion ?? "",
+      periodo: registro?.periodo_id ?? SIN_PERIODO,
+      creditos: String(registro?.creditos ?? 3),
+      estado: registro?.estado ?? "activa",
+      horario: registro?.horario ?? "",
+      aula: registro?.aula ?? "",
+      profesor: edicion ? docente.seleccion : DOCENTE_SIN,
+      profesorExterno: edicion ? docente.nombreExterno : "",
+    };
+  }, [registro, docentes, edicion]);
+
+  const [nombre, setNombre] = React.useState(iniciales.nombre);
+  const [codigo, setCodigo] = React.useState(iniciales.codigo);
+  const [descripcion, setDescripcion] = React.useState(iniciales.descripcion);
+  const [periodo, setPeriodo] = React.useState(iniciales.periodo);
+  const [creditos, setCreditos] = React.useState(iniciales.creditos);
+  const [profesor, setProfesor] = React.useState(iniciales.profesor);
+  const [profesorExterno, setProfesorExterno] = React.useState(iniciales.profesorExterno);
+  const [estado, setEstado] = React.useState(iniciales.estado);
+  const [horario, setHorario] = React.useState(iniciales.horario);
+  const [aula, setAula] = React.useState(iniciales.aula);
 
   function limpiar() {
-    setNombre("");
-    setCodigo("");
-    setDescripcion("");
-    setPeriodo(SIN_PERIODO);
-    setCreditos("3");
-    setProfesor("");
-    setEstado("activa");
-    setHorario("");
-    setAula("");
+    setNombre(iniciales.nombre);
+    setCodigo(iniciales.codigo);
+    setDescripcion(iniciales.descripcion);
+    setPeriodo(iniciales.periodo);
+    setCreditos(iniciales.creditos);
+    setProfesor(iniciales.profesor);
+    setProfesorExterno(iniciales.profesorExterno);
+    setEstado(iniciales.estado);
+    setHorario(iniciales.horario);
+    setAula(iniciales.aula);
     setError(null);
     setErrorNombre(null);
   }
@@ -114,19 +163,24 @@ export function DialogoNuevaMateria({
     }
 
     setEnviando(true);
+    const quienImparte = resolverDocente(profesor, profesorExterno, docentes);
+    const datos = {
+      nombre: nombre.trim(),
+      codigo: codigo.trim() || undefined,
+      descripcion: descripcion.trim() || undefined,
+      periodo_id: periodo === SIN_PERIODO ? undefined : periodo,
+      creditos: creditos || 0,
+      profesor_nombre: quienImparte.nombre,
+      profesor_usuario_id: quienImparte.usuarioId,
+      estado,
+      horario: horario.trim() || undefined,
+      aula: aula.trim() || undefined,
+    };
+
     try {
-      await crearMateria({
-        nombre: nombre.trim(),
-        codigo: codigo.trim() || undefined,
-        descripcion: descripcion.trim() || undefined,
-        periodo_id: periodo === SIN_PERIODO ? undefined : periodo,
-        creditos: creditos || 0,
-        profesor_nombre: profesor.trim() || undefined,
-        estado,
-        horario: horario.trim() || undefined,
-        aula: aula.trim() || undefined,
-      });
-      limpiar();
+      if (registro) await actualizarMateria({ ...datos, id: registro.id });
+      else await crearMateria(datos);
+      if (!registro) limpiar();
       onCambio(false);
       router.refresh();
     } catch {
@@ -140,14 +194,18 @@ export function DialogoNuevaMateria({
     <Dialog
       open={abierto}
       onOpenChange={(v) => {
+        // Al cerrar sin guardar se descartan los cambios: en alta vuelve a
+        // vacío, en edición vuelve a lo que dice la base de datos.
         if (!v) limpiar();
         onCambio(v);
       }}
     >
       <DialogContent etiquetaCerrar={textos.cerrar}>
         <DialogHeader>
-          <DialogTitle>{textos.titulo}</DialogTitle>
-          <DialogDescription>{textos.subtitulo}</DialogDescription>
+          <DialogTitle>{edicion ? textos.tituloEditar : textos.titulo}</DialogTitle>
+          <DialogDescription>
+            {edicion ? textos.subtituloEditar : textos.subtitulo}
+          </DialogDescription>
         </DialogHeader>
 
         <form onSubmit={enviar} className="space-y-4">
@@ -218,11 +276,14 @@ export function DialogoNuevaMateria({
               )}
             </Field>
 
-            <Field label={textos.profesor}>
-              {(p) => (
-                <Input {...p} value={profesor} onChange={(e) => setProfesor(e.target.value)} />
-              )}
-            </Field>
+            <SelectorDocente
+              docentes={docentes}
+              textos={textos.selectorDocente}
+              seleccion={profesor}
+              onSeleccion={setProfesor}
+              nombreExterno={profesorExterno}
+              onNombreExterno={setProfesorExterno}
+            />
 
             <Field label={textos.aula}>
               {(p) => <Input {...p} value={aula} onChange={(e) => setAula(e.target.value)} />}
@@ -262,7 +323,13 @@ export function DialogoNuevaMateria({
               {textos.cancelar}
             </Button>
             <Button type="submit" disabled={enviando}>
-              {enviando ? textos.creando : textos.crear}
+              {edicion
+                ? enviando
+                  ? textos.guardando
+                  : textos.guardar
+                : enviando
+                  ? textos.creando
+                  : textos.crear}
             </Button>
           </DialogFooter>
         </form>
@@ -271,15 +338,17 @@ export function DialogoNuevaMateria({
   );
 }
 
-/** Botón + diálogo, para usarlo desde una página de servidor. */
+/** Botón + diálogo de alta, para usarlo desde una página de servidor. */
 export function BotonNuevaMateria({
   etiqueta,
   textos,
   periodos,
+  docentes,
 }: {
   etiqueta: string;
   textos: TextosNuevaMateria;
   periodos: { id: string; nombre: string }[];
+  docentes: DocenteOpcion[];
 }) {
   const [abierto, setAbierto] = React.useState(false);
   return (
@@ -288,11 +357,12 @@ export function BotonNuevaMateria({
         <Plus aria-hidden />
         {etiqueta}
       </Button>
-      <DialogoNuevaMateria
+      <DialogoMateria
         abierto={abierto}
         onCambio={setAbierto}
         textos={textos}
         periodos={periodos}
+        docentes={docentes}
       />
     </>
   );

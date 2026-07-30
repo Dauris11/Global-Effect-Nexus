@@ -275,6 +275,7 @@ Table materia {
   periodo_id uuid
   creditos integer [default: `3`]
   profesor_nombre text
+  profesor_usuario_id uuid
   estado text [not null, default: `'activa'`]
   horario text
   aula text
@@ -289,6 +290,7 @@ Table curso {
   nombre text [not null]
   descripcion text
   docente text
+  docente_usuario_id uuid
   periodo_id uuid
   estado text [not null, default: `'activo'`]
   capacidad integer [default: `30`]
@@ -561,6 +563,7 @@ Ref: calificacion.estudiante_id > estudiante.id [delete: cascade]
 Ref: calificacion.periodo_id > periodo.id [delete: cascade]
 Ref: cita_psicologia.estudiante_id > estudiante.id [delete: cascade]
 Ref: cita_psicologia.psicologo_id > usuario.id [delete: set null]
+Ref: curso.docente_usuario_id > usuario.id [delete: set null]
 Ref: conversacion_ia.usuario_id > usuario.id [delete: set null]
 Ref: curso.periodo_id > periodo.id [delete: set null]
 Ref: documento.subido_por_id > usuario.id [delete: set null]
@@ -571,6 +574,7 @@ Ref: estudiante.patrocinador_id > patrocinador.id [delete: set null]
 Ref: estudiante.usuario_id > usuario.id [delete: set null]
 Ref: evento.tarea_id > tarea.id [delete: set null]
 Ref: extraccion_ocr.creado_por_id > usuario.id [delete: set null]
+Ref: materia.profesor_usuario_id > usuario.id [delete: set null]
 Ref: extraccion_ocr.documento_id > documento.id [delete: set null]
 Ref: extraccion_ocr.estudiante_id > estudiante.id [delete: set null]
 Ref: familiar.estudiante_id > estudiante.id [delete: cascade]

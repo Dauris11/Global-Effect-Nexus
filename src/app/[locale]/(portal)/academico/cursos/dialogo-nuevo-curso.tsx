@@ -1,17 +1,23 @@
 /**
- * Creación de curso técnico — ClickUp S6 · #219.
+ * Alta y edición de curso técnico — ClickUp S6 · #219 y #384.
  *
- * No pide "inscritos": esa columna la mueve la matrícula, no el formulario de
- * alta. Un curso se crea con su capacidad y empieza en cero inscritos; teclear
- * un número ahí sería un dato que deja de ser cierto en cuanto alguien se
- * inscriba (mismo criterio que el avance de un proyecto, estándar §10).
+ * No pide "inscritos" ni al crear ni al editar: esa columna la mueve la
+ * matrícula, no el formulario. Un curso se crea con su capacidad y empieza en
+ * cero inscritos; teclear un número ahí sería un dato que deja de ser cierto en
+ * cuanto alguien se inscriba, y en la edición sería peor — un cambio de horario
+ * acabaría corrigiendo el cupo sin que nadie lo pidiera (mismo criterio que el
+ * avance de un proyecto, estándar §10).
+ *
+ * Un solo componente para las dos operaciones, por lo mismo que en Materias:
+ * son los mismos campos y las mismas reglas.
  */
 "use client";
 
 import * as React from "react";
 import { useRouter } from "next/navigation";
 import { Plus } from "lucide-react";
-import { crearCurso } from "@/server/academico/actions";
+import { actualizarCurso, crearCurso } from "@/server/academico/actions";
+import type { Curso } from "@/server/academico/types";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -31,14 +37,23 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import {
+  DOCENTE_SIN,
+  SelectorDocente,
+  resolverDocente,
+  seleccionInicial,
+  type DocenteOpcion,
+  type TextosSelectorDocente,
+} from "../selector-docente";
 
 export interface TextosNuevoCurso {
   titulo: string;
   subtitulo: string;
+  tituloEditar: string;
+  subtituloEditar: string;
   nombre: string;
   nombrePlaceholder: string;
   descripcion: string;
-  docente: string;
   periodo: string;
   sinPeriodo: string;
   estado: string;
@@ -49,52 +64,83 @@ export interface TextosNuevoCurso {
   ayudaInscritos: string;
   crear: string;
   creando: string;
+  guardar: string;
+  guardando: string;
   cancelar: string;
   cerrar: string;
   errorNombre: string;
   errorGeneral: string;
   estados: Record<string, string>;
   modalidades: Record<string, string>;
+  selectorDocente: TextosSelectorDocente;
 }
 
 const ESTADOS = ["activo", "planificado", "finalizado"];
 const MODALIDADES = ["presencial", "virtual", "mixto"];
 const SIN_PERIODO = "__sin_periodo__";
 
-export function DialogoNuevoCurso({
+export function DialogoCurso({
   abierto,
   onCambio,
   textos,
   periodos,
+  docentes,
+  registro,
 }: {
   abierto: boolean;
   onCambio: (v: boolean) => void;
   textos: TextosNuevoCurso;
   periodos: { id: string; nombre: string }[];
+  docentes: DocenteOpcion[];
+  /** Presente ⇒ edición. Ausente ⇒ alta. */
+  registro?: Curso;
 }) {
   const router = useRouter();
+  const edicion = registro !== undefined;
+
   const [enviando, setEnviando] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
   const [errorNombre, setErrorNombre] = React.useState<string | null>(null);
 
-  const [nombre, setNombre] = React.useState("");
-  const [descripcion, setDescripcion] = React.useState("");
-  const [docente, setDocente] = React.useState("");
-  const [periodo, setPeriodo] = React.useState(SIN_PERIODO);
-  const [estado, setEstado] = React.useState("activo");
-  const [capacidad, setCapacidad] = React.useState("30");
-  const [horario, setHorario] = React.useState("");
-  const [modalidad, setModalidad] = React.useState("presencial");
+  const iniciales = React.useMemo(() => {
+    const docente = seleccionInicial(
+      registro?.docente_usuario_id ?? null,
+      registro?.docente ?? null,
+      docentes,
+    );
+    return {
+      nombre: registro?.nombre ?? "",
+      descripcion: registro?.descripcion ?? "",
+      periodo: registro?.periodo_id ?? SIN_PERIODO,
+      estado: registro?.estado ?? "activo",
+      capacidad: String(registro?.capacidad ?? 30),
+      horario: registro?.horario ?? "",
+      modalidad: registro?.modalidad ?? "presencial",
+      docente: edicion ? docente.seleccion : DOCENTE_SIN,
+      docenteExterno: edicion ? docente.nombreExterno : "",
+    };
+  }, [registro, docentes, edicion]);
+
+  const [nombre, setNombre] = React.useState(iniciales.nombre);
+  const [descripcion, setDescripcion] = React.useState(iniciales.descripcion);
+  const [docente, setDocente] = React.useState(iniciales.docente);
+  const [docenteExterno, setDocenteExterno] = React.useState(iniciales.docenteExterno);
+  const [periodo, setPeriodo] = React.useState(iniciales.periodo);
+  const [estado, setEstado] = React.useState(iniciales.estado);
+  const [capacidad, setCapacidad] = React.useState(iniciales.capacidad);
+  const [horario, setHorario] = React.useState(iniciales.horario);
+  const [modalidad, setModalidad] = React.useState(iniciales.modalidad);
 
   function limpiar() {
-    setNombre("");
-    setDescripcion("");
-    setDocente("");
-    setPeriodo(SIN_PERIODO);
-    setEstado("activo");
-    setCapacidad("30");
-    setHorario("");
-    setModalidad("presencial");
+    setNombre(iniciales.nombre);
+    setDescripcion(iniciales.descripcion);
+    setDocente(iniciales.docente);
+    setDocenteExterno(iniciales.docenteExterno);
+    setPeriodo(iniciales.periodo);
+    setEstado(iniciales.estado);
+    setCapacidad(iniciales.capacidad);
+    setHorario(iniciales.horario);
+    setModalidad(iniciales.modalidad);
     setError(null);
     setErrorNombre(null);
   }
@@ -110,18 +156,23 @@ export function DialogoNuevoCurso({
     }
 
     setEnviando(true);
+    const quienImparte = resolverDocente(docente, docenteExterno, docentes);
+    const datos = {
+      nombre: nombre.trim(),
+      descripcion: descripcion.trim() || undefined,
+      docente: quienImparte.nombre,
+      docente_usuario_id: quienImparte.usuarioId,
+      periodo_id: periodo === SIN_PERIODO ? undefined : periodo,
+      estado,
+      capacidad: capacidad || 0,
+      horario: horario.trim() || undefined,
+      modalidad,
+    };
+
     try {
-      await crearCurso({
-        nombre: nombre.trim(),
-        descripcion: descripcion.trim() || undefined,
-        docente: docente.trim() || undefined,
-        periodo_id: periodo === SIN_PERIODO ? undefined : periodo,
-        estado,
-        capacidad: capacidad || 0,
-        horario: horario.trim() || undefined,
-        modalidad,
-      });
-      limpiar();
+      if (registro) await actualizarCurso({ ...datos, id: registro.id });
+      else await crearCurso(datos);
+      if (!registro) limpiar();
       onCambio(false);
       router.refresh();
     } catch {
@@ -141,8 +192,10 @@ export function DialogoNuevoCurso({
     >
       <DialogContent etiquetaCerrar={textos.cerrar}>
         <DialogHeader>
-          <DialogTitle>{textos.titulo}</DialogTitle>
-          <DialogDescription>{textos.subtitulo}</DialogDescription>
+          <DialogTitle>{edicion ? textos.tituloEditar : textos.titulo}</DialogTitle>
+          <DialogDescription>
+            {edicion ? textos.subtituloEditar : textos.subtitulo}
+          </DialogDescription>
         </DialogHeader>
 
         <form onSubmit={enviar} className="space-y-4">
@@ -159,11 +212,14 @@ export function DialogoNuevoCurso({
           </Field>
 
           <div className="grid gap-4 sm:grid-cols-2">
-            <Field label={textos.docente}>
-              {(p) => (
-                <Input {...p} value={docente} onChange={(e) => setDocente(e.target.value)} />
-              )}
-            </Field>
+            <SelectorDocente
+              docentes={docentes}
+              textos={textos.selectorDocente}
+              seleccion={docente}
+              onSeleccion={setDocente}
+              nombreExterno={docenteExterno}
+              onNombreExterno={setDocenteExterno}
+            />
 
             <Field label={textos.capacidad} ayuda={textos.ayudaInscritos}>
               {(p) => (
@@ -264,7 +320,13 @@ export function DialogoNuevoCurso({
               {textos.cancelar}
             </Button>
             <Button type="submit" disabled={enviando}>
-              {enviando ? textos.creando : textos.crear}
+              {edicion
+                ? enviando
+                  ? textos.guardando
+                  : textos.guardar
+                : enviando
+                  ? textos.creando
+                  : textos.crear}
             </Button>
           </DialogFooter>
         </form>
@@ -273,15 +335,17 @@ export function DialogoNuevoCurso({
   );
 }
 
-/** Botón + diálogo, para usarlo desde una página de servidor. */
+/** Botón + diálogo de alta, para usarlo desde una página de servidor. */
 export function BotonNuevoCurso({
   etiqueta,
   textos,
   periodos,
+  docentes,
 }: {
   etiqueta: string;
   textos: TextosNuevoCurso;
   periodos: { id: string; nombre: string }[];
+  docentes: DocenteOpcion[];
 }) {
   const [abierto, setAbierto] = React.useState(false);
   return (
@@ -290,11 +354,12 @@ export function BotonNuevoCurso({
         <Plus aria-hidden />
         {etiqueta}
       </Button>
-      <DialogoNuevoCurso
+      <DialogoCurso
         abierto={abierto}
         onCambio={setAbierto}
         textos={textos}
         periodos={periodos}
+        docentes={docentes}
       />
     </>
   );
