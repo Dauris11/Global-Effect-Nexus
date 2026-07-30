@@ -653,7 +653,9 @@
         "total": "Total",
         "active": "Active",
         "credits": "Active credits"
-      }
+      },
+      "deleteHint": "This can't be undone. Academic history isn't affected: it stores the subject name as text, not as a reference.",
+      "inUseHint": "It has enrollments attached, and deleting it would take them down with it. Mark it inactive instead: it leaves day-to-day work without losing anything."
     },
     "subject": {
       "name": "Name",
@@ -694,7 +696,9 @@
         "active": "Active",
         "enrolled": "Enrolled",
         "occupancy": "Occupancy"
-      }
+      },
+      "deleteHint": "This can't be undone.",
+      "inUseHint": "It has people enrolled or grades recorded, and deleting it would take those grades down with it. Mark it finished instead."
     },
     "course": {
       "name": "Name",
@@ -790,6 +794,147 @@
       "external": "Someone else (external)",
       "externalName": "Name of who teaches it",
       "externalHint": "For people who aren't system users; only the name is stored."
+    },
+    "allTerms": "All terms",
+    "term": {
+      "name": "Name",
+      "start": "Start date",
+      "end": "End date",
+      "status": "Status"
+    },
+    "termStatus": {
+      "planificado": "Planned",
+      "activo": "Active",
+      "completado": "Completed"
+    },
+    "terms": {
+      "title": "Terms",
+      "description": "The Foundation's terms and everything attached to each one.",
+      "new": "New term",
+      "empty": "No terms yet",
+      "emptyHint": "Create the first term so subjects, courses and enrollment can hang off it.",
+      "inProgress": "Today falls inside",
+      "mismatchEnded": "Marked active, but its dates have passed. Close it or fix the end date.",
+      "mismatchStarted": "Marked planned, but it already started. Activate it so grades land here.",
+      "stats": {
+        "total": "Terms",
+        "active": "Active",
+        "planned": "Planned",
+        "done": "Completed"
+      },
+      "counts": {
+        "subjects": "Subjects",
+        "courses": "Courses",
+        "enrollments": "Enrollments"
+      },
+      "deleteHint": "This can't be undone.",
+      "inUseHint": "It has records attached and deleting it would take them down with it. Mark it completed: the term closes and everything stays put."
+    },
+    "newTerm": {
+      "title": "New term",
+      "subtitle": "A term with its dates. Subjects and courses get attached afterwards.",
+      "nameHint": "Format YYYY-N, like 2026-I. It sorts on its own and is used across the system.",
+      "create": "Create term",
+      "creating": "Creating…",
+      "nameRequired": "Give the term a name.",
+      "datesRequired": "Both the start and end dates are required.",
+      "endBeforeStart": "The end date can't be earlier than the start.",
+      "duplicate": "A term with that name already exists.",
+      "error": "Couldn't save the term. Try again."
+    },
+    "history": {
+      "title": "Academic history",
+      "description": "One row per student: cumulative GPA, average and how they're closing out.",
+      "searchPlaceholder": "Student or subject",
+      "term": "Term",
+      "count": "{count, plural, =1 {# student} other {# students}}",
+      "empty": "No history yet",
+      "emptyHint": "History fills in once the first term closes.",
+      "limitHint": "Showing the first 300. Narrow your search to see the rest.",
+      "gpaShort": "GPA",
+      "gpaScale": "0–4 scale",
+      "noGpa": "No GPA yet",
+      "average": "Average",
+      "subjects": "Subjects",
+      "result": "How it's going",
+      "lastTerm": "Last term",
+      "passedHint": "{passed} passed",
+      "passedCount": "{count} passed",
+      "failedCount": "{count} failed",
+      "onProbation": "{count} on academic probation",
+      "stats": {
+        "students": "Students",
+        "records": "Subjects taken",
+        "gpa": "Overall GPA",
+        "failed": "Failed"
+      }
+    },
+    "enrollment": {
+      "title": "Pre-registration",
+      "description": "Who is enrolled in which subject and in which term.",
+      "new": "Enroll",
+      "student": "Student",
+      "subject": "Subject",
+      "term": "Term",
+      "status": "Status",
+      "searchPlaceholder": "Student or subject",
+      "count": "{count, plural, =1 {# enrollment} other {# enrollments}}",
+      "empty": "No enrollments yet",
+      "emptyHint": "Enroll the first student in a subject for the term.",
+      "limitHint": "Showing the first 500. Narrow your search to see the rest.",
+      "stats": {
+        "students": "Students",
+        "active": "Active",
+        "credits": "Credits",
+        "closed": "Closed"
+      }
+    },
+    "enrollmentStatus": {
+      "activa": "Active",
+      "retirada": "Withdrawn",
+      "aprobada": "Passed",
+      "reprobada": "Failed"
+    },
+    "newEnrollment": {
+      "title": "Enroll in a subject",
+      "subtitle": "Pick student, subject and term. The same combination can't repeat.",
+      "create": "Enroll",
+      "creating": "Enrolling…",
+      "fieldsRequired": "Pick a student, a subject and a term.",
+      "alreadyEnrolled": "That student is already enrolled in that subject and term.",
+      "noSubjects": "No active subjects. Create one in the catalog.",
+      "error": "Couldn't enroll. Try again."
+    },
+    "rowActions": {
+      "menu": "Actions",
+      "edit": "Edit",
+      "delete": "Delete",
+      "save": "Save changes",
+      "saving": "Saving…",
+      "deleting": "Deleting…",
+      "confirmTitle": "Delete “{name}”?",
+      "inUseTitle": "“{name}” is in use",
+      "understood": "Got it",
+      "error": "Couldn't delete it. Try again.",
+      "deps": {
+        "enrollments": "Enrollments",
+        "grades": "Grades",
+        "subjects": "Subjects",
+        "courses": "Courses",
+        "enrolled": "People enrolled"
+      }
+    },
+    "editSubject": {
+      "title": "Edit subject",
+      "subtitle": "Changes show up right away in the catalog and in the teacher's portal."
+    },
+    "editCourse": {
+      "title": "Edit course",
+      "subtitle": "Enrollment isn't edited here: that figure is moved by registration."
+    },
+    "editTerm": {
+      "title": "Edit term",
+      "subtitle": "Changing the status is what starts a term or closes it."
     }
   },
   "studentPortal": {

@@ -59,6 +59,30 @@ export const RegistrarCalificacion = z.object({
   observaciones: z.string().trim().optional(),
 });
 
+/**
+ * Actualizaciones: los mismos campos del alta más el `id`.
+ *
+ * Se derivan con `.extend({ id })` en vez de escribirse aparte para que un
+ * campo nuevo en el alta no se quede fuera de la edición sin que nadie lo note
+ * — el fallo clásico de mantener dos esquemas paralelos a mano.
+ *
+ * `CrearPeriodo` lleva un `.refine` (fin >= inicio) y por eso es un ZodEffects,
+ * que no tiene `.extend`. Se recompone con `.and()`: la intersección conserva
+ * la validación cruzada de fechas y le añade el id.
+ */
+const ConId = z.object({ id: z.string().uuid() });
+
+export const ActualizarPeriodo = CrearPeriodo.and(ConId);
+export const ActualizarMateria = CrearMateria.extend(ConId.shape);
+export const ActualizarCurso = CrearCurso.extend(ConId.shape);
+
+/** Borrado: solo hace falta el id. */
+export const EliminarPorId = ConId;
+
+export type ActualizarPeriodoInput = z.infer<typeof ActualizarPeriodo>;
+export type ActualizarMateriaInput = z.infer<typeof ActualizarMateria>;
+export type ActualizarCursoInput = z.infer<typeof ActualizarCurso>;
+
 export type CrearPeriodoInput = z.infer<typeof CrearPeriodo>;
 export type CrearMateriaInput = z.infer<typeof CrearMateria>;
 export type CrearCursoInput = z.infer<typeof CrearCurso>;

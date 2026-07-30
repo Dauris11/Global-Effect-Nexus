@@ -68,6 +68,27 @@ export function resolverDocente(
   };
 }
 
+/**
+ * El estado inicial del selector al abrir un registro para editarlo.
+ *
+ * El orden importa. Se mira primero la FK y solo después el texto, porque es el
+ * mismo orden en que manda el dato (ver migración 0019). Y se comprueba que el
+ * usuario siga en la lista: si el docente enlazado se dio de baja, el
+ * desplegable no tendría esa opción y el `<Select>` quedaría en blanco — en ese
+ * caso se cae al nombre en texto, que es justo para lo que se conservó.
+ */
+export function seleccionInicial(
+  usuarioId: string | null,
+  nombre: string | null,
+  docentes: DocenteOpcion[],
+): { seleccion: string; nombreExterno: string } {
+  if (usuarioId && docentes.some((d) => d.id === usuarioId)) {
+    return { seleccion: usuarioId, nombreExterno: "" };
+  }
+  if (nombre?.trim()) return { seleccion: DOCENTE_EXTERNO, nombreExterno: nombre };
+  return { seleccion: DOCENTE_SIN, nombreExterno: "" };
+}
+
 export function SelectorDocente({
   docentes,
   textos,

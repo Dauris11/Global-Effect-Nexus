@@ -37,6 +37,8 @@ import { BarraProgreso } from "@/components/ui/barra-progreso";
 import { EmptyState } from "@/components/ui/empty-state";
 import { Buscador } from "../buscador";
 import { BotonNuevoCurso, type TextosNuevoCurso } from "./dialogo-nuevo-curso";
+import { AccionesCurso } from "./acciones-curso";
+import type { TextosAcciones } from "../acciones-registro";
 
 /** Estado del curso → color del sistema (mismo criterio que Proyectos). */
 function bandaDeCurso(estado: string): EstadoDominio {
@@ -137,6 +139,8 @@ export default async function CursosPage({
   const textosDialogo: TextosNuevoCurso = {
     titulo: t("newCourse.title"),
     subtitulo: t("newCourse.subtitle"),
+    tituloEditar: t("editCourse.title"),
+    subtituloEditar: t("editCourse.subtitle"),
     nombre: t("course.name"),
     nombrePlaceholder: t("newCourse.namePlaceholder"),
     descripcion: t("course.description"),
@@ -150,6 +154,8 @@ export default async function CursosPage({
     ayudaInscritos: t("newCourse.enrolledHint"),
     crear: t("newCourse.create"),
     creando: t("newCourse.creating"),
+    guardar: t("rowActions.save"),
+    guardando: t("rowActions.saving"),
     cancelar: t("cancel"),
     cerrar: t("close"),
     errorNombre: t("newCourse.nameRequired"),
@@ -171,6 +177,28 @@ export default async function CursosPage({
       nombreExterno: t("teacherPicker.externalName"),
       ayudaExterno: t("teacherPicker.externalHint"),
     },
+  };
+
+  const textosAcciones: TextosAcciones = {
+    menu: t("rowActions.menu"),
+    editar: t("rowActions.edit"),
+    eliminar: t("rowActions.delete"),
+    confirmarTitulo: t("rowActions.confirmTitle"),
+    confirmarTexto: t("courses.deleteHint"),
+    enUsoTitulo: t("rowActions.inUseTitle"),
+    enUsoTexto: t("courses.inUseHint"),
+    dependencias: {
+      enrollments: t("rowActions.deps.enrollments"),
+      grades: t("rowActions.deps.grades"),
+      subjects: t("rowActions.deps.subjects"),
+      courses: t("rowActions.deps.courses"),
+      enrolled: t("rowActions.deps.enrolled"),
+    },
+    eliminando: t("rowActions.deleting"),
+    entendido: t("rowActions.understood"),
+    cancelar: t("cancel"),
+    cerrar: t("close"),
+    errorGeneral: t("rowActions.error"),
   };
 
   const ocupacion =
@@ -281,9 +309,20 @@ export default async function CursosPage({
                 >
                   <div className="flex items-start justify-between gap-3">
                     <h3 className="text-lg font-semibold leading-tight">{c.nombre}</h3>
-                    <ChipEstado estado={banda} punto className="shrink-0">
-                      {t(`courseStatus.${c.estado}` as never)}
-                    </ChipEstado>
+                    <div className="flex shrink-0 items-center gap-1">
+                      <ChipEstado estado={banda} punto>
+                        {t(`courseStatus.${c.estado}` as never)}
+                      </ChipEstado>
+                      {puedeEscribir && (
+                        <AccionesCurso
+                          curso={c}
+                          textos={textosDialogo}
+                          textosAcciones={textosAcciones}
+                          periodos={periodos}
+                          docentes={docentes}
+                        />
+                      )}
+                    </div>
                   </div>
 
                   {c.descripcion && (

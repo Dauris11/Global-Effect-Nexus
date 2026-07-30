@@ -41,6 +41,8 @@ import {
 } from "@/components/ui/table";
 import { Buscador } from "../buscador";
 import { BotonNuevaMateria, type TextosNuevaMateria } from "./dialogo-nueva-materia";
+import { AccionesMateria } from "./acciones-materia";
+import type { TextosAcciones } from "../acciones-registro";
 
 /**
  * `conDocentes` solo es cierto para quien puede crear materias.
@@ -118,6 +120,8 @@ export default async function MateriasPage({
   const textosDialogo: TextosNuevaMateria = {
     titulo: t("newSubject.title"),
     subtitulo: t("newSubject.subtitle"),
+    tituloEditar: t("editSubject.title"),
+    subtituloEditar: t("editSubject.subtitle"),
     nombre: t("subject.name"),
     nombrePlaceholder: t("newSubject.namePlaceholder"),
     codigo: t("subject.code"),
@@ -131,6 +135,8 @@ export default async function MateriasPage({
     aula: t("subject.room"),
     crear: t("newSubject.create"),
     creando: t("newSubject.creating"),
+    guardar: t("rowActions.save"),
+    guardando: t("rowActions.saving"),
     cancelar: t("cancel"),
     cerrar: t("close"),
     errorNombre: t("newSubject.nameRequired"),
@@ -146,6 +152,28 @@ export default async function MateriasPage({
       nombreExterno: t("teacherPicker.externalName"),
       ayudaExterno: t("teacherPicker.externalHint"),
     },
+  };
+
+  const textosAcciones: TextosAcciones = {
+    menu: t("rowActions.menu"),
+    editar: t("rowActions.edit"),
+    eliminar: t("rowActions.delete"),
+    confirmarTitulo: t("rowActions.confirmTitle"),
+    confirmarTexto: t("subjects.deleteHint"),
+    enUsoTitulo: t("rowActions.inUseTitle"),
+    enUsoTexto: t("subjects.inUseHint"),
+    dependencias: {
+      enrollments: t("rowActions.deps.enrollments"),
+      grades: t("rowActions.deps.grades"),
+      subjects: t("rowActions.deps.subjects"),
+      courses: t("rowActions.deps.courses"),
+      enrolled: t("rowActions.deps.enrolled"),
+    },
+    eliminando: t("rowActions.deleting"),
+    entendido: t("rowActions.understood"),
+    cancelar: t("cancel"),
+    cerrar: t("close"),
+    errorGeneral: t("rowActions.error"),
   };
 
   const cifras = [
@@ -243,6 +271,11 @@ export default async function MateriasPage({
                     <TableHead scope="col">{t("subject.teacher")}</TableHead>
                     <TableHead scope="col">{t("subject.scheduleShort")}</TableHead>
                     <TableHead scope="col">{t("subject.status")}</TableHead>
+                    {puedeEscribir && (
+                      <TableHead scope="col" className="w-px">
+                        <span className="sr-only">{t("rowActions.menu")}</span>
+                      </TableHead>
+                    )}
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -289,6 +322,18 @@ export default async function MateriasPage({
                           {t(`subjectStatus.${m.estado}` as never)}
                         </ChipEstado>
                       </TableCell>
+
+                      {puedeEscribir && (
+                        <TableCell className="text-right">
+                          <AccionesMateria
+                            materia={m}
+                            textos={textosDialogo}
+                            textosAcciones={textosAcciones}
+                            periodos={periodos}
+                            docentes={docentes}
+                          />
+                        </TableCell>
+                      )}
                     </TableRow>
                   ))}
                 </TableBody>

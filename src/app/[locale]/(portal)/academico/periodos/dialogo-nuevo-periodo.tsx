@@ -1,5 +1,5 @@
 /**
- * Creación de período académico — ClickUp S6 · #221.
+ * Alta y edición de período académico — ClickUp S6 · #221 y #394.
  *
  * El nombre es único en la base de datos (`periodo.nombre UNIQUE`), así que
  * crear un '2026-I' que ya existe falla en el servidor. Se avisa con un mensaje
@@ -9,13 +9,20 @@
  * La coherencia de fechas se valida en tres capas y no es redundancia: el `CHECK`
  * de la tabla es la garantía, el Zod del servidor es la frontera, y esta
  * comprobación en el cliente es la que evita el viaje de ida y vuelta.
+ *
+ * **Editar un período es lo que lo pone en marcha.** Sin esta mitad, el estado
+ * quedaba fijo en el que se eligió al crearlo y un cuatrimestre no podía pasar
+ * nunca de `planificado` a `activo` ni cerrarse en `completado`: la pantalla
+ * avisaba del desajuste entre las fechas y el estado, pero no dejaba
+ * arreglarlo.
  */
 "use client";
 
 import * as React from "react";
 import { useRouter } from "next/navigation";
 import { Plus } from "lucide-react";
-import { crearPeriodo } from "@/server/academico/actions";
+import { actualizarPeriodo, crearPeriodo } from "@/server/academico/actions";
+import type { Periodo } from "@/server/academico/types";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Field } from "@/components/ui/field";
@@ -38,6 +45,8 @@ import {
 export interface TextosNuevoPeriodo {
   titulo: string;
   subtitulo: string;
+  tituloEditar: string;
+  subtituloEditar: string;
   nombre: string;
   nombreAyuda: string;
   inicio: string;
@@ -45,6 +54,8 @@ export interface TextosNuevoPeriodo {
   estado: string;
   crear: string;
   creando: string;
+  guardar: string;
+  guardando: string;
   cancelar: string;
   cerrar: string;
   errorNombre: string;
@@ -57,31 +68,37 @@ export interface TextosNuevoPeriodo {
 
 const ESTADOS = ["planificado", "activo", "completado"];
 
-export function DialogoNuevoPeriodo({
+export function DialogoPeriodo({
   abierto,
   onCambio,
   textos,
+  registro,
 }: {
   abierto: boolean;
   onCambio: (v: boolean) => void;
   textos: TextosNuevoPeriodo;
+  /** Presente ⇒ edición. Ausente ⇒ alta. */
+  registro?: Periodo;
 }) {
   const router = useRouter();
+  const edicion = registro !== undefined;
   const [enviando, setEnviando] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
   const [errorNombre, setErrorNombre] = React.useState<string | null>(null);
   const [errorFin, setErrorFin] = React.useState<string | null>(null);
 
-  const [nombre, setNombre] = React.useState("");
-  const [inicio, setInicio] = React.useState("");
-  const [fin, setFin] = React.useState("");
-  const [estado, setEstado] = React.useState("planificado");
+  // Las fechas ya vienen como `YYYY-MM-DD` desde la consulta (`to_char`), que
+  // es exactamente lo que espera un `<input type="date">`.
+  const [nombre, setNombre] = React.useState(registro?.nombre ?? "");
+  const [inicio, setInicio] = React.useState(registro?.fecha_inicio ?? "");
+  const [fin, setFin] = React.useState(registro?.fecha_fin ?? "");
+  const [estado, setEstado] = React.useState(registro?.estado ?? "planificado");
 
   function limpiar() {
-    setNombre("");
-    setInicio("");
-    setFin("");
-    setEstado("planificado");
+    setNombre(registro?.nombre ?? "");
+    setInicio(registro?.fecha_inicio ?? "");
+    setFin(registro?.fecha_fin ?? "");
+    setEstado(registro?.estado ?? "planificado");
     setError(null);
     setErrorNombre(null);
     setErrorFin(null);
@@ -108,14 +125,16 @@ export function DialogoNuevoPeriodo({
     }
 
     setEnviando(true);
+    const datos = {
+      nombre: nombre.trim(),
+      fecha_inicio: inicio,
+      fecha_fin: fin,
+      estado,
+    };
     try {
-      await crearPeriodo({
-        nombre: nombre.trim(),
-        fecha_inicio: inicio,
-        fecha_fin: fin,
-        estado,
-      });
-      limpiar();
+      if (registro) await actualizarPeriodo({ ...datos, id: registro.id });
+      else await crearPeriodo(datos);
+      if (!registro) limpiar();
       onCambio(false);
       router.refresh();
     } catch (err) {
@@ -142,8 +161,10 @@ export function DialogoNuevoPeriodo({
     >
       <DialogContent etiquetaCerrar={textos.cerrar}>
         <DialogHeader>
-          <DialogTitle>{textos.titulo}</DialogTitle>
-          <DialogDescription>{textos.subtitulo}</DialogDescription>
+          <DialogTitle>{edicion ? textos.tituloEditar : textos.titulo}</DialogTitle>
+          <DialogDescription>
+            {edicion ? textos.subtituloEditar : textos.subtitulo}
+          </DialogDescription>
         </DialogHeader>
 
         <form onSubmit={enviar} className="space-y-4">
@@ -223,7 +244,13 @@ export function DialogoNuevoPeriodo({
               {textos.cancelar}
             </Button>
             <Button type="submit" disabled={enviando}>
-              {enviando ? textos.creando : textos.crear}
+              {edicion
+                ? enviando
+                  ? textos.guardando
+                  : textos.guardar
+                : enviando
+                  ? textos.creando
+                  : textos.crear}
             </Button>
           </DialogFooter>
         </form>
@@ -232,7 +259,7 @@ export function DialogoNuevoPeriodo({
   );
 }
 
-/** Botón + diálogo, para usarlo desde una página de servidor. */
+/** Botón + diálogo de alta, para usarlo desde una página de servidor. */
 export function BotonNuevoPeriodo({
   etiqueta,
   textos,
@@ -247,7 +274,7 @@ export function BotonNuevoPeriodo({
         <Plus aria-hidden />
         {etiqueta}
       </Button>
-      <DialogoNuevoPeriodo abierto={abierto} onCambio={setAbierto} textos={textos} />
+      <DialogoPeriodo abierto={abierto} onCambio={setAbierto} textos={textos} />
     </>
   );
 }
