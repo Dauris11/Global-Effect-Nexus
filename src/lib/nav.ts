@@ -97,6 +97,7 @@ export const NAV_ITEMS: NavItem[] = [
   { href: "/administrativo/proyectos", labelKey: "projects", permiso: "operaciones.leer", icon: "Folder" },
   { href: "/administrativo/personal", labelKey: "staff", permiso: "usuarios.administrar", icon: "UserCog" },
   { href: "/calendario", labelKey: "calendar", permiso: "operaciones.leer", icon: "Calendar" },
+  { href: "/servicios-mensuales", labelKey: "monthlyServices", permiso: "operaciones.leer", icon: "ClipboardCheck" },
   { href: "/inscripcion-comida", labelKey: "meals", permiso: "operaciones.leer", icon: "Utensils" },
   { href: "/expedientes", labelKey: "records", permiso: "expedientes.leer", icon: "Users" },
   { href: "/academico/materias", labelKey: "academic", permiso: "academico.leer", icon: "GraduationCap" },
