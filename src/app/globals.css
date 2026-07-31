@@ -127,6 +127,24 @@
   --prioridad-urgente: #ba1a1a;
   --prioridad-urgente-suave: #fdecec;
 
+  /* Identidad de persona — respaldo por iniciales del avatar.
+     Seis tonos apagados que conviven con la marca sin competir. El tono lo
+     elige un hash estable del nombre (ver components/ui/avatar.tsx), así que
+     la misma persona sale siempre del mismo color y se reconoce sin leer.
+     No codifican estado: son identidad, y por eso no pasan por estados.ts. */
+  --identidad-1: #123a86;
+  --identidad-1-suave: #dce7fa;
+  --identidad-2: #15803d;
+  --identidad-2-suave: #e3efe7;
+  --identidad-3: #a33b31;
+  --identidad-3-suave: #fbe6e3;
+  --identidad-4: #8a5a0b;
+  --identidad-4-suave: #f6e9d5;
+  --identidad-5: #4c3b8f;
+  --identidad-5-suave: #e7e3f4;
+  --identidad-6: #12657d;
+  --identidad-6-suave: #dcedf0;
+
   /* --- Elevación ---
      Sombras cortas y de baja opacidad: el portal es plano salvo lo que
      realmente flota. `arrastre` es la única sombra grande del sistema. */
@@ -222,6 +240,21 @@
   --prioridad-urgente: #ffb4ab;
   --prioridad-urgente-suave: #43181a;
 
+  /* Identidad de persona — se invierte la relación: en oscuro el suave es la
+     superficie profunda y el sólido el tono claro que lleva las iniciales. */
+  --identidad-1: #cadcfb;
+  --identidad-1-suave: #1c2b47;
+  --identidad-2: #4ade80;
+  --identidad-2-suave: #16351f;
+  --identidad-3: #ffb4ab;
+  --identidad-3-suave: #43181a;
+  --identidad-4: #fbbf24;
+  --identidad-4-suave: #3a2a0c;
+  --identidad-5: #c4b5fd;
+  --identidad-5-suave: #241f3d;
+  --identidad-6: #7dd3e8;
+  --identidad-6-suave: #12303a;
+
   --sombra-plana: 0 1px 2px 0 rgb(0 0 0 / 0.4);
   --sombra-flotante: 0 4px 12px -2px rgb(0 0 0 / 0.5), 0 2px 4px -2px rgb(0 0 0 / 0.4);
   --sombra-arrastre: 0 12px 28px -6px rgb(0 0 0 / 0.65);
@@ -304,6 +337,19 @@
   --color-prioridad-alta-suave: var(--prioridad-alta-suave);
   --color-prioridad-urgente: var(--prioridad-urgente);
   --color-prioridad-urgente-suave: var(--prioridad-urgente-suave);
+
+  --color-identidad-1: var(--identidad-1);
+  --color-identidad-1-suave: var(--identidad-1-suave);
+  --color-identidad-2: var(--identidad-2);
+  --color-identidad-2-suave: var(--identidad-2-suave);
+  --color-identidad-3: var(--identidad-3);
+  --color-identidad-3-suave: var(--identidad-3-suave);
+  --color-identidad-4: var(--identidad-4);
+  --color-identidad-4-suave: var(--identidad-4-suave);
+  --color-identidad-5: var(--identidad-5);
+  --color-identidad-5-suave: var(--identidad-5-suave);
+  --color-identidad-6: var(--identidad-6);
+  --color-identidad-6-suave: var(--identidad-6-suave);
 
   /* Elevación */
   --shadow-plana: var(--sombra-plana);

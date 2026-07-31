@@ -12,14 +12,19 @@ import * as React from "react";
 import * as AvatarPrimitive from "@radix-ui/react-avatar";
 import { cn } from "@/lib/utils";
 
-/** Paleta de respaldo: tonos apagados que conviven con la marca sin competir. */
+/**
+ * Paleta de respaldo: los seis tonos de identidad de la capa 3
+ * (`--identidad-N` en globals.css). Aquí no hay ningún color escrito: el
+ * componente solo nombra la familia, y el tema —claro u oscuro— resuelve el
+ * valor. Ver docs/10-estandar-de-interfaz.md §3.
+ */
 const TONOS = [
-  "bg-[#DCE7FA] text-[#123A86] dark:bg-[#1C2B47] dark:text-[#CADCFB]",
-  "bg-[#E3EFE7] text-[#15803D] dark:bg-[#16351F] dark:text-[#4ADE80]",
-  "bg-[#FBE6E3] text-[#A33B31] dark:bg-[#43181A] dark:text-[#FFB4AB]",
-  "bg-[#F6E9D5] text-[#8A5A0B] dark:bg-[#3A2A0C] dark:text-[#FBBF24]",
-  "bg-[#E7E3F4] text-[#4C3B8F] dark:bg-[#241F3D] dark:text-[#C4B5FD]",
-  "bg-[#DCEDF0] text-[#12657D] dark:bg-[#12303A] dark:text-[#7DD3E8]",
+  "bg-identidad-1-suave text-identidad-1",
+  "bg-identidad-2-suave text-identidad-2",
+  "bg-identidad-3-suave text-identidad-3",
+  "bg-identidad-4-suave text-identidad-4",
+  "bg-identidad-5-suave text-identidad-5",
+  "bg-identidad-6-suave text-identidad-6",
 ];
 
 /** Hash estable del nombre → índice de tono. Misma persona, mismo color. */

@@ -23,6 +23,7 @@ import { Link } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
 import { SeccionEncabezado } from "./seccion";
 import { Revelar } from "./revelar";
+import { Portales } from "./portales";
 
 const PUERTAS = [
   { clave: "portal", href: "/login", icono: LogIn, destacado: false },
@@ -114,6 +115,8 @@ export async function Acceso() {
             </Revelar>
           ))}
         </ul>
+
+        <Portales />
       </div>
     </section>
   );

@@ -30,7 +30,7 @@ Toda la documentación del proyecto está centralizada en esta carpeta: **un arc
 | Carpeta | Contenido |
 |---|---|
 | [`entregables/`](entregables/) | Documentos formales de la tesis: guía de entregas, primera entrega, análisis académico, plan de entregas (PDF). |
-| [`fuentes-datos/`](fuentes-datos/) | Datos crudos de origen (planificación de sprints en CSV). |
+| [`fuentes-datos/`](fuentes-datos/) | Datos crudos de origen: planificación de sprints (CSV) y documentos del **prototipo v1** ([guía de estilo](fuentes-datos/guia-estilo-prototipo.md) · [inventario frente al código actual](fuentes-datos/inventario-prototipo-vs-actual.md)). No normativos: manda el 10. |
 
 ## Artefactos de base de datos (código)
 

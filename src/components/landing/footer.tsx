@@ -49,7 +49,7 @@ export function LandingFooter() {
                 <Mail className="size-4 shrink-0 text-brand-teal" aria-hidden />
                 <a
                   href={`mailto:${t("footerEmail")}`}
-                  className="transition-colors hover:text-white underline underline-offset-4"
+                  className="rounded-sm transition-colors hover:text-white underline underline-offset-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-brand-charcoal"
                 >
                   {t("footerEmail")}
                 </a>
@@ -67,7 +67,7 @@ export function LandingFooter() {
                 <li key={s.href}>
                   <a
                     href={s.href}
-                    className="transition-colors hover:text-white flex items-center gap-1.5"
+                    className="flex items-center gap-1.5 rounded-sm transition-colors hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-brand-charcoal"
                   >
                     <span className="size-1 rounded-full bg-brand-teal/60" />
                     <span>{s.label}</span>
@@ -87,7 +87,7 @@ export function LandingFooter() {
                 <li key={p.href}>
                   <Link
                     href={p.href}
-                    className="transition-colors hover:text-white flex items-center gap-1.5"
+                    className="flex items-center gap-1.5 rounded-sm transition-colors hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-brand-charcoal"
                   >
                     <span className="size-1 rounded-full bg-brand-gold/60" />
                     <span>{p.label}</span>

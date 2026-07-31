@@ -24,7 +24,15 @@ import { Input } from "@/components/ui/input";
 
 const initialState: LoginState = {};
 
-/** Icono de Google (SVG oficial multicolor). */
+/**
+ * Icono de Google (SVG oficial multicolor).
+ *
+ * **Única excepción permitida a "ningún hex literal"** (docs/10 §3): los cuatro
+ * colores son la marca de Google, no la nuestra. Pasarlos por la capa 3 daría a
+ * entender que son tokens del sistema —reutilizables, sujetos a tema— y no lo
+ * son: sus valores los fija Google y deben respetarse exactos. Un token que
+ * nadie más puede usar y que no puede cambiar no es un token.
+ */
 function GoogleIcon() {
   return (
     <svg viewBox="0 0 24 24" className="size-4" aria-hidden>
