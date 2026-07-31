@@ -2,7 +2,7 @@
  * Proyectos — ClickUp S9 · #448–449.
  *
  * Cada proyecto lleva su riel de estado y una barra de avance calculada desde
- * las tareas cerradas, no desde el campo manual (docs/10-estandar-de-interfaz.md §10).
+ * las tareas cerradas, no desde el campo manual.
  */
 import { redirect } from "next/navigation";
 import { getTranslations } from "next-intl/server";

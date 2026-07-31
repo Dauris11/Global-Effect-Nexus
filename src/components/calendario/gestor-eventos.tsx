@@ -13,7 +13,7 @@
  * - **Colores de la capa 3, no `bg-blue-500`.** El original traía su propia
  *   paleta de seis colores de Tailwind. En este sistema el color de una fila
  *   *significa* algo —prioridad de la tarea, estado del evento— y sale de
- *   `lib/estados.ts` (docs/10-estandar-de-interfaz.md §3.2). Un selector de
+ *   `lib/estados.ts`. Un selector de
  *   color por evento rompería precisamente eso.
  * - **Nada de texto fijo.** Todos los rótulos entran traducidos por `textos`.
  * - **Semana de lunes a domingo** y calculada bien: el original hacía

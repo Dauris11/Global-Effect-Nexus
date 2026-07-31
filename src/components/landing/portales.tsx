@@ -19,7 +19,7 @@
  * pulsa un área que su rol no alcanza, el RBAC del servidor lo detiene — eso es
  * correcto y no algo que la landing deba adivinar.
  *
- * Movimiento (docs/10 §7 y la lista de la skill de diseño):
+ * Movimiento:
  *
  * - Entrada en cascada con `Revelar`, 40ms entre botones — dentro de la ventana
  *   de 30–80ms; más lento y la fila se lee como si cargara.

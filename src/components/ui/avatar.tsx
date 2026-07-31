@@ -16,7 +16,7 @@ import { cn } from "@/lib/utils";
  * Paleta de respaldo: los seis tonos de identidad de la capa 3
  * (`--identidad-N` en globals.css). Aquí no hay ningún color escrito: el
  * componente solo nombra la familia, y el tema —claro u oscuro— resuelve el
- * valor. Ver docs/10-estandar-de-interfaz.md §3.
+ * valor.
  */
 const TONOS = [
   "bg-identidad-1-suave text-identidad-1",

@@ -2,7 +2,7 @@
  * Creación de proyecto — ClickUp S9 · #449.
  *
  * No pide el porcentaje de avance: se calcula desde las tareas cerradas
- * (docs/10-estandar-de-interfaz.md §10). Un número tecleado a mano deja de ser
+ * automáticamente. Un número tecleado a mano deja de ser
  * cierto el mismo día.
  */
 "use client";

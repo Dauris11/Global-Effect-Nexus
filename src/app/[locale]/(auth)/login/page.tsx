@@ -14,7 +14,7 @@ export default function LoginPage() {
       {/* Panel de marca (desktop) */}
       <div className="relative hidden flex-col justify-between overflow-hidden bg-brand-charcoal p-12 text-white lg:flex">
         {/* Halo de marca. El color sale del token, no de un rgba escrito aquí
-            (docs/10-estandar-de-interfaz.md §3: un componente nunca escribe un color). */}
+            (un componente nunca escribe un color). */}
         <div
           aria-hidden
           className="pointer-events-none absolute -right-24 top-1/4 size-80 rounded-full"

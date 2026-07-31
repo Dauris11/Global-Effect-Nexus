@@ -8,7 +8,7 @@
  *
  * Es también el sitio donde se decide qué iconos existen en el producto. Uno
  * nuevo se añade a este mapa, no se importa suelto en una pantalla.
- * Solo `lucide-react`; nunca emojis (docs/10-estandar-de-interfaz.md §4).
+ * Solo `lucide-react`; nunca emojis.
  */
 "use client";
 

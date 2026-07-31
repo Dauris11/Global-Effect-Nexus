@@ -6,7 +6,7 @@
  * sección nueva, así que las seis se leían como un solo muro. Con esto cada
  * bloque entra al aparecer y el desplazamiento gana ritmo.
  *
- * Reglas del estándar que se respetan (docs/10-estandar-de-interfaz.md §7):
+ * Reglas de movimiento que se respetan:
  *
  * - Entrada `translateY + fade`, nunca desde `scale(0)`.
  * - 400ms como máximo, con `--ease-out` escrito como curva de Motion.

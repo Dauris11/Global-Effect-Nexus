@@ -3,8 +3,7 @@
  *
  * Reúne las cifras de la Fundación, la serie financiera y las listas de próximos
  * eventos y tareas que apremian. Superficie de referencia del sistema de diseño:
- * StatCards con conteo animado, gráfica de área y stagger de entrada discreto
- * (ver docs/09-guia-de-diseno.md §5).
+ * StatCards con conteo animado, gráfica de área y stagger de entrada discreto.
  *
  * **El panel se arma según los permisos del rol.** No es una preferencia de
  * diseño: el balance del mes y la gráfica de ingresos/egresos son datos

@@ -118,4 +118,4 @@ docs/                          # esta documentación
 | sharp | 0.34.x |
 | pg | 8.x |
 
-> Node.js ≥ 20.9 (requisito de Next 16). Ver también la [Guía de Desarrollo](07-guia-desarrollo.md) y la [Guía de Diseño](09-guia-de-diseno.md).
+> Node.js ≥ 20.9 (requisito de Next 16). Ver también la [Guía de Desarrollo](07-guia-desarrollo.md).

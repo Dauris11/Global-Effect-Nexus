@@ -2,7 +2,7 @@
  * "Qué hacemos" — los cuatro programas de la Fundación.
  *
  * Fichas con el **riel de 3px** que es la firma del sistema
- * (docs/10-estandar-de-interfaz.md §5): el mismo que dentro del portal marca
+ * — el mismo que dentro del portal marca
  * una nota o una tarea urgente. Usarlo aquí une la cara pública con el
  * producto en vez de inventar un adorno solo para la landing.
  *

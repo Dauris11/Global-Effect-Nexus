@@ -25,10 +25,9 @@
  * en el commit 0f0a973.
  *
  * Cómo volver atrás: revertir este commit y 0f0a973 devuelve el sistema
- * "Impact Editorial" completo, que sigue documentado en
- * docs/10-estandar-de-interfaz.md. Ese documento describe ahora algo que el
- * código ya no implementa; si el sistema nuevo lo sustituye, hay que
- * reescribirlo.
+ * "Impact Editorial" completo. Su documentación —el estándar de interfaz, la
+ * guía de diseño y el brief— se borró junto con él, así que el historial de git
+ * es ahora la única descripción de lo que había.
  *
  * Al definir el sistema nuevo, el orden que evita rehacer trabajo es: primero
  * los tokens aquí (capas 1 y 2), después la capa 3 de dominio, y solo al final

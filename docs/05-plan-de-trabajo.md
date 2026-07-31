@@ -80,7 +80,9 @@ Cada módulo = migración (ya lista) + queries parametrizadas + validación Zod 
 
 > **Estado del backend:** S0–S3 (BD) ✅. S4 (núcleo) ✅ en curso. **La capa de dominio backend de S5–S11 está construida** (`src/server/*`): consultas parametrizadas + Server Actions con `requirePermission` por módulo. Falta la **UI** de los módulos de S7, S8, S10 y S11 (pantallas, formularios, gráficos).
 
-> **Estado de la UI:** el **sistema de interfaz** está definido y normado en [10 · Estándar de Interfaz](10-estandar-de-interfaz.md) (tokens en tres capas, riel de estado, inventario de componentes en `src/components/ui/`). Sobre él ya están construidos el **login**, el **panel**, la **landing**, `/comida`, **Expedientes (S5)**, el **módulo Administrativo completo (S9)** y el **módulo Académico con los portales por rol (S6)**. Los módulos restantes reutilizan esos mismos componentes: lo que falta es pantalla, no sistema.
+> **Estado de la UI:** las pantallas están construidas —**login**, **panel**, **landing**, `/comida`, **Expedientes (S5)**, **Administrativo completo (S9)** y **Académico con los portales por rol (S6)**— y los módulos restantes reutilizan los mismos componentes de `src/components/ui/`: lo que falta es pantalla, no estructura.
+>
+> **Pero el proyecto está sin estilos a propósito.** Se retiraron los tokens, las fuentes y la generación de utilidades de Tailwind, a la espera de definir un sistema visual nuevo. Las pantallas funcionan y se navegan; no tienen decisiones visuales. Cuando el sistema nuevo exista, habrá que documentarlo: el estándar anterior se borró con él.
 
 ### Capa `server/` construida (backend por dominio)
 

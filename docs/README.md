@@ -15,8 +15,12 @@ Toda la documentación del proyecto está centralizada en esta carpeta: **un arc
 | 06 | [Plan de Entregas](06-plan-de-entregas.md) | Guía para producir las entregas de la tesis (E2–E6). |
 | 07 | [Guía de Desarrollo](07-guia-desarrollo.md) | Convenciones, patrón de módulos, RBAC, i18n, migraciones y flujo de Git (para desarrollar). |
 | 08 | [Stack Tecnológico](08-stack-tecnologico.md) | Stack definitivo (fuente de verdad): framework, Supabase Auth, integraciones, versiones. |
-| 09 | [Guía de Diseño](09-guia-de-diseno.md) | Referencias visuales de marca, tipografía y paleta. |
-| 10 | [**Estándar de Interfaz**](10-estandar-de-interfaz.md) | **Normativo.** Tokens en tres capas, componentes, densidad, movimiento, accesibilidad y dirección por superficie. |
+
+> **Sin documentación de diseño.** Los documentos 09 (guía de diseño), 10
+> (estándar de interfaz) y 11 (brief) se retiraron al dejar el proyecto sin
+> estilos. No hay, a propósito, ninguna norma visual vigente: el sistema nuevo
+> se documentará cuando se defina. Lo que había —«Impact Editorial»— vive solo
+> en el historial de git.
 
 ### 04 · Modelo de datos
 - [Diagrama Entidad-Relación](04-modelo-de-datos/diagrama-entidad-relacion.md) — ERD Mermaid (global + por dominio) y matriz de relaciones.
@@ -30,7 +34,7 @@ Toda la documentación del proyecto está centralizada en esta carpeta: **un arc
 | Carpeta | Contenido |
 |---|---|
 | [`entregables/`](entregables/) | Documentos formales de la tesis: guía de entregas, primera entrega, análisis académico, plan de entregas (PDF). |
-| [`fuentes-datos/`](fuentes-datos/) | Datos crudos de origen: planificación de sprints (CSV) y documentos del **prototipo v1** ([guía de estilo](fuentes-datos/guia-estilo-prototipo.md) · [inventario frente al código actual](fuentes-datos/inventario-prototipo-vs-actual.md)). No normativos: manda el 10. |
+| [`fuentes-datos/`](fuentes-datos/) | Datos crudos de origen: planificación de sprints (CSV) e [inventario del prototipo v1 frente al código actual](fuentes-datos/inventario-prototipo-vs-actual.md). No normativos. |
 
 ## Artefactos de base de datos (código)
 
@@ -44,7 +48,7 @@ Toda la documentación del proyecto está centralizada en esta carpeta: **un arc
 ## Estado del proyecto (2026-07-30)
 
 - ✅ **S0–S3 (Base de datos):** diseñada, normalizada (1NF–3NF), desplegada y verificada en Supabase — 36 tablas, RBAC, pgvector.
-- ✅ **Documentación de cimientos** completa (visión, arquitectura, módulos, ERD, DFD, diccionario, normalización, plan) + [stack definitivo](08-stack-tecnologico.md) y [guía de diseño](09-guia-de-diseno.md).
+- ✅ **Documentación de cimientos** completa (visión, arquitectura, módulos, ERD, DFD, diccionario, normalización, plan) + [stack definitivo](08-stack-tecnologico.md).
 - ✅ **Migración de stack:** Next.js 16, Tailwind CSS 4 (CSS-first), Supabase Auth, i18n `es/en`, y libs nuevas (Leaflet, motion, sharp, Resend).
 - ▶️ **S4 — Backend núcleo (en curso):** Supabase Auth + RBAC (`proxy.ts` + `requirePermission`), login, capa `server/` por dominio, Storage y layout del portal. Build y lint en verde.
 - ✅ **S5 — Expedientes y Panel:** CRUD de expedientes por pestañas, detalle con GPA y gráficos, OCR con IA y panel principal armado por permisos.

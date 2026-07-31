@@ -6,12 +6,16 @@
 > código de este repositorio.
 >
 > Fuente de verdad del avance: [05 · Plan de Trabajo](../05-plan-de-trabajo.md).
-> Fuente de verdad visual: [10 · Estándar de Interfaz](../10-estandar-de-interfaz.md).
+>
+> **Solo compara módulos, rutas y roles.** La comparación visual que este
+> documento traía se retiró junto con la documentación de estilos: el proyecto
+> está sin estilos a propósito, así que no hay sistema vigente con el que
+> contrastar.
 
 ## 0. Divergencia de stack (leer primero)
 
-El inventario y la [guía de estilo](guia-estilo-prototipo.md) asumen un proyecto
-que **no es este**. Ninguna ruta de archivo que citan existe:
+El inventario asume un proyecto que **no es este**. Ninguna ruta de archivo que
+cita existe:
 
 | Aspecto | Prototipo v1 (documentos) | Este repositorio (medido) |
 |---|---|---|
@@ -19,29 +23,11 @@ que **no es este**. Ninguna ruta de archivo que citan existe:
 | Lenguaje | `.jsx` — 0 en el repo | **`.tsx` — 108 archivos** |
 | Páginas | `src/pages/Inicio.jsx` | `src/app/[locale]/**/page.tsx` |
 | Rutas | `/dashboard` | **`/[locale]/dashboard`** (es · en) |
-| Tailwind | v3 con `tailwind.config.js` | **v4 CSS-first, sin config JS** |
-| Tokens | `src/index.css` (HSL) | **`src/app/globals.css` (hex, 3 capas)** |
 | Auth | `AuthContext` + `RoleContext` | **Supabase Auth + JWKS + RBAC en `src/server/auth`** |
 | Markdown | `react-markdown` | **no instalado** |
-| i18n | — | **next-intl, 897 claves es/en** |
+| i18n | — | **next-intl, 905 claves es/en** |
 
-Comprobado: `ls tailwind.config.*` → sin resultados · `src/index.css` y `src/pages/` → no existen · `react-markdown`, `react-router-dom`, `vite` → no instalados.
-
-## 0.1 Divergencia visual
-
-El sistema vigente es **«Impact Editorial»**, no el del prototipo:
-
-| Decisión | Prototipo v1 | Actual (`globals.css`) |
-|---|---|---|
-| Tipografía | **Inter** para todo (1 familia) | **Fraunces** display + **Montserrat** UI + **JetBrains Mono** datos (3, vía `next/font`) |
-| Primario | `#2096BA` turquesa | **`#1D5FD4` azul institucional** |
-| Acento | `#B5D5C4` verde suave | **`#FF6B5C` coral** (uso puntual) |
-| Fondo | `#F8FAFC` | **`#F5F5F5`** papel neutro |
-| Radio | `0.75rem` | **`0.9rem`** |
-| Modo oscuro | no contemplado | **sí**, con `.tema-claro` para páginas públicas |
-| Tokens | 1 capa plana | **3 capas**: primitivos → semánticos → **dominio** |
-| Capa de dominio | — | `--nota-*`, `--flujo-*`, `--tarea-*`, `--prioridad-*` + `lib/estados.ts` (`bandaDeNota`, `paletaDe`, `EstadoDominio`) |
-| Señal de estado | badges | **riel de estado** (`rail.tsx`, `chip-estado.tsx`) |
+Comprobado: `src/index.css` y `src/pages/` → no existen · `react-markdown`, `react-router-dom`, `vite` → no instalados.
 
 ---
 

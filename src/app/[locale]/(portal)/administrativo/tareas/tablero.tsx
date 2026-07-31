@@ -1,7 +1,7 @@
 /**
  * Tablero Kanban de tareas — ClickUp S9 · #439–443.
  *
- * Sigue los patrones de Asana descritos en docs/10-estandar-de-interfaz.md §10:
+ * Sigue los patrones de Asana:
  * columnas por estado con conteo, tarjeta compacta, arrastrar y soltar, y
  * detalle en panel lateral en vez de modal.
  *

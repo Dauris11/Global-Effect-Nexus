@@ -2,8 +2,7 @@
  * ChipEstado — etiqueta de estado del dominio.
  *
  * Acompaña siempre al riel: el color solo nunca comunica un estado, porque el
- * sistema muestra decisiones sobre notas y becas y hay usuarios con daltonismo
- * (docs/10-estandar-de-interfaz.md §3.2).
+ * sistema muestra decisiones sobre notas y becas y hay usuarios con daltonismo.
  *
  * El texto llega ya traducido desde la pantalla que lo usa; este componente no
  * conoce los diccionarios de i18n.

@@ -6,7 +6,7 @@
  *
  * Los controles salen del inventario del estándar (`Field` + `Input` + `Button`),
  * no de inputs con clases propias: la puerta del sistema es la primera pantalla
- * que se ve y tiene que verse como el resto (docs/10-estandar-de-interfaz.md §6).
+ * que se ve y tiene que verse como el resto.
  *
  * Los errores se muestran traducidos y vienen de tres sitios: la Server Action,
  * el callback de OAuth (`?error=`) y el fallo al abrir el diálogo de Google.
@@ -27,7 +27,7 @@ const initialState: LoginState = {};
 /**
  * Icono de Google (SVG oficial multicolor).
  *
- * **Única excepción permitida a "ningún hex literal"** (docs/10 §3): los cuatro
+ * **Única excepción permitida a "ningún hex literal"**: los cuatro
  * colores son la marca de Google, no la nuestra. Pasarlos por la capa 3 daría a
  * entender que son tokens del sistema —reutilizables, sujetos a tema— y no lo
  * son: sus valores los fija Google y deben respetarse exactos. Un token que

@@ -7,7 +7,6 @@
  *
  * Ninguna pantalla debe traducir un estado a color por su cuenta. Si falta un
  * estado, se añade a este archivo y a la capa 3 de tokens en `globals.css`.
- * Ver docs/10-estandar-de-interfaz.md §3.2.
  *
  * Las clases se guardan completas y literales porque Tailwind analiza el
  * código fuente en busca de cadenas: una clase construida por concatenación

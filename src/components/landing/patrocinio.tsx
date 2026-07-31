@@ -5,7 +5,7 @@
  * que busca un programa, y un patrocinador en Estados Unidos que quiere saber
  * qué se hizo con su aporte. Esta sección es para el segundo, y por eso cambia
  * de temperatura: fondo tinta, etiquetas en mono, cero lenguaje emotivo. La
- * sobriedad *es* el argumento (docs/10-estandar-de-interfaz.md §9).
+ * sobriedad *es* el argumento.
  *
  * El elemento visual es **la cadena de trazabilidad**: aporte → beca →
  * estudiante. No es un adorno; es literalmente lo que la sección afirma, y es

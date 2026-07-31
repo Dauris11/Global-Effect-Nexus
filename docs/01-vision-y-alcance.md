@@ -73,7 +73,7 @@ Cada usuario ve un menú lateral distinto según su rol. Los usuarios se **invit
 ## 5. Estado del proyecto (2026-07-01)
 
 - ✅ **Base de datos:** diseñada, normalizada (1NF–3NF), desplegada y verificada en Supabase (36 tablas, soporte de IA con pgvector). Ver [modelo de datos](04-modelo-de-datos/).
-- ✅ **Documentación de cimientos:** ERD, diccionario de datos, normalización/escalabilidad, guía de despliegue, [stack](08-stack-tecnologico.md) y [diseño](09-guia-de-diseno.md).
+- ✅ **Documentación de cimientos:** ERD, diccionario de datos, normalización/escalabilidad, guía de despliegue y [stack](08-stack-tecnologico.md).
 - ▶️ **Aplicación Next.js (S4 en curso):** Supabase Auth + RBAC, i18n (es/en), capa `server/` por dominio, Storage y layout del portal. Build/lint en verde.
 
 Ver el [plan de trabajo](05-plan-de-trabajo.md) para el detalle de sprints y próximos pasos.

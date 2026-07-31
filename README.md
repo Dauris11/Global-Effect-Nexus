@@ -3,7 +3,7 @@
 Plataforma web integral para la gestión académica y administrativa de la **Fundación Global Effect** (La Vega, República Dominicana). Proyecto final de grado — UCATECI.
 
 > **Estado (2026-07-28):** base de datos desplegada en Supabase (36 tablas, RBAC, pgvector) y app en **Next.js 16 + Tailwind 4** con **Supabase Auth + RBAC**, i18n `es/en` y capa `server/` por dominio.
-> **Sistema de interfaz** definido y normado en [docs/10](docs/10-estandar-de-interfaz.md), con 25 componentes en `src/components/ui/`.
+> **Sin estilos a propósito:** no hay tokens, fuentes ni utilidades de Tailwind generadas, a la espera de definir un sistema visual nuevo. Los 25 componentes de `src/components/ui/` siguen en pie, sin pintar.
 > **Pantallas terminadas:** landing, login por invitación, panel, inscripción de comida y el **módulo Administrativo completo (S9)** — tareas (Kanban), proyectos, personal y calendario.
 > Build, tipos y lint en verde.
 
@@ -168,7 +168,7 @@ npm run lint     # sin errores de lint
 npm run build    # compila y valida tipos
 ```
 
-- **Antes de tocar una pantalla**, leer [docs/10 · Estándar de Interfaz](docs/10-estandar-de-interfaz.md). Es normativo: una pantalla que no lo cumple no está terminada.
+- **No hay norma visual vigente.** El proyecto está sin estilos a propósito, así que no se añaden clases de color, tipografía ni espaciado hasta que se defina el sistema nuevo.
 - Todo texto visible pasa por `next-intl` y va en **los dos** idiomas (`messages/es.json` y `messages/en.json`). Cero cadenas literales en JSX.
 - Convenciones de código, patrón de módulo, RBAC y migraciones: [docs/07 · Guía de Desarrollo](docs/07-guia-desarrollo.md).
 
@@ -238,8 +238,6 @@ Todo está en **[`docs/`](docs/)** — un archivo por tema. Empezar por [`docs/R
 | Plan de entregas de la tesis | [docs/06-plan-de-entregas.md](docs/06-plan-de-entregas.md) |
 | **Guía de desarrollo (convenciones)** | [docs/07-guia-desarrollo.md](docs/07-guia-desarrollo.md) |
 | **Stack tecnológico (definitivo)** | [docs/08-stack-tecnologico.md](docs/08-stack-tecnologico.md) |
-| Guía de diseño (marca, tipografía, paleta) | [docs/09-guia-de-diseno.md](docs/09-guia-de-diseno.md) |
-| **Estándar de interfaz (normativo)** | [docs/10-estandar-de-interfaz.md](docs/10-estandar-de-interfaz.md) |
 
 Diagramas editables: `docs/04-modelo-de-datos/*.drawio` (draw.io) y `esquema.dbml` (dbdiagram.io).
 

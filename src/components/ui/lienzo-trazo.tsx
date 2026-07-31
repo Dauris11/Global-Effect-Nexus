@@ -23,7 +23,7 @@
  * o la pestaña se oculta, y escala por `devicePixelRatio` para no verse borroso.
  *
  * Es decoración: `aria-hidden` y `pointer-events-none`. La página funciona
- * igual sin él (docs/10-estandar-de-interfaz.md §7 y §8).
+ * igual sin él.
  */
 "use client";
 

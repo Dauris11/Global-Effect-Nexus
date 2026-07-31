@@ -3,7 +3,7 @@
  *
  * Altura 40px (`h-10`), la del estándar para controles; la variante compacta
  * (`h-8`) se reserva para barras de herramientas densas. El anillo de foco es
- * obligatorio: ver docs/10-estandar-de-interfaz.md §6.
+ * obligatorio.
  */
 import * as React from "react";
 import { cn } from "@/lib/utils";
