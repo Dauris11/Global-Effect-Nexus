@@ -48,26 +48,36 @@ export async function proxy(request: NextRequest) {
   const response = intlMiddleware(request);
 
   // 2. Refresco de sesión: enlazamos Supabase a las cookies de esta petición.
-  const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!,
-    {
-      cookies: {
-        getAll() {
-          return request.cookies.getAll();
-        },
-        setAll(cookiesToSet) {
-          cookiesToSet.forEach(({ name, value, options }) =>
-            response.cookies.set(name, value, options),
-          );
-        },
-      },
-    },
-  );
+  let user = null;
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  if (
+    supabaseUrl &&
+    supabaseKey &&
+    !supabaseUrl.includes("placeholder") &&
+    !supabaseUrl.includes("[PROJECT_REF]")
+  ) {
+    try {
+      const supabase = createServerClient(supabaseUrl, supabaseKey, {
+        cookies: {
+          getAll() {
+            return request.cookies.getAll();
+          },
+          setAll(cookiesToSet) {
+            cookiesToSet.forEach(({ name, value, options }) =>
+              response.cookies.set(name, value, options),
+            );
+          },
+        },
+      });
+
+      const { data } = await supabase.auth.getUser();
+      user = data?.user ?? null;
+    } catch {
+      // Ignorar en desarrollo sin credenciales configuradas
+    }
+  }
 
   // 3. Protección de rutas del portal.
   const segments = request.nextUrl.pathname.split("/").filter(Boolean);
