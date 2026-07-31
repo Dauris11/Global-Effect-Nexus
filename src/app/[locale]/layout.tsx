@@ -4,32 +4,17 @@
  * componentes cliente. Define <html>/<body> y los estilos globales.
  */
 import type { Metadata } from "next";
-import { Montserrat, Fraunces, JetBrains_Mono } from "next/font/google";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { routing, type Locale } from "@/i18n/routing";
 import "../globals.css";
 
-// Sistema tipográfico (auto-hospedado por next/font, expuesto a Tailwind):
-//  • Montserrat — fuente oficial (UI/cuerpo).
-//  • Fraunces — serif óptica de titulares (calidez editorial).
-//  • JetBrains Mono — eyebrows, cifras y etiquetas (precisión).
-const montserrat = Montserrat({
-  subsets: ["latin"],
-  variable: "--font-montserrat",
-  display: "swap",
-});
-const fraunces = Fraunces({
-  subsets: ["latin"],
-  variable: "--font-fraunces",
-  display: "swap",
-});
-const mono = JetBrains_Mono({
-  subsets: ["latin"],
-  variable: "--font-mono",
-  display: "swap",
-});
+// Sin sistema tipográfico: el proyecto está sin estilos a propósito, así que
+// se usa la fuente por defecto del navegador. Antes se auto-hospedaban
+// Montserrat (UI), Fraunces (titulares) y JetBrains Mono (cifras) con
+// `next/font/google`; se quitaron con el resto de las decisiones visuales.
+// Dejarlas habría descargado tres familias que ninguna regla usaba.
 
 export const metadata: Metadata = {
   title: "Global Effect Nexus",
@@ -53,22 +38,11 @@ export default async function LocaleLayout({
   const messages = await getMessages();
 
   return (
-    <html
-      lang={locale}
-      className={`${montserrat.variable} ${fraunces.variable} ${mono.variable}`}
-      suppressHydrationWarning
-    >
-      <head>
-        {/* Aplica el tema guardado antes de pintar para evitar el parpadeo
-            (FOUC). El predeterminado es claro (base blanca); solo pasa a
-            oscuro si el usuario lo eligió explícitamente. */}
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `try{if(localStorage.getItem('theme')==='dark')document.documentElement.classList.add('dark')}catch(e){}`,
-          }}
-        />
-      </head>
-      <body className="min-h-screen bg-background text-foreground antialiased">
+    <html lang={locale} suppressHydrationWarning>
+      {/* Se quitó el script que aplicaba el tema guardado antes de pintar: sin
+          tokens ni variante `dark`, poner esa clase en <html> no cambia nada.
+          Vuelve cuando el sistema nuevo tenga tema oscuro. */}
+      <body>
         <NextIntlClientProvider messages={messages}>
           {children}
         </NextIntlClientProvider>

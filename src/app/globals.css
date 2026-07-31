@@ -1,318 +1,38 @@
 /**
- * Estilos globales — Tailwind CSS 4 (CSS-first).
+ * Estilos globales — VACÍO A PROPÓSITO.
  *
- * Sistema "Impact Editorial": base neutra (blanco / #F5F5F5), azul
- * institucional (#1D5FD4) como color dominante de marca/primario, coral
- * (#FF6B5C) como acento humano puntual y tinta (#171717) para texto.
- * Tipografía: Fraunces (display), Montserrat (UI), JetBrains Mono
- * (datos).
+ * El proyecto está deliberadamente sin estilos, a la espera de definir un
+ * sistema visual nuevo. Este archivo era el único sitio donde vivía el color,
+ * la tipografía, el espaciado y el movimiento, así que vaciarlo deja la
+ * plataforma en HTML sin estilo: se navega y funciona igual, pero no hay
+ * ninguna decisión visual tomada.
  *
- * Los tokens se organizan en tres capas (ver docs/10-estandar-de-interfaz.md):
- *   1. Primitivos  — rampas de color crudas. No se usan en componentes.
- *   2. Semánticos  — rol en la interfaz (--background, --primary, --border…).
- *   3. De dominio  — significado del negocio (--nota-*, --flujo-*, --tarea-*).
+ * Lo que se quitó, y por qué la primera línea es la que decide:
  *
- * Regla: un componente NUNCA escribe un hex ni un primitivo. Solo usa las
- * utilidades derivadas de las capas 2 y 3.
+ *   1. `@import "tailwindcss"` — la pieza decisiva. Sin ella no se genera
+ *      ninguna utilidad, así que las ~1.360 clases que siguen escritas en los
+ *      componentes no resuelven a nada. No hacía falta borrarlas de los 102
+ *      archivos para que dejaran de pintar: basta con no generar el CSS.
+ *   2. `@import "tw-animate-css"` — animaciones de utilidad.
+ *   3. `@custom-variant dark` y `@theme inline` — el registro que convertía
+ *      los tokens en clases de Tailwind.
+ *   4. Las capas 1 y 2 completas: fondo, texto, superficies, marca, radios,
+ *      sombras y curvas de easing, en claro y en oscuro.
+ *   5. Los `@keyframes` propios (marker-draw, fade-up, shimmer) y `@layer base`
+ *      con sus reglas de tipografía y de `prefers-reduced-motion`.
+ *
+ * La capa 3 (colores de dominio) y el riel de estado se habían borrado antes,
+ * en el commit 0f0a973.
+ *
+ * Cómo volver atrás: revertir este commit y 0f0a973 devuelve el sistema
+ * "Impact Editorial" completo, que sigue documentado en
+ * docs/10-estandar-de-interfaz.md. Ese documento describe ahora algo que el
+ * código ya no implementa; si el sistema nuevo lo sustituye, hay que
+ * reescribirlo.
+ *
+ * Al definir el sistema nuevo, el orden que evita rehacer trabajo es: primero
+ * los tokens aquí (capas 1 y 2), después la capa 3 de dominio, y solo al final
+ * tocar componentes. `src/lib/estados.ts` y `src/components/ui/chip-estado.tsx`
+ * se conservaron para eso: mantienen el mapa de estados del negocio, que es
+ * semántica y no estilo.
  */
-@import "tailwindcss";
-@import "tw-animate-css";
-
-@custom-variant dark (&:is(.dark *));
-
-/*
- * `.tema-claro` — subárbol que ignora el modo oscuro.
- *
- * El conmutador de tema escribe `dark` en <html>, y los tokens se heredan, así
- * que sin esto el modo oscuro del portal se colaría en las páginas públicas.
- * No debe: la landing y las inscripciones abiertas son la cara de la Fundación
- * ante patrocinadores y familias, y su base de papel neutro es parte de la
- * identidad (docs/10-estandar-de-interfaz.md §9). Nadie elige "modo oscuro"
- * para un folleto.
- *
- * Funciona porque una declaración directa sobre el elemento siempre gana a un
- * valor heredado: da igual que `<html>` tenga `.dark`. Los valores claros se
- * declaran una sola vez, compartidos con `:root`, para que no haya dos listas
- * de tokens que mantener sincronizadas.
- *
- * Aviso: las utilidades `dark:*` sí seguirían aplicándose dentro del subárbol
- * (su condición es un ancestro `.dark`). Las páginas públicas no usan ninguna;
- * si algún día hace falta, la solución es un token, no un `dark:`.
- */
-:root,
-.tema-claro {
-  --background: #f5f5f5; /* papel neutro: superficie base dominante */
-  --foreground: #171717;
-  --card: #ffffff; /* blanco puro para tarjetas y contenido */
-  --card-foreground: #171717;
-  --popover: #ffffff;
-  --popover-foreground: #171717;
-  --primary: #1d5fd4; /* azul institucional */
-  --primary-foreground: #ffffff;
-  --secondary: #ededed;
-  --secondary-foreground: #171717;
-  --muted: #f5f5f5;
-  --muted-foreground: #5f6b76;
-  --accent: #eaf1fd; /* azul muy claro para hover/selección */
-  --accent-foreground: #123a86;
-  --destructive: #ba1a1a;
-  --destructive-foreground: #ffffff;
-  --border: #e5e5e5;
-  --input: #e5e5e5;
-  --ring: #1d5fd4;
-  --radius: 0.9rem;
-
-  /* Marca — azul institucional sobre base neutra (blanco / #f5f5f5). */
-  --brand-charcoal: #1a2230; /* tinta: superficies oscuras (hero foto, sidebar) */
-  --brand-deep: #0f1620;
-  --brand-teal: #1d5fd4; /* primario (azul) */
-  --brand-teal-dark: #123a86;
-  --brand-accent: #ff6b5c; /* coral (acento humano, uso puntual) */
-  --brand-gold: #f59e0b; /* ámbar (comida) */
-
-  /* --- Superficies (capa 2) ---
-     Tres niveles de profundidad. Nunca se apilan más de dos. */
-  --surface-sunken: #ededed; /* fondos de columna, celdas vacías, wells */
-  --surface: #ffffff; /* tarjetas, filas, paneles */
-  --surface-raised: #ffffff; /* popovers, diálogos, tarjeta arrastrada */
-
-  /* --- Elevación ---
-     Sombras cortas y de baja opacidad: el portal es plano salvo lo que
-     realmente flota. `arrastre` es la única sombra grande del sistema. */
-  --sombra-plana: 0 1px 2px 0 rgb(15 22 32 / 0.05);
-  --sombra-flotante: 0 4px 12px -2px rgb(15 22 32 / 0.1), 0 2px 4px -2px rgb(15 22 32 / 0.06);
-  --sombra-arrastre: 0 12px 28px -6px rgb(15 22 32 / 0.22);
-
-  /* Curvas de easing (vocabulario de movimiento del portal).
-     Las nativas de CSS son "flojas"; estas dan intención. Ver
-     docs/10-estandar-de-interfaz.md §7. */
-  --ease-out: cubic-bezier(0.23, 1, 0.32, 1); /* entradas/salidas: arranque rápido */
-  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1); /* movimiento en pantalla */
-  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1); /* rebote sutil (raro) */
-}
-
-.dark {
-  --background: #121316;
-  --foreground: #f2f3f5;
-  --card: #1a1b1e;
-  --card-foreground: #f2f3f5;
-  --popover: #1a1b1e;
-  --popover-foreground: #f2f3f5;
-  --primary: #5b9bf5; /* azul claro */
-  --primary-foreground: #08183a;
-  --secondary: #26282c;
-  --secondary-foreground: #f2f3f5;
-  --muted: #26282c;
-  --muted-foreground: #a3aab3;
-  --accent: #1c2b47; /* azul apagado para hover/selección */
-  --accent-foreground: #cadcfb;
-  --destructive: #ffb4ab;
-  --destructive-foreground: #690005;
-  --border: #2e3035;
-  --input: #2e3035;
-  --ring: #5b9bf5;
-
-  --brand-charcoal: #1a1b1e;
-  --brand-teal: #5b9bf5;
-  --brand-teal-dark: #1d5fd4;
-  --brand-accent: #ff8377;
-  --brand-gold: #f59e0b;
-
-  /* Superficies: en oscuro la profundidad se hace con luminosidad, no con
-     sombra (una sombra sobre fondo oscuro no se ve). */
-  --surface-sunken: #0e0f12;
-  --surface: #1a1b1e;
-  --surface-raised: #26282c;
-
-  --sombra-plana: 0 1px 2px 0 rgb(0 0 0 / 0.4);
-  --sombra-flotante: 0 4px 12px -2px rgb(0 0 0 / 0.5), 0 2px 4px -2px rgb(0 0 0 / 0.4);
-  --sombra-arrastre: 0 12px 28px -6px rgb(0 0 0 / 0.65);
-}
-
-@theme inline {
-  --font-sans: var(--font-montserrat), ui-sans-serif, system-ui, sans-serif;
-  --font-display: var(--font-fraunces), Georgia, "Times New Roman", serif;
-  --font-mono: var(--font-mono), ui-monospace, "SFMono-Regular", monospace;
-
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-card: var(--card);
-  --color-card-foreground: var(--card-foreground);
-  --color-popover: var(--popover);
-  --color-popover-foreground: var(--popover-foreground);
-  --color-primary: var(--primary);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-secondary: var(--secondary);
-  --color-secondary-foreground: var(--secondary-foreground);
-  --color-muted: var(--muted);
-  --color-muted-foreground: var(--muted-foreground);
-  --color-accent: var(--accent);
-  --color-accent-foreground: var(--accent-foreground);
-  --color-destructive: var(--destructive);
-  --color-destructive-foreground: var(--destructive-foreground);
-  --color-border: var(--border);
-  --color-input: var(--input);
-  --color-ring: var(--ring);
-
-  --color-brand-charcoal: var(--brand-charcoal);
-  --color-brand-deep: var(--brand-deep);
-  --color-brand-teal: var(--brand-teal);
-  --color-brand-teal-dark: var(--brand-teal-dark);
-  --color-brand-accent: var(--brand-accent);
-  --color-brand-gold: var(--brand-gold);
-
-  /* Superficies */
-  --color-surface: var(--surface);
-  --color-surface-sunken: var(--surface-sunken);
-  --color-surface-raised: var(--surface-raised);
-
-  /* Elevación */
-  --shadow-plana: var(--sombra-plana);
-  --shadow-flotante: var(--sombra-flotante);
-  --shadow-arrastre: var(--sombra-arrastre);
-
-  --radius-lg: var(--radius);
-  --radius-md: calc(var(--radius) - 4px);
-  --radius-sm: calc(var(--radius) - 8px);
-}
-
-/*
- * Trama de registro — textura de la banda de patrocinadores.
- *
- * Rayado horizontal muy tenue, como el de un libro de cuentas. Le da cuerpo a
- * un rectángulo de tinta que si no queda plano, y lo hace con el material del
- * propio asunto: este sistema es un registro. No es un degradado de marca, que
- * el estándar prohíbe como fondo (docs/10-estandar-de-interfaz.md §2).
- */
-.trama-registro {
-  background-image: repeating-linear-gradient(
-    to bottom,
-    rgb(255 255 255 / 0.045) 0px,
-    rgb(255 255 255 / 0.045) 1px,
-    transparent 1px,
-    transparent 2rem
-  );
-}
-
-/*
- * Cuadrícula de maqueta — textura del hero público.
- *
- * La retícula tenue de una plancha de imprenta: dice "esto está compuesto, no
- * volcado". Se usa en lugar de un degradado de marca, que el estándar prohíbe
- * como fondo (docs/10-estandar-de-interfaz.md §2), y se desvanece con una
- * máscara radial para que no compita con el titular.
- */
-.trama-cuadricula {
-  background-image:
-    linear-gradient(
-      to right,
-      color-mix(in oklab, var(--foreground) 6%, transparent) 1px,
-      transparent 1px
-    ),
-    linear-gradient(
-      to bottom,
-      color-mix(in oklab, var(--foreground) 6%, transparent) 1px,
-      transparent 1px
-    );
-  background-size: 4.5rem 4.5rem;
-  -webkit-mask-image: radial-gradient(75% 60% at 50% 0%, #000 0%, transparent 78%);
-  mask-image: radial-gradient(75% 60% at 50% 0%, #000 0%, transparent 78%);
-}
-
-/* Firma: subrayado de marcador que se "dibuja" al cargar. */
-@keyframes marker-draw {
-  from {
-    stroke-dashoffset: 300;
-  }
-  to {
-    stroke-dashoffset: 0;
-  }
-}
-.marker-path {
-  stroke-dasharray: 300;
-  stroke-dashoffset: 300;
-  animation: marker-draw 0.9s cubic-bezier(0.23, 1, 0.32, 1) 0.35s forwards;
-}
-
-/* Portal: entrada suave (translateY + fade). Nunca desde scale(0): nada en el
-   mundo real aparece de la nada. Se combina con animation-delay para el stagger
-   discreto (30–80 ms entre ítems) del dashboard. */
-@keyframes fade-up {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-.animate-fade-up {
-  animation: fade-up 0.5s var(--ease-out) both;
-}
-
-/* Skeleton: barrido de brillo para estados de carga (percepción de velocidad). */
-@keyframes shimmer {
-  from {
-    background-position: 200% 0;
-  }
-  to {
-    background-position: -200% 0;
-  }
-}
-.animate-shimmer {
-  background-image: linear-gradient(
-    90deg,
-    transparent 0%,
-    color-mix(in oklab, var(--foreground) 6%, transparent) 50%,
-    transparent 100%
-  );
-  background-size: 200% 100%;
-  animation: shimmer 1.4s linear infinite;
-}
-
-@layer base {
-  * {
-    @apply border-border;
-  }
-  body {
-    @apply bg-background text-foreground;
-    font-family: var(--font-sans);
-  }
-  /*
-   * Navegación por ancla de las páginas públicas.
-   *
-   * El desplazamiento suave convierte los enlaces `#seccion` de la landing en un
-   * movimiento continuo en vez de un salto: el visitante no pierde el sitio. Y
-   * `scroll-margin-top` es la corrección que faltaba — la cabecera es `sticky`,
-   * así que sin margen de anclaje el titular de la sección aterrizaba debajo de
-   * ella. 6rem = aviso superior + barra.
-   *
-   * La regla global de `prefers-reduced-motion` de más abajo devuelve
-   * `scroll-behavior: auto`, así que esto no se le impone a nadie.
-   */
-  html {
-    scroll-behavior: smooth;
-  }
-  section[id] {
-    scroll-margin-top: 6rem;
-  }
-  /* El subárbol claro se pinta a sí mismo: el <body> ya está pintado con los
-     tokens oscuros y hay que taparlo, no solo redefinir variables. */
-  .tema-claro {
-    background-color: var(--background);
-    color: var(--foreground);
-    color-scheme: light; /* controles nativos: date, time, scrollbar */
-  }
-  /* Accesibilidad: reducir movimiento (mantiene opacidad/color, quita motion). */
-  @media (prefers-reduced-motion: reduce) {
-    *,
-    ::before,
-    ::after {
-      animation-duration: 0.001ms !important;
-      animation-iteration-count: 1 !important;
-      transition-duration: 0.001ms !important;
-      scroll-behavior: auto !important;
-    }
-  }
-}
