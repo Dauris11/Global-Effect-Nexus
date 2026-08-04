@@ -75,14 +75,14 @@ export function PanelVivo({ evento }: { evento?: EventoResumen | null }) {
     <div className="rounded-xl border border-border bg-card shadow-flotante">
       {/* Cabecera: reloj en vivo */}
       <div className="flex items-center justify-between border-b border-border px-5 py-3.5">
-        <span className="flex items-center gap-2 font-mono text-[10px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+        <span className="flex items-center gap-2 font-mono text-xs font-semibold uppercase tracking-[0.15em] text-muted-foreground">
           <span aria-hidden className="relative flex size-2">
             <span className="absolute inset-0 animate-ping rounded-full bg-primary/60" />
             <span className="relative size-2 rounded-full bg-primary" />
           </span>
           {t("panelNow")}
         </span>
-        <span className="font-mono text-sm font-semibold tabular-nums text-foreground">
+        <span className="font-mono text-base font-semibold tabular-nums text-foreground">
           {reloj}
         </span>
       </div>
@@ -101,12 +101,12 @@ export function PanelVivo({ evento }: { evento?: EventoResumen | null }) {
 
           <div className="min-w-0 flex-1">
             <div className="flex items-center gap-2">
-              <h3 className="font-display text-lg font-semibold leading-none text-foreground">
+              <h3 className="font-display text-xl font-semibold leading-none text-foreground">
                 {t("panelMeals")}
               </h3>
               <span
                 className={cn(
-                  "rounded-full px-2 py-0.5 font-mono text-[10px] font-semibold uppercase tracking-[0.12em]",
+                  "rounded-full px-2.5 py-0.5 font-mono text-xs font-semibold uppercase tracking-[0.1em]",
                   abierto
                     ? "bg-brand-gold/15 text-brand-gold"
                     : "bg-muted text-muted-foreground",
@@ -119,7 +119,7 @@ export function PanelVivo({ evento }: { evento?: EventoResumen | null }) {
                     : t("panelMealsClosed")}
               </span>
             </div>
-            <p className="mt-1.5 flex items-center gap-1.5 font-mono text-[11px] text-muted-foreground">
+            <p className="mt-1.5 flex items-center gap-1.5 font-mono text-xs text-muted-foreground">
               <Clock className="size-3.5 shrink-0" aria-hidden />
               {ahora === null
                 ? t("panelMealsWindow")
@@ -133,7 +133,7 @@ export function PanelVivo({ evento }: { evento?: EventoResumen | null }) {
         <Link
           href="/comida"
           className={cn(
-            "group mt-4 flex w-full items-center justify-center gap-2 rounded-lg py-2.5 text-sm font-semibold transition duration-150 ease-out",
+            "group mt-4 flex w-full items-center justify-center gap-2 rounded-lg py-2.5 text-base font-semibold transition duration-150 ease-out",
             "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
             abierto
               ? "bg-brand-gold text-white hover:brightness-95 active:scale-[0.99]"
@@ -150,7 +150,7 @@ export function PanelVivo({ evento }: { evento?: EventoResumen | null }) {
 
       {/* Próximo evento del calendario institucional */}
       <div className="border-b border-border p-5">
-        <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+        <p className="font-mono text-xs font-semibold uppercase tracking-[0.15em] text-muted-foreground">
           {t("panelNextEvent")}
         </p>
 
@@ -160,10 +160,10 @@ export function PanelVivo({ evento }: { evento?: EventoResumen | null }) {
               aria-hidden
               className="flex size-12 shrink-0 flex-col items-center justify-center rounded-lg border border-border bg-background"
             >
-              <span className="font-mono text-lg font-semibold leading-none tabular-nums text-foreground">
+              <span className="font-mono text-xl font-semibold leading-none tabular-nums text-foreground">
                 {new Intl.DateTimeFormat(locale, { day: "2-digit" }).format(fechaEvento)}
               </span>
-              <span className="mt-0.5 font-mono text-[9px] font-semibold uppercase tracking-[0.12em] text-primary">
+              <span className="mt-0.5 font-mono text-[11px] font-semibold uppercase tracking-[0.1em] text-primary">
                 {new Intl.DateTimeFormat(locale, { month: "short" })
                   .format(fechaEvento)
                   .replace(".", "")}
@@ -174,7 +174,7 @@ export function PanelVivo({ evento }: { evento?: EventoResumen | null }) {
                 {evento.titulo}
               </span>
               {evento.ubicacion && (
-                <span className="mt-1 flex items-center gap-1.5 font-mono text-[11px] text-muted-foreground">
+                <span className="mt-1 flex items-center gap-1.5 font-mono text-xs text-muted-foreground">
                   <MapPin className="size-3 shrink-0 text-primary/70" aria-hidden />
                   <span className="truncate">{evento.ubicacion}</span>
                 </span>
@@ -191,7 +191,7 @@ export function PanelVivo({ evento }: { evento?: EventoResumen | null }) {
       {/* Pie: cómo se entra */}
       <div className="flex items-center gap-2.5 rounded-b-xl bg-muted/60 px-5 py-3.5">
         <ShieldCheck className="size-4 shrink-0 text-muted-foreground" aria-hidden />
-        <p className="font-mono text-[11px] leading-snug text-muted-foreground">
+        <p className="font-mono text-xs leading-snug text-muted-foreground">
           {t("panelInviteOnly")}
         </p>
       </div>

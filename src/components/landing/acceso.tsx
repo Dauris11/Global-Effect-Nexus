@@ -78,7 +78,7 @@ export async function Acceso() {
                     </span>
                     <span
                       className={cn(
-                        "rounded-full px-2.5 py-1 font-mono text-[10px] font-semibold uppercase tracking-[0.14em]",
+                        "rounded-full px-3 py-1 font-mono text-xs font-semibold uppercase tracking-[0.12em]",
                         destacado
                           ? "bg-brand-gold/15 text-brand-gold"
                           : "bg-muted text-muted-foreground",
@@ -88,16 +88,16 @@ export async function Acceso() {
                     </span>
                   </div>
 
-                  <h3 className="mt-6 font-display text-xl font-semibold leading-tight text-foreground transition-colors group-hover:text-primary">
+                  <h3 className="mt-6 font-display text-2xl font-semibold leading-tight text-foreground transition-colors group-hover:text-primary">
                     {t(`access_${clave}_title` as never)}
                   </h3>
-                  <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                  <p className="mt-2 text-base leading-relaxed text-muted-foreground">
                     {t(`access_${clave}_desc` as never)}
                   </p>
                 </div>
 
                 <div className="mt-6 flex items-center justify-between gap-3 border-t border-border/60 pt-4">
-                  <span className="inline-flex items-center gap-1.5 text-sm font-semibold text-foreground transition-colors group-hover:text-primary">
+                  <span className="inline-flex items-center gap-1.5 text-base font-semibold text-foreground transition-colors group-hover:text-primary">
                     {t(`access_${clave}_cta` as never)}
                     <ArrowRight
                       className="size-4 transition-transform duration-150 ease-out group-hover:translate-x-1"
@@ -105,7 +105,7 @@ export async function Acceso() {
                     />
                   </span>
                   {destacado && (
-                    <span className="flex shrink-0 items-center gap-1 font-mono text-[11px] text-brand-gold">
+                    <span className="flex shrink-0 items-center gap-1 font-mono text-xs text-brand-gold">
                       <Clock className="size-3" aria-hidden />
                       <span>{t("access_meals_hours")}</span>
                     </span>

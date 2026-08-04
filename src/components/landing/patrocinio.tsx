@@ -63,7 +63,7 @@ export async function Patrocinio() {
         </Revelar>
 
         <div className="mt-14">
-          <p className="mb-4 flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.2em] text-white/60">
+          <p className="mb-4 flex items-center gap-2 font-mono text-xs uppercase tracking-[0.15em] text-white/60">
             <ShieldCheck className="size-4 text-primary" aria-hidden />
             {t("chainTitle")}
           </p>
@@ -93,20 +93,20 @@ export async function Patrocinio() {
                         <Icono className="size-6" strokeWidth={1.7} aria-hidden />
                       </span>
                       {/* El orden importa aquí: es una secuencia, no un catálogo. */}
-                      <span className="font-mono text-xs font-semibold tabular-nums text-white/60">
+                      <span className="font-mono text-sm font-semibold tabular-nums text-white/60">
                         {String(i + 1).padStart(2, "0")}
                       </span>
                     </div>
 
-                    <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-white/60">
+                    <p className="font-mono text-xs uppercase tracking-[0.14em] text-white/60">
                       {t(`chain_${clave}_label` as never)}
                     </p>
-                    <p className="mt-1 text-base font-semibold text-white">
+                    <p className="mt-1 text-lg font-semibold text-white">
                       {t(`chain_${clave}_value` as never)}
                     </p>
                   </div>
 
-                  <p className="mt-4 border-t border-white/10 pt-3 text-xs leading-relaxed text-white/65">
+                  <p className="mt-4 border-t border-white/10 pt-3 text-sm leading-relaxed text-white/65">
                     {t(`chain_${clave}_detail` as never)}
                   </p>
                 </div>
@@ -131,11 +131,11 @@ export async function Patrocinio() {
           <dl className="grid gap-x-8 gap-y-8 sm:grid-cols-3">
             {COMPROMISOS.map((clave) => (
               <div key={clave} className="border-t border-white/15 pt-5">
-                <dt className="flex items-center gap-2 font-display text-lg font-semibold text-white">
+                <dt className="flex items-center gap-2 font-display text-xl font-semibold text-white">
                   <Check className="size-4 shrink-0 text-primary" aria-hidden />
                   {t(`sponsor_${clave}_title` as never)}
                 </dt>
-                <dd className="mt-2 text-sm leading-relaxed text-white/65">
+                <dd className="mt-2 text-base leading-relaxed text-white/65">
                   {t(`sponsor_${clave}_desc` as never)}
                 </dd>
               </div>
@@ -144,7 +144,7 @@ export async function Patrocinio() {
 
           <Link
             href="/login"
-            className="inline-flex shrink-0 items-center justify-center gap-2 rounded-full bg-white px-7 py-3.5 text-sm font-semibold text-brand-charcoal transition duration-150 ease-out hover:bg-white/90 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-brand-charcoal"
+            className="inline-flex shrink-0 items-center justify-center gap-2 rounded-full bg-white px-7 py-4 text-base font-semibold text-brand-charcoal transition duration-150 ease-out hover:bg-white/90 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-brand-charcoal"
           >
             {t("sponsorCta")}
             <ArrowRight className="size-4" aria-hidden />

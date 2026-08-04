@@ -36,11 +36,11 @@ export function LandingFooter() {
             <span className="inline-block rounded-lg bg-white/5 p-2 backdrop-blur-xs">
               <Logo className="h-8 w-auto" />
             </span>
-            <p className="mt-5 max-w-xs font-display text-base italic leading-snug text-white/80">
+            <p className="mt-5 max-w-xs font-display text-lg italic leading-snug text-white/80">
               {t("footerTagline")}
             </p>
 
-            <address className="mt-6 space-y-2.5 text-sm not-italic text-white/70">
+            <address className="mt-6 space-y-2.5 text-base not-italic text-white/70">
               <p className="flex items-start gap-2.5">
                 <MapPin className="mt-0.5 size-4 shrink-0 text-brand-teal" aria-hidden />
                 <span>{t("footerAddress")}</span>
@@ -59,10 +59,10 @@ export function LandingFooter() {
 
           {/* Columna Navegación Pública */}
           <div>
-            <h3 className="font-mono text-[11px] uppercase tracking-[0.18em] text-white/90 font-semibold mb-4">
+            <h3 className="font-mono text-xs uppercase tracking-[0.15em] text-white/90 font-semibold mb-4">
               {t("footerThisPage")}
             </h3>
-            <ul className="space-y-3 text-sm">
+            <ul className="space-y-3 text-base">
               {secciones.map((s) => (
                 <li key={s.href}>
                   <a
@@ -79,10 +79,10 @@ export function LandingFooter() {
 
           {/* Columna Accesos Directos */}
           <div>
-            <h3 className="font-mono text-[11px] uppercase tracking-[0.18em] text-white/90 font-semibold mb-4">
+            <h3 className="font-mono text-xs uppercase tracking-[0.15em] text-white/90 font-semibold mb-4">
               {t("footerAccess")}
             </h3>
-            <ul className="space-y-3 text-sm mb-6">
+            <ul className="space-y-3 text-base mb-6">
               {puertas.map((p) => (
                 <li key={p.href}>
                   <Link
@@ -103,7 +103,7 @@ export function LandingFooter() {
         </div>
 
         {/* Sub-footer */}
-        <div className="mt-14 flex flex-col items-center justify-between gap-4 border-t border-white/10 pt-8 font-mono text-[11px] text-white/55 md:flex-row">
+        <div className="mt-14 flex flex-col items-center justify-between gap-4 border-t border-white/10 pt-8 font-mono text-xs text-white/55 md:flex-row">
           {/* El escudo va en el gris de la línea, no en verde: un check verde
               aquí se lee como un sello de certificación que no tenemos, y el
               color funcional del sistema no significa "seguro" (§3.2). */}

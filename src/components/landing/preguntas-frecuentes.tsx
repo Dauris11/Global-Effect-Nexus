@@ -74,7 +74,7 @@ export function PreguntasFrecuentes() {
                     aria-controls={`faq-answer-${clave}`}
                     className="flex w-full items-center justify-between gap-4 p-5 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
                   >
-                    <span className="flex items-center gap-3 font-display text-lg font-semibold text-foreground">
+                    <span className="flex items-center gap-3 font-display text-xl font-semibold text-foreground">
                       <HelpCircle className="size-5 shrink-0 text-primary" aria-hidden />
                       {t(titleKey)}
                     </span>
@@ -101,7 +101,7 @@ export function PreguntasFrecuentes() {
                             : { duration: 0.25, ease: [0.23, 1, 0.32, 1] }
                         }
                       >
-                        <div className="border-t border-border/60 px-5 pb-5 pt-4 text-sm leading-relaxed text-muted-foreground">
+                        <div className="border-t border-border/60 px-5 pb-5 pt-4 text-base leading-relaxed text-muted-foreground">
                           {t(descKey)}
                         </div>
                       </m.div>

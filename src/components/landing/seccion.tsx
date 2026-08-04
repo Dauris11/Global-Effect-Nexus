@@ -33,7 +33,7 @@ export function SeccionEncabezado({
     <header className={cn("max-w-2xl", className)}>
       <p
         className={cn(
-          "flex items-center gap-3 font-mono text-[11px] uppercase tracking-[0.22em]",
+          "flex items-center gap-3 font-mono text-xs uppercase tracking-[0.15em]",
           tono === "claro" ? "text-primary" : "text-white/55",
         )}
       >
@@ -50,7 +50,7 @@ export function SeccionEncabezado({
       <h2
         id={idTitulo}
         className={cn(
-          "mt-4 font-display text-[clamp(1.9rem,3.4vw,2.75rem)] font-semibold leading-[1.1] tracking-[-0.02em]",
+          "mt-4 font-display text-[clamp(2.2rem,4vw,3.25rem)] font-bold leading-[1.1] tracking-[-0.025em]",
           tono === "claro" ? "text-foreground" : "text-white",
         )}
       >
@@ -60,7 +60,7 @@ export function SeccionEncabezado({
       {intro && (
         <p
           className={cn(
-            "mt-5 text-lg leading-relaxed",
+            "mt-5 text-xl leading-relaxed",
             tono === "claro" ? "text-muted-foreground" : "text-white/65",
           )}
         >

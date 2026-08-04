@@ -69,16 +69,16 @@ export async function Labor() {
                   <span className="flex size-12 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary transition-transform duration-200 ease-out group-hover:scale-105">
                     <Icono className="size-6" strokeWidth={1.7} aria-hidden />
                   </span>
-                  <span className="rounded-full border border-border bg-muted px-3 py-1 font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
+                  <span className="rounded-full border border-border bg-muted px-3.5 py-1 font-mono text-xs uppercase tracking-[0.12em] text-muted-foreground">
                     {t(`work_${clave}_tag` as never)}
                   </span>
                 </div>
 
-                <h3 className="mt-6 font-display text-2xl font-semibold leading-tight text-foreground">
+                <h3 className="mt-6 font-display text-3xl font-semibold leading-tight text-foreground">
                   {t(`work_${clave}_title` as never)}
                 </h3>
 
-                <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
+                <p className="mt-4 text-base leading-relaxed text-muted-foreground">
                   {t(`work_${clave}_desc` as never)}
                 </p>
 
@@ -86,7 +86,7 @@ export async function Labor() {
                   {PUNTOS.map((p) => (
                     <li
                       key={p}
-                      className="flex items-start gap-2 text-[13px] font-medium text-foreground/80"
+                      className="flex items-start gap-2 text-sm font-medium text-foreground/80"
                     >
                       <Check
                         className="mt-0.5 size-3.5 shrink-0 text-primary"

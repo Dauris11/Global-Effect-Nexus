@@ -110,7 +110,7 @@ export function Navbar() {
   return (
     <>
       {/* Aviso de servicio: el comedor es lo único con hora de cierre */}
-      <div className="border-b border-white/10 bg-brand-charcoal px-4 py-1.5 font-mono text-xs text-white/80">
+      <div className="border-b border-white/10 bg-brand-charcoal px-4 py-2 font-mono text-sm text-white/80">
         <div className="mx-auto flex w-full max-w-6xl items-center justify-between gap-4">
           <Link
             href="/comida"
@@ -123,7 +123,7 @@ export function Navbar() {
               aria-hidden
             />
           </Link>
-          <div className="hidden shrink-0 items-center gap-2 text-[11px] text-white/50 sm:flex">
+          <div className="hidden shrink-0 items-center gap-2 text-xs text-white/50 sm:flex">
             <span aria-hidden className="inline-block size-2 rounded-full bg-emerald-500" />
             <span>{t("systemStatusPill")}</span>
           </div>
@@ -151,7 +151,7 @@ export function Navbar() {
           </Link>
 
           {/* Navegación de escritorio */}
-          <nav className="hidden items-center gap-6 font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground lg:flex">
+          <nav className="hidden items-center gap-6 font-mono text-xs uppercase tracking-[0.12em] text-muted-foreground lg:flex">
             {SECCIONES.map((s) => {
               const esActiva = activa === s.href;
               return (
@@ -181,7 +181,7 @@ export function Navbar() {
             <SelectorIdioma />
             <Link
               href="/login"
-              className="group hidden items-center gap-1.5 rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground transition duration-150 ease-out hover:bg-brand-teal-dark active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 sm:inline-flex"
+              className="group hidden items-center gap-1.5 rounded-full bg-primary px-5 py-2.5 text-base font-semibold text-primary-foreground transition duration-150 ease-out hover:bg-brand-teal-dark active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 sm:inline-flex"
             >
               {t("enter")}
               <ArrowRight
@@ -221,7 +221,7 @@ export function Navbar() {
             id="menu-movil"
             className="animate-fade-up border-b border-border bg-background p-6 lg:hidden"
           >
-            <nav className="flex flex-col gap-1 font-mono text-xs uppercase tracking-[0.16em]">
+            <nav className="flex flex-col gap-1 font-mono text-sm uppercase tracking-[0.12em]">
               {SECCIONES.map((s) => (
                 <a
                   key={s.href}
@@ -242,7 +242,7 @@ export function Navbar() {
                 <Link
                   href="/login"
                   onClick={() => setMenuAbierto(false)}
-                  className="flex w-full items-center justify-center gap-2 rounded-lg bg-primary py-3 text-sm font-semibold text-primary-foreground"
+                  className="flex w-full items-center justify-center gap-2 rounded-lg bg-primary py-3 text-base font-semibold text-primary-foreground"
                 >
                   {t("enter")}
                   <ArrowRight className="size-4" aria-hidden />
@@ -250,7 +250,7 @@ export function Navbar() {
                 <Link
                   href="/comida"
                   onClick={() => setMenuAbierto(false)}
-                  className="flex w-full items-center justify-center gap-2 rounded-lg border border-brand-gold/50 bg-brand-gold/10 py-3 text-sm font-semibold text-brand-gold"
+                  className="flex w-full items-center justify-center gap-2 rounded-lg border border-brand-gold/50 bg-brand-gold/10 py-3 text-base font-semibold text-brand-gold"
                 >
                   {t("access_meals_cta")}
                   <ArrowRight className="size-4" aria-hidden />

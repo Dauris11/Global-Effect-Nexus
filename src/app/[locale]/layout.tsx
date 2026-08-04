@@ -2,19 +2,36 @@
  * Layout raíz por idioma. Envuelve toda el área localizada (/es, /en),
  * valida el locale de la ruta y provee las traducciones (next-intl) a los
  * componentes cliente. Define <html>/<body> y los estilos globales.
+ *
+ * Tipografía:
+ *   - Inter (300–800): interfaz y titulares (`--font-inter` → `font-sans` y
+ *     `font-display` en el tema).
+ *   - JetBrains Mono: etiquetas, cifras y datos técnicos (`--font-jetbrains-mono`
+ *     → `font-mono` en el tema).
+ *
+ * Tema oscuro:
+ *   El script inline aplica la clase `dark` en <html> antes de pintar,
+ *   leyendo localStorage("theme"). El ThemeToggle lo actualiza en tiempo real.
  */
 import type { Metadata } from "next";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
 import { notFound } from "next/navigation";
+import { Inter, JetBrains_Mono } from "next/font/google";
 import { routing, type Locale } from "@/i18n/routing";
 import "../globals.css";
 
-// Sin sistema tipográfico: el proyecto está sin estilos a propósito, así que
-// se usa la fuente por defecto del navegador. Antes se auto-hospedaban
-// Montserrat (UI), Fraunces (titulares) y JetBrains Mono (cifras) con
-// `next/font/google`; se quitaron con el resto de las decisiones visuales.
-// Dejarlas habría descargado tres familias que ninguna regla usaba.
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-inter",
+  display: "swap",
+});
+
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ["latin"],
+  variable: "--font-jetbrains-mono",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   title: "Global Effect Nexus",
@@ -38,10 +55,14 @@ export default async function LocaleLayout({
   const messages = await getMessages();
 
   return (
-    <html lang={locale} suppressHydrationWarning>
-      {/* Se quitó el script que aplicaba el tema guardado antes de pintar: sin
-          tokens ni variante `dark`, poner esa clase en <html> no cambia nada.
-          Vuelve cuando el sistema nuevo tenga tema oscuro. */}
+    <html
+      lang={locale}
+      suppressHydrationWarning
+      className={`${inter.variable} ${jetbrainsMono.variable}`}
+    >
+      {/* Tema oscuro desactivado: la landing es blanca por ahora.
+          Para restaurar, descomentar el script anti-FOUC que aplica .dark
+          desde localStorage antes del primer paint. */}
       <body>
         <NextIntlClientProvider messages={messages}>
           {children}

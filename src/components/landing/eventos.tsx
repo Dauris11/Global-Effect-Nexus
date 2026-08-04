@@ -95,7 +95,7 @@ export function Eventos({ eventos }: { eventos: EventoPublico[] }) {
                   onChange={(e) => setBusqueda(e.target.value)}
                   placeholder={t("eventsSearchPlaceholder")}
                   aria-label={t("eventsSearchPlaceholder")}
-                  className="w-full rounded-full border border-border bg-background py-2.5 pl-9 pr-4 text-xs font-medium transition-colors placeholder:text-muted-foreground focus-visible:border-primary/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                  className="w-full rounded-full border border-border bg-background py-2.5 pl-9 pr-4 text-sm font-medium transition-colors placeholder:text-muted-foreground focus-visible:border-primary/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                 />
               </div>
             )}
@@ -152,10 +152,10 @@ export function Eventos({ eventos }: { eventos: EventoPublico[] }) {
                         className="flex size-16 shrink-0 flex-col items-center justify-center rounded-lg border border-border bg-card shadow-plana"
                         aria-hidden
                       >
-                        <span className="font-mono text-2xl font-semibold leading-none tabular-nums text-foreground">
+                        <span className="font-mono text-3xl font-bold leading-none tabular-nums text-foreground">
                           {dia.format(fecha)}
                         </span>
-                        <span className="mt-1 font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-primary">
+                        <span className="mt-1 font-mono text-xs font-semibold uppercase tracking-[0.12em] text-primary">
                           {mes.format(fecha).replace(".", "")}
                         </span>
                       </div>
@@ -168,7 +168,7 @@ export function Eventos({ eventos }: { eventos: EventoPublico[] }) {
                         <div className="flex flex-wrap items-center gap-2">
                           <span
                             className={cn(
-                              "rounded-full px-2 py-0.5 font-mono text-[10px] font-semibold uppercase tracking-[0.12em]",
+                              "rounded-full px-2.5 py-0.5 font-mono text-xs font-semibold uppercase tracking-[0.1em]",
                               dias <= 1
                                 ? "bg-brand-gold/15 text-brand-gold"
                                 : "bg-muted text-muted-foreground",
@@ -180,16 +180,16 @@ export function Eventos({ eventos }: { eventos: EventoPublico[] }) {
                                 ? t("eventsTomorrow")
                                 : t("eventsInDays", { n: dias })}
                           </span>
-                          <span className="font-mono text-[10px] uppercase tracking-[0.12em] text-muted-foreground/70">
+                          <span className="font-mono text-xs uppercase tracking-[0.1em] text-muted-foreground/70">
                             {t(`eventType_${TIPOS.includes(e.tipo as never) ? e.tipo : "otro"}` as never)}
                           </span>
                         </div>
 
-                        <h3 className="mt-1.5 truncate font-display text-lg font-semibold text-foreground">
+                        <h3 className="mt-1.5 truncate font-display text-xl font-semibold text-foreground">
                           {e.titulo}
                         </h3>
                         {e.ubicacion && (
-                          <p className="mt-1 flex items-center gap-1.5 font-mono text-xs text-muted-foreground">
+                          <p className="mt-1 flex items-center gap-1.5 font-mono text-sm text-muted-foreground">
                             <MapPin className="size-3.5 shrink-0 text-primary/70" aria-hidden />
                             <span className="truncate">{e.ubicacion}</span>
                           </p>
@@ -204,11 +204,11 @@ export function Eventos({ eventos }: { eventos: EventoPublico[] }) {
             {/* Filtró hasta cero: se explica y se ofrece la salida. */}
             {filtrados.length === 0 && (
               <div className="mt-8 rounded-xl border border-dashed border-border bg-background p-8 text-center">
-                <p className="text-sm font-medium text-foreground">{t("eventsNoResults")}</p>
+                <p className="text-base font-medium text-foreground">{t("eventsNoResults")}</p>
                 <button
                   type="button"
                   onClick={limpiar}
-                  className="mt-4 inline-flex items-center gap-1.5 rounded-full border border-border bg-card px-4 py-2 text-xs font-semibold transition-colors hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                  className="mt-4 inline-flex items-center gap-1.5 rounded-full border border-border bg-card px-4 py-2 text-sm font-semibold transition-colors hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
                 >
                   <X className="size-3.5" aria-hidden />
                   {t("eventsClear")}
@@ -219,7 +219,7 @@ export function Eventos({ eventos }: { eventos: EventoPublico[] }) {
             {filtrando && filtrados.length > 0 && (
               <p
                 aria-live="polite"
-                className="mt-6 font-mono text-[11px] uppercase tracking-[0.14em] text-muted-foreground"
+                className="mt-6 font-mono text-xs uppercase tracking-[0.12em] text-muted-foreground"
               >
                 {t("eventsCount", { n: filtrados.length, total: eventos.length })}
               </p>
@@ -246,7 +246,7 @@ function Pestana({
       onClick={onClick}
       aria-pressed={activa}
       className={cn(
-        "inline-flex items-center gap-2 rounded-full border px-3.5 py-1.5 font-mono text-[11px] uppercase tracking-[0.12em] transition-all duration-150 ease-out",
+        "inline-flex items-center gap-2 rounded-full border px-4 py-2 font-mono text-xs uppercase tracking-[0.1em] transition-all duration-150 ease-out",
         "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
         activa
           ? "border-primary bg-primary text-primary-foreground shadow-plana"

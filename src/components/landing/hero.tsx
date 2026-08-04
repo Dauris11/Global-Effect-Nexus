@@ -95,11 +95,11 @@ function Cta({
   children: React.ReactNode;
 }) {
   const base =
-    "group inline-flex items-center gap-2 rounded-full px-6 py-3.5 text-sm font-semibold transition duration-150 ease-out active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2";
+    "group inline-flex items-center gap-2 rounded-full px-8 py-5 text-lg font-semibold transition-all duration-300 ease-out active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2";
   const style =
     variant === "primary"
-      ? "bg-primary text-primary-foreground shadow-plana hover:bg-brand-teal-dark hover:shadow-flotante"
-      : "border border-foreground/15 bg-card/80 text-foreground backdrop-blur-sm hover:bg-accent hover:border-foreground/25";
+      ? "bg-primary text-primary-foreground glow-button hover:bg-brand-teal-dark"
+      : "border border-primary/20 bg-background/50 text-foreground backdrop-blur-md hover:bg-primary/10 hover:border-primary/40 glass-card";
   const contenido = (
     <>
       {children}
@@ -124,11 +124,10 @@ function Titular({ text }: { text: string }) {
   const words = text.trim().split(" ");
   const last = words.pop() ?? "";
   return (
-    <h1 className="font-display text-[clamp(2.4rem,5vw,4rem)] font-semibold leading-[1.04] tracking-[-0.025em] text-foreground">
+    <h1 className="font-display text-[clamp(3.5rem,8vw,6.5rem)] font-bold leading-[1.05] tracking-[-0.04em] text-foreground">
       {words.join(" ")}{" "}
-      <span className="relative inline-block whitespace-nowrap">
+      <span className="relative inline-block whitespace-nowrap text-gradient-primary-animated">
         {last}
-        <Marker className="absolute -bottom-1 left-0 h-4 w-full text-primary" />
       </span>
     </h1>
   );
@@ -182,8 +181,8 @@ export function Hero({
   const conFoto = Boolean(s.imagen);
 
   return (
-    <section className="relative overflow-hidden border-b border-border bg-background">
-      {/* Cuadrícula de maqueta + veladura del primario. Decorativo. */}
+    <section className="relative overflow-hidden border-b border-border bg-background animated-hero-bg">
+      {/* Cuadrícula de maqueta refinada. */}
       <div aria-hidden className="trama-cuadricula pointer-events-none absolute inset-0" />
       <div
         aria-hidden
@@ -206,10 +205,10 @@ export function Hero({
                 variants={CASCADA}
                 initial={reduce ? false : "oculto"}
                 animate="visible"
-                className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-3 py-1 font-mono text-[11px] uppercase tracking-[0.2em] text-primary"
+                className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-4 py-2 font-mono text-sm uppercase tracking-[0.2em] text-primary glass-card"
               >
-                <MapPin className="size-3" aria-hidden />
-                <span>{s.tag ?? lugar}</span>
+                <MapPin className="size-4 animate-pulse" aria-hidden />
+                <span className="font-semibold">{s.tag ?? lugar}</span>
               </m.div>
 
               <AnimatePresence mode="wait">
@@ -223,7 +222,7 @@ export function Hero({
                 >
                   <Titular text={s.titulo} />
                   {s.texto && (
-                    <p className="mt-7 max-w-xl text-lg leading-relaxed text-muted-foreground">
+                    <p className="mt-8 max-w-2xl text-2xl leading-relaxed text-muted-foreground/90">
                       {s.texto}
                     </p>
                   )}
@@ -370,16 +369,16 @@ export function Hero({
                   return (
                     <div
                       key={d.label}
-                      className="flex items-center gap-4 rounded-xl border border-border bg-card/80 p-5 transition-colors duration-150 hover:border-primary/40 hover:bg-card"
+                      className="flex items-center gap-5 rounded-2xl border border-primary/10 bg-background/40 p-6 glass-card hover-glow-border transition-all duration-300"
                     >
-                      <span className="flex size-12 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
-                        <Icon className="size-6" strokeWidth={1.7} aria-hidden />
+                      <span className="flex size-14 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary shadow-glow">
+                        <Icon className="size-7 animate-float" strokeWidth={1.5} aria-hidden />
                       </span>
                       <div>
-                        <dd className="font-mono text-2xl font-semibold text-foreground">
+                        <dd className="font-display text-4xl font-bold text-foreground">
                           <Contador valor={d.valor} />
                         </dd>
-                        <dt className="text-sm font-medium text-muted-foreground">{d.label}</dt>
+                        <dt className="text-lg font-medium text-muted-foreground mt-1">{d.label}</dt>
                       </div>
                     </div>
                   );
@@ -387,14 +386,14 @@ export function Hero({
               </dl>
 
               <div className="mt-5 flex flex-wrap items-center justify-between gap-3">
-                <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-muted-foreground/70">
+                <p className="font-mono text-xs uppercase tracking-[0.12em] text-muted-foreground/70">
                   {pieDatos}
                 </p>
                 {/* Atajo a la primera sección: da salida al hero en móvil, donde
                     el desplazamiento no tiene una pista visual de qué sigue. */}
                 <a
                   href="#acceso"
-                  className="group inline-flex items-center gap-1.5 font-mono text-[11px] font-semibold uppercase tracking-[0.14em] text-primary transition-colors hover:text-brand-teal-dark"
+                  className="group inline-flex items-center gap-1.5 font-mono text-xs font-semibold uppercase tracking-[0.12em] text-primary transition-colors hover:text-brand-teal-dark"
                 >
                   {t("heroScroll")}
                   <ArrowDown

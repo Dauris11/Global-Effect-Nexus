@@ -1,37 +1,356 @@
 /**
- * Estilos globales — VACÍO A PROPÓSITO.
+ * Sistema visual — Global Effect Nexus · Edición Futurista.
  *
- * El proyecto está deliberadamente sin estilos, a la espera de definir un
- * sistema visual nuevo. Este archivo era el único sitio donde vivía el color,
- * la tipografía, el espaciado y el movimiento, así que vaciarlo deja la
- * plataforma en HTML sin estilo: se navega y funciona igual, pero no hay
- * ninguna decisión visual tomada.
- *
- * Lo que se quitó, y por qué la primera línea es la que decide:
- *
- *   1. `@import "tailwindcss"` — la pieza decisiva. Sin ella no se genera
- *      ninguna utilidad, así que las ~1.360 clases que siguen escritas en los
- *      componentes no resuelven a nada. No hacía falta borrarlas de los 102
- *      archivos para que dejaran de pintar: basta con no generar el CSS.
- *   2. `@import "tw-animate-css"` — animaciones de utilidad.
- *   3. `@custom-variant dark` y `@theme inline` — el registro que convertía
- *      los tokens en clases de Tailwind.
- *   4. Las capas 1 y 2 completas: fondo, texto, superficies, marca, radios,
- *      sombras y curvas de easing, en claro y en oscuro.
- *   5. Los `@keyframes` propios (marker-draw, fade-up, shimmer) y `@layer base`
- *      con sus reglas de tipografía y de `prefers-reduced-motion`.
- *
- * La capa 3 (colores de dominio) y el riel de estado se habían borrado antes,
- * en el commit 0f0a973.
- *
- * Cómo volver atrás: revertir este commit y 0f0a973 devuelve el sistema
- * "Impact Editorial" completo. Su documentación —el estándar de interfaz, la
- * guía de diseño y el brief— se borró junto con él, así que el historial de git
- * es ahora la única descripción de lo que había.
- *
- * Al definir el sistema nuevo, el orden que evita rehacer trabajo es: primero
- * los tokens aquí (capas 1 y 2), después la capa 3 de dominio, y solo al final
- * tocar componentes. `src/lib/estados.ts` y `src/components/ui/chip-estado.tsx`
- * se conservaron para eso: mantienen el mapa de estados del negocio, que es
- * semántica y no estilo.
+ * Estética: minimalista premium con toques futuristas — glassmorphism,
+ * gradient text, glow effects, animated backgrounds, y tipografía
+ * grande y segura. Blanco como base, teal como acento.
  */
+
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+/* ══════════════════════════════════════════════════════════════
+   Theme tokens → utilidades de Tailwind
+   ══════════════════════════════════════════════════════════════ */
+@theme inline {
+  /* ── Colores semánticos ── */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  /* ── Colores de marca ── */
+  --color-brand-charcoal: #0F1219;
+  --color-brand-teal: #2096BA;
+  --color-brand-teal-dark: #1A7A98;
+  --color-brand-gold: #E5A91B;
+  --color-brand-accent: #E8735A;
+
+  /* ── Tipografía ── */
+  --font-sans: var(--font-inter), "Inter", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-display: var(--font-inter), "Inter", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-mono: var(--font-jetbrains-mono), "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+
+  /* ── Radios ── */
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+
+  /* ── Sombras (premium — con glow sutil) ── */
+  --shadow-plana: 0 2px 8px -2px rgb(0 0 0 / 0.06), 0 1px 3px -1px rgb(0 0 0 / 0.04);
+  --shadow-flotante: 0 25px 50px -12px rgb(0 0 0 / 0.12), 0 12px 24px -8px rgb(0 0 0 / 0.06);
+  --shadow-glow: 0 0 20px rgba(32, 150, 186, 0.2), 0 0 60px rgba(32, 150, 186, 0.06), 0 8px 32px -8px rgb(0 0 0 / 0.1);
+  --shadow-glow-lg: 0 0 40px rgba(32, 150, 186, 0.3), 0 0 80px rgba(32, 150, 186, 0.1), 0 16px 48px -8px rgb(0 0 0 / 0.12);
+
+  /* ── Curvas ── */
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* ── Animaciones ── */
+  --animate-fade-up: fade-up 0.5s cubic-bezier(0.23, 1, 0.32, 1) both;
+  --animate-marker-draw: marker-draw 0.6s cubic-bezier(0.23, 1, 0.32, 1) 0.3s both;
+  --animate-shimmer: shimmer 2s linear infinite;
+  --animate-float: float 6s ease-in-out infinite;
+  --animate-gradient: gradient-shift 20s ease infinite;
+  --animate-pulse-glow: pulse-glow 3s ease-in-out infinite;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   Tokens semánticos: claro
+   ══════════════════════════════════════════════════════════════ */
+@layer base {
+  :root {
+    --background: #FFFFFF;
+    --foreground: #0A0F1A;
+
+    --card: #FFFFFF;
+    --card-foreground: #0A0F1A;
+
+    --popover: #FFFFFF;
+    --popover-foreground: #0A0F1A;
+
+    --primary: #2096BA;
+    --primary-foreground: #FFFFFF;
+
+    --secondary: #F1F5F9;
+    --secondary-foreground: #0F172A;
+
+    --muted: #F4F6F9;
+    --muted-foreground: #556274;
+
+    --accent: #F0F7FA;
+    --accent-foreground: #0F172A;
+
+    --destructive: #EF4444;
+    --destructive-foreground: #FFFFFF;
+
+    --border: #E4E9F0;
+    --input: #E4E9F0;
+    --ring: #2096BA;
+
+    --radius: 0.75rem;
+
+    --chart-1: #2096BA;
+    --chart-2: #E8735A;
+    --chart-3: #E5A91B;
+    --chart-4: #22C55E;
+    --chart-5: #8B5CF6;
+  }
+
+  .dark {
+    --background: #0A0E17;
+    --foreground: #F1F5F9;
+    --card: #141924;
+    --card-foreground: #F1F5F9;
+    --popover: #141924;
+    --popover-foreground: #F1F5F9;
+    --primary: #2DA8CE;
+    --primary-foreground: #FFFFFF;
+    --secondary: #1A1F2E;
+    --secondary-foreground: #F1F5F9;
+    --muted: #1A1F2E;
+    --muted-foreground: #8896A8;
+    --accent: #1A2435;
+    --accent-foreground: #F1F5F9;
+    --destructive: #DC2626;
+    --destructive-foreground: #FFFFFF;
+    --border: #232A3A;
+    --input: #232A3A;
+    --ring: #2DA8CE;
+    --chart-1: #2DA8CE;
+    --chart-2: #F09A88;
+    --chart-3: #E8B84D;
+    --chart-4: #4ADE80;
+    --chart-5: #A78BFA;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Transiciones globales suaves */
+  a, button {
+    transition: all 0.25s cubic-bezier(0.23, 1, 0.32, 1);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   Keyframes
+   ══════════════════════════════════════════════════════════════ */
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes marker-draw {
+  from { clip-path: inset(0 100% 0 0); }
+  to   { clip-path: inset(0 0 0 0); }
+}
+
+@keyframes shimmer {
+  from { background-position: -200% center; }
+  to   { background-position: 200% center; }
+}
+
+@keyframes gradient-shift {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-10px); }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 20px rgba(32, 150, 186, 0.2); }
+  50%      { box-shadow: 0 0 40px rgba(32, 150, 186, 0.35); }
+}
+
+@keyframes orb-float-1 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33%      { transform: translate(30px, -20px) scale(1.05); }
+  66%      { transform: translate(-15px, 15px) scale(0.97); }
+}
+
+@keyframes orb-float-2 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33%      { transform: translate(-25px, 20px) scale(0.95); }
+  66%      { transform: translate(20px, -25px) scale(1.03); }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   Futuristic Utility Classes
+   ══════════════════════════════════════════════════════════════ */
+
+/* Gradient text — teal shimmer for accent words */
+.text-gradient-primary {
+  background: linear-gradient(135deg, #2096BA 0%, #1AAFDE 40%, #2096BA 60%, #1A7A98 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.text-gradient-primary-animated {
+  background: linear-gradient(135deg, #2096BA, #1AAFDE, #2096BA, #1A7A98);
+  background-size: 300% 300%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: gradient-shift 6s ease infinite;
+}
+
+/* Glow button — primary CTA with radiant glow */
+.glow-button {
+  position: relative;
+  box-shadow: 0 0 20px rgba(32, 150, 186, 0.3), 0 4px 16px -4px rgba(32, 150, 186, 0.25);
+}
+
+.glow-button:hover {
+  box-shadow: 0 0 35px rgba(32, 150, 186, 0.4), 0 8px 24px -4px rgba(32, 150, 186, 0.35);
+  transform: translateY(-2px);
+}
+
+.glow-button:active {
+  transform: translateY(0);
+  box-shadow: 0 0 15px rgba(32, 150, 186, 0.3), 0 2px 8px -2px rgba(32, 150, 186, 0.2);
+}
+
+/* Glass card — frosted glass effect */
+.glass-card {
+  background: rgba(255, 255, 255, 0.65);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  transition: all 0.35s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.glass-card:hover {
+  background: rgba(255, 255, 255, 0.82);
+  border-color: rgba(32, 150, 186, 0.25);
+  box-shadow: 0 0 30px rgba(32, 150, 186, 0.08), 0 25px 50px -12px rgba(0, 0, 0, 0.08);
+  transform: translateY(-4px);
+}
+
+/* Animated hero background — gradient orbs */
+.animated-hero-bg {
+  overflow: hidden;
+}
+
+.animated-hero-bg::before,
+.animated-hero-bg::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.5;
+}
+
+.animated-hero-bg::before {
+  width: 600px;
+  height: 600px;
+  top: -15%;
+  right: -5%;
+  background: radial-gradient(circle, rgba(32, 150, 186, 0.12) 0%, transparent 70%);
+  animation: orb-float-1 20s ease-in-out infinite;
+}
+
+.animated-hero-bg::after {
+  width: 500px;
+  height: 500px;
+  bottom: -10%;
+  left: 5%;
+  background: radial-gradient(circle, rgba(32, 150, 186, 0.08) 0%, transparent 70%);
+  animation: orb-float-2 25s ease-in-out infinite;
+}
+
+/* Subtle dot grid for hero — more refined */
+.trama-cuadricula {
+  background-image: radial-gradient(circle, rgba(32, 150, 186, 0.08) 1px, transparent 1px);
+  background-size: 32px 32px;
+  mask-image: radial-gradient(ellipse 70% 60% at 50% 30%, black 20%, transparent 70%);
+}
+
+.dark .trama-cuadricula {
+  background-image: radial-gradient(circle, rgba(45, 168, 206, 0.12) 1px, transparent 1px);
+}
+
+/* Registro pattern for sponsors section */
+.trama-registro {
+  background-image:
+    linear-gradient(to right, rgb(255 255 255 / 0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(255 255 255 / 0.03) 1px, transparent 1px);
+  background-size: 32px 32px;
+  mask-image: radial-gradient(ellipse 80% 60% at 50% 50%, black 20%, transparent 70%);
+}
+
+/* Hover glow border — gradient border on hover */
+.hover-glow-border {
+  position: relative;
+}
+
+.hover-glow-border::after {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(135deg, rgba(32,150,186,0.5), transparent 40%, rgba(32,150,186,0.3));
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  -webkit-mask-composite: xor;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+}
+
+.hover-glow-border:hover::after {
+  opacity: 1;
+}
+
+/* Section divider with gradient */
+.section-divider {
+  height: 1px;
+  background: linear-gradient(to right, transparent, rgba(32, 150, 186, 0.2), transparent);
+}
+
+/* Floating animation for decorative elements */
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
