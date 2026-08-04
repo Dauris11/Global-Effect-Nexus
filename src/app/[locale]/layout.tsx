@@ -60,9 +60,14 @@ export default async function LocaleLayout({
       suppressHydrationWarning
       className={`${inter.variable} ${jetbrainsMono.variable}`}
     >
-      {/* Tema oscuro desactivado: la landing es blanca por ahora.
-          Para restaurar, descomentar el script anti-FOUC que aplica .dark
-          desde localStorage antes del primer paint. */}
+      {/* Anti-FOUC: aplica `.dark` antes del primer paint, leyendo la
+          preferencia guardada. Por defecto el tema es oscuro (incluida la
+          landing pública), salvo que la persona haya elegido claro antes. */}
+      <script
+        dangerouslySetInnerHTML={{
+          __html: `(function(){try{var t=localStorage.getItem("theme");if(t!=="light"){document.documentElement.classList.add("dark");}}catch(e){document.documentElement.classList.add("dark");}})();`,
+        }}
+      />
       <body>
         <NextIntlClientProvider messages={messages}>
           {children}

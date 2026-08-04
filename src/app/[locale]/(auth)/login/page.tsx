@@ -9,8 +9,8 @@ import { Logo } from "@/components/brand/logo";
 
 export default function LoginPage() {
   return (
-    // `tema-claro`: la puerta del sistema es pública, nunca en oscuro.
-    <main className="tema-claro grid min-h-screen lg:grid-cols-2">
+    // Respeta el tema global (oscuro por defecto, con toggle) igual que la landing.
+    <main className="grid min-h-screen lg:grid-cols-2">
       {/* Panel de marca (desktop) */}
       <div className="relative hidden flex-col justify-between overflow-hidden bg-brand-charcoal p-12 text-white lg:flex">
         {/* Halo de marca. El color sale del token, no de un rgba escrito aquí

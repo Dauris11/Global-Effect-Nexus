@@ -82,7 +82,7 @@ export default async function LandingPage() {
     }));
 
   return (
-    <div className="tema-claro flex min-h-screen flex-col">
+    <div className="flex min-h-screen flex-col">
       <Navbar />
 
       <Hero

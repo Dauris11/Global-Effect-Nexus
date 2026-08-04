@@ -43,7 +43,7 @@ export async function Labor() {
   const t = await getTranslations("landing");
 
   return (
-    <section id="labor" aria-labelledby="labor-title" className="bg-background py-20 md:py-28">
+    <section id="labor" aria-labelledby="labor-title" className="franja-oscura bg-background py-20 md:py-28">
       <div className="mx-auto max-w-6xl px-6">
         <Revelar>
           <SeccionEncabezado

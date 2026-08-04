@@ -28,6 +28,7 @@ import { Menu, X, ArrowRight, Clock } from "lucide-react";
 import { Link } from "@/i18n/navigation";
 import { Logo } from "@/components/brand/logo";
 import { SelectorIdioma } from "@/components/layout/selector-idioma";
+import { ThemeToggle } from "@/components/layout/theme-toggle";
 import { cn } from "@/lib/utils";
 
 const SECCIONES = [
@@ -179,6 +180,7 @@ export function Navbar() {
 
           <div className="flex shrink-0 items-center gap-3">
             <SelectorIdioma />
+            <ThemeToggle />
             <Link
               href="/login"
               className="group hidden items-center gap-1.5 rounded-full bg-primary px-5 py-2.5 text-base font-semibold text-primary-foreground transition duration-150 ease-out hover:bg-brand-teal-dark active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 sm:inline-flex"

@@ -40,7 +40,7 @@ export function PreguntasFrecuentes() {
     <section
       id="faq"
       aria-labelledby="faq-title"
-      className="border-t border-border bg-background py-20 md:py-28"
+      className="franja-clara border-t border-border bg-background py-20 md:py-28"
     >
       <div className="mx-auto max-w-6xl px-6">
         <SeccionEncabezado

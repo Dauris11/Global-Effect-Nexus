@@ -48,8 +48,8 @@ export default async function ComidaPage() {
   const dias = proximosDiasHabiles(5, locale);
 
   return (
-    // `tema-claro`: página pública, nunca en modo oscuro (globals.css).
-    <main className="tema-claro flex min-h-screen items-center justify-center bg-muted px-4 py-10">
+    // Respeta el tema global (oscuro por defecto, con toggle) igual que la landing.
+    <main className="flex min-h-screen items-center justify-center bg-muted px-4 py-10">
       <div className="w-full max-w-md space-y-6 rounded-xl border border-border bg-card p-8 shadow-sm">
         <Link
           href={`/${locale}`}

@@ -354,3 +354,86 @@
 .animate-float {
   animation: float 6s ease-in-out infinite;
 }
+
+/* ══════════════════════════════════════════════════════════════
+   Franjas fijas — bandas alternas de la landing pública.
+   ══════════════════════════════════════════════════════════════
+   La landing alterna secciones oscuras y claras a propósito, para
+   dar ritmo visual (Hero oscuro → Acceso claro → Labor oscuro → …).
+   Cada franja fija sus propios tokens semánticos, así que todo lo
+   que ya usa `bg-background`, `text-foreground`, `border-border`,
+   `bg-card`, etc. dentro de la sección se pinta correcto sin tocar
+   el interior de cada componente. El toggle claro/oscuro global
+   sigue afectando navbar y footer, pero NO estas franjas: son fijas
+   a propósito, para que el ritmo de bandas no dependa del tema. */
+.franja-oscura {
+  --background: #0A0E17;
+  --foreground: #F1F5F9;
+  --card: #141924;
+  --card-foreground: #F1F5F9;
+  --popover: #141924;
+  --popover-foreground: #F1F5F9;
+  --primary: #2DA8CE;
+  --primary-foreground: #FFFFFF;
+  --secondary: #1A1F2E;
+  --secondary-foreground: #F1F5F9;
+  --muted: #1A1F2E;
+  --muted-foreground: #8896A8;
+  --accent: #1A2435;
+  --accent-foreground: #F1F5F9;
+  --destructive: #DC2626;
+  --destructive-foreground: #FFFFFF;
+  --border: #232A3A;
+  --input: #232A3A;
+  --ring: #2DA8CE;
+  color-scheme: dark;
+}
+
+.franja-clara {
+  --background: #FFFFFF;
+  --foreground: #0A0F1A;
+  --card: #FFFFFF;
+  --card-foreground: #0A0F1A;
+  --popover: #FFFFFF;
+  --popover-foreground: #0A0F1A;
+  --primary: #2096BA;
+  --primary-foreground: #FFFFFF;
+  --secondary: #F1F5F9;
+  --secondary-foreground: #0F172A;
+  --muted: #F4F6F9;
+  --muted-foreground: #556274;
+  --accent: #F0F7FA;
+  --accent-foreground: #0F172A;
+  --destructive: #EF4444;
+  --destructive-foreground: #FFFFFF;
+  --border: #E4E9F0;
+  --input: #E4E9F0;
+  --ring: #2096BA;
+  color-scheme: light;
+}
+
+/* Igual que `.franja-clara` pero con fondo gris muy suave, para que
+   dos franjas claras seguidas (p. ej. Acceso y Eventos si se reordena)
+   no se sientan pegadas. */
+.franja-clara-alt {
+  --background: #F4F6F9;
+  --foreground: #0A0F1A;
+  --card: #FFFFFF;
+  --card-foreground: #0A0F1A;
+  --popover: #FFFFFF;
+  --popover-foreground: #0A0F1A;
+  --primary: #2096BA;
+  --primary-foreground: #FFFFFF;
+  --secondary: #E9EDF3;
+  --secondary-foreground: #0F172A;
+  --muted: #E9EDF3;
+  --muted-foreground: #556274;
+  --accent: #E5EEF2;
+  --accent-foreground: #0F172A;
+  --destructive: #EF4444;
+  --destructive-foreground: #FFFFFF;
+  --border: #DEE4EC;
+  --input: #DEE4EC;
+  --ring: #2096BA;
+  color-scheme: light;
+}

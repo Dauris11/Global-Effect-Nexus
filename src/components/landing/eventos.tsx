@@ -72,7 +72,7 @@ export function Eventos({ eventos }: { eventos: EventoPublico[] }) {
     <section
       id="eventos"
       aria-labelledby="eventos-title"
-      className="border-t border-border bg-card py-20 md:py-28"
+      className="franja-clara-alt border-t border-border bg-card py-20 md:py-28"
     >
       <div className="mx-auto max-w-6xl px-6">
         <Revelar>

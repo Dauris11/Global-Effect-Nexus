@@ -181,7 +181,7 @@ export function Hero({
   const conFoto = Boolean(s.imagen);
 
   return (
-    <section className="relative overflow-hidden border-b border-border bg-background animated-hero-bg">
+    <section className="franja-oscura relative overflow-hidden border-b border-border bg-background animated-hero-bg">
       {/* Cuadrícula de maqueta refinada. */}
       <div aria-hidden className="trama-cuadricula pointer-events-none absolute inset-0" />
       <div
