@@ -57,7 +57,7 @@ export async function Portales() {
   const t = await getTranslations("landing");
 
   return (
-    <div className="mt-16 border-t border-border pt-10">
+    <div>
       <p className="font-mono text-[11px] uppercase tracking-[0.12em] text-muted-foreground">
         {t("portalsLabel")}
       </p>
@@ -69,8 +69,8 @@ export async function Portales() {
               href={href}
               className="group flex h-full flex-col items-center gap-3 rounded-xl border border-border bg-card px-3 py-5 text-center transition-[transform,border-color,background-color] duration-150 ease-out hover:-translate-y-0.5 hover:border-primary/50 hover:bg-accent/40 active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
             >
-              <span className="flex size-11 items-center justify-center rounded-xl bg-primary/10 text-primary transition-transform duration-150 ease-out group-hover:scale-105">
-                <Icono className="size-5" strokeWidth={1.7} aria-hidden />
+              <span className="flex size-11 items-center justify-center rounded-xl bg-primary/10 text-primary transition-[transform,background-color] duration-200 ease-out group-hover:scale-110 group-hover:bg-primary/20">
+                <Icono className="size-5 transition-transform duration-200 ease-out group-hover:-translate-y-0.5 group-hover:scale-110" strokeWidth={1.7} aria-hidden />
               </span>
               <span className="text-[13px] font-semibold leading-tight text-foreground transition-colors duration-150 ease-out group-hover:text-primary">
                 {t(`portal_${clave}` as never)}

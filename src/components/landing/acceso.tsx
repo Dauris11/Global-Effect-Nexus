@@ -23,7 +23,6 @@ import { Link } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
 import { SeccionEncabezado } from "./seccion";
 import { Revelar } from "./revelar";
-import { Portales } from "./portales";
 
 const PUERTAS = [
   { clave: "portal", href: "/login", icono: LogIn, destacado: false },
@@ -68,13 +67,13 @@ export async function Acceso() {
                   <div className="flex items-center justify-between gap-3">
                     <span
                       className={cn(
-                        "flex size-14 items-center justify-center rounded-xl transition-transform duration-200 ease-out group-hover:scale-105",
+                        "flex size-14 items-center justify-center rounded-xl transition-[transform,background-color] duration-200 ease-out",
                         destacado
-                          ? "bg-brand-gold/20 text-brand-gold"
-                          : "bg-primary/10 text-primary",
+                          ? "bg-brand-gold/20 text-brand-gold group-hover:bg-brand-gold/30 group-hover:scale-110"
+                          : "bg-primary/10 text-primary group-hover:bg-primary/20 group-hover:scale-110",
                       )}
                     >
-                      <Icono className="size-7" strokeWidth={1.6} aria-hidden />
+                      <Icono className="size-7 transition-transform duration-200 ease-out group-hover:-translate-y-0.5 group-hover:scale-110" strokeWidth={1.6} aria-hidden />
                     </span>
                     <span
                       className={cn(
@@ -115,8 +114,6 @@ export async function Acceso() {
             </Revelar>
           ))}
         </ul>
-
-        <Portales />
       </div>
     </section>
   );

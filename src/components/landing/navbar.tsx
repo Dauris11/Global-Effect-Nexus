@@ -28,13 +28,12 @@ import { Menu, X, ArrowRight, Clock } from "lucide-react";
 import { Link } from "@/i18n/navigation";
 import { Logo } from "@/components/brand/logo";
 import { SelectorIdioma } from "@/components/layout/selector-idioma";
-import { ThemeToggle } from "@/components/layout/theme-toggle";
 import { cn } from "@/lib/utils";
 
 const SECCIONES = [
+  { href: "#patrocinio", clave: "navSponsors" },
   { href: "#acceso", clave: "navAccess" },
   { href: "#labor", clave: "navWork" },
-  { href: "#patrocinio", clave: "navSponsors" },
   { href: "#eventos", clave: "navEventos" },
   { href: "#faq", clave: "navFaq" },
 ] as const;
@@ -142,17 +141,17 @@ export function Navbar() {
           className={cn(
             "mx-auto flex max-w-6xl items-center justify-between gap-4 px-6",
             "transition-[height] duration-200 ease-out",
-            compacta ? "h-14" : "h-16",
+            compacta ? "h-16" : "h-20",
           )}
         >
           <Link href="/" aria-label="Global Effect" className="flex shrink-0 items-center">
-            <span className="flex items-center rounded-lg bg-brand-charcoal px-2.5 py-1.5 transition-opacity hover:opacity-95">
-              <Logo className={cn("w-auto transition-all duration-200", compacta ? "h-5" : "h-6")} priority />
+            <span className="flex items-center rounded-lg bg-brand-charcoal px-3 py-2 transition-opacity hover:opacity-95 shadow-md">
+              <Logo className={cn("w-auto transition-all duration-200", compacta ? "h-8" : "h-10")} priority />
             </span>
           </Link>
 
           {/* Navegación de escritorio */}
-          <nav className="hidden items-center gap-6 font-mono text-xs uppercase tracking-[0.12em] text-muted-foreground lg:flex">
+          <nav className="hidden items-center gap-8 font-mono text-[13px] uppercase tracking-[0.12em] text-muted-foreground lg:flex">
             {SECCIONES.map((s) => {
               const esActiva = activa === s.href;
               return (
@@ -180,7 +179,6 @@ export function Navbar() {
 
           <div className="flex shrink-0 items-center gap-3">
             <SelectorIdioma />
-            <ThemeToggle />
             <Link
               href="/login"
               className="group hidden items-center gap-1.5 rounded-full bg-primary px-5 py-2.5 text-base font-semibold text-primary-foreground transition duration-150 ease-out hover:bg-brand-teal-dark active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 sm:inline-flex"

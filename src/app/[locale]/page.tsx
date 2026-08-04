@@ -15,7 +15,9 @@
 import { getLocale, getTranslations } from "next-intl/server";
 import { Navbar } from "@/components/landing/navbar";
 import { Hero, type HeroSlide, type HeroDato } from "@/components/landing/hero";
+import { Portales } from "@/components/landing/portales";
 import { Labor } from "@/components/landing/labor";
+import { Patrocinio } from "@/components/landing/patrocinio";
 import { Eventos } from "@/components/landing/eventos";
 import { PreguntasFrecuentes } from "@/components/landing/preguntas-frecuentes";
 import { Acceso } from "@/components/landing/acceso";
@@ -45,25 +47,45 @@ export default async function LandingPage() {
   const heroSlides: HeroSlide[] =
     dbSlides.length > 0
       ? dbSlides.map((s) => ({
-          id: s.id,
-          tag: s.subtitulo,
-          titulo: s.titulo,
-          texto: s.texto,
-          imagen: s.imagen_url,
-          ctaLabel: s.cta_texto,
-          ctaHref: s.cta_enlace,
-        }))
+        id: s.id,
+        tag: s.subtitulo,
+        titulo: s.titulo,
+        texto: s.texto,
+        imagen: s.imagen_url,
+        ctaLabel: s.cta_texto,
+        ctaHref: s.cta_enlace,
+      }))
       : [
-          {
-            id: "principal",
-            titulo: t("heroTitle"),
-            texto: t("heroText"),
-            ctaLabel: t("heroCta"),
-            ctaHref: "/login",
-            cta2Label: t("heroCta2"),
-            cta2Href: "/comida",
-          },
-        ];
+        {
+          id: "principal",
+          tag: t("heroPlace"),
+          titulo: t("heroTitle"),
+          texto: t("heroText"),
+          imagen: "/hero-slide-1.png",
+          ctaLabel: t("heroCta"),
+          ctaHref: "/login",
+          cta2Label: t("heroCta2"),
+          cta2Href: "/comida",
+        },
+        {
+          id: "slide2",
+          tag: t("heroSlide2Tag"),
+          titulo: t("heroSlide2Title"),
+          texto: t("heroSlide2Text"),
+          imagen: "/hero-slide-2.png",
+          ctaLabel: t("heroCta"),
+          ctaHref: "/login",
+        },
+        {
+          id: "slide3",
+          tag: t("heroSlide3Tag"),
+          titulo: t("heroSlide3Title"),
+          texto: t("heroSlide3Text"),
+          imagen: "/hero-slide-3.png",
+          ctaLabel: t("heroCta"),
+          ctaHref: "/login",
+        },
+      ];
 
   /**
    * Cifras institucionales (estudiantes activos y materias abiertas).
@@ -92,6 +114,13 @@ export default async function LandingPage() {
         pieDatos={t("statsFootnote")}
       />
 
+      <section id="portales" className="border-b border-border bg-card/30 py-12">
+        <div className="mx-auto max-w-6xl px-6">
+          <Portales />
+        </div>
+      </section>
+
+      <Patrocinio />
       <Acceso />
       <Labor />
       <Eventos eventos={eventos} />
