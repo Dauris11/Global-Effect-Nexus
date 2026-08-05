@@ -28,19 +28,19 @@ export async function Patrocinio() {
         className="pointer-events-none absolute inset-0"
         style={{
           backgroundImage:
-            "radial-gradient(ellipse 80rem 50rem at 50% 100%, rgba(108,62,244,0.12) 0%, transparent 70%)",
+            "radial-gradient(ellipse 80rem 50rem at 50% 100%, rgba(29,78,216,0.12) 0%, transparent 70%)",
         }}
       />
       {/* Top line */}
       <div
         aria-hidden
-        className="pointer-events-none absolute left-1/2 top-0 h-px w-2/3 -translate-x-1/2 bg-gradient-to-r from-transparent via-[#6C3EF4]/40 to-transparent"
+        className="pointer-events-none absolute left-1/2 top-0 h-px w-2/3 -translate-x-1/2 bg-gradient-to-r from-transparent via-[#1d4ed8]/40 to-transparent"
       />
 
       <div className="relative mx-auto max-w-6xl px-6">
         {/* Header */}
         <div className="text-center">
-          <p className="mb-3 font-mono text-xs uppercase tracking-[0.2em] text-[#818cf8]">
+          <p className="mb-3 font-mono text-xs uppercase tracking-[0.2em] text-[#60a5fa]">
             {t("sponsorEyebrow")}
           </p>
           <h2
@@ -57,7 +57,7 @@ export async function Patrocinio() {
         {/* Chain label */}
         <div className="mt-16">
           <p className="mb-5 flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.2em] text-white/40">
-            <ShieldCheck className="size-3.5 text-[#818cf8]" aria-hidden />
+            <ShieldCheck className="size-3.5 text-[#60a5fa]" aria-hidden />
             {t("chainTitle")}
           </p>
 
@@ -70,7 +70,7 @@ export async function Patrocinio() {
                     "flex h-full flex-col justify-between rounded-2xl border p-6 transition-all duration-300 hover:-translate-y-0.5",
                     humano
                       ? "border-rose-400/25 bg-rose-400/[0.05] hover:border-rose-400/40 hover:bg-rose-400/[0.09]"
-                      : "border-white/8 bg-white/[0.03] hover:border-[#6C3EF4]/35 hover:bg-[#6C3EF4]/[0.06]",
+                      : "border-white/8 bg-white/[0.03] hover:border-[#1d4ed8]/35 hover:bg-[#1d4ed8]/[0.06]",
                   ].join(" ")}
                 >
                   {/* Icon + number */}
@@ -80,7 +80,7 @@ export async function Patrocinio() {
                         "flex size-12 items-center justify-center rounded-xl",
                         humano
                           ? "bg-rose-400/15 text-rose-400"
-                          : "bg-[#6C3EF4]/15 text-[#818cf8]",
+                          : "bg-[#1d4ed8]/15 text-[#60a5fa]",
                       ].join(" ")}
                     >
                       <Icono className="size-6" strokeWidth={1.5} aria-hidden />
@@ -123,7 +123,7 @@ export async function Patrocinio() {
             {COMPROMISOS.map((clave) => (
               <div key={clave} className="border-t border-white/8 pt-5">
                 <dt className="flex items-center gap-2 font-display text-base font-semibold text-white">
-                  <Check className="size-4 shrink-0 text-[#818cf8]" aria-hidden />
+                  <Check className="size-4 shrink-0 text-[#60a5fa]" aria-hidden />
                   {t(`sponsor_${clave}_title` as never)}
                 </dt>
                 <dd className="mt-2 text-sm leading-relaxed text-white/45">
@@ -135,7 +135,7 @@ export async function Patrocinio() {
 
           <Link
             href="/login"
-            className="group inline-flex shrink-0 items-center gap-2.5 rounded-full border border-[#6C3EF4]/50 bg-[#6C3EF4]/15 px-7 py-3.5 text-sm font-semibold text-white transition-all duration-200 hover:border-[#6C3EF4] hover:bg-[#6C3EF4] active:scale-[0.97]"
+            className="group inline-flex shrink-0 items-center gap-2.5 rounded-full border border-[#1d4ed8]/50 bg-[#1d4ed8]/15 px-7 py-3.5 text-sm font-semibold text-white transition-all duration-200 hover:border-[#1d4ed8] hover:bg-[#1d4ed8] active:scale-[0.97]"
           >
             {t("sponsorCta")}
             <ArrowRight className="size-4 transition-transform duration-150 group-hover:translate-x-0.5" aria-hidden />

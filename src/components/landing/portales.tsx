@@ -14,12 +14,12 @@ import {
 import { Link } from "@/i18n/navigation";
 
 const PORTALES = [
-  { clave: "estudiante",  href: "/portal/estudiante",  icono: GraduationCap, color: "#818cf8", glow: "rgba(129,140,248,0.35)" },
+  { clave: "estudiante",  href: "/portal/estudiante",  icono: GraduationCap, color: "#60a5fa", glow: "rgba(96,165,250,0.35)" },
   { clave: "docente",     href: "/portal/profesor",    icono: BookOpen,      color: "#34d399", glow: "rgba(52,211,153,0.30)"  },
   { clave: "panel",       href: "/dashboard",          icono: LayoutDashboard,color:"#fb7185", glow: "rgba(251,113,133,0.30)" },
   { clave: "expedientes", href: "/expedientes",        icono: Users,         color: "#fbbf24", glow: "rgba(251,191,36,0.30)"  },
   { clave: "academico",   href: "/academico/materias", icono: Library,       color: "#38bdf8", glow: "rgba(56,189,248,0.30)"  },
-  { clave: "calendario",  href: "/calendario",         icono: Calendar,      color: "#a78bfa", glow: "rgba(167,139,250,0.30)" },
+  { clave: "calendario",  href: "/calendario",         icono: Calendar,      color: "#a78bfa", glow: "rgba(96,165,250,0.30)" },
 ] as const;
 
 export async function Portales() {

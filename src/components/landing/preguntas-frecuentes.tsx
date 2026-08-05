@@ -39,13 +39,13 @@ export function PreguntasFrecuentes() {
       {/* Bottom glow */}
       <div
         aria-hidden
-        className="pointer-events-none absolute bottom-0 left-1/2 h-32 w-1/2 -translate-x-1/2 bg-[radial-gradient(ellipse,rgba(108,62,244,0.1),transparent_70%)]"
+        className="pointer-events-none absolute bottom-0 left-1/2 h-32 w-1/2 -translate-x-1/2 bg-[radial-gradient(ellipse,rgba(29,78,216,0.1),transparent_70%)]"
       />
 
       <div className="mx-auto max-w-6xl px-6">
         {/* Header */}
         <div className="text-center">
-          <p className="mb-3 font-mono text-xs uppercase tracking-[0.2em] text-[#818cf8]">
+          <p className="mb-3 font-mono text-xs uppercase tracking-[0.2em] text-[#60a5fa]">
             {t("faqEyebrow")}
           </p>
           <h2
@@ -73,7 +73,7 @@ export function PreguntasFrecuentes() {
                   className={cn(
                     "overflow-hidden rounded-2xl border transition-all duration-200",
                     isOpen
-                      ? "border-[#6C3EF4]/40 bg-[#6C3EF4]/[0.06] shadow-[0_0_40px_rgba(108,62,244,0.12)]"
+                      ? "border-[#1d4ed8]/40 bg-[#1d4ed8]/[0.06] shadow-[0_0_40px_rgba(29,78,216,0.12)]"
                       : "border-white/8 bg-white/[0.025] hover:border-white/15 hover:bg-white/[0.04]",
                   )}
                 >
@@ -82,7 +82,7 @@ export function PreguntasFrecuentes() {
                     onClick={() => toggle(clave)}
                     aria-expanded={isOpen}
                     aria-controls={`faq-answer-${clave}`}
-                    className="flex w-full items-center justify-between gap-4 px-6 py-5 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6C3EF4] focus-visible:ring-inset"
+                    className="flex w-full items-center justify-between gap-4 px-6 py-5 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1d4ed8] focus-visible:ring-inset"
                   >
                     <span className="font-display text-base font-semibold text-white md:text-lg">
                       {t(titleKey)}
@@ -91,7 +91,7 @@ export function PreguntasFrecuentes() {
                       className={cn(
                         "flex size-8 shrink-0 items-center justify-center rounded-full border transition-all duration-200",
                         isOpen
-                          ? "rotate-180 border-[#6C3EF4]/50 bg-[#6C3EF4]/20 text-[#818cf8]"
+                          ? "rotate-180 border-[#1d4ed8]/50 bg-[#1d4ed8]/20 text-[#60a5fa]"
                           : "border-white/10 bg-white/5 text-white/40",
                       )}
                     >

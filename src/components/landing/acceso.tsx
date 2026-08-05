@@ -25,13 +25,13 @@ export async function Acceso() {
       {/* Subtle top glow */}
       <div
         aria-hidden
-        className="pointer-events-none absolute left-1/2 top-0 h-px w-2/3 -translate-x-1/2 bg-gradient-to-r from-transparent via-[#6C3EF4]/50 to-transparent"
+        className="pointer-events-none absolute left-1/2 top-0 h-px w-2/3 -translate-x-1/2 bg-gradient-to-r from-transparent via-[#1d4ed8]/50 to-transparent"
       />
 
       <div className="mx-auto max-w-6xl px-6">
         {/* Section header */}
         <div className="text-center">
-          <p className="mb-3 font-mono text-xs uppercase tracking-[0.2em] text-[#818cf8]">
+          <p className="mb-3 font-mono text-xs uppercase tracking-[0.2em] text-[#60a5fa]">
             {t("accessEyebrow")}
           </p>
           <h2
@@ -51,10 +51,10 @@ export async function Acceso() {
                 className={cn(
                   "group relative flex h-full flex-col overflow-hidden rounded-2xl border p-7 transition-all duration-300 ease-out",
                   "hover:-translate-y-1 hover:shadow-[0_20px_60px_rgba(0,0,0,0.4)]",
-                  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6C3EF4]",
+                  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1d4ed8]",
                   destacado
                     ? "border-amber-400/25 bg-amber-400/[0.05] hover:border-amber-400/50 hover:bg-amber-400/[0.10]"
-                    : "border-white/8 bg-white/[0.03] hover:border-[#6C3EF4]/40 hover:bg-[#6C3EF4]/5",
+                    : "border-white/8 bg-white/[0.03] hover:border-[#1d4ed8]/40 hover:bg-[#1d4ed8]/5",
                 )}
               >
                 {/* Glow overlay on hover */}
@@ -64,7 +64,7 @@ export async function Acceso() {
                     "pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100",
                     destacado
                       ? "bg-[radial-gradient(ellipse_at_top,rgba(251,191,36,0.08),transparent_60%)]"
-                      : "bg-[radial-gradient(ellipse_at_top,rgba(108,62,244,0.1),transparent_60%)]",
+                      : "bg-[radial-gradient(ellipse_at_top,rgba(29,78,216,0.1),transparent_60%)]",
                   )}
                 />
 
@@ -76,7 +76,7 @@ export async function Acceso() {
                         "flex size-14 items-center justify-center rounded-xl transition-all duration-200 group-hover:scale-110",
                         destacado
                           ? "bg-amber-400/15 text-amber-400"
-                          : "bg-[#6C3EF4]/15 text-[#818cf8]",
+                          : "bg-[#1d4ed8]/15 text-[#60a5fa]",
                       )}
                     >
                       <Icono className="size-7" strokeWidth={1.5} aria-hidden />
@@ -116,7 +116,7 @@ export async function Acceso() {
                       "flex items-center gap-1.5 text-sm font-semibold transition-colors duration-200",
                       destacado
                         ? "text-amber-400 group-hover:text-amber-300"
-                        : "text-[#818cf8] group-hover:text-white",
+                        : "text-[#60a5fa] group-hover:text-white",
                     )}
                   >
                     {t(`access_${clave}_cta` as never)}

@@ -104,7 +104,7 @@ export default async function LandingPage() {
     }));
 
   return (
-    <div className="flex min-h-screen flex-col bg-[#080c14]">
+    <div className="flex min-h-screen flex-col bg-[#060d18]">
       <Navbar />
 
       <Hero
@@ -114,7 +114,7 @@ export default async function LandingPage() {
         pieDatos={t("statsFootnote")}
       />
 
-      <section id="portales" className="relative bg-[#0d1117] py-14">
+      <section id="portales" className="relative bg-[#0a1628] py-14">
         {/* Separator matching hero bottom */}
         <div
           aria-hidden

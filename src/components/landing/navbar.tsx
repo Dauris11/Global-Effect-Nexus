@@ -74,7 +74,7 @@ export function Navbar() {
           className="flex shrink-0 items-center transition-opacity duration-200 hover:opacity-90"
         >
           <Logo
-            className="h-9 w-auto brightness-0 invert drop-shadow-[0_0_12px_rgba(129,140,248,0.6)] transition-all duration-300 hover:drop-shadow-[0_0_20px_rgba(129,140,248,0.9)] md:h-10"
+            className="h-9 w-auto brightness-0 invert drop-shadow-[0_0_12px_rgba(96,165,250,0.6)] transition-all duration-300 hover:drop-shadow-[0_0_20px_rgba(96,165,250,0.9)] md:h-10"
             priority
           />
         </Link>
@@ -97,7 +97,7 @@ export function Navbar() {
               {active === href && (
                 <span
                   aria-hidden
-                  className="absolute -bottom-0.5 left-0 h-[2px] w-full rounded-full bg-[#6C3EF4]"
+                  className="absolute -bottom-0.5 left-0 h-[2px] w-full rounded-full bg-[#1d4ed8]"
                 />
               )}
             </a>
@@ -109,7 +109,7 @@ export function Navbar() {
           <SelectorIdioma />
           <Link
             href="/login"
-            className="hidden items-center gap-1.5 rounded-full border border-[#6C3EF4]/60 bg-[#6C3EF4]/15 px-5 py-2 text-sm font-semibold text-white transition-all duration-200 hover:bg-[#6C3EF4] hover:border-[#6C3EF4] active:scale-[0.97] sm:inline-flex"
+            className="hidden items-center gap-1.5 rounded-full border border-[#1d4ed8]/60 bg-[#1d4ed8]/15 px-5 py-2 text-sm font-semibold text-white transition-all duration-200 hover:bg-[#1d4ed8] hover:border-[#1d4ed8] active:scale-[0.97] sm:inline-flex"
           >
             {t("enter")}
             <ArrowRight className="size-3.5" aria-hidden />
@@ -144,7 +144,7 @@ export function Navbar() {
                   className={cn(
                     "block rounded-lg px-3 py-2.5 text-sm font-medium transition-colors",
                     active === href
-                      ? "bg-[#6C3EF4]/20 text-white"
+                      ? "bg-[#1d4ed8]/20 text-white"
                       : "text-white/60 hover:bg-white/5 hover:text-white",
                   )}
                 >
@@ -156,7 +156,7 @@ export function Navbar() {
               <Link
                 href="/login"
                 onClick={() => setOpen(false)}
-                className="flex items-center justify-center gap-2 rounded-full bg-[#6C3EF4] py-2.5 text-sm font-semibold text-white transition hover:bg-[#7B52F5]"
+                className="flex items-center justify-center gap-2 rounded-full bg-[#1d4ed8] py-2.5 text-sm font-semibold text-white transition hover:bg-[#2563eb]"
               >
                 {t("enter")} <ArrowRight className="size-4" />
               </Link>

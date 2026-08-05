@@ -6,7 +6,7 @@ import { getTranslations } from "next-intl/server";
 import { GraduationCap, Wrench, Brain, Utensils, Check, type LucideIcon } from "lucide-react";
 
 const PROGRAMAS: { clave: string; icono: LucideIcon; color: string; glow: string }[] = [
-  { clave: "scholarships", icono: GraduationCap, color: "#818cf8", glow: "rgba(108,62,244,0.15)" },
+  { clave: "scholarships", icono: GraduationCap, color: "#60a5fa", glow: "rgba(29,78,216,0.15)" },
   { clave: "training",     icono: Wrench,        color: "#34d399", glow: "rgba(52,211,153,0.12)"  },
   { clave: "wellbeing",    icono: Brain,          color: "#fb7185", glow: "rgba(251,113,133,0.12)" },
   { clave: "meals",        icono: Utensils,       color: "#fbbf24", glow: "rgba(251,191,36,0.12)"  },
@@ -28,7 +28,7 @@ export async function Labor() {
       <div className="mx-auto max-w-6xl px-6">
         {/* Header */}
         <div className="text-center">
-          <p className="mb-3 font-mono text-xs uppercase tracking-[0.2em] text-[#818cf8]">
+          <p className="mb-3 font-mono text-xs uppercase tracking-[0.2em] text-[#60a5fa]">
             {t("workEyebrow")}
           </p>
           <h2
