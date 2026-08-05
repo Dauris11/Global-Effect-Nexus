@@ -437,3 +437,11 @@
   --ring: #2096BA;
   color-scheme: light;
 }
+
+/* ── Hero nuevo: sección autónoma, sin depender de franja-oscura ── */
+.hero-new {
+  --foreground: #F8FAFC;
+  --muted-foreground: #94A3B8;
+  color-scheme: dark;
+}
+
