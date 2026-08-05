@@ -104,7 +104,7 @@ export default async function LandingPage() {
     }));
 
   return (
-    <div className="flex min-h-screen flex-col">
+    <div className="flex min-h-screen flex-col bg-[#080c14]">
       <Navbar />
 
       <Hero
@@ -114,7 +114,7 @@ export default async function LandingPage() {
         pieDatos={t("statsFootnote")}
       />
 
-      <section id="portales" className="border-b border-border bg-card/30 py-12">
+      <section id="portales" className="bg-[#0d1117] border-b border-white/5 py-12">
         <div className="mx-auto max-w-6xl px-6">
           <Portales />
         </div>
