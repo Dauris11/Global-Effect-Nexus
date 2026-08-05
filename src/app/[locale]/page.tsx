@@ -114,7 +114,12 @@ export default async function LandingPage() {
         pieDatos={t("statsFootnote")}
       />
 
-      <section id="portales" className="bg-[#0d1117] border-b border-white/5 py-12">
+      <section id="portales" className="relative bg-[#0d1117] py-14">
+        {/* Separator matching hero bottom */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute left-1/2 top-0 h-px w-3/4 -translate-x-1/2 bg-gradient-to-r from-transparent via-white/8 to-transparent"
+        />
         <div className="mx-auto max-w-6xl px-6">
           <Portales />
         </div>

@@ -1,36 +1,16 @@
 /**
- * Próximos eventos — del calendario institucional, con búsqueda y filtro.
- *
- * Qué se añadió sobre la versión anterior, que solo tenía un campo de texto:
- *
- * - **Filtro por tipo.** Los tipos salen de los eventos que realmente llegaron
- *   (`academico`, `administrativo`, `social`, `reunion`, `otro` en el enum de la
- *   BD), no de una lista fija: una pestaña que al pulsarla deja la rejilla vacía
- *   es una promesa incumplida. Cada pestaña lleva su conteo.
- * - **`@formkit/auto-animate` en la rejilla.** Al filtrar, las tarjetas que se
- *   van y las que se quedan se mueven en lugar de saltar. Es el caso exacto para
- *   el que el estándar lo recomienda (§7: reordenamientos y buscadores en vivo).
- * - **Distancia en días.** "Hoy", "Mañana", "En 5 días": el dato que uno busca al
- *   mirar un calendario, y que obligaba a calcular mentalmente desde la fecha.
- *   Hoy y mañana van en ámbar porque son los que exigen algo del lector.
- * - **Estado de "sin resultados" con salida.** Antes, filtrar hasta cero dejaba
- *   una rejilla vacía sin explicación ni forma de volver.
- *
- * El estado vacío original (la base no trae eventos) se conserva: es distinto de
- * "tu búsqueda no encontró nada" y merece otro texto.
+ * Eventos — calendario institucional con búsqueda y filtros.
+ * Rediseño completo: tema oscuro, tarjetas con acento púrpura, sin tokens viejos.
  */
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { useTranslations, useLocale } from "next-intl";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 import { MapPin, Search, Calendar as CalendarIcon, X } from "lucide-react";
 import type { EventoPublico } from "@/server/landing/types";
-import { SeccionEncabezado } from "./seccion";
-import { Revelar } from "./revelar";
 import { cn } from "@/lib/utils";
 
-/** Tipos del enum de `evento.tipo`. El orden es el de la cabecera del filtro. */
 const TIPOS = ["academico", "administrativo", "social", "reunion", "otro"] as const;
 
 export function Eventos({ eventos }: { eventos: EventoPublico[] }) {
@@ -41,11 +21,12 @@ export function Eventos({ eventos }: { eventos: EventoPublico[] }) {
   const [tipo, setTipo] = useState<string>("");
   const [rejilla] = useAutoAnimate<HTMLUListElement>();
 
-  const dia = new Intl.DateTimeFormat(locale, { day: "2-digit" });
-  const mes = new Intl.DateTimeFormat(locale, { month: "short" });
-  const diaSemana = new Intl.DateTimeFormat(locale, { weekday: "long" });
+  const fmt = {
+    dia:      new Intl.DateTimeFormat(locale, { day: "2-digit" }),
+    mes:      new Intl.DateTimeFormat(locale, { month: "short" }),
+    semana:   new Intl.DateTimeFormat(locale, { weekday: "long" }),
+  };
 
-  /** Solo los tipos presentes, con su conteo. Nada de pestañas que no filtran. */
   const pestanas = useMemo(() => {
     const conteo = new Map<string, number>();
     for (const e of eventos) conteo.set(e.tipo, (conteo.get(e.tipo) ?? 0) + 1);
@@ -63,80 +44,81 @@ export function Eventos({ eventos }: { eventos: EventoPublico[] }) {
   });
 
   const filtrando = busqueda.trim() !== "" || tipo !== "";
-  const limpiar = () => {
-    setBusqueda("");
-    setTipo("");
-  };
+  const limpiar = () => { setBusqueda(""); setTipo(""); };
 
   return (
     <section
       id="eventos"
       aria-labelledby="eventos-title"
-      className="franja-clara-alt border-t border-border bg-card py-20 md:py-28"
+      className="relative bg-[#0a0e1a] py-24 md:py-32"
     >
+      {/* Separator */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute left-1/2 top-0 h-px w-2/3 -translate-x-1/2 bg-gradient-to-r from-transparent via-white/8 to-transparent"
+      />
+
       <div className="mx-auto max-w-6xl px-6">
-        <Revelar>
-          <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
-            <SeccionEncabezado
-              idTitulo="eventos-title"
-              eyebrow={t("eyebrowCalendar")}
-              titulo={t("eventsTitle")}
-            />
-
-            {eventos.length > 0 && (
-              <div className="relative w-full md:w-72">
-                <Search
-                  className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground"
-                  aria-hidden
-                />
-                <input
-                  type="search"
-                  value={busqueda}
-                  onChange={(e) => setBusqueda(e.target.value)}
-                  placeholder={t("eventsSearchPlaceholder")}
-                  aria-label={t("eventsSearchPlaceholder")}
-                  className="w-full rounded-full border border-border bg-background py-2.5 pl-9 pr-4 text-sm font-medium transition-colors placeholder:text-muted-foreground focus-visible:border-primary/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                />
-              </div>
-            )}
+        {/* Header row */}
+        <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
+          <div>
+            <p className="mb-3 font-mono text-xs uppercase tracking-[0.2em] text-[#818cf8]">
+              {t("eyebrowCalendar")}
+            </p>
+            <h2
+              id="eventos-title"
+              className="font-display text-[clamp(2rem,5vw,3.5rem)] font-bold leading-tight text-white"
+            >
+              {t("eventsTitle")}
+            </h2>
           </div>
-        </Revelar>
 
-        {/* Filtro por tipo. Solo aparece si hay más de un tipo que separar. */}
+          {/* Search */}
+          {eventos.length > 0 && (
+            <div className="relative w-full md:w-72">
+              <Search
+                className="absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-white/30"
+                aria-hidden
+              />
+              <input
+                type="search"
+                value={busqueda}
+                onChange={(e) => setBusqueda(e.target.value)}
+                placeholder={t("eventsSearchPlaceholder")}
+                aria-label={t("eventsSearchPlaceholder")}
+                className="w-full rounded-full border border-white/10 bg-white/[0.04] py-2.5 pl-10 pr-4 text-sm font-medium text-white/80 placeholder:text-white/25 transition-colors focus-visible:border-[#6C3EF4]/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6C3EF4]/40 focus-visible:bg-white/[0.06]"
+              />
+            </div>
+          )}
+        </div>
+
+        {/* Filter tabs */}
         {pestanas.length > 1 && (
-          <div
-            className="mt-8 flex flex-wrap items-center gap-2"
-            role="group"
-            aria-label={t("eventsFilterLabel")}
-          >
-            <Pestana activa={tipo === ""} onClick={() => setTipo("")}>
-              {t("eventsFilterAll")}
-              <Conteo>{eventos.length}</Conteo>
-            </Pestana>
+          <div className="mt-8 flex flex-wrap items-center gap-2">
+            <FilterTab active={tipo === ""} onClick={() => setTipo("")}>
+              {t("eventsFilterAll")} <Badge>{eventos.length}</Badge>
+            </FilterTab>
             {pestanas.map(({ tipo: x, n }) => (
-              <Pestana key={x} activa={tipo === x} onClick={() => setTipo(tipo === x ? "" : x)}>
-                {t(`eventType_${x}` as never)}
-                <Conteo>{n}</Conteo>
-              </Pestana>
+              <FilterTab key={x} active={tipo === x} onClick={() => setTipo(tipo === x ? "" : x)}>
+                {t(`eventType_${x}` as never)} <Badge>{n}</Badge>
+              </FilterTab>
             ))}
           </div>
         )}
 
+        {/* Empty state — no events from DB */}
         {eventos.length === 0 ? (
-          /* La base no tiene nada agendado: estado institucional explicativo. */
-          <Revelar>
-            <div className="mx-auto mt-12 max-w-2xl rounded-xl border border-border bg-background p-8 text-center">
-              <div className="mx-auto flex size-14 items-center justify-center rounded-full bg-primary/10 text-primary">
-                <CalendarIcon className="size-7" aria-hidden />
-              </div>
-              <h3 className="mt-4 font-display text-xl font-semibold text-foreground">
-                {t("eventsEmptyTitle")}
-              </h3>
-              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-                {t("eventsEmptyDesc")}
-              </p>
+          <div className="mx-auto mt-12 max-w-2xl rounded-2xl border border-white/8 bg-white/[0.03] p-10 text-center">
+            <div className="mx-auto flex size-14 items-center justify-center rounded-full bg-[#6C3EF4]/15 text-[#818cf8]">
+              <CalendarIcon className="size-7" aria-hidden />
             </div>
-          </Revelar>
+            <h3 className="mt-4 font-display text-xl font-semibold text-white">
+              {t("eventsEmptyTitle")}
+            </h3>
+            <p className="mt-2 text-sm leading-relaxed text-white/40">
+              {t("eventsEmptyDesc")}
+            </p>
+          </div>
         ) : (
           <>
             <ul ref={rejilla} className="mt-8 grid gap-4 md:grid-cols-2">
@@ -144,34 +126,41 @@ export function Eventos({ eventos }: { eventos: EventoPublico[] }) {
                 const fecha = partirFecha(e.fecha);
                 if (!fecha) return null;
                 const dias = diasHasta(fecha);
+                const urgente = dias <= 1;
 
                 return (
                   <li key={e.id}>
-                    <article className="flex h-full items-center gap-5 rounded-xl border border-border bg-background p-5 transition-all duration-200 ease-out hover:-translate-y-0.5 hover:border-primary/40 hover:shadow-flotante">
+                    <article className="flex h-full items-center gap-5 rounded-2xl border border-white/8 bg-white/[0.025] p-5 transition-all duration-300 hover:-translate-y-0.5 hover:border-[#6C3EF4]/35 hover:bg-[#6C3EF4]/[0.04] hover:shadow-[0_12px_40px_rgba(0,0,0,0.3)]">
+                      {/* Date block */}
                       <div
-                        className="flex size-16 shrink-0 flex-col items-center justify-center rounded-lg border border-border bg-card shadow-plana"
+                        className={cn(
+                          "flex size-16 shrink-0 flex-col items-center justify-center rounded-xl border",
+                          urgente
+                            ? "border-amber-400/30 bg-amber-400/10 text-amber-400"
+                            : "border-white/10 bg-white/[0.04] text-white",
+                        )}
                         aria-hidden
                       >
-                        <span className="font-mono text-3xl font-bold leading-none tabular-nums text-foreground">
-                          {dia.format(fecha)}
+                        <span className="font-mono text-2xl font-bold leading-none tabular-nums">
+                          {fmt.dia.format(fecha)}
                         </span>
-                        <span className="mt-1 font-mono text-xs font-semibold uppercase tracking-[0.12em] text-primary">
-                          {mes.format(fecha).replace(".", "")}
+                        <span className="mt-1 font-mono text-[10px] font-semibold uppercase tracking-[0.12em] text-[#818cf8]">
+                          {fmt.mes.format(fecha).replace(".", "")}
                         </span>
                       </div>
 
                       <div className="min-w-0 flex-1">
                         <span className="sr-only">
-                          {diaSemana.format(fecha)} {dia.format(fecha)} {mes.format(fecha)}.{" "}
+                          {fmt.semana.format(fecha)} {fmt.dia.format(fecha)} {fmt.mes.format(fecha)}.{" "}
                         </span>
 
                         <div className="flex flex-wrap items-center gap-2">
                           <span
                             className={cn(
-                              "rounded-full px-2.5 py-0.5 font-mono text-xs font-semibold uppercase tracking-[0.1em]",
-                              dias <= 1
-                                ? "bg-brand-gold/15 text-brand-gold"
-                                : "bg-muted text-muted-foreground",
+                              "rounded-full px-2.5 py-0.5 font-mono text-[10px] font-semibold uppercase tracking-[0.1em]",
+                              urgente
+                                ? "bg-amber-400/15 text-amber-400"
+                                : "bg-white/6 text-white/35",
                             )}
                           >
                             {dias <= 0
@@ -180,17 +169,17 @@ export function Eventos({ eventos }: { eventos: EventoPublico[] }) {
                                 ? t("eventsTomorrow")
                                 : t("eventsInDays", { n: dias })}
                           </span>
-                          <span className="font-mono text-xs uppercase tracking-[0.1em] text-muted-foreground/70">
+                          <span className="font-mono text-[10px] uppercase tracking-[0.1em] text-white/25">
                             {t(`eventType_${TIPOS.includes(e.tipo as never) ? e.tipo : "otro"}` as never)}
                           </span>
                         </div>
 
-                        <h3 className="mt-1.5 truncate font-display text-xl font-semibold text-foreground">
+                        <h3 className="mt-1.5 truncate font-display text-base font-semibold text-white">
                           {e.titulo}
                         </h3>
                         {e.ubicacion && (
-                          <p className="mt-1 flex items-center gap-1.5 font-mono text-sm text-muted-foreground">
-                            <MapPin className="size-3.5 shrink-0 text-primary/70" aria-hidden />
+                          <p className="mt-1 flex items-center gap-1.5 text-xs text-white/35">
+                            <MapPin className="size-3 shrink-0 text-[#818cf8]" aria-hidden />
                             <span className="truncate">{e.ubicacion}</span>
                           </p>
                         )}
@@ -201,14 +190,14 @@ export function Eventos({ eventos }: { eventos: EventoPublico[] }) {
               })}
             </ul>
 
-            {/* Filtró hasta cero: se explica y se ofrece la salida. */}
+            {/* Filtered to zero */}
             {filtrados.length === 0 && (
-              <div className="mt-8 rounded-xl border border-dashed border-border bg-background p-8 text-center">
-                <p className="text-base font-medium text-foreground">{t("eventsNoResults")}</p>
+              <div className="mt-8 rounded-2xl border border-dashed border-white/10 bg-white/[0.02] p-8 text-center">
+                <p className="text-sm font-medium text-white/50">{t("eventsNoResults")}</p>
                 <button
                   type="button"
                   onClick={limpiar}
-                  className="mt-4 inline-flex items-center gap-1.5 rounded-full border border-border bg-card px-4 py-2 text-sm font-semibold transition-colors hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                  className="mt-4 inline-flex items-center gap-1.5 rounded-full border border-white/15 bg-white/5 px-4 py-2 text-xs font-semibold text-white/60 transition-colors hover:bg-white/10 hover:text-white"
                 >
                   <X className="size-3.5" aria-hidden />
                   {t("eventsClear")}
@@ -219,7 +208,7 @@ export function Eventos({ eventos }: { eventos: EventoPublico[] }) {
             {filtrando && filtrados.length > 0 && (
               <p
                 aria-live="polite"
-                className="mt-6 font-mono text-xs uppercase tracking-[0.12em] text-muted-foreground"
+                className="mt-6 font-mono text-[10px] uppercase tracking-[0.15em] text-white/30"
               >
                 {t("eventsCount", { n: filtrados.length, total: eventos.length })}
               </p>
@@ -231,12 +220,12 @@ export function Eventos({ eventos }: { eventos: EventoPublico[] }) {
   );
 }
 
-function Pestana({
-  activa,
+function FilterTab({
+  active,
   onClick,
   children,
 }: {
-  activa: boolean;
+  active: boolean;
   onClick: () => void;
   children: React.ReactNode;
 }) {
@@ -244,13 +233,13 @@ function Pestana({
     <button
       type="button"
       onClick={onClick}
-      aria-pressed={activa}
+      aria-pressed={active}
       className={cn(
-        "inline-flex items-center gap-2 rounded-full border px-4 py-2 font-mono text-xs uppercase tracking-[0.1em] transition-all duration-150 ease-out",
-        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
-        activa
-          ? "border-primary bg-primary text-primary-foreground shadow-plana"
-          : "border-border bg-background text-muted-foreground hover:border-primary/40 hover:text-foreground",
+        "inline-flex items-center gap-1.5 rounded-full border px-4 py-1.5 font-mono text-[10px] uppercase tracking-[0.12em] transition-all duration-150",
+        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6C3EF4]",
+        active
+          ? "border-[#6C3EF4] bg-[#6C3EF4] text-white shadow-[0_0_20px_rgba(108,62,244,0.35)]"
+          : "border-white/10 bg-white/[0.03] text-white/40 hover:border-white/20 hover:text-white/70",
       )}
     >
       {children}
@@ -258,25 +247,20 @@ function Pestana({
   );
 }
 
-function Conteo({ children }: { children: React.ReactNode }) {
+function Badge({ children }: { children: React.ReactNode }) {
   return (
-    <span className="rounded-full bg-current/15 px-1.5 font-semibold tabular-nums">
+    <span className="rounded-full bg-current/15 px-1.5 font-semibold tabular-nums text-[9px]">
       {children}
     </span>
   );
 }
 
-/**
- * `YYYY-MM-DD` → `Date` al mediodía local: `new Date("2026-08-12")` se lee como
- * UTC y en América retrocede un día.
- */
 function partirFecha(iso: string): Date | null {
   const [a, m, d] = iso.split("-").map(Number);
   if (!a || !m || !d) return null;
   return new Date(a, m - 1, d, 12);
 }
 
-/** Días de calendario que faltan, comparando mediodías para ignorar la hora. */
 function diasHasta(fecha: Date): number {
   const hoy = new Date();
   hoy.setHours(12, 0, 0, 0);
