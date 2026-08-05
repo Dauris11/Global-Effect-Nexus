@@ -27,6 +27,7 @@ import { getTranslations } from "next-intl/server";
 import { ArrowRight, Receipt, GraduationCap, User, ShieldCheck, Check } from "lucide-react";
 import { Link } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
+import { SeccionEncabezado } from "./seccion";
 import { Revelar } from "./revelar";
 
 /** Los tres compromisos verificables, no promesas de marketing. */
@@ -46,148 +47,108 @@ export async function Patrocinio() {
     <section
       id="patrocinio"
       aria-labelledby="patrocinio-title"
-      className="franja-oscura relative overflow-hidden bg-background py-24 md:py-32"
+      className="relative overflow-hidden bg-brand-charcoal py-20 md:py-28"
     >
-      {/* High-end decorative background glows */}
-      <div aria-hidden className="trama-registro absolute inset-0 opacity-[0.25] pointer-events-none" />
-      <div
-        aria-hidden
-        className="pointer-events-none absolute -left-40 top-1/4 size-[600px] rounded-full bg-primary/10 blur-[130px]"
-      />
-      <div
-        aria-hidden
-        className="pointer-events-none absolute -right-40 bottom-1/4 size-[600px] rounded-full bg-brand-accent/10 blur-[130px]"
-      />
+      <div aria-hidden className="trama-registro absolute inset-0" />
 
       <div className="relative mx-auto max-w-6xl px-6">
-        <div className="grid gap-16 lg:grid-cols-2 lg:gap-20">
-          
-          {/* Left Column: Headers, Commitments, CTA */}
-          <div className="flex flex-col justify-center">
-            <Revelar>
-              <div className="flex items-center gap-2.5">
-                <span className="h-px w-6 bg-primary" />
-                <p className="font-mono text-xs font-semibold uppercase tracking-[0.2em] text-primary">
-                  {t("sponsorEyebrow")}
-                </p>
-              </div>
-            </Revelar>
+        <Revelar>
+          <SeccionEncabezado
+            idTitulo="patrocinio-title"
+            tono="oscuro"
+            eyebrow={t("sponsorEyebrow")}
+            titulo={t("sponsorTitle")}
+            intro={t("sponsorIntro")}
+          />
+        </Revelar>
 
-            <Revelar delay={0.06}>
-              <h2
-                id="patrocinio-title"
-                className="mt-6 font-display text-4xl font-bold leading-tight tracking-tight text-white md:text-5xl"
-              >
-                {t("sponsorTitle")}
-              </h2>
-            </Revelar>
+        <div className="mt-14">
+          <p className="mb-4 flex items-center gap-2 font-mono text-xs uppercase tracking-[0.15em] text-white/60">
+            <ShieldCheck className="size-4 text-primary" aria-hidden />
+            {t("chainTitle")}
+          </p>
 
-            <Revelar delay={0.12}>
-              <p className="mt-6 text-lg leading-relaxed text-white/70">
-                {t("sponsorIntro")}
-              </p>
-            </Revelar>
-
-            {/* Commitments List */}
-            <ul className="mt-10 space-y-6">
-              {COMPROMISOS.map((clave, index) => (
-                <Revelar key={clave} delay={0.15 + index * 0.05}>
-                  <div className="group flex items-start gap-4 rounded-xl border border-white/5 bg-white/[0.01] p-5 backdrop-blur-sm transition-all duration-300 hover:border-white/10 hover:bg-white/[0.03]">
-                    <span className="flex size-6 shrink-0 items-center justify-center rounded-full bg-emerald-500/10 text-emerald-400 transition-colors group-hover:bg-emerald-500/20">
-                      <Check className="size-3.5" aria-hidden />
-                    </span>
-                    <div>
-                      <h4 className="font-display text-base font-semibold text-white">
-                        {t(`sponsor_${clave}_title` as never)}
-                      </h4>
-                      <p className="mt-1 text-sm leading-relaxed text-white/50">
-                        {t(`sponsor_${clave}_desc` as never)}
-                      </p>
-                    </div>
-                  </div>
-                </Revelar>
-              ))}
-            </ul>
-
-            <Revelar delay={0.35} className="mt-10">
-              <Link
-                href="/login"
-                className="inline-flex items-center justify-center gap-2.5 rounded-full bg-gradient-to-r from-primary to-brand-teal px-8 py-4.5 text-base font-semibold text-white shadow-lg shadow-primary/10 transition-all duration-300 hover:shadow-primary/20 hover:brightness-110 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-brand-charcoal"
-              >
-                {t("sponsorCta")}
-                <ArrowRight className="size-4" aria-hidden />
-              </Link>
-            </Revelar>
-          </div>
-
-          {/* Right Column: Interactive Vertical Timeline */}
-          <div className="relative flex flex-col justify-center">
-            <Revelar delay={0.1}>
-              <div className="mb-8 flex items-center gap-2.5">
-                <span className="flex size-6 items-center justify-center rounded-full bg-primary/15 text-primary">
-                  <ShieldCheck className="size-3.5" aria-hidden />
-                </span>
-                <p className="font-mono text-xs font-semibold uppercase tracking-[0.15em] text-white/50">
-                  {t("chainTitle")}
-                </p>
-              </div>
-            </Revelar>
-
-            {/* Vertical Line Container */}
-            <div className="relative pl-10 sm:pl-12">
-              {/* Vertical timeline line */}
-              <div
-                aria-hidden
-                className="absolute left-[23px] sm:left-[27px] top-4 bottom-4 w-[2px] bg-gradient-to-b from-primary via-primary/50 to-brand-accent/30"
-              />
-
-              <ol className="space-y-10">
-                {CADENA.map(({ clave, icono: Icono, humano }, i) => (
-                  <Revelar key={clave} delay={0.15 + i * 0.1}>
-                    <div className="group relative flex gap-6 sm:gap-8">
-                      {/* Timeline Icon Badge */}
+          <ol className="grid gap-4 sm:grid-cols-3">
+            {CADENA.map(({ clave, icono: Icono, humano }, i) => (
+              <Revelar key={clave} como="li" retardo={0.08 * i} className="group relative">
+                <div
+                  className={cn(
+                    "flex h-full flex-col justify-between rounded-xl border p-6",
+                    "transition-all duration-200 ease-out hover:-translate-y-0.5",
+                    humano
+                      ? "border-brand-accent/40 bg-brand-accent/[0.09] hover:bg-brand-accent/[0.14]"
+                      : "border-white/15 bg-white/[0.04] hover:bg-white/[0.08]",
+                  )}
+                >
+                  <div>
+                    <div className="mb-4 flex items-center justify-between">
                       <span
                         className={cn(
-                          "absolute -left-[37px] sm:-left-[41px] top-1.5 flex size-12 items-center justify-center rounded-full border shadow-md transition-all duration-300 group-hover:scale-110",
+                          "flex size-12 items-center justify-center rounded-xl",
                           humano
-                            ? "border-brand-accent/30 bg-brand-charcoal text-brand-accent group-hover:border-brand-accent group-hover:bg-brand-accent/10"
-                            : "border-primary/30 bg-brand-charcoal text-primary group-hover:border-primary group-hover:bg-primary/10",
+                            ? "bg-brand-accent/20 text-brand-accent"
+                            : "bg-white/10 text-white/90",
                         )}
                       >
-                        <Icono className="size-5 transition-transform duration-300" strokeWidth={1.8} aria-hidden />
+                        <Icono className="size-6" strokeWidth={1.7} aria-hidden />
                       </span>
-
-                      {/* Card Content */}
-                      <div
-                        className={cn(
-                          "flex-1 rounded-2xl border p-6 backdrop-blur-md transition-all duration-300",
-                          humano
-                            ? "border-brand-accent/15 bg-brand-accent/[0.02] hover:border-brand-accent/40 hover:bg-brand-accent/[0.06] hover:shadow-[0_0_30px_rgba(239,97,81,0.1)]"
-                            : "border-white/5 bg-white/[0.01] hover:border-primary/30 hover:bg-primary/[0.02] hover:shadow-[0_0_30px_rgba(20,184,166,0.08)]",
-                        )}
-                      >
-                        <div className="flex items-center justify-between gap-4">
-                          <span className="font-mono text-[10px] font-semibold uppercase tracking-[0.15em] text-white/40">
-                            {t(`chain_${clave}_label` as never)}
-                          </span>
-                          <span className="font-mono text-xs font-semibold text-white/30">
-                            0{i + 1}
-                          </span>
-                        </div>
-                        <h3 className="mt-2 text-lg font-bold text-white tracking-tight">
-                          {t(`chain_${clave}_value` as never)}
-                        </h3>
-                        <p className="mt-2.5 text-sm leading-relaxed text-white/50">
-                          {t(`chain_${clave}_detail` as never)}
-                        </p>
-                      </div>
+                      {/* El orden importa aquí: es una secuencia, no un catálogo. */}
+                      <span className="font-mono text-sm font-semibold tabular-nums text-white/60">
+                        {String(i + 1).padStart(2, "0")}
+                      </span>
                     </div>
-                  </Revelar>
-                ))}
-              </ol>
-            </div>
-          </div>
 
+                    <p className="font-mono text-xs uppercase tracking-[0.14em] text-white/60">
+                      {t(`chain_${clave}_label` as never)}
+                    </p>
+                    <p className="mt-1 text-lg font-semibold text-white">
+                      {t(`chain_${clave}_value` as never)}
+                    </p>
+                  </div>
+
+                  <p className="mt-4 border-t border-white/10 pt-3 text-sm leading-relaxed text-white/65">
+                    {t(`chain_${clave}_detail` as never)}
+                  </p>
+                </div>
+
+                {/* Eslabón: no se dibuja tras el último. */}
+                {i < CADENA.length - 1 && (
+                  <div
+                    aria-hidden
+                    className="absolute -right-3 top-1/2 z-10 hidden -translate-y-1/2 sm:block"
+                  >
+                    <div className="flex size-6 items-center justify-center rounded-full border border-white/20 bg-brand-charcoal text-white/60 transition-transform duration-200 ease-out group-hover:translate-x-0.5 group-hover:text-white">
+                      <ArrowRight className="size-3" />
+                    </div>
+                  </div>
+                )}
+              </Revelar>
+            ))}
+          </ol>
+        </div>
+
+        <div className="mt-16 grid gap-10 md:grid-cols-[1fr_auto] md:items-end">
+          <dl className="grid gap-x-8 gap-y-8 sm:grid-cols-3">
+            {COMPROMISOS.map((clave) => (
+              <div key={clave} className="border-t border-white/15 pt-5">
+                <dt className="flex items-center gap-2 font-display text-xl font-semibold text-white">
+                  <Check className="size-4 shrink-0 text-primary" aria-hidden />
+                  {t(`sponsor_${clave}_title` as never)}
+                </dt>
+                <dd className="mt-2 text-base leading-relaxed text-white/65">
+                  {t(`sponsor_${clave}_desc` as never)}
+                </dd>
+              </div>
+            ))}
+          </dl>
+
+          <Link
+            href="/login"
+            className="inline-flex shrink-0 items-center justify-center gap-2 rounded-full bg-white px-7 py-4 text-base font-semibold text-brand-charcoal transition duration-150 ease-out hover:bg-white/90 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-brand-charcoal"
+          >
+            {t("sponsorCta")}
+            <ArrowRight className="size-4" aria-hidden />
+          </Link>
         </div>
       </div>
     </section>
