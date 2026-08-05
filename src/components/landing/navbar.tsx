@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 import { Menu, X, ArrowRight } from "lucide-react";
 import { Link } from "@/i18n/navigation";
+import { Logo } from "@/components/brand/logo";
 import { SelectorIdioma } from "@/components/layout/selector-idioma";
 import { cn } from "@/lib/utils";
 
@@ -66,18 +67,16 @@ export function Navbar() {
     >
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-6 px-6 lg:h-[72px]">
 
-        {/* Logo */}
+        {/* Logo — prominente como Amazon */}
         <Link
           href="/"
           aria-label="Global Effect"
-          className="flex shrink-0 items-center gap-2.5 group"
+          className="flex shrink-0 items-center transition-opacity duration-200 hover:opacity-90"
         >
-          <span className="flex size-9 items-center justify-center rounded-xl bg-[#6C3EF4]/20 border border-[#6C3EF4]/40 text-white font-bold text-lg tracking-tight transition-all duration-200 group-hover:bg-[#6C3EF4]/35">
-            G
-          </span>
-          <span className="hidden text-sm font-semibold text-white/90 sm:block tracking-wide">
-            Global Effect
-          </span>
+          <Logo
+            className="h-9 w-auto brightness-0 invert drop-shadow-[0_0_12px_rgba(129,140,248,0.6)] transition-all duration-300 hover:drop-shadow-[0_0_20px_rgba(129,140,248,0.9)] md:h-10"
+            priority
+          />
         </Link>
 
         {/* Desktop nav */}
