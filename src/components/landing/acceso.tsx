@@ -1,33 +1,16 @@
 /**
- * Banda de acceso — Las tres puertas que existen de verdad.
- *
- * Es la sección más importante de la página: el visitante llega para entrar a
- * algún sitio, y aquí se decide a cuál. Por eso es la primera después del hero y
- * por eso cada tarjeta es un enlace completo, no una tarjeta con un enlace
- * dentro (el objetivo táctil es toda la ficha, §8).
- *
- * Cambios sobre la versión anterior:
- *
- * - **Las fichas se levantan al apuntarlas** (`-translate-y-0.5` + sombra
- *   flotante). Es la señal de "esto se puede pulsar", y en una rejilla de tres
- *   enlaces idénticos en forma es la única forma barata de decirlo.
- * - **Entrada en cascada al aparecer** (`Revelar`, 60ms entre fichas). El
- *   contenido sigue siendo de servidor: `Revelar` solo envuelve.
- * - **La ficha del comedor lleva su cuenta atrás real.** El ámbar ya la
- *   distinguía; ahora además dice la ventana horaria en el pie, que es el dato
- *   que decide si sirve pulsarla.
+ * Sección de acceso — las tres puertas de entrada al sistema.
+ * Rediseño completo: tema oscuro, acento púrpura, glassmorphism.
  */
 import { getTranslations } from "next-intl/server";
 import { ArrowRight, LogIn, Utensils, CalendarPlus, Clock } from "lucide-react";
 import { Link } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
-import { SeccionEncabezado } from "./seccion";
-import { Revelar } from "./revelar";
 
 const PUERTAS = [
-  { clave: "portal", href: "/login", icono: LogIn, destacado: false },
-  { clave: "meals", href: "/comida", icono: Utensils, destacado: true },
-  { clave: "appointment", href: "/login", icono: CalendarPlus, destacado: false },
+  { clave: "portal",      href: "/login",   icono: LogIn,       destacado: false },
+  { clave: "meals",       href: "/comida",  icono: Utensils,    destacado: true  },
+  { clave: "appointment", href: "/login",   icono: CalendarPlus,destacado: false },
 ] as const;
 
 export async function Acceso() {
@@ -37,81 +20,117 @@ export async function Acceso() {
     <section
       id="acceso"
       aria-labelledby="acceso-title"
-      className="franja-clara border-t border-border bg-background py-20 md:py-28"
+      className="relative overflow-hidden bg-[#0a0e1a] py-24 md:py-32"
     >
-      <div className="mx-auto max-w-6xl px-6">
-        <Revelar>
-          <SeccionEncabezado
-            idTitulo="acceso-title"
-            eyebrow={t("accessEyebrow")}
-            titulo={t("accessTitle")}
-            intro={t("accessIntro")}
-          />
-        </Revelar>
+      {/* Subtle top glow */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute left-1/2 top-0 h-px w-2/3 -translate-x-1/2 bg-gradient-to-r from-transparent via-[#6C3EF4]/50 to-transparent"
+      />
 
-        <ul className="mt-12 grid gap-6 sm:grid-cols-3">
-          {PUERTAS.map(({ clave, href, icono: Icono, destacado }, i) => (
-            <Revelar key={clave} como="li" retardo={0.06 * i}>
+      <div className="mx-auto max-w-6xl px-6">
+        {/* Section header */}
+        <div className="text-center">
+          <p className="mb-3 font-mono text-xs uppercase tracking-[0.2em] text-[#818cf8]">
+            {t("accessEyebrow")}
+          </p>
+          <h2
+            id="acceso-title"
+            className="font-display text-[clamp(2rem,5vw,3.5rem)] font-bold leading-tight text-white"
+          >
+            {t("accessTitle")}
+          </h2>
+        </div>
+
+        {/* Cards */}
+        <ul className="mt-14 grid gap-5 sm:grid-cols-3">
+          {PUERTAS.map(({ clave, href, icono: Icono, destacado }) => (
+            <li key={clave}>
               <Link
                 href={href}
                 className={cn(
-                  "group flex h-full flex-col justify-between rounded-xl border bg-card p-7 shadow-plana",
-                  "transition-all duration-200 ease-out hover:-translate-y-0.5 hover:shadow-flotante",
-                  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+                  "group relative flex h-full flex-col overflow-hidden rounded-2xl border p-7 transition-all duration-300 ease-out",
+                  "hover:-translate-y-1 hover:shadow-[0_20px_60px_rgba(0,0,0,0.4)]",
+                  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#6C3EF4]",
                   destacado
-                    ? "border-brand-gold/50 bg-brand-gold/[0.06] hover:border-brand-gold hover:bg-brand-gold/[0.12]"
-                    : "border-border hover:border-primary/50 hover:bg-accent/40",
+                    ? "border-amber-400/25 bg-amber-400/[0.05] hover:border-amber-400/50 hover:bg-amber-400/[0.10]"
+                    : "border-white/8 bg-white/[0.03] hover:border-[#6C3EF4]/40 hover:bg-[#6C3EF4]/5",
                 )}
               >
-                <div>
+                {/* Glow overlay on hover */}
+                <div
+                  aria-hidden
+                  className={cn(
+                    "pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100",
+                    destacado
+                      ? "bg-[radial-gradient(ellipse_at_top,rgba(251,191,36,0.08),transparent_60%)]"
+                      : "bg-[radial-gradient(ellipse_at_top,rgba(108,62,244,0.1),transparent_60%)]",
+                  )}
+                />
+
+                <div className="relative">
+                  {/* Icon + tag row */}
                   <div className="flex items-center justify-between gap-3">
                     <span
                       className={cn(
-                        "flex size-14 items-center justify-center rounded-xl transition-[transform,background-color] duration-200 ease-out",
+                        "flex size-14 items-center justify-center rounded-xl transition-all duration-200 group-hover:scale-110",
                         destacado
-                          ? "bg-brand-gold/20 text-brand-gold group-hover:bg-brand-gold/30 group-hover:scale-110"
-                          : "bg-primary/10 text-primary group-hover:bg-primary/20 group-hover:scale-110",
+                          ? "bg-amber-400/15 text-amber-400"
+                          : "bg-[#6C3EF4]/15 text-[#818cf8]",
                       )}
                     >
-                      <Icono className="size-7 transition-transform duration-200 ease-out group-hover:-translate-y-0.5 group-hover:scale-110" strokeWidth={1.6} aria-hidden />
+                      <Icono className="size-7" strokeWidth={1.5} aria-hidden />
                     </span>
                     <span
                       className={cn(
-                        "rounded-full px-3 py-1 font-mono text-xs font-semibold uppercase tracking-[0.12em]",
+                        "rounded-full px-3 py-1 font-mono text-[10px] font-semibold uppercase tracking-[0.15em]",
                         destacado
-                          ? "bg-brand-gold/15 text-brand-gold"
-                          : "bg-muted text-muted-foreground",
+                          ? "bg-amber-400/10 text-amber-400"
+                          : "bg-white/6 text-white/40",
                       )}
                     >
                       {t(`access_${clave}_tag` as never)}
                     </span>
                   </div>
 
-                  <h3 className="mt-6 font-display text-2xl font-semibold leading-tight text-foreground transition-colors group-hover:text-primary">
+                  {/* Text */}
+                  <h3
+                    className={cn(
+                      "mt-6 font-display text-xl font-semibold leading-snug text-white transition-colors duration-200",
+                      destacado
+                        ? "group-hover:text-amber-300"
+                        : "group-hover:text-[#a5b4fc]",
+                    )}
+                  >
                     {t(`access_${clave}_title` as never)}
                   </h3>
-                  <p className="mt-2 text-base leading-relaxed text-muted-foreground">
+                  <p className="mt-2 text-sm leading-relaxed text-white/45">
                     {t(`access_${clave}_desc` as never)}
                   </p>
                 </div>
 
-                <div className="mt-6 flex items-center justify-between gap-3 border-t border-border/60 pt-4">
-                  <span className="inline-flex items-center gap-1.5 text-base font-semibold text-foreground transition-colors group-hover:text-primary">
+                {/* Footer CTA */}
+                <div className="relative mt-7 flex items-center justify-between gap-3 border-t border-white/8 pt-5">
+                  <span
+                    className={cn(
+                      "flex items-center gap-1.5 text-sm font-semibold transition-colors duration-200",
+                      destacado
+                        ? "text-amber-400 group-hover:text-amber-300"
+                        : "text-[#818cf8] group-hover:text-white",
+                    )}
+                  >
                     {t(`access_${clave}_cta` as never)}
-                    <ArrowRight
-                      className="size-4 transition-transform duration-150 ease-out group-hover:translate-x-1"
-                      aria-hidden
-                    />
+                    <ArrowRight className="size-3.5 transition-transform duration-150 group-hover:translate-x-0.5" aria-hidden />
                   </span>
                   {destacado && (
-                    <span className="flex shrink-0 items-center gap-1 font-mono text-xs text-brand-gold">
+                    <span className="flex shrink-0 items-center gap-1 font-mono text-xs text-amber-400/70">
                       <Clock className="size-3" aria-hidden />
-                      <span>{t("access_meals_hours")}</span>
+                      {t("access_meals_hours")}
                     </span>
                   )}
                 </div>
               </Link>
-            </Revelar>
+            </li>
           ))}
         </ul>
       </div>

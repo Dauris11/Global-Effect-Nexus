@@ -1,43 +1,16 @@
 /**
- * Banda para patrocinadores — rendición de cuentas.
- *
- * La landing tiene dos lectores con necesidades opuestas: una familia de La Vega
- * que busca un programa, y un patrocinador en Estados Unidos que quiere saber
- * qué se hizo con su aporte. Esta sección es para el segundo, y por eso cambia
- * de temperatura: fondo tinta, etiquetas en mono, cero lenguaje emotivo. La
- * sobriedad *es* el argumento.
- *
- * El elemento visual es **la cadena de trazabilidad**: aporte → beca →
- * estudiante. No es un adorno; es literalmente lo que la sección afirma, y es
- * la única forma de decirlo sin pedirle al lector que se fíe de un párrafo.
- * Aquí sí van numerados: los tres eslabones **son** una secuencia, y el orden
- * es la información. Es también el sitio donde se gasta el coral, el color
- * humano de la marca, en el único eslabón que es una persona.
- *
- * Dos correcciones sobre una versión anterior de esta sección:
- *
- * - **Nada depende del cursor.** Los eslabones se realzaban con
- *   `onMouseEnter`/`onMouseLeave`: en una pantalla táctil —que es como entra
- *   la mayoría de los visitantes— ese estado no se alcanza nunca. El realce
- *   está ahora en CSS, y con eso el componente vuelve a ser de servidor.
- * - **Contraste.** El número del eslabón iba en `text-white/40`, que sobre el
- *   charcoal da 3.71:1 y no llega al mínimo AA de 4.5:1 para texto normal.
+ * Sección "Patrocinadores" — rendición de cuentas y trazabilidad.
+ * Rediseño completo: tema oscuro profundo, cadena visual, sin tokens viejos.
  */
 import { getTranslations } from "next-intl/server";
 import { ArrowRight, Receipt, GraduationCap, User, ShieldCheck, Check } from "lucide-react";
 import { Link } from "@/i18n/navigation";
-import { cn } from "@/lib/utils";
-import { SeccionEncabezado } from "./seccion";
-import { Revelar } from "./revelar";
 
-/** Los tres compromisos verificables, no promesas de marketing. */
 const COMPROMISOS = ["traceability", "records", "reports"] as const;
-
-/** Los tres eslabones. El último es una persona: va en coral. */
 const CADENA = [
-  { clave: "contribution", icono: Receipt, humano: false },
-  { clave: "scholarship", icono: GraduationCap, humano: false },
-  { clave: "student", icono: User, humano: true },
+  { clave: "contribution", icono: Receipt,       humano: false },
+  { clave: "scholarship",  icono: GraduationCap, humano: false },
+  { clave: "student",      icono: User,          humano: true  },
 ] as const;
 
 export async function Patrocinio() {
@@ -47,95 +20,113 @@ export async function Patrocinio() {
     <section
       id="patrocinio"
       aria-labelledby="patrocinio-title"
-      className="relative overflow-hidden bg-brand-charcoal py-20 md:py-28"
+      className="relative overflow-hidden bg-[#050810] py-24 md:py-32"
     >
-      <div aria-hidden className="trama-registro absolute inset-0" />
+      {/* Background mesh */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0"
+        style={{
+          backgroundImage:
+            "radial-gradient(ellipse 80rem 50rem at 50% 100%, rgba(108,62,244,0.12) 0%, transparent 70%)",
+        }}
+      />
+      {/* Top line */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute left-1/2 top-0 h-px w-2/3 -translate-x-1/2 bg-gradient-to-r from-transparent via-[#6C3EF4]/40 to-transparent"
+      />
 
       <div className="relative mx-auto max-w-6xl px-6">
-        <Revelar>
-          <SeccionEncabezado
-            idTitulo="patrocinio-title"
-            tono="oscuro"
-            eyebrow={t("sponsorEyebrow")}
-            titulo={t("sponsorTitle")}
-            intro={t("sponsorIntro")}
-          />
-        </Revelar>
+        {/* Header */}
+        <div className="text-center">
+          <p className="mb-3 font-mono text-xs uppercase tracking-[0.2em] text-[#818cf8]">
+            {t("sponsorEyebrow")}
+          </p>
+          <h2
+            id="patrocinio-title"
+            className="font-display text-[clamp(2rem,5vw,3.5rem)] font-bold leading-tight text-white"
+          >
+            {t("sponsorTitle")}
+          </h2>
+          <p className="mx-auto mt-4 max-w-xl text-base leading-relaxed text-white/45">
+            {t("sponsorIntro")}
+          </p>
+        </div>
 
-        <div className="mt-14">
-          <p className="mb-4 flex items-center gap-2 font-mono text-xs uppercase tracking-[0.15em] text-white/60">
-            <ShieldCheck className="size-4 text-primary" aria-hidden />
+        {/* Chain label */}
+        <div className="mt-16">
+          <p className="mb-5 flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.2em] text-white/40">
+            <ShieldCheck className="size-3.5 text-[#818cf8]" aria-hidden />
             {t("chainTitle")}
           </p>
 
+          {/* Chain cards */}
           <ol className="grid gap-4 sm:grid-cols-3">
             {CADENA.map(({ clave, icono: Icono, humano }, i) => (
-              <Revelar key={clave} como="li" retardo={0.08 * i} className="group relative">
+              <li key={clave} className="relative">
                 <div
-                  className={cn(
-                    "flex h-full flex-col justify-between rounded-xl border p-6",
-                    "transition-all duration-200 ease-out hover:-translate-y-0.5",
+                  className={[
+                    "flex h-full flex-col justify-between rounded-2xl border p-6 transition-all duration-300 hover:-translate-y-0.5",
                     humano
-                      ? "border-brand-accent/40 bg-brand-accent/[0.09] hover:bg-brand-accent/[0.14]"
-                      : "border-white/15 bg-white/[0.04] hover:bg-white/[0.08]",
-                  )}
+                      ? "border-rose-400/25 bg-rose-400/[0.05] hover:border-rose-400/40 hover:bg-rose-400/[0.09]"
+                      : "border-white/8 bg-white/[0.03] hover:border-[#6C3EF4]/35 hover:bg-[#6C3EF4]/[0.06]",
+                  ].join(" ")}
                 >
-                  <div>
-                    <div className="mb-4 flex items-center justify-between">
-                      <span
-                        className={cn(
-                          "flex size-12 items-center justify-center rounded-xl",
-                          humano
-                            ? "bg-brand-accent/20 text-brand-accent"
-                            : "bg-white/10 text-white/90",
-                        )}
-                      >
-                        <Icono className="size-6" strokeWidth={1.7} aria-hidden />
-                      </span>
-                      {/* El orden importa aquí: es una secuencia, no un catálogo. */}
-                      <span className="font-mono text-sm font-semibold tabular-nums text-white/60">
-                        {String(i + 1).padStart(2, "0")}
-                      </span>
-                    </div>
-
-                    <p className="font-mono text-xs uppercase tracking-[0.14em] text-white/60">
-                      {t(`chain_${clave}_label` as never)}
-                    </p>
-                    <p className="mt-1 text-lg font-semibold text-white">
-                      {t(`chain_${clave}_value` as never)}
-                    </p>
+                  {/* Icon + number */}
+                  <div className="mb-5 flex items-center justify-between">
+                    <span
+                      className={[
+                        "flex size-12 items-center justify-center rounded-xl",
+                        humano
+                          ? "bg-rose-400/15 text-rose-400"
+                          : "bg-[#6C3EF4]/15 text-[#818cf8]",
+                      ].join(" ")}
+                    >
+                      <Icono className="size-6" strokeWidth={1.5} aria-hidden />
+                    </span>
+                    <span className="font-mono text-2xl font-bold tabular-nums text-white/15">
+                      {String(i + 1).padStart(2, "0")}
+                    </span>
                   </div>
 
-                  <p className="mt-4 border-t border-white/10 pt-3 text-sm leading-relaxed text-white/65">
+                  <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-white/40">
+                    {t(`chain_${clave}_label` as never)}
+                  </p>
+                  <p className="mt-1 font-display text-lg font-semibold text-white">
+                    {t(`chain_${clave}_value` as never)}
+                  </p>
+                  <p className="mt-4 border-t border-white/8 pt-3 text-sm leading-relaxed text-white/45">
                     {t(`chain_${clave}_detail` as never)}
                   </p>
                 </div>
 
-                {/* Eslabón: no se dibuja tras el último. */}
+                {/* Arrow connector (not after last) */}
                 {i < CADENA.length - 1 && (
                   <div
                     aria-hidden
-                    className="absolute -right-3 top-1/2 z-10 hidden -translate-y-1/2 sm:block"
+                    className="absolute -right-3 top-1/2 z-10 hidden -translate-y-1/2 sm:flex"
                   >
-                    <div className="flex size-6 items-center justify-center rounded-full border border-white/20 bg-brand-charcoal text-white/60 transition-transform duration-200 ease-out group-hover:translate-x-0.5 group-hover:text-white">
+                    <div className="flex size-6 items-center justify-center rounded-full border border-white/15 bg-[#050810] text-white/30">
                       <ArrowRight className="size-3" />
                     </div>
                   </div>
                 )}
-              </Revelar>
+              </li>
             ))}
           </ol>
         </div>
 
+        {/* Commitments + CTA */}
         <div className="mt-16 grid gap-10 md:grid-cols-[1fr_auto] md:items-end">
           <dl className="grid gap-x-8 gap-y-8 sm:grid-cols-3">
             {COMPROMISOS.map((clave) => (
-              <div key={clave} className="border-t border-white/15 pt-5">
-                <dt className="flex items-center gap-2 font-display text-xl font-semibold text-white">
-                  <Check className="size-4 shrink-0 text-primary" aria-hidden />
+              <div key={clave} className="border-t border-white/8 pt-5">
+                <dt className="flex items-center gap-2 font-display text-base font-semibold text-white">
+                  <Check className="size-4 shrink-0 text-[#818cf8]" aria-hidden />
                   {t(`sponsor_${clave}_title` as never)}
                 </dt>
-                <dd className="mt-2 text-base leading-relaxed text-white/65">
+                <dd className="mt-2 text-sm leading-relaxed text-white/45">
                   {t(`sponsor_${clave}_desc` as never)}
                 </dd>
               </div>
@@ -144,10 +135,10 @@ export async function Patrocinio() {
 
           <Link
             href="/login"
-            className="inline-flex shrink-0 items-center justify-center gap-2 rounded-full bg-white px-7 py-4 text-base font-semibold text-brand-charcoal transition duration-150 ease-out hover:bg-white/90 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-brand-charcoal"
+            className="group inline-flex shrink-0 items-center gap-2.5 rounded-full border border-[#6C3EF4]/50 bg-[#6C3EF4]/15 px-7 py-3.5 text-sm font-semibold text-white transition-all duration-200 hover:border-[#6C3EF4] hover:bg-[#6C3EF4] active:scale-[0.97]"
           >
             {t("sponsorCta")}
-            <ArrowRight className="size-4" aria-hidden />
+            <ArrowRight className="size-4 transition-transform duration-150 group-hover:translate-x-0.5" aria-hidden />
           </Link>
         </div>
       </div>
