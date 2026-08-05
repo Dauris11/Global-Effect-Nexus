@@ -60,14 +60,16 @@ export default async function LocaleLayout({
       suppressHydrationWarning
       className={`${inter.variable} ${jetbrainsMono.variable}`}
     >
-      {/* Anti-FOUC: aplica `.dark` antes del primer paint, leyendo la
-          preferencia guardada. Por defecto el tema es oscuro (incluida la
-          landing pública), salvo que la persona haya elegido claro antes. */}
-      <script
-        dangerouslySetInnerHTML={{
-          __html: `(function(){try{var t=localStorage.getItem("theme");if(t!=="light"){document.documentElement.classList.add("dark");}}catch(e){document.documentElement.classList.add("dark");}})();`,
-        }}
-      />
+      <head>
+        {/* Anti-FOUC: aplica `.dark` antes del primer paint, leyendo la
+            preferencia guardada. Por defecto el tema es oscuro (incluida la
+            landing pública), salvo que la persona haya elegido claro antes. */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var t=localStorage.getItem("theme");if(t!=="light"){document.documentElement.classList.add("dark");}}catch(e){document.documentElement.classList.add("dark");}})();`,
+          }}
+        />
+      </head>
       <body>
         <NextIntlClientProvider messages={messages}>
           {children}

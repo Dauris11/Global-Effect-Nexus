@@ -180,8 +180,7 @@ export function Hero({
                 variants={FADE_UP}
                 initial={reduce ? false : "hidden"}
                 animate="visible"
-                className="mb-4 text-sm font-normal tracking-wide"
-                style={{ color: NAVY.accent }}
+                className="mb-4 text-sm font-normal tracking-wide text-[#60a5fa]"
               >
                 {s.tag ?? lugar}
               </m.p>
@@ -218,19 +217,7 @@ export function Hero({
                   s.ctaHref.startsWith("http") ? (
                     <a
                       href={s.ctaHref}
-                      className="group inline-flex items-center gap-2.5 rounded-full px-7 py-3.5 text-sm font-semibold text-white transition-all duration-300 active:scale-[0.97]"
-                      style={{
-                        backgroundColor: NAVY.primary,
-                        boxShadow: `0 0 28px ${NAVY.glow}`,
-                      }}
-                      onMouseEnter={(e) => {
-                        (e.currentTarget as HTMLElement).style.backgroundColor = NAVY.hover;
-                        (e.currentTarget as HTMLElement).style.boxShadow = `0 0 42px ${NAVY.glow}`;
-                      }}
-                      onMouseLeave={(e) => {
-                        (e.currentTarget as HTMLElement).style.backgroundColor = NAVY.primary;
-                        (e.currentTarget as HTMLElement).style.boxShadow = `0 0 28px ${NAVY.glow}`;
-                      }}
+                      className="group inline-flex items-center gap-2.5 rounded-full bg-[#1d4ed8] px-7 py-3.5 text-sm font-semibold text-white shadow-[0_0_28px_rgba(29,78,216,0.55)] transition-all duration-300 hover:bg-[#2563eb] hover:shadow-[0_0_42px_rgba(29,78,216,0.65)] active:scale-[0.97]"
                     >
                       {s.ctaLabel}
                       <ArrowRight className="size-4 transition-transform duration-200 group-hover:translate-x-0.5" aria-hidden />
@@ -238,11 +225,7 @@ export function Hero({
                   ) : (
                     <Link
                       href={s.ctaHref}
-                      className="group inline-flex items-center gap-2.5 rounded-full px-7 py-3.5 text-sm font-semibold text-white transition-all duration-300 active:scale-[0.97]"
-                      style={{
-                        backgroundColor: NAVY.primary,
-                        boxShadow: `0 0 28px ${NAVY.glow}`,
-                      }}
+                      className="group inline-flex items-center gap-2.5 rounded-full bg-[#1d4ed8] px-7 py-3.5 text-sm font-semibold text-white shadow-[0_0_28px_rgba(29,78,216,0.55)] transition-all duration-300 hover:bg-[#2563eb] hover:shadow-[0_0_42px_rgba(29,78,216,0.65)] active:scale-[0.97]"
                     >
                       {s.ctaLabel}
                       <ArrowRight className="size-4 transition-transform duration-200 group-hover:translate-x-0.5" aria-hidden />
@@ -311,15 +294,14 @@ export function Hero({
                             className="absolute inset-y-0 left-0 rounded-full"
                             style={{
                               width: `${Math.round(progreso * 100)}%`,
-                              backgroundColor: NAVY.accent,
+                              backgroundColor: "#60a5fa",
                               transition: "width 60ms linear",
                             }}
                           />
                         )}
                         {i === idx && reduce && (
                           <span
-                            className="absolute inset-0 rounded-full"
-                            style={{ backgroundColor: NAVY.accent }}
+                            className="absolute inset-0 rounded-full bg-[#60a5fa]"
                           />
                         )}
                       </button>
@@ -441,8 +423,7 @@ export function Hero({
                     </div>
                     <Link
                       href="/login"
-                      className="mt-3 flex items-center justify-end gap-1 text-[11px] font-semibold transition-colors hover:text-white"
-                      style={{ color: NAVY.accent }}
+                      className="mt-3 flex items-center justify-end gap-1 text-[11px] font-semibold text-[#60a5fa] transition-colors hover:text-white"
                     >
                       {t("heroStatusCta")}
                       <ArrowRight className="size-3" aria-hidden />
@@ -478,23 +459,10 @@ export function Hero({
                   return (
                     <div
                       key={d.label}
-                      className="flex items-center gap-5 rounded-2xl border p-5 transition-all duration-300"
-                      style={{
-                        borderColor: "rgba(96,165,250,0.10)",
-                        backgroundColor: "rgba(255,255,255,0.025)",
-                      }}
-                      onMouseEnter={(e) => {
-                        (e.currentTarget as HTMLElement).style.borderColor = "rgba(96,165,250,0.30)";
-                        (e.currentTarget as HTMLElement).style.backgroundColor = "rgba(29,78,216,0.08)";
-                      }}
-                      onMouseLeave={(e) => {
-                        (e.currentTarget as HTMLElement).style.borderColor = "rgba(96,165,250,0.10)";
-                        (e.currentTarget as HTMLElement).style.backgroundColor = "rgba(255,255,255,0.025)";
-                      }}
+                      className="flex items-center gap-5 rounded-2xl border border-[#60a5fa]/10 bg-white/[0.025] p-5 transition-all duration-300 hover:border-[#60a5fa]/30 hover:bg-[#1d4ed8]/8"
                     >
                       <span
-                        className="flex size-12 shrink-0 items-center justify-center rounded-xl"
-                        style={{ backgroundColor: "rgba(29,78,216,0.18)", color: NAVY.accent }}
+                        className="flex size-12 shrink-0 items-center justify-center rounded-xl bg-[#1d4ed8]/18 text-[#60a5fa]"
                       >
                         <Icon className="size-6" strokeWidth={1.5} aria-hidden />
                       </span>
@@ -515,8 +483,7 @@ export function Hero({
                 </p>
                 <a
                   href="#acceso"
-                  className="group inline-flex items-center gap-1.5 font-mono text-xs font-semibold uppercase tracking-[0.14em] transition-colors hover:text-white"
-                  style={{ color: NAVY.accent }}
+                  className="group inline-flex items-center gap-1.5 font-mono text-xs font-semibold uppercase tracking-[0.14em] text-[#60a5fa] transition-colors hover:text-white"
                 >
                   {t("heroScroll")}
                   <ArrowDown
