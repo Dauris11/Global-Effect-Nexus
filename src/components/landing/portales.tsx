@@ -27,7 +27,7 @@ export async function Portales() {
 
   return (
     <div>
-      <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-muted-foreground">
+      <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-primary font-bold">
         {t("portalsLabel")}
       </p>
 
@@ -37,20 +37,20 @@ export async function Portales() {
             {/* Each portal card is a standalone styled element using style prop for dynamic colors */}
             <Link
               href={href}
-              className="portal-card group relative flex h-full flex-col items-center overflow-hidden rounded-2xl border border-border bg-card px-4 py-7 text-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+              className="portal-card group relative flex h-full flex-col items-center overflow-hidden rounded-2xl border border-primary/15 bg-primary/[0.02] shadow-[0_4px_16px_rgba(29,78,216,0.04)] px-4 py-7 text-center transition-all duration-300 hover:-translate-y-1 hover:border-primary/45 hover:shadow-[0_12px_24px_rgba(29,78,216,0.1)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
               style={{ "--portal-glow": glow, "--portal-color": color } as React.CSSProperties}
             >
               {/* Animated background sweep on hover */}
               <span
                 aria-hidden
                 className="absolute inset-0 translate-y-full rounded-2xl transition-transform duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] group-hover:translate-y-0"
-                style={{ background: `linear-gradient(135deg, ${color}10 0%, ${color}06 100%)` }}
+                style={{ background: `linear-gradient(135deg, ${color}15 0%, ${color}08 100%)` }}
               />
               {/* Glow ring that expands on hover */}
               <span
                 aria-hidden
                 className="absolute inset-0 rounded-2xl opacity-0 transition-opacity duration-300 group-hover:opacity-100"
-                style={{ boxShadow: `inset 0 0 0 1px ${color}40, 0 0 40px ${glow}` }}
+                style={{ boxShadow: `inset 0 0 0 1px ${color}50, 0 0 40px ${glow}` }}
               />
 
               {/* Icon container with bounce animation */}
@@ -71,7 +71,7 @@ export async function Portales() {
 
               {/* Label slides up */}
               <span
-                className="relative z-10 mt-4 block text-[13px] font-semibold leading-tight text-muted-foreground transition-all duration-300 group-hover:-translate-y-0.5 group-hover:text-foreground"
+                className="relative z-10 mt-4 block text-[13px] font-bold leading-tight text-foreground transition-all duration-300 group-hover:-translate-y-0.5 group-hover:text-primary"
               >
                 {t(`portal_${clave}` as never)}
               </span>
