@@ -91,30 +91,30 @@ const COLOR_LETRA: Record<string, string> = {
   F: "border-red-200 bg-red-50 text-red-500",
 };
 
-const ACCESOS: AccesoRapido[] = [
+const getAccesos = (t: (key: string) => string): AccesoRapido[] => [
   {
     href: "/academico/materias",
     icono: BookOpen,
-    titulo: "Mis materias",
-    descripcion: "Catálogo y cupos disponibles este cuatrimestre.",
+    titulo: t("mySubjectsTitle"),
+    descripcion: t("mySubjectsDesc"),
     azulejo: "bg-emerald-500/10 text-emerald-600 dark:bg-emerald-500/20 dark:text-emerald-400",
-    textoEnlace: "Ver catálogo",
+    textoEnlace: t("viewCatalog"),
   },
   {
     href: "/academico/historial",
     icono: ClipboardList,
-    titulo: "Calificaciones",
-    descripcion: "Tu historial completo, cuatrimestre por cuatrimestre.",
+    titulo: t("gradesSubTitle"),
+    descripcion: t("gradesSubDesc"),
     azulejo: "bg-amber-500/10 text-amber-600 dark:bg-amber-500/20 dark:text-amber-400",
-    textoEnlace: "Ver historial",
+    textoEnlace: t("viewHistory"),
   },
   {
     href: "/cita-psicologia",
     icono: Heart,
-    titulo: "Cita de psicología",
-    descripcion: "Solicita un espacio confidencial de acompañamiento.",
+    titulo: t("psychologyTitle"),
+    descripcion: t("psychologyDesc"),
     azulejo: "bg-rose-500/10 text-rose-600 dark:bg-rose-500/20 dark:text-rose-400",
-    textoEnlace: "Pedir cita",
+    textoEnlace: t("requestAppointment"),
   },
 ];
 
@@ -203,7 +203,7 @@ export default async function PortalEstudiantePage({
             <div>
               <p className="text-[10px] font-extrabold tracking-[0.2em] uppercase text-[#2096ba] dark:text-[#38bdf8]">{t("stats.passed")}</p>
               <p className="text-sm font-bold text-slate-900 dark:text-white mt-0.5">
-                {resumen.aprobadas === 0 ? "Aún sin materias" : `${resumen.aprobadas} aprobadas`}
+                {resumen.aprobadas === 0 ? t("noSubjectsYet") : `${resumen.aprobadas}`}
               </p>
             </div>
           </div>
@@ -215,7 +215,7 @@ export default async function PortalEstudiantePage({
             <div>
               <p className="text-[10px] font-extrabold tracking-[0.2em] uppercase text-slate-400 dark:text-slate-500">{t("stats.average")}</p>
               <p className="text-sm font-bold text-slate-900 dark:text-white mt-0.5">
-                {resumen.promedio !== null ? `${resumen.promedio}%` : "Sin registros aún"}
+                {resumen.promedio !== null ? `${resumen.promedio}%` : t("noRecordsYet")}
               </p>
             </div>
           </div>
@@ -227,13 +227,13 @@ export default async function PortalEstudiantePage({
             <div>
               <p className="text-[10px] font-extrabold tracking-[0.2em] uppercase text-slate-400 dark:text-slate-500">{t("gpaLabel")}</p>
               <p className="text-sm font-bold text-slate-900 dark:text-white mt-0.5">
-                {resumen.gpa !== null ? resumen.gpa.toFixed(2) : "Empieza tu historial"}
+                {resumen.gpa !== null ? resumen.gpa.toFixed(2) : t("startHistory")}
               </p>
             </div>
           </div>
         </div>
 
-        <AccesosRapidos accesos={ACCESOS} columnas="sm:grid-cols-3" />
+        <AccesosRapidos accesos={getAccesos(t)} columnas="sm:grid-cols-3" />
 
         <CardLista titulo={t("subjectsTitle")} icono={BookOpen}>
           {materias.length === 0 ? (

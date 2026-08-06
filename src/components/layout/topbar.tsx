@@ -42,7 +42,8 @@ export function TopBar({
   rol: string;
   items: NavItem[];
 }) {
-  const t = useTranslations("auth");
+  const tAuth = useTranslations("auth");
+  const tStudent = useTranslations("studentPortal");
   const locale = useLocale();
 
   return (
@@ -52,10 +53,10 @@ export function TopBar({
         <MobileNav items={items} />
         <div className="hidden md:flex flex-col">
           <span className="text-[10px] font-extrabold tracking-[0.2em] uppercase text-[#2096ba] dark:text-[#38bdf8]">
-            Fundación Global Effect
+            {tStudent("foundationHeader")}
           </span>
           <h1 className="text-xl font-bold tracking-tight text-slate-900 dark:text-white">
-            Portal del Estudiante
+            {tStudent("studentPortalHeader")}
           </h1>
         </div>
       </div>
@@ -93,7 +94,7 @@ export function TopBar({
               <DropdownMenuItem asChild>
                 <button type="submit" className="w-full cursor-pointer text-red-600 dark:text-red-400">
                   <LogOut className="mr-2 h-4 w-4" />
-                  {t("signOut")}
+                  {tAuth("signOut")}
                 </button>
               </DropdownMenuItem>
             </form>
