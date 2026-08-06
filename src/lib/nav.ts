@@ -130,6 +130,8 @@ export const NAV_ITEMS: NavItem[] = [
   { href: "/expedientes", labelKey: "records", permiso: "expedientes.leer", icon: "Users" },
   { href: "/academico/materias", labelKey: "academic", permiso: "academico.leer", icon: "GraduationCap" },
   { href: "/academico/cursos", labelKey: "courses", permiso: "academico.leer", icon: "BookOpen" },
+  { href: "/academico/historial", labelKey: "grades", roles: ["estudiante"], icon: "ClipboardList" },
+  { href: "/cita-psicologia", labelKey: "psychologyPortal", roles: ["estudiante"], icon: "Heart" },
   // Notas de todos los estudiantes: `academico.leer` no basta — el rol
   // `estudiante` lo tiene para el catálogo. Ver la cabecera de la pantalla.
   {

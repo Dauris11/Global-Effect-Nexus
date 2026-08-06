@@ -20,12 +20,15 @@ export function NavList({
   items,
   onNavigate,
   tone = "dark",
+  isCollapsed = false,
 }: {
   items: NavItem[];
   /** Se invoca al pulsar un enlace (para cerrar el cajón móvil). */
   onNavigate?: () => void;
-  /** `dark` para el sidebar (charcoal); `light` para el cajón móvil. */
+  /** `dark` para el sidebar (charcoal); `light` para el cajón móvil o sidebar claro. */
   tone?: "dark" | "light";
+  /** Si es true, oculta el texto y solo muestra los iconos. */
+  isCollapsed?: boolean;
 }) {
   const t = useTranslations("nav");
   const pathname = usePathname();
@@ -56,37 +59,26 @@ export function NavList({
             onClick={onNavigate}
             aria-current={active ? "page" : undefined}
             className={cn(
-              "group relative flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors duration-150",
-              tone === "dark"
-                ? active
-                  ? "bg-white/[0.07] text-white"
-                  : "text-slate-400 hover:bg-white/[0.04] hover:text-white"
-                : active
-                  ? "bg-primary/10 text-primary"
-                  : "text-muted-foreground hover:bg-muted hover:text-foreground",
+              "group relative flex flex-col cursor-pointer items-center justify-center gap-1.5 py-3 mx-1.5 text-[10px] font-bold transition-all rounded-[1rem]",
+              active
+                ? "bg-[#2096ba] text-white shadow-md shadow-[#2096ba]/20"
+                : "text-white/70 hover:text-white hover:bg-white/10",
             )}
           >
-            {/* Indicador activo: barra que aparece a la izquierda */}
-            <span
-              className={cn(
-                "absolute left-0 top-1/2 h-5 w-1 -translate-y-1/2 rounded-r-full bg-primary transition-all duration-200 ease-out",
-                active ? "opacity-100" : "scale-y-0 opacity-0",
-              )}
-            />
+
             {Icon && (
               <Icon
                 className={cn(
-                  "size-4 shrink-0 transition-colors",
-                  active && tone === "dark" && "text-primary",
+                  "size-5 shrink-0 transition-colors",
                 )}
               />
             )}
-            {t(item.labelKey)}
+            <span className="text-center w-full leading-tight">{t(item.labelKey)}</span>
           </Link>
         );
       })}
 
-      {pendientes.length > 0 && (
+      {!isCollapsed && pendientes.length > 0 && (
         <>
           <p
             className={cn(

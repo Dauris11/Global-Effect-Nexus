@@ -30,6 +30,7 @@ export default async function PortalLayout({
     // concreta (ver lib/nav.ts).
     if (i.roles && !i.roles.includes(user.rol)) return false;
     if (permisos === null) return true;
+
     // `permiso` es obligatorio; `permisos` es "basta con uno" (ver lib/nav.ts).
     if (i.permiso && !permisos.includes(i.permiso)) return false;
     if (i.permisos && !i.permisos.some((p) => permisos.includes(p))) return false;
@@ -37,13 +38,11 @@ export default async function PortalLayout({
   });
 
   return (
-    <div className="flex min-h-screen bg-background">
+    <div className="flex min-h-screen bg-slate-50 dark:bg-[#101322] transition-colors duration-300 font-inter">
       <Sidebar items={items} />
+      
       <div className="flex min-w-0 flex-1 flex-col">
-        <TopBar nombre={user.nombre} rol={user.rol} items={items} />
-        <main className="mx-auto w-full max-w-7xl flex-1 p-4 sm:p-6 lg:p-8">
-          {children}
-        </main>
+        <main className="flex-1 pb-16">{children}</main>
       </div>
     </div>
   );

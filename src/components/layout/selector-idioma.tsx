@@ -44,8 +44,7 @@ export function SelectorIdioma({
   return (
     <div
       className={cn(
-        "flex items-center gap-0.5 rounded-full p-0.5",
-        tone === "dark" ? "bg-white/10" : "bg-muted",
+        "flex items-center gap-0.5 rounded-full p-1 bg-white dark:bg-[#18181c] border border-slate-200/80 dark:border-zinc-800 shadow-sm",
         className,
       )}
     >
@@ -61,16 +60,10 @@ export function SelectorIdioma({
             hrefLang={locale}
             aria-current={esActivo ? "true" : undefined}
             className={cn(
-              "rounded-full px-2 py-1 tabular-nums text-[11px] font-medium uppercase tracking-wide",
-              "transition-colors duration-150 ease-out",
-              "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+              "rounded-full px-2.5 py-1 tabular-nums text-[11px] font-bold uppercase tracking-wide transition-all",
               esActivo
-                ? tone === "dark"
-                  ? "bg-white/15 text-white"
-                  : "bg-surface text-foreground shadow-sm"
-                : tone === "dark"
-                  ? "text-white/50 hover:text-white"
-                  : "text-muted-foreground hover:text-foreground",
+                ? "bg-[#0a6a8a] text-white shadow-xs dark:bg-[#2096ba]"
+                : "text-slate-400 hover:text-slate-700 dark:text-slate-400 dark:hover:text-white",
             )}
           >
             <span aria-hidden>{nombre.corto}</span>

@@ -20,7 +20,7 @@ export interface EstudianteDelUsuario {
   fecha_ingreso: string | null;
 }
 
-/** Cifras del banner del Portal Estudiante (#396). */
+  /** Cifras del banner del Portal Estudiante (#396). */
 export interface ResumenDelEstudiante {
   /** Escala 0–4; `null` si todavía no hay historial. */
   gpa: number | null;

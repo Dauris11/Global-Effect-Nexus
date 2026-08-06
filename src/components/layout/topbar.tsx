@@ -46,44 +46,53 @@ export function TopBar({
   const locale = useLocale();
 
   return (
-    <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-border bg-background px-4 sm:px-6">
-      <div className="flex items-center gap-2">
+    <header className="flex w-full items-center justify-between py-2 mb-2">
+      {/* Izquierda: Título de la Fundación y Portal */}
+      <div className="flex items-center gap-3">
         <MobileNav items={items} />
-        <span className="flex items-center rounded-md bg-foreground px-1.5 py-1.5 md:hidden">
-          <IconMark className="h-5 w-auto" />
-        </span>
+        <div className="hidden md:flex flex-col">
+          <span className="text-[10px] font-extrabold tracking-[0.2em] uppercase text-[#2096ba] dark:text-[#38bdf8]">
+            Fundación Global Effect
+          </span>
+          <h1 className="text-xl font-bold tracking-tight text-slate-900 dark:text-white">
+            Portal del Estudiante
+          </h1>
+        </div>
       </div>
 
-      <div className="flex items-center gap-1">
-        <SelectorIdioma className="mr-1" />
+      {/* Derecha: Selector de Idioma, Tema y Usuario */}
+      <div className="flex items-center gap-3">
+        <SelectorIdioma tone="light" />
         <ThemeToggle />
+
         <DropdownMenu>
-          <DropdownMenuTrigger className="flex items-center gap-2 rounded-full py-1 pl-1 pr-2 outline-none transition-colors hover:bg-muted focus-visible:ring-1 focus-visible:ring-ring">
-            <span className="flex size-8 items-center justify-center rounded-full bg-primary/12 tabular-nums text-xs font-semibold text-primary">
+          <DropdownMenuTrigger className="flex items-center gap-3 rounded-full bg-white dark:bg-[#18181c] border border-slate-200/80 dark:border-zinc-800 p-1.5 pr-4 shadow-sm outline-none transition-all hover:bg-slate-50 dark:hover:bg-zinc-800/50">
+            <span className="flex h-9 w-9 items-center justify-center rounded-full bg-[#0a6a8a] dark:bg-[#2096ba] text-xs font-bold text-white shadow-sm">
               {iniciales(nombre)}
             </span>
             <span className="hidden text-left sm:block">
-              <span className="block text-sm font-medium leading-tight text-foreground">
+              <span className="block text-xs font-bold leading-tight text-slate-900 dark:text-white">
                 {nombre}
               </span>
-              <span className="block text-xs capitalize leading-tight text-muted-foreground">
+              <span className="block text-[10px] font-medium capitalize leading-tight text-slate-500 dark:text-slate-400">
                 {rol.replace(/_/g, " ")}
               </span>
             </span>
-            <ChevronDown className="size-4 text-muted-foreground" />
+            <ChevronDown className="size-3.5 text-slate-400 ml-1" />
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>
-              <span className="block text-sm font-medium text-foreground">{nombre}</span>
-              <span className="block capitalize text-muted-foreground">
+
+          <DropdownMenuContent align="end" className="w-56 rounded-2xl p-2">
+            <DropdownMenuLabel className="px-3 py-2">
+              <span className="block text-sm font-bold text-slate-900 dark:text-white">{nombre}</span>
+              <span className="block text-xs capitalize text-slate-500 dark:text-slate-400">
                 {rol.replace(/_/g, " ")}
               </span>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <form action={cerrarSesion.bind(null, locale)}>
               <DropdownMenuItem asChild>
-                <button type="submit" className="w-full">
-                  <LogOut />
+                <button type="submit" className="w-full cursor-pointer text-red-600 dark:text-red-400">
+                  <LogOut className="mr-2 h-4 w-4" />
                   {t("signOut")}
                 </button>
               </DropdownMenuItem>

@@ -53,17 +53,13 @@ export default async function LocaleLayout({
       suppressHydrationWarning
       className={inter.variable}
     >
-      <head>
-        {/* Anti-FOUC: el claro es el predeterminado, así que solo hay que
-            adelantarse cuando la persona pidió el oscuro explícitamente. */}
+      <body>
         <script
           suppressHydrationWarning
           dangerouslySetInnerHTML={{
-            __html: `(function(){try{if(localStorage.getItem("theme")==="dark"){document.documentElement.classList.add("dark");}}catch(e){}})();`,
+            __html: `(function(){try{if(localStorage.getItem("theme")==="dark" || (!("theme" in localStorage) && window.matchMedia("(prefers-color-scheme: dark)").matches)){document.documentElement.classList.add("dark");}else{document.documentElement.classList.remove("dark");}}catch(_){}})();`,
           }}
         />
-      </head>
-      <body>
         <NextIntlClientProvider messages={messages}>
           {children}
         </NextIntlClientProvider>

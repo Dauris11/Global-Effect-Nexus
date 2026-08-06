@@ -47,10 +47,10 @@ export function ThemeToggle() {
       type="button"
       onClick={toggle}
       aria-label={t("toggleTheme")}
-      className="flex size-9 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-muted hover:text-foreground active:scale-95"
+      className="flex size-9 items-center justify-center rounded-full bg-white dark:bg-[#18181c] border border-slate-200/80 dark:border-zinc-800 text-slate-600 dark:text-slate-300 shadow-sm transition-all hover:bg-slate-50 dark:hover:bg-zinc-800/50 active:scale-95"
     >
-      <Sun className="size-4 dark:hidden" />
-      <Moon className="hidden size-4 dark:block" />
+      <Sun className="size-4 text-amber-500 dark:hidden" />
+      <Moon className="hidden size-4 text-blue-400 dark:block" />
     </button>
   );
 }
