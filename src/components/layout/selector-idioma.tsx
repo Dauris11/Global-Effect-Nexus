@@ -61,13 +61,13 @@ export function SelectorIdioma({
             hrefLang={locale}
             aria-current={esActivo ? "true" : undefined}
             className={cn(
-              "rounded-full px-2 py-1 font-mono text-[11px] font-medium uppercase tracking-wide",
+              "rounded-full px-2 py-1 tabular-nums text-[11px] font-medium uppercase tracking-wide",
               "transition-colors duration-150 ease-out",
               "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
               esActivo
                 ? tone === "dark"
                   ? "bg-white/15 text-white"
-                  : "bg-surface text-foreground shadow-plana"
+                  : "bg-surface text-foreground shadow-sm"
                 : tone === "dark"
                   ? "text-white/50 hover:text-white"
                   : "text-muted-foreground hover:text-foreground",

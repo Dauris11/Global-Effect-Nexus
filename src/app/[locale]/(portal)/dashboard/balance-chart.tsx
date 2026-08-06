@@ -59,8 +59,8 @@ export function BalanceChart({
               <stop offset="100%" stopColor="var(--color-primary)" stopOpacity={0.02} />
             </linearGradient>
             <linearGradient id="fillEgresos" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="var(--color-brand-accent)" stopOpacity={0.28} />
-              <stop offset="100%" stopColor="var(--color-brand-accent)" stopOpacity={0.02} />
+              <stop offset="0%" stopColor="var(--color-gold)" stopOpacity={0.28} />
+              <stop offset="100%" stopColor="var(--color-gold)" stopOpacity={0.02} />
             </linearGradient>
           </defs>
           <CartesianGrid strokeDasharray="3 3" stroke="var(--color-border)" vertical={false} />
@@ -102,7 +102,7 @@ export function BalanceChart({
             type="monotone"
             dataKey="egresos"
             name={textos.egresos}
-            stroke="var(--color-brand-accent)"
+            stroke="var(--color-gold)"
             strokeWidth={2}
             fill="url(#fillEgresos)"
             isAnimationActive={!reduce}

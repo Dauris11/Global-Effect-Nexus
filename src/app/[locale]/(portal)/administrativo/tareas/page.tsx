@@ -50,7 +50,7 @@ export default async function TareasPage({
 
   return (
     <div className="space-y-6">
-      <div className="animate-fade-up">
+      <div className="animate-in fade-in-0 slide-in-from-bottom-2 duration-200 ease-out">
         <PageHeader
           eyebrow={t("eyebrow")}
           title={t("tasks.title")}
@@ -58,7 +58,7 @@ export default async function TareasPage({
         />
       </div>
 
-      <div className="animate-fade-up space-y-4" style={{ animationDelay: "60ms" }}>
+      <div className="animate-in fade-in-0 slide-in-from-bottom-2 duration-200 ease-out space-y-4" style={{ animationDelay: "60ms" }}>
         <VistaTareas
           tareas={tareas}
           proyectos={proyectos}

@@ -71,11 +71,12 @@ export default async function EditarExpedientePage({
     relation: t.raw("relation"),
     type: t.raw("type"),
     status: t.raw("status"),
+    followUp: t.raw("followUp"),
   };
 
   return (
     <div className="space-y-8">
-      <div className="animate-fade-up">
+      <div className="animate-in fade-in-0 slide-in-from-bottom-2 duration-200 ease-out">
         <PageHeader
           eyebrow={t("eyebrow")}
           title={expediente.estudiante.nombre}

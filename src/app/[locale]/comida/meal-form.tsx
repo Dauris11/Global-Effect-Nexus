@@ -77,13 +77,13 @@ export function MealForm({ dias }: { dias: DiaOpcion[] }) {
       {state.procesado && (
         <div className="space-y-1 rounded-md bg-muted p-3 text-sm">
           {state.confirmados.length > 0 && (
-            <p className="flex items-center gap-2 font-medium text-brand-teal">
+            <p className="flex items-center gap-2 font-medium text-primary">
               <CheckCircle2 className="size-4" />
               {t("registeredDays")}: {state.confirmados.length}
             </p>
           )}
           {state.duplicados.length > 0 && (
-            <p className="text-brand-gold">
+            <p className="text-amber-600">
               {t("alreadyDays")}: {state.duplicados.length}
             </p>
           )}

@@ -49,7 +49,7 @@ function BarraProgreso({
         />
       </div>
       {mostrarCifra && (
-        <span className="shrink-0 font-mono text-[11px] tabular-nums text-muted-foreground">
+        <span className="shrink-0 tabular-nums text-[11px] tabular-nums text-muted-foreground">
           {pct}%
         </span>
       )}

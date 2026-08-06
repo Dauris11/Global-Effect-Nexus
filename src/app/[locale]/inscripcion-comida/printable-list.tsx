@@ -54,7 +54,7 @@ export function PrintableList({
 
       {/* Encabezado imprimible */}
       <div className="mb-4 flex items-center gap-3 border-b border-border pb-4">
-        <div className="flex size-10 items-center justify-center rounded-lg bg-brand-gold/15 text-brand-gold print:bg-transparent">
+        <div className="flex size-10 items-center justify-center rounded-lg bg-amber-100 text-amber-600 print:bg-transparent">
           <Utensils className="size-6" />
         </div>
         <div>
@@ -63,7 +63,7 @@ export function PrintableList({
         </div>
         <span
           className={`ml-auto rounded-full px-3 py-1 text-xs font-medium print:hidden ${
-            cerrado ? "bg-brand-teal/10 text-brand-teal" : "bg-brand-gold/15 text-brand-gold"
+            cerrado ? "bg-primary/10 text-primary" : "bg-amber-100 text-amber-600"
           }`}
         >
           {cerrado ? t("closed") : t("open")}

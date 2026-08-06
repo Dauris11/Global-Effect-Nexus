@@ -25,9 +25,9 @@ export default async function ConfiguracionPage() {
         {puedeLanding && (
           <Link
             href={`/${locale}/configuracion/landing`}
-            className="flex items-center gap-4 rounded-xl border border-border bg-card p-5 transition hover:border-brand-teal"
+            className="flex items-center gap-4 rounded-xl border border-border bg-card p-5 transition hover:border-primary"
           >
-            <div className="flex size-11 items-center justify-center rounded-lg bg-brand-teal/10 text-brand-teal">
+            <div className="flex size-11 items-center justify-center rounded-lg bg-primary/10 text-primary">
               <ImageIcon className="size-6" />
             </div>
             <div className="flex-1">

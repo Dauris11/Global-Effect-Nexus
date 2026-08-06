@@ -25,7 +25,7 @@ function TooltipContent({
       <TooltipPrimitive.Content
         sideOffset={sideOffset}
         className={cn(
-          "z-50 max-w-64 rounded-md bg-brand-charcoal px-2.5 py-1.5 text-xs text-white shadow-flotante",
+          "z-50 max-w-64 rounded-md bg-foreground px-2.5 py-1.5 text-xs text-white shadow-lg",
           "data-[state=delayed-open]:animate-in data-[state=delayed-open]:fade-in-0 data-[state=delayed-open]:zoom-in-95",
           "data-[state=closed]:animate-out data-[state=closed]:fade-out-0",
           className,

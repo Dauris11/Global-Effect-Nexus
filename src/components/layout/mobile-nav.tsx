@@ -27,9 +27,9 @@ export function MobileNav({ items }: { items: NavItem[] }) {
         <Menu className="size-5" />
       </Dialog.Trigger>
       <Dialog.Portal>
-        <Dialog.Overlay className="fixed inset-0 z-40 bg-brand-charcoal/40 backdrop-blur-sm data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 md:hidden" />
+        <Dialog.Overlay className="fixed inset-0 z-40 bg-foreground/40 data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 md:hidden" />
         <Dialog.Content
-          className="fixed inset-y-0 left-0 z-50 flex w-72 flex-col bg-brand-charcoal shadow-2xl duration-300 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:slide-out-to-left data-[state=open]:slide-in-from-left md:hidden"
+          className="fixed inset-y-0 left-0 z-50 flex w-72 flex-col bg-foreground shadow-2xl duration-300 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:slide-out-to-left data-[state=open]:slide-in-from-left md:hidden"
           style={{ transitionTimingFunction: "cubic-bezier(0.32,0.72,0,1)" }}
         >
           <Dialog.Title className="sr-only">{t("menu")}</Dialog.Title>

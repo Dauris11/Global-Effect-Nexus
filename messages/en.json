@@ -21,7 +21,17 @@
     "continueWithGoogle": "Continue with Google",
     "orEmail": "or with your email",
     "notRegistered": "Your account is not registered. Contact the administrator.",
-    "oauth": "Could not sign in with Google. Please try again."
+    "oauth": "Could not sign in with Google. Please try again.",
+    "brandTagline": "Bringing Hope · Changing Lives · Transforming Communities",
+    "gateHeading": "One door, six portals",
+    "gateNote": "Sign in with your account and the system takes you to your role’s portal. You don’t have to choose.",
+    "gatePortals": "Student · Teacher · Administrative · Psychology · Accounting · Technical courses",
+    "backHome": "Back to home",
+    "needAccess": "No access yet? Users are invited from administration.",
+    "portalGateNote": "Sign in with the account the Foundation assigned you. If your role is another one, the system will take you to your portal.",
+    "otherPortals": "Not your portal? See all entry points",
+    "genericGate": "General access",
+    "portalGateEyebrow": "Portal access"
   },
   "nav": {
     "dashboard": "Dashboard",
@@ -44,7 +54,11 @@
     "courses": "Technical courses",
     "grades": "Grades",
     "studentPortal": "My portal",
-    "teacherPortal": "My courses"
+    "teacherPortal": "My courses",
+    "adminPortal": "Administrative portal",
+    "psychologyPortal": "Psychology portal",
+    "accountingPortal": "Accounting portal",
+    "technicalCourses": "Technical courses"
   },
   "landing": {
     "enter": "Sign in",
@@ -185,7 +199,7 @@
     "eventsNoResults": "No events of that type right now.",
     "eventsClear": "See all",
     "eventsCount": "{n} of {total} events",
-    "accessIntro": "Three different doors, and they don't all ask for the same thing. The portal is only for people already in the system; dining-hall sign-up is open to anyone.",
+    "accessIntro": "Six doors, one per role. The portal is only for those already in the system; meal sign-up is open to anyone.",
     "portalsLabel": "Go straight to your area",
     "portalsHint": "Asks you to sign in, then drops you on the screen you picked.",
     "portal_estudiante": "Students",
@@ -198,7 +212,26 @@
     "eventType_administrativo": "Administrative",
     "eventType_social": "Social",
     "eventType_reunion": "Meeting",
-    "eventType_otro": "Other"
+    "eventType_otro": "Other",
+    "navContact": "Contact",
+    "navSystemActive": "System active",
+    "portal_administrativo": "Administration",
+    "portal_contabilidad": "Accounting",
+    "portal_psicologia": "Psychology",
+    "portal_cursos_tecnicos": "Technical courses",
+    "portal_estudiante_desc": "Your subjects, grades and standing at the foundation.",
+    "portal_docente_desc": "Your courses, enrolments and grade entry.",
+    "portal_administrativo_desc": "Records, tasks, projects and services.",
+    "portal_contabilidad_desc": "Income, expenses, scholarships and balance.",
+    "portal_psicologia_desc": "Confidential appointments and wellbeing follow-up.",
+    "portal_cursos_tecnicos_desc": "Entry to the technical programme, as student or teacher.",
+    "portalsRoleNote": "Each door opens only for its role. Sign in with another account and the system takes you to yours.",
+    "navMealsShort": "Meals",
+    "blogEyebrow": "What we do",
+    "blogTitle": "News and activities",
+    "blogIntro": "What has happened at the Foundation: awards, gatherings, agreements and past activities.",
+    "blogTagNews": "News",
+    "blogTagEvent": "Activity"
   },
   "comida": {
     "title": "Meal sign-up",
@@ -614,7 +647,13 @@
       "scholarshipReason": "Reason for the scholarship",
       "academicGoals": "Academic goals",
       "notes": "Additional notes",
-      "optional": "Optional"
+      "optional": "Optional",
+      "sexDocument": "Sex (document)",
+      "schoolDirector": "School director",
+      "sponsorEmail": "Email to sponsor",
+      "monthlyMeeting": "Monthly meeting",
+      "warnings": "Warnings this term",
+      "pendingRequests": "Pending requests"
     },
     "family": {
       "add": "Add family member",
@@ -695,6 +734,13 @@
         "notes": "Follow-up notes",
         "service": "Service and meetings"
       }
+    },
+    "followUp": {
+      "unset": "Not set",
+      "pendiente": "Pending",
+      "si": "Yes",
+      "no": "No",
+      "justificado": "Excused"
     }
   },
   "academic": {

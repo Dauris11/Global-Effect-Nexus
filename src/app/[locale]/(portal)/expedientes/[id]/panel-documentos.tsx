@@ -152,7 +152,7 @@ export function PanelDocumentos({
     <section className="space-y-3">
       <div className="flex flex-wrap items-end justify-between gap-3">
         <div>
-          <h2 className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.12em] text-muted-foreground">
+          <h2 className="flex items-center gap-2 tabular-nums text-[11px] uppercase tracking-[0.12em] text-muted-foreground">
             <FileText className="size-3.5" aria-hidden />
             {textos.title}
           </h2>
@@ -188,14 +188,14 @@ export function PanelDocumentos({
                     <p className="truncate text-sm font-medium">
                       {d.nombre ?? textos.title}
                     </p>
-                    <p className="mt-0.5 font-mono text-[13px] tabular-nums text-muted-foreground">
+                    <p className="mt-0.5 tabular-nums text-[13px] tabular-nums text-muted-foreground">
                       {fecha.format(new Date(d.created_at))}
                     </p>
                   </div>
 
                   <div className="flex shrink-0 items-center gap-2">
                     {d.ocr_confianza != null && (
-                      <span className="font-mono text-[13px] tabular-nums text-muted-foreground">
+                      <span className="tabular-nums text-[13px] tabular-nums text-muted-foreground">
                         {textos.confidence}: {d.ocr_confianza}%
                       </span>
                     )}
@@ -211,7 +211,7 @@ export function PanelDocumentos({
 
                 {campos.length > 0 && (
                   <div className="mt-4 border-t border-border pt-4">
-                    <p className="font-mono text-[11px] uppercase tracking-[0.12em] text-muted-foreground">
+                    <p className="tabular-nums text-[11px] uppercase tracking-[0.12em] text-muted-foreground">
                       {textos.extracted}
                     </p>
                     <dl className="mt-3 grid gap-3 sm:grid-cols-2">

@@ -126,7 +126,7 @@ export default async function HistorialPage({
 
   return (
     <div className="space-y-8">
-      <div className="animate-fade-up">
+      <div className="animate-in fade-in-0 slide-in-from-bottom-2 duration-200 ease-out">
         <PageHeader
           eyebrow={t("eyebrow")}
           title={t("history.title")}
@@ -135,39 +135,39 @@ export default async function HistorialPage({
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <Card className="animate-fade-up p-5">
-          <p className="font-mono text-[11px] uppercase tracking-[0.12em] text-muted-foreground">
+        <Card className="animate-in fade-in-0 slide-in-from-bottom-2 duration-200 ease-out p-5">
+          <p className="tabular-nums text-[11px] uppercase tracking-[0.12em] text-muted-foreground">
             {t("history.stats.students")}
           </p>
-          <p className="mt-2 font-mono text-3xl font-semibold tabular-nums">
+          <p className="mt-2 tabular-nums text-3xl font-semibold tabular-nums">
             {resumen.estudiantes}
           </p>
         </Card>
 
-        <Card className="animate-fade-up p-5" style={{ animationDelay: "40ms" }}>
-          <p className="font-mono text-[11px] uppercase tracking-[0.12em] text-muted-foreground">
+        <Card className="animate-in fade-in-0 slide-in-from-bottom-2 duration-200 ease-out p-5" style={{ animationDelay: "40ms" }}>
+          <p className="tabular-nums text-[11px] uppercase tracking-[0.12em] text-muted-foreground">
             {t("history.stats.records")}
           </p>
-          <p className="mt-2 font-mono text-3xl font-semibold tabular-nums">
+          <p className="mt-2 tabular-nums text-3xl font-semibold tabular-nums">
             {resumen.registros}
           </p>
         </Card>
 
         <Card
           className={cn(
-            "animate-fade-up border-l-[3px] p-5",
+            "animate-in fade-in-0 slide-in-from-bottom-2 duration-200 ease-out border-l-[3px] p-5",
             resumen.gpa != null ? paletaDe(bandaGpaGlobal).riel : "border-l-border",
           )}
           style={{ animationDelay: "80ms" }}
         >
-          <p className="font-mono text-[11px] uppercase tracking-[0.12em] text-muted-foreground">
+          <p className="tabular-nums text-[11px] uppercase tracking-[0.12em] text-muted-foreground">
             {t("history.stats.gpa")}
           </p>
           {resumen.gpa != null ? (
             <>
               <p
                 className={cn(
-                  "mt-2 font-mono text-3xl font-semibold tabular-nums",
+                  "mt-2 tabular-nums text-3xl font-semibold tabular-nums",
                   paletaDe(bandaGpaGlobal).texto,
                 )}
               >
@@ -182,13 +182,13 @@ export default async function HistorialPage({
           )}
         </Card>
 
-        <Card className="animate-fade-up p-5" style={{ animationDelay: "120ms" }}>
-          <p className="font-mono text-[11px] uppercase tracking-[0.12em] text-muted-foreground">
+        <Card className="animate-in fade-in-0 slide-in-from-bottom-2 duration-200 ease-out p-5" style={{ animationDelay: "120ms" }}>
+          <p className="tabular-nums text-[11px] uppercase tracking-[0.12em] text-muted-foreground">
             {t("history.stats.failed")}
           </p>
           <p
             className={cn(
-              "mt-2 font-mono text-3xl font-semibold tabular-nums",
+              "mt-2 tabular-nums text-3xl font-semibold tabular-nums",
               resumen.reprobadas > 0 ? "text-nota-critica" : "text-foreground",
             )}
           >
@@ -231,11 +231,11 @@ export default async function HistorialPage({
         />
       ) : (
         <section className="space-y-3">
-          <h2 className="font-mono text-[11px] uppercase tracking-[0.12em] text-muted-foreground">
+          <h2 className="tabular-nums text-[11px] uppercase tracking-[0.12em] text-muted-foreground">
             {t("history.count", { count: filas.length })}
           </h2>
 
-          <Card className="animate-fade-up overflow-hidden p-0">
+          <Card className="animate-in fade-in-0 slide-in-from-bottom-2 duration-200 ease-out overflow-hidden p-0">
             <div className="overflow-x-auto">
               <Table>
                 <TableHeader>
@@ -279,7 +279,7 @@ export default async function HistorialPage({
 
                         <TableCell
                           className={cn(
-                            "text-right font-mono text-sm font-semibold tabular-nums",
+                            "text-right tabular-nums text-sm font-semibold tabular-nums",
                             f.gpa != null && paletaDe(banda).texto,
                           )}
                         >
@@ -288,14 +288,14 @@ export default async function HistorialPage({
 
                         <TableCell
                           className={cn(
-                            "text-right font-mono text-sm tabular-nums",
+                            "text-right tabular-nums text-sm tabular-nums",
                             f.promedio != null && paletaDe(bandaProm).texto,
                           )}
                         >
                           {f.promedio != null ? notaFmt.format(f.promedio) : "—"}
                         </TableCell>
 
-                        <TableCell className="text-right font-mono text-sm tabular-nums">
+                        <TableCell className="text-right tabular-nums text-sm tabular-nums">
                           {f.materias}
                         </TableCell>
 
@@ -321,7 +321,7 @@ export default async function HistorialPage({
                           </div>
                         </TableCell>
 
-                        <TableCell className="font-mono text-[13px] tabular-nums text-muted-foreground">
+                        <TableCell className="tabular-nums text-[13px] tabular-nums text-muted-foreground">
                           {f.ultimo_cuatrimestre}
                         </TableCell>
                       </TableRow>

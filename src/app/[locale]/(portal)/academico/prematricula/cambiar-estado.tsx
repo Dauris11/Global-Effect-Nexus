@@ -62,7 +62,7 @@ export function CambiadorEstadoInscripcion({
             key={e.clave}
             disabled={e.clave === estadoActual || isPending}
             onClick={() => cambiar(e.clave)}
-            className="cursor-pointer font-mono text-xs"
+            className="cursor-pointer tabular-nums text-xs"
           >
             {textosEstado[e.clave] ?? e.etiqueta}
           </DropdownMenuItem>

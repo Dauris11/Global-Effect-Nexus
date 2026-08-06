@@ -60,6 +60,8 @@ export interface TextosExpediente {
   relation: Record<string, string>;
   type: Record<string, string>;
   status: Record<string, string>;
+  /** Estados del seguimiento del cuatrimestre (`records.followUp`). */
+  followUp: Record<string, string>;
 }
 
 interface FamiliarForm {
@@ -81,6 +83,7 @@ const CAMPOS_INICIALES = {
   lugar_nacimiento: "",
   nacionalidad: "",
   genero: "",
+  sexo_documento: "",
   religion: "",
   // Académico
   tipo: "regular",
@@ -90,6 +93,7 @@ const CAMPOS_INICIALES = {
   universidad: "",
   fecha_ingreso: "",
   centro_educativo: "",
+  director_centro: "",
   facilitador_habitudes: "",
   breve_historia_habitudes: "",
   // Vivienda
@@ -117,7 +121,17 @@ const CAMPOS_INICIALES = {
   motivo_beca: "",
   metas_academicas: "",
   notas_adicionales: "",
+  // Seguimiento del cuatrimestre
+  amonestaciones: "",
+  solicitudes_pendientes: "",
+  envio_correo_patrocinador: "",
+  asistio_reunion_mensual: "",
 };
+
+/* Estados del compromiso del joven con la Fundación. La reunión admite
+   además `justificado`: faltar con aviso no es lo mismo que no aparecer. */
+const SEGUIMIENTO = ["pendiente", "si", "no"] as const;
+const SEGUIMIENTO_REUNION = [...SEGUIMIENTO, "justificado"] as const;
 
 type Campos = typeof CAMPOS_INICIALES;
 type Campo = keyof Campos;
@@ -287,6 +301,12 @@ function desdeExpediente(x: ExpedienteCompleto): {
       facilitador_habitudes: txt(e.facilitador_habitudes),
       breve_historia_habitudes: txt(e.breve_historia_habitudes),
       notas_adicionales: txt(e.notas_adicionales),
+      sexo_documento: txt(e.sexo_documento),
+      director_centro: txt(e.director_centro),
+      amonestaciones: txt(e.amonestaciones),
+      solicitudes_pendientes: txt(e.solicitudes_pendientes),
+      envio_correo_patrocinador: txt(e.envio_correo_patrocinador),
+      asistio_reunion_mensual: txt(e.asistio_reunion_mensual),
       con_quien_vive: txt(v?.con_quien_vive),
       por_que_vive_con_esa_persona: txt(v?.por_que_vive_con_esa_persona),
       hermanos_cantidad: txt(v?.hermanos_cantidad),
@@ -497,6 +517,7 @@ export function FormularioExpediente({
               diccionario={textos.gender}
               vacio={textos.field.optional}
             />
+            <CampoTexto valor={campos.sexo_documento} onCambio={set("sexo_documento")} etiqueta={textos.field.sexDocument} />
             <CampoTexto valor={campos.religion} onCambio={set("religion")} etiqueta={textos.field.religion} />
           </Card>
         </TabsContent>
@@ -525,6 +546,7 @@ export function FormularioExpediente({
               tipo="date"
             />
             <CampoTexto valor={campos.centro_educativo} onCambio={set("centro_educativo")} etiqueta={textos.field.school} />
+            <CampoTexto valor={campos.director_centro} onCambio={set("director_centro")} etiqueta={textos.field.schoolDirector} />
             <CampoTexto
               valor={campos.facilitador_habitudes} onCambio={set("facilitador_habitudes")}
               etiqueta={textos.field.facilitator}
@@ -559,7 +581,7 @@ export function FormularioExpediente({
                 {familiares.map((f, i) => (
                   <Card key={i} className="space-y-4 p-5">
                     <div className="flex items-center justify-between gap-3">
-                      <h3 className="font-mono text-[11px] uppercase tracking-[0.12em] text-muted-foreground">
+                      <h3 className="tabular-nums text-[11px] uppercase tracking-[0.12em] text-muted-foreground">
                         {textos.family.member.replace("{n}", String(i + 1))}
                       </h3>
                       <Button
@@ -750,6 +772,36 @@ export function FormularioExpediente({
             <CampoLargo
               valor={campos.notas_adicionales} onCambio={set("notas_adicionales")}
               etiqueta={textos.field.notes}
+              filas={2}
+            />
+
+            {/* Seguimiento del cuatrimestre. Va aquí y no en una pestaña
+                propia porque son cuatro campos que se revisan a la vez que
+                las notas administrativas, en la misma conversación. */}
+            <CampoSelect
+              valor={campos.envio_correo_patrocinador}
+              onCambio={set("envio_correo_patrocinador")}
+              etiqueta={textos.field.sponsorEmail}
+              opciones={SEGUIMIENTO}
+              diccionario={textos.followUp}
+              vacio={textos.followUp.unset}
+            />
+            <CampoSelect
+              valor={campos.asistio_reunion_mensual}
+              onCambio={set("asistio_reunion_mensual")}
+              etiqueta={textos.field.monthlyMeeting}
+              opciones={SEGUIMIENTO_REUNION}
+              diccionario={textos.followUp}
+              vacio={textos.followUp.unset}
+            />
+            <CampoLargo
+              valor={campos.amonestaciones} onCambio={set("amonestaciones")}
+              etiqueta={textos.field.warnings}
+              filas={2}
+            />
+            <CampoLargo
+              valor={campos.solicitudes_pendientes} onCambio={set("solicitudes_pendientes")}
+              etiqueta={textos.field.pendingRequests}
               filas={2}
             />
           </Card>

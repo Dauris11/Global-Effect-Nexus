@@ -40,6 +40,8 @@ const RUTAS_PROTEGIDAS = [
   "/configuracion",
   "/inscripcion-comida",
   "/servicios-mensuales",
+  // Requiere sesión (no permiso): el estudiante pide su propia cita.
+  "/cita-psicologia",
   "/portal",
 ];
 

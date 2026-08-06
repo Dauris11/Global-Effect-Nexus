@@ -92,7 +92,7 @@ export default async function ProyectosPage({
 
   return (
     <div className="space-y-6">
-      <div className="animate-fade-up">
+      <div className="animate-in fade-in-0 slide-in-from-bottom-2 duration-200 ease-out">
         <PageHeader
           eyebrow={t("eyebrow")}
           title={t("projects.title")}
@@ -118,7 +118,7 @@ export default async function ProyectosPage({
             return (
               <Card
                 key={p.id}
-                className={cn("animate-fade-up border-l-[3px] p-5", paletaDe(banda).riel)}
+                className={cn("animate-in fade-in-0 slide-in-from-bottom-2 duration-200 ease-out border-l-[3px] p-5", paletaDe(banda).riel)}
                 style={{ animationDelay: `${Math.min(i, 8) * 40}ms` }}
               >
                 <div className="flex items-start justify-between gap-3">
@@ -136,10 +136,10 @@ export default async function ProyectosPage({
 
                 <div className="mt-4 space-y-2">
                   <div className="flex items-baseline justify-between">
-                    <span className="font-mono text-[11px] uppercase tracking-[0.12em] text-muted-foreground">
+                    <span className="tabular-nums text-[11px] uppercase tracking-[0.12em] text-muted-foreground">
                       {t("project.progress")}
                     </span>
-                    <span className="font-mono text-xs tabular-nums text-muted-foreground">
+                    <span className="tabular-nums text-xs tabular-nums text-muted-foreground">
                       {p.total_tareas > 0
                         ? t("project.tasksDone", {
                             done: p.tareas_completadas,
@@ -167,7 +167,7 @@ export default async function ProyectosPage({
                   {(p.fecha_inicio || p.fecha_fin) && (
                     <div>
                       <dt className="sr-only">{t("project.dates")}</dt>
-                      <dd className="font-mono tabular-nums">
+                      <dd className="tabular-nums tabular-nums">
                         {formatear(p.fecha_inicio) ?? "—"} → {formatear(p.fecha_fin) ?? "—"}
                       </dd>
                     </div>

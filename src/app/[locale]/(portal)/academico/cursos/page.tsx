@@ -213,7 +213,7 @@ export default async function CursosPage({
 
   return (
     <div className="space-y-8">
-      <div className="animate-fade-up">
+      <div className="animate-in fade-in-0 slide-in-from-bottom-2 duration-200 ease-out">
         <PageHeader
           eyebrow={t("eyebrow")}
           title={t("courses.title")}
@@ -235,13 +235,13 @@ export default async function CursosPage({
         {cifras.map((c, i) => (
           <Card
             key={c.clave}
-            className="animate-fade-up p-5"
+            className="animate-in fade-in-0 slide-in-from-bottom-2 duration-200 ease-out p-5"
             style={{ animationDelay: `${i * 40}ms` }}
           >
-            <p className="font-mono text-[11px] uppercase tracking-[0.12em] text-muted-foreground">
+            <p className="tabular-nums text-[11px] uppercase tracking-[0.12em] text-muted-foreground">
               {t(`courses.stats.${c.clave}` as never)}
             </p>
-            <p className="mt-2 font-mono text-3xl font-semibold tabular-nums">{c.valor}</p>
+            <p className="mt-2 tabular-nums text-3xl font-semibold tabular-nums">{c.valor}</p>
           </Card>
         ))}
       </div>
@@ -287,7 +287,7 @@ export default async function CursosPage({
         />
       ) : (
         <section className="space-y-3">
-          <h2 className="font-mono text-[11px] uppercase tracking-[0.12em] text-muted-foreground">
+          <h2 className="tabular-nums text-[11px] uppercase tracking-[0.12em] text-muted-foreground">
             {t("courses.count", { count: cursos.length })}
           </h2>
 
@@ -304,7 +304,7 @@ export default async function CursosPage({
               return (
                 <Card
                   key={c.id}
-                  className={cn("animate-fade-up border-l-[3px] p-5", paletaDe(banda).riel)}
+                  className={cn("animate-in fade-in-0 slide-in-from-bottom-2 duration-200 ease-out border-l-[3px] p-5", paletaDe(banda).riel)}
                   style={{ animationDelay: `${Math.min(i, 8) * 40}ms` }}
                 >
                   <div className="flex items-start justify-between gap-3">
@@ -333,12 +333,12 @@ export default async function CursosPage({
 
                   <div className="mt-4 space-y-2">
                     <div className="flex items-baseline justify-between gap-2">
-                      <span className="font-mono text-[11px] uppercase tracking-[0.12em] text-muted-foreground">
+                      <span className="tabular-nums text-[11px] uppercase tracking-[0.12em] text-muted-foreground">
                         {t("course.occupancy")}
                       </span>
                       <span
                         className={cn(
-                          "font-mono text-xs tabular-nums",
+                          "tabular-nums text-xs tabular-nums",
                           pasado
                             ? "font-semibold text-prioridad-urgente"
                             : "text-muted-foreground",
@@ -377,7 +377,7 @@ export default async function CursosPage({
                     {c.periodo_nombre && (
                       <div>
                         <dt className="sr-only">{t("course.term")}</dt>
-                        <dd className="font-mono">{c.periodo_nombre}</dd>
+                        <dd className="tabular-nums">{c.periodo_nombre}</dd>
                       </div>
                     )}
                     {c.horario && (

@@ -1,135 +1,77 @@
 /**
- * Footer institucional de la landing page.
- * Rediseño completo: tema oscuro profundo, acento púrpura, sin tokens viejos.
+ * Footer institucional.
+ *
+ * Cierra la página con el filete turquesa arriba (la única marca de color
+ * sobre el slate-900) y reparte contacto, secciones y accesos en columnas.
  */
-"use client";
-
-import { useTranslations } from "next-intl";
-import { MapPin, Mail, ShieldCheck } from "lucide-react";
+import { Mail, MapPin } from "lucide-react";
+import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
-import { SelectorIdioma } from "@/components/layout/selector-idioma";
-import Image from "next/image";
 import { Logo } from "@/components/brand/logo";
 
-export function LandingFooter() {
-  const t = useTranslations("landing");
-
-  const secciones = [
-    { label: t("navAccess"),   href: "#acceso"     },
-    { label: t("navWork"),     href: "#labor"       },
-    { label: t("navEventos"),  href: "#eventos"     },
-    { label: t("navFaq"),      href: "#faq"         },
-  ];
-
-  const puertas = [
-    { label: t("access_portal_title"), href: "/login"   },
-    { label: t("access_meals_title"),  href: "/comida"  },
-  ];
+export async function LandingFooter() {
+  const t = await getTranslations("landing");
+  const año = new Date().getFullYear();
 
   return (
-    <footer id="footer" className="relative bg-[#050810]">
-      {/* Top separator line with glow */}
-      <div
-        aria-hidden
-        className="absolute left-1/2 top-0 h-px w-3/4 -translate-x-1/2 bg-gradient-to-r from-transparent via-[#1d4ed8]/40 to-transparent"
-      />
-      {/* Top purple accent bar */}
-      <div aria-hidden className="h-[2px] w-full bg-gradient-to-r from-[#1d4ed8] via-[#60a5fa] to-[#1d4ed8]" />
-
-      <div className="mx-auto max-w-6xl px-6 py-16">
-        <div className="grid gap-12 md:grid-cols-[1.4fr_1fr_1fr]">
-
-          {/* Brand column */}
+    <footer
+      id="footer"
+      className="border-t-4 bg-slate-900"
+      style={{ borderTopColor: "#2096BA" }}
+    >
+      <div className="mx-auto max-w-6xl px-4 py-14 md:px-6">
+        <div className="grid gap-10 md:grid-cols-3">
           <div>
-            {/* Logo mark */}
-            <div className="flex items-center">
-              <Logo className="h-9 w-auto brightness-0 invert drop-shadow-[0_0_12px_rgba(96,165,250,0.4)]" />
-            </div>
+            <Logo className="h-9 w-auto brightness-200" />
+            <p className="mt-4 max-w-xs text-sm text-slate-400">{t("footerTagline")}</p>
+          </div>
 
-            <p className="mt-5 max-w-xs text-sm italic leading-relaxed text-white/40">
-              {t("footerTagline")}
-            </p>
+          <div>
+            <h2 className="font-heading text-sm font-semibold text-white">
+              {t("footerAccess")}
+            </h2>
+            <ul className="mt-4 space-y-2">
+              <li>
+                <Link href="/login" className="text-xs text-slate-400 hover:text-white">
+                  {t("enter")}
+                </Link>
+              </li>
+              <li>
+                <Link href="/comida" className="text-xs text-slate-400 hover:text-white">
+                  {t("heroCta2")}
+                </Link>
+              </li>
+              <li>
+                <a href="#portales" className="text-xs text-slate-400 hover:text-white">
+                  {t("navAccess")}
+                </a>
+              </li>
+            </ul>
+          </div>
 
-            <address className="mt-6 space-y-2.5 text-sm not-italic text-white/40">
-              <p className="flex items-start gap-2.5">
-                <MapPin className="mt-0.5 size-4 shrink-0 text-[#60a5fa]" aria-hidden />
-                <span>{t("footerAddress")}</span>
-              </p>
-              <p className="flex items-center gap-2.5">
-                <Mail className="size-4 shrink-0 text-[#60a5fa]" aria-hidden />
-                <a
-                  href={`mailto:${t("footerEmail")}`}
-                  className="transition-colors hover:text-white"
-                >
+          <div>
+            <h2 className="font-heading text-sm font-semibold text-white">
+              {t("footerThisPage")}
+            </h2>
+            <ul className="mt-4 space-y-2 text-xs text-slate-400">
+              <li className="flex items-start gap-2">
+                <MapPin aria-hidden className="mt-0.5 h-3.5 w-3.5 shrink-0" />
+                {t("footerAddress")}
+              </li>
+              <li className="flex items-start gap-2">
+                <Mail aria-hidden className="mt-0.5 h-3.5 w-3.5 shrink-0" />
+                <a href={`mailto:${t("footerEmail")}`} className="hover:text-white">
                   {t("footerEmail")}
                 </a>
-              </p>
-            </address>
-          </div>
-
-          {/* Nav column */}
-          <div>
-            <h3 className="mb-5 font-mono text-[10px] uppercase tracking-[0.2em] text-white/50">
-              {t("footerThisPage")}
-            </h3>
-            <ul className="space-y-3 text-sm">
-              {secciones.map((s) => (
-                <li key={s.href}>
-                  <a
-                    href={s.href}
-                    className="flex items-center gap-2 text-white/40 transition-colors hover:text-white"
-                  >
-                    <span className="size-1 rounded-full bg-[#1d4ed8]/60" />
-                    {s.label}
-                  </a>
-                </li>
-              ))}
+              </li>
             </ul>
-          </div>
-
-          {/* Access column */}
-          <div>
-            <h3 className="mb-5 font-mono text-[10px] uppercase tracking-[0.2em] text-white/50">
-              {t("footerAccess")}
-            </h3>
-            <ul className="mb-8 space-y-3 text-sm">
-              {puertas.map((p) => (
-                <li key={p.href}>
-                  <Link
-                    href={p.href}
-                    className="flex items-center gap-2 text-white/40 transition-colors hover:text-white"
-                  >
-                    <span className="size-1 rounded-full bg-[#60a5fa]/60" />
-                    {p.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-            <SelectorIdioma />
           </div>
         </div>
 
-        {/* Sub-footer */}
-        <div className="mt-14 flex flex-col items-center justify-between gap-4 border-t border-white/6 pt-8 font-mono text-xs text-white/25 md:flex-row">
-          <div className="flex items-center gap-2">
-            <ShieldCheck className="size-3.5 shrink-0" aria-hidden />
-            <span>
-              © {new Date().getFullYear()} Global Effect Foundation.{" "}
-              {t("footerAccessNote")}
-            </span>
-          </div>
-          <span>{t("footerVersion")}</span>
-        </div>
-
-        {/* Icon watermark */}
-        <div className="mt-10 flex justify-center">
-          <Image
-            src="/icon.png"
-            alt="Global Effect Foundation"
-            width={48}
-            height={48}
-            className="opacity-20 transition-opacity duration-300 hover:opacity-40"
-          />
+        <div className="mt-12 border-t border-slate-800 pt-6">
+          <p className="text-xs text-slate-500">
+            © {año} Global Effect · {t("footerRights")}
+          </p>
         </div>
       </div>
     </footer>

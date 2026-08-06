@@ -1,93 +1,96 @@
 /**
- * Portales — accesos directos al sistema.
- * Botones grandes y llamativos con animaciones creativas al hover.
+ * Tira de acceso a los portales — va pegada bajo el hero.
+ *
+ * Ocupa el sitio donde antes estaban las cifras institucionales. El cambio es
+ * de propósito: una landing cuya primera fila son estadísticas se lee como un
+ * folleto; una cuya primera fila son las puertas de entrada se lee como la
+ * portada de un sistema, que es lo que esto es.
+ *
+ * Son los seis portales del catálogo (03-modulos-funcionales.md § Portales por
+ * rol), cada uno con el color que se encontrará en el banner al entrar, para
+ * que el icono de aquí y la cabecera de allá sean reconociblemente lo mismo.
+ *
+ * **Un solo color, un solo tono de fondo.** Los seis azulejos comparten el
+ * mismo neutro y los seis glifos el turquesa institucional. Seis colores
+ * distintos, uno al lado del otro, se pelean entre sí y ninguno gana: la fila
+ * deja de leerse como un grupo y pasa a leerse como seis cosas sueltas. Lo que
+ * distingue a cada portal aquí es el icono y el nombre, no el color; el color
+ * de rol aparece dentro, en el banner de cada portal, donde ya no compite con
+ * nada.
+ *
+ * El azulejo es lo interactivo: al enfocarlo o pasar el cursor se eleva, se
+ * tiñe de turquesa y el glifo crece. Todo en 200ms y con `ease-out`, y todo
+ * anulado por `prefers-reduced-motion` desde `globals.css`.
+ *
+ * Las clases van literales y completas: Tailwind no genera las que se
+ * construyen por concatenación.
  */
-import { getTranslations } from "next-intl/server";
-import {
-  GraduationCap,
-  BookOpen,
-  LayoutDashboard,
-  Users,
-  Library,
-  Calendar,
-} from "lucide-react";
+import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
+import { PORTALES } from "@/lib/portales";
 
-const PORTALES = [
-  { clave: "estudiante",  href: "/portal/estudiante",  icono: GraduationCap, color: "#60a5fa", glow: "rgba(96,165,250,0.35)" },
-  { clave: "docente",     href: "/portal/profesor",    icono: BookOpen,      color: "#34d399", glow: "rgba(52,211,153,0.30)"  },
-  { clave: "panel",       href: "/dashboard",          icono: LayoutDashboard,color:"#fb7185", glow: "rgba(251,113,133,0.30)" },
-  { clave: "expedientes", href: "/expedientes",        icono: Users,         color: "#fbbf24", glow: "rgba(251,191,36,0.30)"  },
-  { clave: "academico",   href: "/academico/materias", icono: Library,       color: "#38bdf8", glow: "rgba(56,189,248,0.30)"  },
-  { clave: "calendario",  href: "/calendario",         icono: Calendar,      color: "#a78bfa", glow: "rgba(96,165,250,0.30)" },
-] as const;
 
-export async function Portales() {
-  const t = await getTranslations("landing");
+export function Portales() {
+  const t = useTranslations("landing");
 
   return (
-    <div>
-      <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-primary font-bold">
-        {t("portalsLabel")}
-      </p>
+    <section
+      id="portales"
+      aria-labelledby="portales-titulo"
+      className="border-b border-slate-200 bg-white"
+    >
+      <div className="mx-auto max-w-6xl px-4 py-10 md:px-6">
+        {/* El titular existe para los lectores de pantalla y para dar contexto
+            sin robarle protagonismo a la fila de iconos. */}
+        <h2
+          id="portales-titulo"
+          className="text-center text-xs uppercase tracking-widest text-[#2096BA]"
+        >
+          {t("accessEyebrow")}
+        </h2>
 
-      <ul className="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
-        {PORTALES.map(({ clave, href, icono: Icono, color, glow }) => (
-          <li key={clave}>
-            {/* Each portal card is a standalone styled element using style prop for dynamic colors */}
-            <Link
-              href={href}
-              className="portal-card group relative flex h-full flex-col items-center overflow-hidden rounded-2xl border border-primary/15 bg-primary/[0.02] shadow-[0_4px_16px_rgba(29,78,216,0.04)] px-4 py-7 text-center transition-all duration-300 hover:-translate-y-1 hover:border-primary/45 hover:shadow-[0_12px_24px_rgba(29,78,216,0.1)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-              style={{ "--portal-glow": glow, "--portal-color": color } as React.CSSProperties}
-            >
-              {/* Animated background sweep on hover */}
-              <span
-                aria-hidden
-                className="absolute inset-0 translate-y-full rounded-2xl transition-transform duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] group-hover:translate-y-0"
-                style={{ background: `linear-gradient(135deg, ${color}15 0%, ${color}08 100%)` }}
-              />
-              {/* Glow ring that expands on hover */}
-              <span
-                aria-hidden
-                className="absolute inset-0 rounded-2xl opacity-0 transition-opacity duration-300 group-hover:opacity-100"
-                style={{ boxShadow: `inset 0 0 0 1px ${color}50, 0 0 40px ${glow}` }}
-              />
+        <ul className="mt-7 grid grid-cols-3 gap-x-3 gap-y-7 sm:gap-x-6 md:grid-cols-6">
+          {PORTALES.map((p) => {
+            const Icono = p.icono;
+            return (
+              <li key={p.clave}>
+                <Link
+                  href={`/login/${p.clave}`}
+                  className="group flex h-full flex-col items-center rounded-xl p-2 text-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2096BA] focus-visible:ring-offset-2"
+                >
+                  <span
+                    aria-hidden
+                    className="
+                      flex h-16 w-16 items-center justify-center rounded-2xl
+                      border border-slate-200 bg-slate-100 text-[#2096BA]
+                      transition-all duration-200 ease-out
+                      group-hover:-translate-y-1.5 group-hover:border-[#2096BA]/40
+                      group-hover:bg-[#2096BA]/10 group-hover:shadow-lg
+                      group-hover:shadow-[#2096BA]/20
+                      group-focus-visible:-translate-y-1.5
+                      group-focus-visible:border-[#2096BA]/40
+                      group-focus-visible:bg-[#2096BA]/10
+                    "
+                  >
+                    {/* El glifo crece un punto más que el azulejo: el conjunto
+                        se siente vivo sin que la fila se mueva de sitio. */}
+                    <Icono className="h-7 w-7 transition-transform duration-200 ease-out group-hover:scale-110 group-focus-visible:scale-110" />
+                  </span>
 
-              {/* Icon container with bounce animation */}
-              <span
-                className="relative z-10 flex size-14 items-center justify-center rounded-xl transition-all duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)] group-hover:scale-125 group-hover:-translate-y-1"
-                style={{
-                  backgroundColor: `${color}18`,
-                  color,
-                  boxShadow: `0 0 0 0 ${glow}`,
-                }}
-              >
-                <Icono
-                  className="size-7 transition-transform duration-300 group-hover:rotate-[-8deg]"
-                  strokeWidth={1.4}
-                  aria-hidden
-                />
-              </span>
+                  {/* Altura fija en la etiqueta: "Administración" y "Cursos
+                      técnicos" ocupan dos líneas y sin esto la fila quedaba
+                      con los azulejos a distinta altura. */}
+                  <span className="mt-3 flex min-h-[2.25rem] items-start justify-center text-xs font-semibold leading-tight text-slate-700 transition-colors duration-200 group-hover:text-[#2096BA] sm:text-sm">
+                    {t(p.nombreKey as "portal_estudiante")}
+                  </span>
+                </Link>
+              </li>
+            );
+          })}
+        </ul>
 
-              {/* Label slides up */}
-              <span
-                className="relative z-10 mt-4 block text-[13px] font-bold leading-tight text-foreground transition-all duration-300 group-hover:-translate-y-0.5 group-hover:text-primary"
-              >
-                {t(`portal_${clave}` as never)}
-              </span>
-
-              {/* Animated underline */}
-              <span
-                aria-hidden
-                className="absolute bottom-3 left-1/2 h-px w-0 -translate-x-1/2 rounded-full transition-all duration-300 group-hover:w-10"
-                style={{ backgroundColor: color }}
-              />
-            </Link>
-          </li>
-        ))}
-      </ul>
-
-      <p className="mt-5 text-xs text-muted-foreground">{t("portalsHint")}</p>
-    </div>
+        <p className="mt-8 text-center text-xs text-slate-500">{t("portalsRoleNote")}</p>
+      </div>
+    </section>
   );
 }

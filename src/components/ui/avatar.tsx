@@ -119,7 +119,7 @@ function AvatarGroup({
       {resto > 0 && (
         <span
           className={cn(
-            "-ml-2 flex items-center justify-center rounded-full bg-muted font-mono font-medium text-muted-foreground ring-2 ring-surface",
+            "-ml-2 flex items-center justify-center rounded-full bg-muted tabular-nums font-medium text-muted-foreground ring-2 ring-surface",
             TAMANOS[tamano],
           )}
         >

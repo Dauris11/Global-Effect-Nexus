@@ -16,3 +16,20 @@ export const GuardarSlide = z.object({
 });
 
 export type GuardarSlideInput = z.infer<typeof GuardarSlide>;
+
+/**
+ * Noticia del blog público.
+ *
+ * `fecha` es la que se muestra y ordena, no la de creación: una nota sobre
+ * algo de marzo puede redactarse en agosto.
+ */
+export const GuardarNoticia = z.object({
+  id: z.string().uuid().optional(),
+  titulo: z.string().trim().min(1),
+  resumen: z.string().trim().optional(),
+  contenido: z.string().trim().optional(),
+  imagen_url: z.string().trim().optional(),
+  fecha: z.string().min(1),
+  autor: z.string().trim().optional(),
+  publicada: z.coerce.boolean().default(false),
+});

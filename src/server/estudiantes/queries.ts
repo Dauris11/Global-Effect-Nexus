@@ -3,6 +3,7 @@
  * Nunca se interpola entrada del usuario: todo va como parámetro posicional.
  */
 import { query } from "@/lib/db";
+import { urlFirmada } from "@/server/storage";
 import type {
   DocumentoExpediente,
   Estudiante,
@@ -125,14 +126,29 @@ export async function obtenerEstudiante(id: string): Promise<Estudiante | null> 
     // en la zona del servidor y una fecha de nacimiento puede retroceder un día.
     `SELECT e.id, e.nombre, e.cedula, e.email, e.telefono,
             to_char(e.fecha_nacimiento, 'YYYY-MM-DD') AS fecha_nacimiento,
-            e.lugar_nacimiento, e.nacionalidad, e.genero, e.religion,
+            e.lugar_nacimiento, e.nacionalidad, e.genero, e.sexo_documento, e.religion,
             e.tipo, e.estado, e.programa, e.donde_estudia, e.universidad,
             to_char(e.fecha_ingreso, 'YYYY-MM-DD') AS fecha_ingreso,
-            e.centro_educativo, e.facilitador_habitudes, e.breve_historia_habitudes,
+            e.centro_educativo, e.director_centro,
+            e.facilitador_habitudes, e.breve_historia_habitudes,
+            -- Claves de Storage de los tres adjuntos de la ficha. Se devuelven
+            -- crudas: firmarlas aquí obligaría a tres llamadas a Supabase en
+            -- cada listado que use esta consulta. Las firma quien las pinta.
+            dfoto.storage_key       AS foto_key,
+            dhab.storage_key        AS imagen_habitudes_key,
+            dexp.storage_key        AS expediente_key,
             e.notas_adicionales, e.patrocinador_id, p.nombre AS patrocinador_nombre,
+            -- Seguimiento del cuatrimestre: lo consume la pestaña homónima del
+            -- expediente. Van aquí y no en una consulta aparte porque son
+            -- columnas de la propia fila del estudiante.
+            e.amonestaciones, e.solicitudes_pendientes,
+            e.envio_correo_patrocinador, e.asistio_reunion_mensual,
             e.created_at
        FROM estudiante e
        LEFT JOIN patrocinador p ON p.id = e.patrocinador_id
+       LEFT JOIN documento dfoto ON dfoto.id = e.foto_id
+       LEFT JOIN documento dhab  ON dhab.id  = e.imagen_habitudes_id
+       LEFT JOIN documento dexp  ON dexp.id  = e.expediente_id
       WHERE e.id = $1`,
     [id],
   );
@@ -203,8 +219,24 @@ export async function obtenerExpedienteCompleto(
     ),
   ]);
 
+  /* Se firman aquí y no en el SELECT: son enlaces con caducidad y cada uno
+     cuesta una llamada a Supabase, así que solo se pagan al abrir una ficha
+     concreta —nunca en un listado—. Si un adjunto se borró del bucket, la
+     firma falla y se devuelve `null` en vez de tumbar el expediente entero. */
+  const firmar = async (key: string | null) =>
+    key ? await urlFirmada(key).catch(() => null) : null;
+
+  const [fotoUrl, imagenHabitudesUrl, expedienteUrl] = await Promise.all([
+    firmar(estudiante.foto_key),
+    firmar(estudiante.imagen_habitudes_key),
+    firmar(estudiante.expediente_key),
+  ]);
+
   return {
     estudiante,
+    fotoUrl,
+    imagenHabitudesUrl,
+    expedienteUrl,
     familiares: fam.rows as Familiar[],
     vivienda: (viv.rows[0] as PerfilVivienda) ?? null,
     salud: (sal.rows[0] as PerfilSalud) ?? null,

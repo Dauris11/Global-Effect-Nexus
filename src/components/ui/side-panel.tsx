@@ -40,7 +40,7 @@ function SidePanelContent({
       <DialogPrimitive.Content
         className={cn(
           "fixed inset-y-0 right-0 z-50 flex w-full max-w-xl flex-col",
-          "border-l border-border bg-surface shadow-flotante",
+          "border-l border-border bg-surface shadow-lg",
           "duration-250 ease-out",
           "data-[state=open]:animate-in data-[state=open]:slide-in-from-right",
           "data-[state=closed]:animate-out data-[state=closed]:slide-out-to-right",

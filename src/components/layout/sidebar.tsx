@@ -10,7 +10,7 @@ import type { NavItem } from "@/lib/nav";
 
 export function Sidebar({ items }: { items: NavItem[] }) {
   return (
-    <aside className="hidden w-64 shrink-0 flex-col bg-brand-charcoal md:flex">
+    <aside className="hidden w-64 shrink-0 flex-col bg-foreground md:flex">
       <div className="flex h-16 items-center px-6">
         <Logo className="h-6 w-auto" />
       </div>
@@ -18,7 +18,7 @@ export function Sidebar({ items }: { items: NavItem[] }) {
         <NavList items={items} tone="dark" />
       </div>
       <div className="border-t border-white/10 px-6 py-4">
-        <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-slate-500">
+        <p className="tabular-nums text-[10px] uppercase tracking-[0.18em] text-slate-500">
           Fundación Global Effect
         </p>
       </div>

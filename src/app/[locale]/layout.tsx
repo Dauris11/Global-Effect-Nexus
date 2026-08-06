@@ -4,32 +4,25 @@
  * componentes cliente. Define <html>/<body> y los estilos globales.
  *
  * Tipografía:
- *   - Inter (300–800): interfaz y titulares (`--font-inter` → `font-sans` y
- *     `font-display` en el tema).
- *   - JetBrains Mono: etiquetas, cifras y datos técnicos (`--font-jetbrains-mono`
- *     → `font-mono` en el tema).
+ *   Una sola familia, Inter (300–900). Cubre cuerpo, interfaz y titulares:
+ *   `--font-inter` alimenta tanto `font-sans` como `font-heading`.
  *
- * Tema oscuro:
- *   El script inline aplica la clase `dark` en <html> antes de pintar,
- *   leyendo localStorage("theme"). El ThemeToggle lo actualiza en tiempo real.
+ * Tema:
+ *   El claro es el predeterminado. El script inline aplica `.dark` antes del
+ *   primer paint solo si la persona lo eligió antes.
  */
 import type { Metadata } from "next";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
 import { notFound } from "next/navigation";
-import { Inter, JetBrains_Mono } from "next/font/google";
+import { Inter } from "next/font/google";
 import { routing, type Locale } from "@/i18n/routing";
 import "../globals.css";
 
 const inter = Inter({
   subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700", "800", "900"],
   variable: "--font-inter",
-  display: "swap",
-});
-
-const jetbrainsMono = JetBrains_Mono({
-  subsets: ["latin"],
-  variable: "--font-jetbrains-mono",
   display: "swap",
 });
 
@@ -58,15 +51,14 @@ export default async function LocaleLayout({
     <html
       lang={locale}
       suppressHydrationWarning
-      className={`${inter.variable} ${jetbrainsMono.variable}`}
+      className={inter.variable}
     >
       <head>
-        {/* Anti-FOUC: aplica `.dark` antes del primer paint, leyendo la
-            preferencia guardada. Por defecto el tema es oscuro (incluida la
-            landing pública), salvo que la persona haya elegido claro antes. */}
+        {/* Anti-FOUC: el claro es el predeterminado, así que solo hay que
+            adelantarse cuando la persona pidió el oscuro explícitamente. */}
         <script
           dangerouslySetInnerHTML={{
-            __html: `(function(){try{var t=localStorage.getItem("theme");if(t!=="light"){document.documentElement.classList.add("dark");}}catch(e){document.documentElement.classList.add("dark");}})();`,
+            __html: `(function(){try{if(localStorage.getItem("theme")==="dark"){document.documentElement.classList.add("dark");}}catch(e){}})();`,
           }}
         />
       </head>

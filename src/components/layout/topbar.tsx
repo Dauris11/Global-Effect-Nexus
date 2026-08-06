@@ -46,10 +46,10 @@ export function TopBar({
   const locale = useLocale();
 
   return (
-    <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-border bg-background/80 px-4 backdrop-blur sm:px-6">
+    <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-border bg-background px-4 sm:px-6">
       <div className="flex items-center gap-2">
         <MobileNav items={items} />
-        <span className="flex items-center rounded-md bg-brand-charcoal px-1.5 py-1.5 md:hidden">
+        <span className="flex items-center rounded-md bg-foreground px-1.5 py-1.5 md:hidden">
           <IconMark className="h-5 w-auto" />
         </span>
       </div>
@@ -59,7 +59,7 @@ export function TopBar({
         <ThemeToggle />
         <DropdownMenu>
           <DropdownMenuTrigger className="flex items-center gap-2 rounded-full py-1 pl-1 pr-2 outline-none transition-colors hover:bg-muted focus-visible:ring-1 focus-visible:ring-ring">
-            <span className="flex size-8 items-center justify-center rounded-full bg-primary/12 font-mono text-xs font-semibold text-primary">
+            <span className="flex size-8 items-center justify-center rounded-full bg-primary/12 tabular-nums text-xs font-semibold text-primary">
               {iniciales(nombre)}
             </span>
             <span className="hidden text-left sm:block">

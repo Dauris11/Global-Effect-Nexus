@@ -180,7 +180,7 @@ export function DialogoPeriodo({
                 value={nombre}
                 onChange={(e) => setNombre(e.target.value)}
                 placeholder="2026-I"
-                className="font-mono"
+                className="tabular-nums"
                 autoFocus
               />
             )}

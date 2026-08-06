@@ -202,7 +202,7 @@ export default async function CalificacionesPage({
 
   return (
     <div className="space-y-8">
-      <div className="animate-fade-up">
+      <div className="animate-in fade-in-0 slide-in-from-bottom-2 duration-200 ease-out">
         <PageHeader
           eyebrow={t("eyebrow")}
           title={t("grades.title")}
@@ -213,29 +213,29 @@ export default async function CalificacionesPage({
 
       {/* Cabecera: total, promedio con su banda y tasa de aprobación */}
       <div className="grid gap-4 sm:grid-cols-3">
-        <Card className="animate-fade-up p-5">
-          <p className="font-mono text-[11px] uppercase tracking-[0.12em] text-muted-foreground">
+        <Card className="animate-in fade-in-0 slide-in-from-bottom-2 duration-200 ease-out p-5">
+          <p className="tabular-nums text-[11px] uppercase tracking-[0.12em] text-muted-foreground">
             {t("grades.stats.total")}
           </p>
-          <p className="mt-2 font-mono text-3xl font-semibold tabular-nums">
+          <p className="mt-2 tabular-nums text-3xl font-semibold tabular-nums">
             {resumen.total}
           </p>
         </Card>
 
         <Card
           className={cn(
-            "animate-fade-up border-l-[3px] p-5",
+            "animate-in fade-in-0 slide-in-from-bottom-2 duration-200 ease-out border-l-[3px] p-5",
             resumen.promedio != null ? paletaDe(bandaPromedio).riel : "border-l-border",
           )}
           style={{ animationDelay: "40ms" }}
         >
-          <p className="font-mono text-[11px] uppercase tracking-[0.12em] text-muted-foreground">
+          <p className="tabular-nums text-[11px] uppercase tracking-[0.12em] text-muted-foreground">
             {t("grades.stats.average")}
           </p>
           {resumen.promedio != null ? (
             <p
               className={cn(
-                "mt-2 font-mono text-3xl font-semibold tabular-nums",
+                "mt-2 tabular-nums text-3xl font-semibold tabular-nums",
                 paletaDe(bandaPromedio).texto,
               )}
             >
@@ -246,11 +246,11 @@ export default async function CalificacionesPage({
           )}
         </Card>
 
-        <Card className="animate-fade-up p-5" style={{ animationDelay: "80ms" }}>
-          <p className="font-mono text-[11px] uppercase tracking-[0.12em] text-muted-foreground">
+        <Card className="animate-in fade-in-0 slide-in-from-bottom-2 duration-200 ease-out p-5" style={{ animationDelay: "80ms" }}>
+          <p className="tabular-nums text-[11px] uppercase tracking-[0.12em] text-muted-foreground">
             {t("grades.stats.passRate")}
           </p>
-          <p className="mt-2 font-mono text-3xl font-semibold tabular-nums">{tasa}%</p>
+          <p className="mt-2 tabular-nums text-3xl font-semibold tabular-nums">{tasa}%</p>
           <p className="mt-1 text-[13px] text-muted-foreground">
             {t("grades.passRateHint", { passed: resumen.aprobadas, total: resumen.total })}
           </p>
@@ -260,25 +260,25 @@ export default async function CalificacionesPage({
       {/* Distribución por banda — el corazón de la pantalla */}
       {resumen.total > 0 && (
         <section className="space-y-3">
-          <h2 className="font-mono text-[11px] uppercase tracking-[0.12em] text-muted-foreground">
+          <h2 className="tabular-nums text-[11px] uppercase tracking-[0.12em] text-muted-foreground">
             {t("grades.distribution")}
           </h2>
           <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
             {distribucion.map((d, i) => (
               <Card
                 key={d.banda}
-                className={cn("animate-fade-up border-l-[3px] p-4", paletaDe(d.banda).riel)}
+                className={cn("animate-in fade-in-0 slide-in-from-bottom-2 duration-200 ease-out border-l-[3px] p-4", paletaDe(d.banda).riel)}
                 style={{ animationDelay: `${120 + i * 30}ms` }}
               >
                 <div className="flex items-baseline justify-between gap-2">
                   <p className="text-sm font-medium">{d.nombre}</p>
-                  <span className="font-mono text-[11px] tabular-nums text-muted-foreground">
+                  <span className="tabular-nums text-[11px] tabular-nums text-muted-foreground">
                     {d.rango}
                   </span>
                 </div>
                 <p
                   className={cn(
-                    "mt-2 font-mono text-2xl font-semibold tabular-nums",
+                    "mt-2 tabular-nums text-2xl font-semibold tabular-nums",
                     paletaDe(d.banda).texto,
                   )}
                 >
@@ -324,11 +324,11 @@ export default async function CalificacionesPage({
         />
       ) : (
         <section className="space-y-3">
-          <h2 className="font-mono text-[11px] uppercase tracking-[0.12em] text-muted-foreground">
+          <h2 className="tabular-nums text-[11px] uppercase tracking-[0.12em] text-muted-foreground">
             {t("grades.count", { count: notas.length })}
           </h2>
 
-          <Card className="animate-fade-up overflow-hidden p-0">
+          <Card className="animate-in fade-in-0 slide-in-from-bottom-2 duration-200 ease-out overflow-hidden p-0">
             <div className="overflow-x-auto">
               <Table>
                 <TableHeader>
@@ -365,7 +365,7 @@ export default async function CalificacionesPage({
                           {n.estudiante_nombre}
                         </TableCell>
                         <TableCell className="text-[13px]">{n.curso_nombre}</TableCell>
-                        <TableCell className="font-mono text-[13px] tabular-nums">
+                        <TableCell className="tabular-nums text-[13px] tabular-nums">
                           {n.periodo_nombre ?? "—"}
                         </TableCell>
                         <TableCell className="text-[13px]">
@@ -373,7 +373,7 @@ export default async function CalificacionesPage({
                         </TableCell>
                         <TableCell
                           className={cn(
-                            "text-right font-mono text-sm font-semibold tabular-nums",
+                            "text-right tabular-nums text-sm font-semibold tabular-nums",
                             paletaDe(banda).texto,
                           )}
                         >

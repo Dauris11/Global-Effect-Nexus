@@ -21,7 +21,17 @@
     "continueWithGoogle": "Continuar con Google",
     "orEmail": "o con tu correo",
     "notRegistered": "Tu cuenta no está registrada. Contacta al administrador.",
-    "oauth": "No se pudo iniciar sesión con Google. Inténtalo de nuevo."
+    "oauth": "No se pudo iniciar sesión con Google. Inténtalo de nuevo.",
+    "brandTagline": "Bringing Hope · Changing Lives · Transforming Communities",
+    "gateHeading": "Una sola puerta, seis portales",
+    "gateNote": "Entras con tu cuenta y el sistema te lleva al portal de tu rol. No hace falta que elijas.",
+    "gatePortals": "Estudiante · Profesor · Administrativo · Psicología · Contabilidad · Cursos técnicos",
+    "backHome": "Volver al inicio",
+    "needAccess": "¿No tienes acceso? Los usuarios se invitan desde administración.",
+    "portalGateNote": "Entra con la cuenta que la Fundación te asignó. Si tu rol es otro, el sistema te llevará a tu portal.",
+    "otherPortals": "¿No es tu portal? Ver todos los accesos",
+    "genericGate": "Acceso general",
+    "portalGateEyebrow": "Acceso al portal"
   },
   "nav": {
     "dashboard": "Panel",
@@ -44,7 +54,11 @@
     "courses": "Cursos técnicos",
     "grades": "Calificaciones",
     "studentPortal": "Mi portal",
-    "teacherPortal": "Mis cursos"
+    "teacherPortal": "Mis cursos",
+    "adminPortal": "Portal administrativo",
+    "psychologyPortal": "Portal de psicología",
+    "accountingPortal": "Portal de contabilidad",
+    "technicalCourses": "Cursos técnicos"
   },
   "landing": {
     "enter": "Acceder",
@@ -185,7 +199,7 @@
     "eventsNoResults": "No hay eventos de ese tipo por ahora.",
     "eventsClear": "Ver todos",
     "eventsCount": "{n} de {total} eventos",
-    "accessIntro": "Tres puertas distintas, y no todas piden lo mismo. El portal es solo para quien ya está en el sistema; la inscripción al comedor está abierta a cualquiera.",
+    "accessIntro": "Seis puertas, una por rol. El portal es solo para quien ya está en el sistema; la inscripción al comedor está abierta a cualquiera.",
     "portalsLabel": "Ir directo a tu área",
     "portalsHint": "Pide iniciar sesión y te deja justo en la pantalla que elegiste.",
     "portal_estudiante": "Estudiantes",
@@ -198,7 +212,26 @@
     "eventType_administrativo": "Administrativo",
     "eventType_social": "Social",
     "eventType_reunion": "Reunión",
-    "eventType_otro": "Otro"
+    "eventType_otro": "Otro",
+    "navContact": "Contacto",
+    "navSystemActive": "Sistema activo",
+    "portal_administrativo": "Administración",
+    "portal_contabilidad": "Contabilidad",
+    "portal_psicologia": "Psicología",
+    "portal_cursos_tecnicos": "Cursos técnicos",
+    "portal_estudiante_desc": "Tus materias, calificaciones y condición en la fundación.",
+    "portal_docente_desc": "Tus cursos, inscritos y registro de calificaciones.",
+    "portal_administrativo_desc": "Expedientes, tareas, proyectos y servicios.",
+    "portal_contabilidad_desc": "Ingresos, egresos, becas y balance.",
+    "portal_psicologia_desc": "Citas confidenciales y seguimiento de bienestar.",
+    "portal_cursos_tecnicos_desc": "Entrada al programa técnico, como estudiante o docente.",
+    "portalsRoleNote": "Cada puerta abre solo para su rol. Si entras con otra cuenta, el sistema te lleva a la tuya.",
+    "navMealsShort": "Comida",
+    "blogEyebrow": "Lo que hacemos",
+    "blogTitle": "Noticias y actividades",
+    "blogIntro": "Lo que ha pasado en la Fundación: entregas, encuentros, convenios y actividades ya celebradas.",
+    "blogTagNews": "Noticia",
+    "blogTagEvent": "Actividad"
   },
   "comida": {
     "title": "Inscripción de comida",
@@ -614,7 +647,13 @@
       "scholarshipReason": "Motivo de la beca",
       "academicGoals": "Metas académicas",
       "notes": "Notas adicionales",
-      "optional": "Opcional"
+      "optional": "Opcional",
+      "sexDocument": "Sexo (documento)",
+      "schoolDirector": "Director del centro",
+      "sponsorEmail": "Correo al patrocinador",
+      "monthlyMeeting": "Reunión mensual",
+      "warnings": "Amonestaciones del cuatrimestre",
+      "pendingRequests": "Solicitudes pendientes"
     },
     "family": {
       "add": "Añadir familiar",
@@ -695,6 +734,13 @@
         "notes": "Notas de seguimiento",
         "service": "Servicio y reuniones"
       }
+    },
+    "followUp": {
+      "unset": "Sin especificar",
+      "pendiente": "Pendiente",
+      "si": "Sí",
+      "no": "No",
+      "justificado": "Justificado"
     }
   },
   "academic": {

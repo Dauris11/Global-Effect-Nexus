@@ -113,7 +113,7 @@ export default async function PersonalPage({
 
   return (
     <div className="space-y-8">
-      <div className="animate-fade-up">
+      <div className="animate-in fade-in-0 slide-in-from-bottom-2 duration-200 ease-out">
         <PageHeader
           eyebrow={t("eyebrow")}
           title={t("title")}
@@ -127,17 +127,17 @@ export default async function PersonalPage({
           <Card
             key={c.clave}
             className={cn(
-              "animate-fade-up border-l-[3px] p-5",
+              "animate-in fade-in-0 slide-in-from-bottom-2 duration-200 ease-out border-l-[3px] p-5",
               c.alerta ? "border-l-prioridad-alta" : "border-l-border",
             )}
             style={{ animationDelay: `${i * 40}ms` }}
           >
-            <p className="font-mono text-[11px] uppercase tracking-[0.12em] text-muted-foreground">
+            <p className="tabular-nums text-[11px] uppercase tracking-[0.12em] text-muted-foreground">
               {t(`stats.${c.clave}` as never)}
             </p>
             <p
               className={cn(
-                "mt-2 font-mono text-3xl font-semibold tabular-nums",
+                "mt-2 tabular-nums text-3xl font-semibold tabular-nums",
                 c.alerta ? "text-prioridad-alta" : "text-foreground",
               )}
             >
@@ -149,14 +149,14 @@ export default async function PersonalPage({
 
       {/* Reparto por rol — #451 */}
       <section className="space-y-3">
-        <h2 className="font-mono text-[11px] uppercase tracking-[0.12em] text-muted-foreground">
+        <h2 className="tabular-nums text-[11px] uppercase tracking-[0.12em] text-muted-foreground">
           {t("roles")}
         </h2>
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {resumen.por_rol.map((r, i) => (
             <Card
               key={r.rol}
-              className="animate-fade-up p-4"
+              className="animate-in fade-in-0 slide-in-from-bottom-2 duration-200 ease-out p-4"
               style={{ animationDelay: `${180 + i * 30}ms` }}
             >
               <div className="flex items-start justify-between gap-3">
@@ -171,7 +171,7 @@ export default async function PersonalPage({
                     </p>
                   )}
                 </div>
-                <span className="shrink-0 font-mono text-xl font-semibold tabular-nums">
+                <span className="shrink-0 tabular-nums text-xl font-semibold tabular-nums">
                   {r.total}
                 </span>
               </div>
@@ -182,14 +182,14 @@ export default async function PersonalPage({
 
       {/* Personas y su carga — #450 */}
       <section className="space-y-3">
-        <h2 className="font-mono text-[11px] uppercase tracking-[0.12em] text-muted-foreground">
+        <h2 className="tabular-nums text-[11px] uppercase tracking-[0.12em] text-muted-foreground">
           {t("people")}
         </h2>
 
         {personas.length === 0 ? (
           <EmptyState icon={Users} title={t("empty")} description={t("emptyHint")} />
         ) : (
-          <Card className="animate-fade-up overflow-hidden p-0">
+          <Card className="animate-in fade-in-0 slide-in-from-bottom-2 duration-200 ease-out overflow-hidden p-0">
             <Table>
               <TableHeader>
                 <TableRow>
@@ -225,7 +225,7 @@ export default async function PersonalPage({
                         El rojo es de las vencidas, no del volumen: tener diez
                         tareas al día no es un problema. */}
                     <TableCell className="text-right">
-                      <span className="font-mono text-sm tabular-nums">
+                      <span className="tabular-nums text-sm tabular-nums">
                         {p.tareas_abiertas}
                       </span>
                       {p.tareas_vencidas > 0 && (
@@ -235,7 +235,7 @@ export default async function PersonalPage({
                       )}
                     </TableCell>
 
-                    <TableCell className="font-mono text-[13px] tabular-nums text-muted-foreground">
+                    <TableCell className="tabular-nums text-[13px] tabular-nums text-muted-foreground">
                       {p.ultimo_acceso
                         ? fechaHora.format(new Date(p.ultimo_acceso))
                         : t("never")}

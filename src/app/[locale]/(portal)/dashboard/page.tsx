@@ -133,7 +133,7 @@ export default async function DashboardPage({
       label: t("scholarships"),
       value: metricas.becados,
       icon: "HeartHandshake",
-      accent: "coral" as const,
+      accent: "esmeralda" as const,
       href: `/${locale}/expedientes?tipo=becado`,
     },
     verAcademico && {
@@ -157,7 +157,7 @@ export default async function DashboardPage({
         label: t("balance"),
         value: balance,
         icon: "Wallet",
-        accent: "gold" as const,
+        accent: "ambar" as const,
         format: "currency" as const,
         hint: t("thisMonth"),
       },
@@ -166,7 +166,7 @@ export default async function DashboardPage({
     label: string;
     value: number;
     icon: string;
-    accent: "teal" | "coral" | "gold";
+    accent: "teal" | "esmeralda" | "ambar";
     format?: "currency";
     hint?: string;
     href?: string;
@@ -178,7 +178,7 @@ export default async function DashboardPage({
 
   return (
     <div className="space-y-6">
-      <div className="animate-fade-up">
+      <div className="animate-in fade-in-0 slide-in-from-bottom-2 duration-200 ease-out">
         <PageHeader
           eyebrow={t("overview")}
           title={t("greeting", { name: user.nombre.split(" ")[0] })}
@@ -213,7 +213,7 @@ export default async function DashboardPage({
                 return (
                   <div
                     key={c.clave}
-                    className="animate-fade-up"
+                    className="animate-in fade-in-0 slide-in-from-bottom-2 duration-200 ease-out"
                     style={{ animationDelay: `${i * 40}ms` }}
                   >
                     {/* Las cifras que tienen módulo llevan al módulo con el
@@ -239,7 +239,7 @@ export default async function DashboardPage({
             {/* Gráfica financiera — solo con finanzas.leer */}
             {verFinanzas && (
               <Card
-                className="animate-fade-up lg:col-span-2"
+                className="animate-in fade-in-0 slide-in-from-bottom-2 duration-200 ease-out lg:col-span-2"
                 style={{ animationDelay: "160ms" }}
               >
                 <CardHeader>
@@ -263,7 +263,7 @@ export default async function DashboardPage({
             {/* Próximos eventos — solo con operaciones.leer */}
             {verOperaciones && (
               <Card
-                className={cn("animate-fade-up", !verFinanzas && "lg:col-span-3")}
+                className={cn("animate-in fade-in-0 slide-in-from-bottom-2 duration-200 ease-out", !verFinanzas && "lg:col-span-3")}
                 style={{ animationDelay: "200ms" }}
               >
                 <CardHeader>
@@ -276,7 +276,7 @@ export default async function DashboardPage({
                         key={e.id}
                         className="flex items-center gap-3 rounded-md px-2 py-2 transition-colors hover:bg-muted/60"
                       >
-                        <span className="flex size-9 shrink-0 flex-col items-center justify-center rounded-md bg-muted font-mono text-[10px] leading-none text-muted-foreground">
+                        <span className="flex size-9 shrink-0 flex-col items-center justify-center rounded-md bg-muted tabular-nums text-[10px] leading-none text-muted-foreground">
                           {formatearDia(e.fecha)
                             .split(" ")
                             .map((s, i) => (
@@ -314,7 +314,7 @@ export default async function DashboardPage({
 
           {/* Tareas que apremian — solo con operaciones.leer */}
           {verOperaciones && (
-            <Card className="animate-fade-up" style={{ animationDelay: "240ms" }}>
+            <Card className="animate-in fade-in-0 slide-in-from-bottom-2 duration-200 ease-out" style={{ animationDelay: "240ms" }}>
               <CardHeader>
                 <CardTitle>{t("tasksTitle")}</CardTitle>
               </CardHeader>
@@ -349,7 +349,7 @@ export default async function DashboardPage({
                       {tarea.fecha_limite && (
                         <span
                           className={cn(
-                            "shrink-0 font-mono text-xs tabular-nums",
+                            "shrink-0 tabular-nums text-xs tabular-nums",
                             tarea.vencida
                               ? "font-semibold text-destructive"
                               : tarea.vence_hoy

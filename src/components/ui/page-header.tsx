@@ -27,11 +27,11 @@ export function PageHeader({
     >
       <div className="space-y-1">
         {eyebrow && (
-          <p className="font-mono text-xs uppercase tracking-[0.18em] text-primary">
+          <p className="tabular-nums text-xs uppercase tracking-[0.18em] text-primary">
             {eyebrow}
           </p>
         )}
-        <h1 className="font-display text-2xl font-semibold tracking-tight text-foreground">
+        <h1 className="font-heading text-2xl font-semibold tracking-tight text-foreground">
           {title}
         </h1>
         {description && (

@@ -1,47 +1,49 @@
 /**
- * Landing e Ingesta de Portales — Fundación Global Effect (Nexus).
+ * Landing — Fundación Global Effect (Nexus).
  *
- * Página de entrada institucional para la comunidad de la Fundación:
- * estudiantes activos, personal docente y equipo administrativo.
+ * Página pública de entrada. Orden de lectura:
+ *   1. Navbar          · barra fija con acceso a comida y estado del sistema.
+ *   2. Hero            · carrusel de 72vh con la propuesta y los CTA.
+ *   3. Portales        · las seis puertas de entrada por rol, pegadas al hero.
+ *   4. Eventos         · próximas actividades (se oculta si no hay).
+ *   5. Blog            · noticias y actividades ya celebradas.
+ *   6. Propuesta       · qué resuelve la plataforma.
+ *   7. Footer          · contacto y accesos.
  *
- * Orden de lectura y estructura:
- *   1. Hero                 · bienvenida al portal e inicio de sesión rápido.
- *   2. Puertas de Acceso    · los 3 portales de entrada principal.
- *   3. Servicios & Módulos  · áreas académicas, salud y comida.
- *   4. Eventos              · calendario e información institucional.
- *   5. Preguntas Frecuentes · ayuda sobre el uso del portal.
- *   6. Footer               · contacto y estado del sistema.
+ * La franja de cifras institucionales que iba entre el hero y los portales se
+ * retiró: ese sitio —lo primero que se ve al bajar— vale más como puerta de
+ * entrada que como folleto de estadísticas.
+ *
+ * Los datos salen de Supabase; si la base no responde, la página se sigue
+ * pintando con los slides de respaldo y sin la sección de eventos.
  */
-import { getLocale, getTranslations } from "next-intl/server";
+import { getTranslations } from "next-intl/server";
 import { Navbar } from "@/components/landing/navbar";
-import { Hero, type HeroSlide, type HeroDato } from "@/components/landing/hero";
+import { Hero, type HeroSlide } from "@/components/landing/hero";
 import { Portales } from "@/components/landing/portales";
-import { Labor } from "@/components/landing/labor";
-import { Patrocinio } from "@/components/landing/patrocinio";
 import { Eventos } from "@/components/landing/eventos";
-import { PreguntasFrecuentes } from "@/components/landing/preguntas-frecuentes";
-import { Acceso } from "@/components/landing/acceso";
+import { PropuestaValor } from "@/components/landing/propuesta-valor";
+import { Blog } from "@/components/landing/blog";
 import { LandingFooter } from "@/components/landing/footer";
-import { slidesActivos, estadisticasLanding, eventosPublicos } from "@/server/landing/queries";
-import type { LandingSlide, LandingEstadisticas, EventoPublico } from "@/server/landing/types";
+import { slidesActivos, eventosPublicos, entradasDelBlog } from "@/server/landing/queries";
+import type { LandingSlide, EventoPublico, EntradaBlog } from "@/server/landing/types";
 
 export const dynamic = "force-dynamic";
 
 export default async function LandingPage() {
   const t = await getTranslations("landing");
-  const locale = await getLocale();
 
   let dbSlides: LandingSlide[] = [];
-  let stats: LandingEstadisticas = { estudiantes_activos: 0, materias: 0, patrocinadores: 0 };
   let eventos: EventoPublico[] = [];
+  let blog: EntradaBlog[] = [];
   try {
-    [dbSlides, stats, eventos] = await Promise.all([
+    [dbSlides, eventos, blog] = await Promise.all([
       slidesActivos(),
-      estadisticasLanding(),
       eventosPublicos(),
+      entradasDelBlog(),
     ]);
   } catch {
-    /* BD no disponible: la página se ve completa. */
+    /* BD no disponible: la página se ve completa igual. */
   }
 
   const heroSlides: HeroSlide[] =
@@ -87,62 +89,15 @@ export default async function LandingPage() {
         },
       ];
 
-  /**
-   * Cifras institucionales (estudiantes activos y materias abiertas).
-   * Se excluyen métricas de patrocinadores o donaciones externas.
-   */
-  const datos: HeroDato[] = (
-    [
-      { valor: stats.estudiantes_activos, clave: "statsStudents" },
-      { valor: stats.materias, clave: "statsSubjects" },
-    ] as const
-  )
-    .filter((d) => d.valor > 0)
-    .map((d) => ({
-      valor: d.valor,
-      label: t(d.clave, { n: d.valor }),
-    }));
 
   return (
-    <div className="flex min-h-screen flex-col bg-[#060d18]">
+    <div className="flex min-h-screen flex-col bg-slate-50">
       <Navbar />
-
-      {/* 1 · Hero — AZUL */}
-      <Hero
-        slides={heroSlides}
-        datos={datos}
-        lugar={t("heroPlace")}
-        pieDatos={t("statsFootnote")}
-      />
-
-      {/* 2 · Portales — BLANCO (franja-clara) */}
-      <section id="portales" className="franja-clara relative bg-background py-14">
-        {/* Blue accent bar */}
-        <div
-          aria-hidden
-          className="pointer-events-none absolute left-0 top-0 h-1 w-full bg-gradient-to-r from-primary via-primary/60 to-primary"
-        />
-        <div className="mx-auto max-w-6xl px-6">
-          <Portales />
-        </div>
-      </section>
-
-      {/* 3 · Patrocinio — AZUL (franja-oscura) */}
-      <Patrocinio />
-
-      {/* 4 · Acceso — BLANCO (franja-clara) */}
-      <Acceso />
-
-      {/* 5 · Labor — AZUL (franja-oscura) */}
-      <Labor />
-
-      {/* 6 · Eventos — BLANCO (franja-clara) */}
+      <Hero slides={heroSlides} />
+      <Portales />
       <Eventos eventos={eventos} />
-
-      {/* 7 · FAQ — AZUL (franja-oscura) */}
-      <PreguntasFrecuentes />
-
-      {/* 8 · Footer — OSCURO */}
+      <Blog entradas={blog} />
+      <PropuestaValor />
       <LandingFooter />
     </div>
   );

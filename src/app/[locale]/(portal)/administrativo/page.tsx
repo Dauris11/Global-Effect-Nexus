@@ -90,7 +90,7 @@ export default async function AdministrativoPage({
 
   return (
     <div className="space-y-8">
-      <div className="animate-fade-up">
+      <div className="animate-in fade-in-0 slide-in-from-bottom-2 duration-200 ease-out">
         <PageHeader
           eyebrow={t("eyebrow")}
           title={t("hub.title")}
@@ -104,17 +104,17 @@ export default async function AdministrativoPage({
           <Card
             key={c.clave}
             className={cn(
-              "animate-fade-up border-l-[3px] p-5",
+              "animate-in fade-in-0 slide-in-from-bottom-2 duration-200 ease-out border-l-[3px] p-5",
               c.alerta ? "border-l-destructive" : "border-l-border",
             )}
             style={{ animationDelay: `${i * 40}ms` }}
           >
-            <p className="font-mono text-[11px] uppercase tracking-[0.12em] text-muted-foreground">
+            <p className="tabular-nums text-[11px] uppercase tracking-[0.12em] text-muted-foreground">
               {t(`hub.${c.clave}` as never)}
             </p>
             <p
               className={cn(
-                "mt-2 font-mono text-3xl font-semibold tabular-nums",
+                "mt-2 tabular-nums text-3xl font-semibold tabular-nums",
                 c.alerta ? "text-destructive" : "text-foreground",
               )}
             >
@@ -128,10 +128,10 @@ export default async function AdministrativoPage({
           el riel es para ir a otro sitio, la lista para actuar aquí. */}
       <div className="grid gap-6 lg:grid-cols-[auto_minmax(0,1fr)]">
         <section
-          className="animate-fade-up space-y-3"
+          className="animate-in fade-in-0 slide-in-from-bottom-2 duration-200 ease-out space-y-3"
           style={{ animationDelay: "180ms" }}
         >
-          <h2 className="font-mono text-[11px] uppercase tracking-[0.12em] text-muted-foreground">
+          <h2 className="tabular-nums text-[11px] uppercase tracking-[0.12em] text-muted-foreground">
             {t("hub.shortcuts")}
           </h2>
           <DockAccesos
@@ -148,7 +148,7 @@ export default async function AdministrativoPage({
 
         {/* Tareas que apremian */}
         <section className="space-y-3">
-          <h2 className="font-mono text-[11px] uppercase tracking-[0.12em] text-muted-foreground">
+          <h2 className="tabular-nums text-[11px] uppercase tracking-[0.12em] text-muted-foreground">
             {t("hub.urgent")}
           </h2>
 
@@ -173,7 +173,7 @@ export default async function AdministrativoPage({
                     paletaDe(banda).riel,
                     "transition-colors duration-150 ease-out hover:bg-accent",
                     "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
-                    "animate-fade-up",
+                    "animate-in fade-in-0 slide-in-from-bottom-2 duration-200 ease-out",
                   )}
                   style={{ animationDelay: `${300 + i * 30}ms` }}
                 >
@@ -194,7 +194,7 @@ export default async function AdministrativoPage({
                   {tarea.fecha_limite && (
                     <span
                       className={cn(
-                        "shrink-0 font-mono text-xs tabular-nums",
+                        "shrink-0 tabular-nums text-xs tabular-nums",
                         vencida ? "font-semibold text-destructive" : "text-muted-foreground",
                       )}
                     >

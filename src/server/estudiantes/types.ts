@@ -42,6 +42,8 @@ export interface Estudiante {
   lugar_nacimiento: string | null;
   nacionalidad: string | null;
   genero: string | null;
+  /** Sexo tal como figura en el documento de identidad. */
+  sexo_documento: string | null;
   religion: string | null;
   tipo: TipoEstudiante;
   estado: EstadoEstudiante;
@@ -50,12 +52,28 @@ export interface Estudiante {
   universidad: string | null;
   fecha_ingreso: string | null;
   centro_educativo: string | null;
+  director_centro: string | null;
   facilitador_habitudes: string | null;
   breve_historia_habitudes: string | null;
+  /* ── Adjuntos ──
+     Claves de Supabase Storage, no URLs: los documentos del expediente son
+     privados y su enlace se firma con caducidad en el momento de pintarlos
+     (`urlFirmada`). Guardar una URL fija sería publicar la foto de un menor. */
+  foto_key: string | null;
+  imagen_habitudes_key: string | null;
+  expediente_key: string | null;
   notas_adicionales: string | null;
   patrocinador_id: string | null;
   /** Nombre del patrocinador, si tiene beca asignada (viene de un JOIN). */
   patrocinador_nombre: string | null;
+  /* ── Seguimiento del cuatrimestre ──
+     Los dos primeros son texto libre; los dos últimos, el estado del
+     compromiso del joven con la Fundación (`si` · `no` · `justificado` ·
+     `pendiente`), que es lo que pinta la pestaña Seguimiento. */
+  amonestaciones: string | null;
+  solicitudes_pendientes: string | null;
+  envio_correo_patrocinador: string | null;
+  asistio_reunion_mensual: string | null;
   created_at: string;
 }
 
@@ -108,6 +126,11 @@ export interface PuntoHistorial {
 /** Expediente integral: núcleo + tablas hijas + GPA acumulado. */
 export interface ExpedienteCompleto {
   estudiante: Estudiante;
+  /* Enlaces firmados y temporales de los adjuntos. `null` si no hay adjunto o
+     si la firma falló (fichero borrado del bucket). */
+  fotoUrl: string | null;
+  imagenHabitudesUrl: string | null;
+  expedienteUrl: string | null;
   familiares: Familiar[];
   vivienda: PerfilVivienda | null;
   salud: PerfilSalud | null;

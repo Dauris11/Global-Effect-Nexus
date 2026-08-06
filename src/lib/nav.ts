@@ -63,8 +63,12 @@ const HOME_POR_ROL: Record<string, string> = {
   admin: "/dashboard",
   docente: "/portal/profesor",
   estudiante: "/portal/estudiante",
-  psicologo: "/dashboard",
-  contabilidad: "/dashboard",
+  // Psicología y Contabilidad ya tienen portal propio, así que aterrizan ahí
+  // por el mismo motivo que el estudiante y el docente: el panel general
+  // enseña cifras de la institución que a estos dos roles se les recortan
+  // casi por completo.
+  psicologo: "/portal/psicologia",
+  contabilidad: "/portal/contabilidad",
 };
 
 export function rutaPorRol(rol: string): string {
@@ -91,6 +95,30 @@ export const NAV_ITEMS: NavItem[] = [
     roles: ["docente"],
     icon: "BookOpen",
   },
+  {
+    href: "/portal/administrativo",
+    labelKey: "adminPortal",
+    roles: ["admin", "super_admin"],
+    icon: "ClipboardList",
+  },
+  {
+    href: "/portal/psicologia",
+    labelKey: "psychologyPortal",
+    roles: ["psicologo"],
+    icon: "Heart",
+  },
+  {
+    href: "/portal/contabilidad",
+    labelKey: "accountingPortal",
+    roles: ["contabilidad"],
+    icon: "DollarSign",
+  },
+  {
+    href: "/portal/cursos-tecnicos",
+    labelKey: "technicalCourses",
+    roles: ["estudiante", "docente"],
+    icon: "BookMarked",
+  },
   { href: "/dashboard", labelKey: "dashboard", icon: "LayoutDashboard" },
   { href: "/administrativo", labelKey: "admin", permiso: "operaciones.leer", icon: "FolderKanban" },
   { href: "/administrativo/tareas", labelKey: "tasks", permiso: "operaciones.leer", icon: "ListChecks" },
@@ -114,7 +142,7 @@ export const NAV_ITEMS: NavItem[] = [
 
   // Pantallas pendientes (S6–S11). El backend ya está en `src/server/*`.
   { href: "/patrocinadores", labelKey: "sponsors", permiso: "patrocinadores.leer", icon: "HeartHandshake", disponible: false },
-  { href: "/contabilidad", labelKey: "accounting", permiso: "finanzas.leer", icon: "Wallet", disponible: false },
-  { href: "/psicologia", labelKey: "psychology", permiso: "psicologia.leer", icon: "Brain", disponible: false },
+  { href: "/contabilidad", labelKey: "accounting", permiso: "finanzas.leer", icon: "Wallet" },
+  { href: "/psicologia", labelKey: "psychology", permiso: "psicologia.leer", icon: "Brain" },
   { href: "/reportes", labelKey: "reports", permiso: "finanzas.leer", icon: "BarChart3", disponible: false },
 ];

@@ -184,7 +184,7 @@ export default async function MateriasPage({
 
   return (
     <div className="space-y-8">
-      <div className="animate-fade-up">
+      <div className="animate-in fade-in-0 slide-in-from-bottom-2 duration-200 ease-out">
         <PageHeader
           eyebrow={t("eyebrow")}
           title={t("subjects.title")}
@@ -206,13 +206,13 @@ export default async function MateriasPage({
         {cifras.map((c, i) => (
           <Card
             key={c.clave}
-            className="animate-fade-up p-5"
+            className="animate-in fade-in-0 slide-in-from-bottom-2 duration-200 ease-out p-5"
             style={{ animationDelay: `${i * 40}ms` }}
           >
-            <p className="font-mono text-[11px] uppercase tracking-[0.12em] text-muted-foreground">
+            <p className="tabular-nums text-[11px] uppercase tracking-[0.12em] text-muted-foreground">
               {t(`subjects.stats.${c.clave}` as never)}
             </p>
-            <p className="mt-2 font-mono text-3xl font-semibold tabular-nums">{c.valor}</p>
+            <p className="mt-2 tabular-nums text-3xl font-semibold tabular-nums">{c.valor}</p>
           </Card>
         ))}
       </div>
@@ -254,11 +254,11 @@ export default async function MateriasPage({
         />
       ) : (
         <section className="space-y-3">
-          <h2 className="font-mono text-[11px] uppercase tracking-[0.12em] text-muted-foreground">
+          <h2 className="tabular-nums text-[11px] uppercase tracking-[0.12em] text-muted-foreground">
             {t("subjects.count", { count: materias.length })}
           </h2>
 
-          <Card className="animate-fade-up overflow-hidden p-0">
+          <Card className="animate-in fade-in-0 slide-in-from-bottom-2 duration-200 ease-out overflow-hidden p-0">
             <div className="overflow-x-auto">
               <Table>
                 <TableHeader>
@@ -287,7 +287,7 @@ export default async function MateriasPage({
                       <TableCell>
                         <p className="font-medium">{m.nombre}</p>
                         {m.codigo && (
-                          <p className="font-mono text-[13px] text-muted-foreground">
+                          <p className="tabular-nums text-[13px] text-muted-foreground">
                             {m.codigo}
                           </p>
                         )}
@@ -300,7 +300,7 @@ export default async function MateriasPage({
                       </TableCell>
 
                       {/* Los créditos se comparan en columna: mono tabular. */}
-                      <TableCell className="text-right font-mono text-sm tabular-nums">
+                      <TableCell className="text-right tabular-nums text-sm tabular-nums">
                         {m.creditos}
                       </TableCell>
 
