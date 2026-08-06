@@ -27,7 +27,7 @@ export async function Portales() {
 
   return (
     <div>
-      <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-white/30">
+      <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-[#1d4ed8]/70">
         {t("portalsLabel")}
       </p>
 
@@ -37,7 +37,7 @@ export async function Portales() {
             {/* Each portal card is a standalone styled element using style prop for dynamic colors */}
             <Link
               href={href}
-              className="portal-card group relative flex h-full flex-col items-center overflow-hidden rounded-2xl border border-white/8 bg-white/[0.03] px-4 py-7 text-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
+              className="portal-card group relative flex h-full flex-col items-center overflow-hidden rounded-2xl border border-[#1d4ed8]/15 bg-[#1d4ed8]/[0.04] px-4 py-7 text-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
               style={{ "--portal-glow": glow, "--portal-color": color } as React.CSSProperties}
             >
               {/* Animated background sweep on hover */}
@@ -71,7 +71,7 @@ export async function Portales() {
 
               {/* Label slides up */}
               <span
-                className="relative z-10 mt-4 block text-[13px] font-semibold leading-tight text-white/55 transition-all duration-300 group-hover:-translate-y-0.5 group-hover:text-white"
+                className="relative z-10 mt-4 block text-[13px] font-semibold leading-tight text-[#1d4ed8]/70 transition-all duration-300 group-hover:-translate-y-0.5 group-hover:text-[#1d4ed8]"
               >
                 {t(`portal_${clave}` as never)}
               </span>
@@ -87,7 +87,7 @@ export async function Portales() {
         ))}
       </ul>
 
-      <p className="mt-5 text-xs text-white/25">{t("portalsHint")}</p>
+      <p className="mt-5 text-xs text-[#1d4ed8]/40">{t("portalsHint")}</p>
     </div>
   );
 }

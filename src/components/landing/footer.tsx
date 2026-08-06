@@ -8,6 +8,7 @@ import { useTranslations } from "next-intl";
 import { MapPin, Mail, ShieldCheck } from "lucide-react";
 import { Link } from "@/i18n/navigation";
 import { SelectorIdioma } from "@/components/layout/selector-idioma";
+import Image from "next/image";
 
 export function LandingFooter() {
   const t = useTranslations("landing");
@@ -123,6 +124,17 @@ export function LandingFooter() {
             </span>
           </div>
           <span>{t("footerVersion")}</span>
+        </div>
+
+        {/* Icon watermark */}
+        <div className="mt-10 flex justify-center">
+          <Image
+            src="/icon.png"
+            alt="Global Effect Foundation"
+            width={48}
+            height={48}
+            className="opacity-20 transition-opacity duration-300 hover:opacity-40"
+          />
         </div>
       </div>
     </footer>

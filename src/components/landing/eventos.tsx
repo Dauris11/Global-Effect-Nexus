@@ -50,24 +50,24 @@ export function Eventos({ eventos }: { eventos: EventoPublico[] }) {
     <section
       id="eventos"
       aria-labelledby="eventos-title"
-      className="relative bg-[#0a0e1a] py-24 md:py-32"
+      className="relative bg-white py-24 md:py-32"
     >
-      {/* Separator */}
+      {/* Blue accent line top */}
       <div
         aria-hidden
-        className="pointer-events-none absolute left-1/2 top-0 h-px w-2/3 -translate-x-1/2 bg-gradient-to-r from-transparent via-white/8 to-transparent"
+        className="pointer-events-none absolute left-0 top-0 h-1 w-full bg-gradient-to-r from-[#1d4ed8] via-[#60a5fa] to-[#1d4ed8]"
       />
 
       <div className="mx-auto max-w-6xl px-6">
         {/* Header row */}
         <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
           <div>
-            <p className="mb-3 font-mono text-xs uppercase tracking-[0.2em] text-[#60a5fa]">
+            <p className="mb-3 font-mono text-xs uppercase tracking-[0.2em] text-[#1d4ed8]">
               {t("eyebrowCalendar")}
             </p>
             <h2
               id="eventos-title"
-              className="font-display text-[clamp(2rem,5vw,3.5rem)] font-bold leading-tight text-white"
+              className="font-display text-[clamp(2rem,5vw,3.5rem)] font-bold leading-tight text-[#0f172a]"
             >
               {t("eventsTitle")}
             </h2>
@@ -77,7 +77,7 @@ export function Eventos({ eventos }: { eventos: EventoPublico[] }) {
           {eventos.length > 0 && (
             <div className="relative w-full md:w-72">
               <Search
-                className="absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-white/30"
+                className="absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-[#94a3b8]"
                 aria-hidden
               />
               <input
@@ -86,7 +86,7 @@ export function Eventos({ eventos }: { eventos: EventoPublico[] }) {
                 onChange={(e) => setBusqueda(e.target.value)}
                 placeholder={t("eventsSearchPlaceholder")}
                 aria-label={t("eventsSearchPlaceholder")}
-                className="w-full rounded-full border border-white/10 bg-white/[0.04] py-2.5 pl-10 pr-4 text-sm font-medium text-white/80 placeholder:text-white/25 transition-colors focus-visible:border-[#1d4ed8]/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1d4ed8]/40 focus-visible:bg-white/[0.06]"
+              className="w-full rounded-full border border-[#1d4ed8]/20 bg-[#1d4ed8]/[0.04] py-2.5 pl-10 pr-4 text-sm font-medium text-[#0f172a] placeholder:text-[#94a3b8] transition-colors focus-visible:border-[#1d4ed8]/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1d4ed8]/40 focus-visible:bg-white"
               />
             </div>
           )}
@@ -108,14 +108,14 @@ export function Eventos({ eventos }: { eventos: EventoPublico[] }) {
 
         {/* Empty state — no events from DB */}
         {eventos.length === 0 ? (
-          <div className="mx-auto mt-12 max-w-2xl rounded-2xl border border-white/8 bg-white/[0.03] p-10 text-center">
-            <div className="mx-auto flex size-14 items-center justify-center rounded-full bg-[#1d4ed8]/15 text-[#60a5fa]">
+          <div className="mx-auto mt-12 max-w-2xl rounded-2xl border border-[#1d4ed8]/15 bg-[#1d4ed8]/[0.04] p-10 text-center">
+            <div className="mx-auto flex size-14 items-center justify-center rounded-full bg-[#1d4ed8]/15 text-[#1d4ed8]">
               <CalendarIcon className="size-7" aria-hidden />
             </div>
-            <h3 className="mt-4 font-display text-xl font-semibold text-white">
+            <h3 className="mt-4 font-display text-xl font-semibold text-[#0f172a]">
               {t("eventsEmptyTitle")}
             </h3>
-            <p className="mt-2 text-sm leading-relaxed text-white/40">
+            <p className="mt-2 text-sm leading-relaxed text-[#475569]">
               {t("eventsEmptyDesc")}
             </p>
           </div>
@@ -130,7 +130,7 @@ export function Eventos({ eventos }: { eventos: EventoPublico[] }) {
 
                 return (
                   <li key={e.id}>
-                    <article className="flex h-full items-center gap-5 rounded-2xl border border-white/8 bg-white/[0.025] p-5 transition-all duration-300 hover:-translate-y-0.5 hover:border-[#1d4ed8]/35 hover:bg-[#1d4ed8]/[0.04] hover:shadow-[0_12px_40px_rgba(0,0,0,0.3)]">
+                    <article className="flex h-full items-center gap-5 rounded-2xl border border-[#1d4ed8]/12 bg-[#1d4ed8]/[0.025] p-5 transition-all duration-300 hover:-translate-y-0.5 hover:border-[#1d4ed8]/35 hover:bg-[#1d4ed8]/[0.06] hover:shadow-[0_12px_40px_rgba(29,78,216,0.08)]">
                       {/* Date block */}
                       <div
                         className={cn(
@@ -174,11 +174,11 @@ export function Eventos({ eventos }: { eventos: EventoPublico[] }) {
                           </span>
                         </div>
 
-                        <h3 className="mt-1.5 truncate font-display text-base font-semibold text-white">
+                        <h3 className="mt-1.5 truncate font-display text-base font-semibold text-[#0f172a]">
                           {e.titulo}
                         </h3>
                         {e.ubicacion && (
-                          <p className="mt-1 flex items-center gap-1.5 text-xs text-white/35">
+                          <p className="mt-1 flex items-center gap-1.5 text-xs text-[#64748b]">
                             <MapPin className="size-3 shrink-0 text-[#60a5fa]" aria-hidden />
                             <span className="truncate">{e.ubicacion}</span>
                           </p>
@@ -208,7 +208,7 @@ export function Eventos({ eventos }: { eventos: EventoPublico[] }) {
             {filtrando && filtrados.length > 0 && (
               <p
                 aria-live="polite"
-                className="mt-6 font-mono text-[10px] uppercase tracking-[0.15em] text-white/30"
+                className="mt-6 font-mono text-[10px] uppercase tracking-[0.15em] text-[#94a3b8]"
               >
                 {t("eventsCount", { n: filtrados.length, total: eventos.length })}
               </p>
@@ -239,7 +239,7 @@ function FilterTab({
         "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1d4ed8]",
         active
           ? "border-[#1d4ed8] bg-[#1d4ed8] text-white shadow-[0_0_20px_rgba(29,78,216,0.35)]"
-          : "border-white/10 bg-white/[0.03] text-white/40 hover:border-white/20 hover:text-white/70",
+          : "border-[#1d4ed8]/20 bg-[#1d4ed8]/[0.04] text-[#1d4ed8]/60 hover:border-[#1d4ed8]/40 hover:text-[#1d4ed8]",
       )}
     >
       {children}

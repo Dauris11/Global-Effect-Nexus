@@ -107,6 +107,7 @@ export default async function LandingPage() {
     <div className="flex min-h-screen flex-col bg-[#060d18]">
       <Navbar />
 
+      {/* 1 · Hero — AZUL */}
       <Hero
         slides={heroSlides}
         datos={datos}
@@ -114,22 +115,34 @@ export default async function LandingPage() {
         pieDatos={t("statsFootnote")}
       />
 
-      <section id="portales" className="relative bg-[#0a1628] py-14">
-        {/* Separator matching hero bottom */}
+      {/* 2 · Portales — BLANCO */}
+      <section id="portales" className="relative bg-white py-14">
+        {/* Wave top separator */}
         <div
           aria-hidden
-          className="pointer-events-none absolute left-1/2 top-0 h-px w-3/4 -translate-x-1/2 bg-gradient-to-r from-transparent via-white/8 to-transparent"
+          className="pointer-events-none absolute left-0 top-0 h-1 w-full bg-gradient-to-r from-[#1d4ed8] via-[#60a5fa] to-[#1d4ed8]"
         />
         <div className="mx-auto max-w-6xl px-6">
           <Portales />
         </div>
       </section>
 
+      {/* 3 · Patrocinio — AZUL */}
       <Patrocinio />
+
+      {/* 4 · Acceso — BLANCO */}
       <Acceso />
+
+      {/* 5 · Labor — AZUL */}
       <Labor />
+
+      {/* 6 · Eventos — BLANCO */}
       <Eventos eventos={eventos} />
+
+      {/* 7 · FAQ — AZUL */}
       <PreguntasFrecuentes />
+
+      {/* 8 · Footer — OSCURO */}
       <LandingFooter />
     </div>
   );

@@ -31,10 +31,10 @@ export async function Patrocinio() {
             "radial-gradient(ellipse 80rem 50rem at 50% 100%, rgba(29,78,216,0.12) 0%, transparent 70%)",
         }}
       />
-      {/* Top line */}
+      {/* Blue accent top bar */}
       <div
         aria-hidden
-        className="pointer-events-none absolute left-1/2 top-0 h-px w-2/3 -translate-x-1/2 bg-gradient-to-r from-transparent via-[#1d4ed8]/40 to-transparent"
+        className="pointer-events-none absolute left-0 top-0 h-1 w-full bg-gradient-to-r from-[#1d4ed8] via-[#60a5fa] to-[#1d4ed8]"
       />
 
       <div className="relative mx-auto max-w-6xl px-6">

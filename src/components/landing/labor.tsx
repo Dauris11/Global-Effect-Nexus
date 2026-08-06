@@ -19,10 +19,10 @@ export async function Labor() {
 
   return (
     <section id="labor" aria-labelledby="labor-title" className="relative bg-[#080c14] py-24 md:py-32">
-      {/* Horizontal separator */}
+      {/* Blue accent top bar */}
       <div
         aria-hidden
-        className="pointer-events-none absolute left-1/2 top-0 h-px w-2/3 -translate-x-1/2 bg-gradient-to-r from-transparent via-white/8 to-transparent"
+        className="pointer-events-none absolute left-0 top-0 h-1 w-full bg-gradient-to-r from-[#1d4ed8] via-[#60a5fa] to-[#1d4ed8]"
       />
 
       <div className="mx-auto max-w-6xl px-6">
