@@ -12,7 +12,7 @@ export default function LoginPage() {
     // Respeta el tema global (oscuro por defecto, con toggle) igual que la landing.
     <main className="grid min-h-screen lg:grid-cols-2">
       {/* Panel de marca (desktop) */}
-      <div className="relative hidden flex-col justify-between overflow-hidden bg-brand-charcoal p-12 text-white lg:flex">
+      <div className="relative hidden flex-col justify-between overflow-hidden bg-foreground p-12 text-white lg:flex">
         {/* Halo de marca. El color sale del token, no de un rgba escrito aquí
             (un componente nunca escribe un color). */}
         <div
@@ -20,21 +20,21 @@ export default function LoginPage() {
           className="pointer-events-none absolute -right-24 top-1/4 size-80 rounded-full"
           style={{
             background:
-              "radial-gradient(closest-side, color-mix(in oklab, var(--brand-teal) 45%, transparent), transparent)",
+              "radial-gradient(closest-side, color-mix(in oklab, var(--primary) 45%, transparent), transparent)",
           }}
         />
         <Logo className="relative h-8 w-auto" />
         <p className="relative max-w-md font-display text-3xl italic leading-snug text-white/90">
           Bringing Hope · Changing Lives · Transforming Communities
         </p>
-        <p className="relative font-mono text-xs uppercase tracking-[0.2em] text-white/50">
+        <p className="relative tabular-nums text-xs uppercase tracking-[0.2em] text-white/50">
           Global Effect Foundation
         </p>
       </div>
 
       {/* Formulario */}
       <div className="flex flex-col items-center justify-center bg-background px-6 py-12">
-        <span className="mb-10 flex items-center rounded-xl bg-brand-charcoal px-3 py-2 lg:hidden">
+        <span className="mb-10 flex items-center rounded-xl bg-foreground px-3 py-2 lg:hidden">
           <Logo className="h-6 w-auto" priority />
         </span>
         <Suspense>

@@ -4,20 +4,22 @@
  * componentes cliente. Define <html>/<body> y los estilos globales.
  *
  * Tipografía:
- *   - Inter (300–800): interfaz y titulares (`--font-inter` → `font-sans` y
- *     `font-display` en el tema).
- *   - JetBrains Mono: etiquetas, cifras y datos técnicos (`--font-jetbrains-mono`
- *     → `font-mono` en el tema).
+ *   - Fraunces (serif variable): titulares. Es lo que le da carácter editorial
+ *     y cálido a la identidad (`--font-fraunces` → `font-display`).
+ *   - Inter: cuerpo e interfaz (`--font-inter` → `font-sans`).
+ *   No se auto-hospeda ninguna monoespaciada: el sistema nuevo no usa
+ *   etiquetas monoespaciadas como decoración.
  *
- * Tema oscuro:
- *   El script inline aplica la clase `dark` en <html> antes de pintar,
- *   leyendo localStorage("theme"). El ThemeToggle lo actualiza en tiempo real.
+ * Tema:
+ *   El claro ("Esperanza") es el predeterminado. El script inline aplica
+ *   `.dark` ("Espresso", oscuro cálido) antes del primer paint solo si la
+ *   persona lo eligió antes; el ThemeToggle lo actualiza en tiempo real.
  */
 import type { Metadata } from "next";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
 import { notFound } from "next/navigation";
-import { Inter, JetBrains_Mono } from "next/font/google";
+import { Fraunces, Inter } from "next/font/google";
 import { routing, type Locale } from "@/i18n/routing";
 import "../globals.css";
 
@@ -27,10 +29,11 @@ const inter = Inter({
   display: "swap",
 });
 
-const jetbrainsMono = JetBrains_Mono({
+const fraunces = Fraunces({
   subsets: ["latin"],
-  variable: "--font-jetbrains-mono",
+  variable: "--font-fraunces",
   display: "swap",
+  axes: ["SOFT", "WONK", "opsz"],
 });
 
 export const metadata: Metadata = {
@@ -58,15 +61,14 @@ export default async function LocaleLayout({
     <html
       lang={locale}
       suppressHydrationWarning
-      className={`${inter.variable} ${jetbrainsMono.variable}`}
+      className={`${inter.variable} ${fraunces.variable}`}
     >
       <head>
-        {/* Anti-FOUC: aplica `.dark` antes del primer paint, leyendo la
-            preferencia guardada. Por defecto el tema es oscuro (incluida la
-            landing pública), salvo que la persona haya elegido claro antes. */}
+        {/* Anti-FOUC: el claro es el predeterminado, así que solo hay que
+            adelantarse cuando la persona pidió el oscuro explícitamente. */}
         <script
           dangerouslySetInnerHTML={{
-            __html: `(function(){try{var t=localStorage.getItem("theme");if(t!=="light"){document.documentElement.classList.add("dark");}}catch(e){document.documentElement.classList.add("dark");}})();`,
+            __html: `(function(){try{if(localStorage.getItem("theme")==="dark"){document.documentElement.classList.add("dark");}}catch(e){}})();`,
           }}
         />
       </head>

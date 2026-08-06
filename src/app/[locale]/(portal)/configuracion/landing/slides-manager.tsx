@@ -76,7 +76,7 @@ export function SlidesManager({ slides }: { slides: LandingSlide[] }) {
             <span
               className={`rounded-full px-2 py-0.5 text-xs font-medium ${
                 s.activo
-                  ? "bg-brand-teal/10 text-brand-teal"
+                  ? "bg-primary/10 text-primary"
                   : "bg-muted text-muted-foreground"
               }`}
             >

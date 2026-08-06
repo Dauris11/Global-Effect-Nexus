@@ -156,7 +156,7 @@ export function AccionesExpediente({
                   <span className="text-muted-foreground">
                     {textos.dependencias[d.clave] ?? d.clave}
                   </span>
-                  <span className="font-mono font-semibold tabular-nums">{d.total}</span>
+                  <span className="tabular-nums font-semibold tabular-nums">{d.total}</span>
                 </li>
               ))}
             </ul>

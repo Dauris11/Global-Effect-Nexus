@@ -559,7 +559,7 @@ export function FormularioExpediente({
                 {familiares.map((f, i) => (
                   <Card key={i} className="space-y-4 p-5">
                     <div className="flex items-center justify-between gap-3">
-                      <h3 className="font-mono text-[11px] uppercase tracking-[0.12em] text-muted-foreground">
+                      <h3 className="tabular-nums text-[11px] uppercase tracking-[0.12em] text-muted-foreground">
                         {textos.family.member.replace("{n}", String(i + 1))}
                       </h3>
                       <Button

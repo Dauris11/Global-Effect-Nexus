@@ -312,7 +312,7 @@ export function GestorEventos({
                   "transition-colors duration-150 ease-out",
                   "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
                   vista === v
-                    ? "bg-surface text-foreground shadow-plana"
+                    ? "bg-surface text-foreground shadow-sm"
                     : "text-muted-foreground hover:text-foreground",
                 )}
               >
@@ -451,7 +451,7 @@ function Pildora({
       )}
     >
       {entrada.hora_inicio && (
-        <span className="shrink-0 font-mono tabular-nums opacity-70">
+        <span className="shrink-0 tabular-nums tabular-nums opacity-70">
           {entrada.hora_inicio.slice(0, 5)}
         </span>
       )}
@@ -499,7 +499,7 @@ function Fila({
             {entrada.titulo}
           </p>
           <div className="mt-1.5 flex flex-wrap items-center gap-x-3 gap-y-1 text-[13px] text-muted-foreground">
-            <span className="inline-flex items-center gap-1 font-mono text-xs tabular-nums">
+            <span className="inline-flex items-center gap-1 tabular-nums text-xs tabular-nums">
               <Clock className="size-3" aria-hidden />
               {entrada.hora_inicio?.slice(0, 5) ?? textos.todoElDia}
             </span>
@@ -522,7 +522,7 @@ function Fila({
             {etiqueta}
           </ChipEstado>
           {vencida && (
-            <span className="font-mono text-[11px] font-semibold uppercase text-destructive">
+            <span className="tabular-nums text-[11px] font-semibold uppercase text-destructive">
               {textos.vencida}
             </span>
           )}
@@ -559,7 +559,7 @@ function VistaMes({
         {textos.dias.map((d) => (
           <div
             key={d}
-            className="bg-surface-sunken px-2 py-2 text-center font-mono text-[11px] uppercase tracking-[0.12em] text-muted-foreground"
+            className="bg-surface-sunken px-2 py-2 text-center tabular-nums text-[11px] uppercase tracking-[0.12em] text-muted-foreground"
           >
             <span aria-hidden>{d.slice(0, 3)}</span>
             <span className="sr-only">{d}</span>
@@ -589,7 +589,7 @@ function VistaMes({
             >
               <span
                 className={cn(
-                  "flex size-6 shrink-0 items-center justify-center rounded-full font-mono text-xs tabular-nums",
+                  "flex size-6 shrink-0 items-center justify-center rounded-full tabular-nums text-xs tabular-nums",
                   esHoy
                     ? "bg-primary font-semibold text-primary-foreground"
                     : "text-muted-foreground",
@@ -611,7 +611,7 @@ function VistaMes({
                   />
                 ))}
                 {lista.length > MAX && (
-                  <span className="px-1 font-mono text-[10px] tabular-nums text-muted-foreground">
+                  <span className="px-1 tabular-nums text-[10px] tabular-nums text-muted-foreground">
                     {textos.masEntradas.replace("{n}", String(lista.length - MAX))}
                   </span>
                 )}
@@ -665,7 +665,7 @@ function VistaSemana({
 
         {/* Franja de todo el día: lo que no tiene hora no cabe en la retícula */}
         <div className="grid grid-cols-[3.5rem_repeat(7,minmax(0,1fr))] gap-px bg-border">
-          <div className="flex items-center justify-end bg-surface-sunken px-1.5 py-2 text-right font-mono text-[10px] uppercase text-muted-foreground">
+          <div className="flex items-center justify-end bg-surface-sunken px-1.5 py-2 text-right tabular-nums text-[10px] uppercase text-muted-foreground">
             {textos.todoElDia}
           </div>
           {dias.map((f) => (
@@ -696,7 +696,7 @@ function VistaSemana({
             key={h}
             className="grid grid-cols-[3.5rem_repeat(7,minmax(0,1fr))] gap-px bg-border"
           >
-            <div className="bg-surface-sunken px-1.5 py-1 text-right font-mono text-[10px] tabular-nums text-muted-foreground">
+            <div className="bg-surface-sunken px-1.5 py-1 text-right tabular-nums text-[10px] tabular-nums text-muted-foreground">
               {String(h).padStart(2, "0")}:00
             </div>
             {dias.map((f) => (
@@ -754,7 +754,7 @@ function VistaDia({
     <div className="space-y-4">
       {sinHora.length > 0 && (
         <section className="space-y-2">
-          <h3 className="font-mono text-[11px] uppercase tracking-[0.12em] text-muted-foreground">
+          <h3 className="tabular-nums text-[11px] uppercase tracking-[0.12em] text-muted-foreground">
             {textos.todoElDia}
           </h3>
           {sinHora.map((e) => (
@@ -775,7 +775,7 @@ function VistaDia({
           const deLaHora = lista.filter((e) => horaDe(e) === h);
           return (
             <div key={h} className="flex border-b border-border last:border-b-0">
-              <div className="w-16 shrink-0 border-r border-border p-2 text-right font-mono text-[11px] tabular-nums text-muted-foreground">
+              <div className="w-16 shrink-0 border-r border-border p-2 text-right tabular-nums text-[11px] tabular-nums text-muted-foreground">
                 {String(h).padStart(2, "0")}:00
               </div>
               <div className="flex-1 space-y-2 p-2">
@@ -843,14 +843,14 @@ function VistaLista({
       {grupos.map((g) => (
         <section key={g.fecha} className="space-y-2">
           <h3 className="flex items-baseline gap-2">
-            <span className="font-mono text-[11px] uppercase tracking-[0.12em] text-muted-foreground">
+            <span className="tabular-nums text-[11px] uppercase tracking-[0.12em] text-muted-foreground">
               {g.fecha === hoy
                 ? textos.hoy
                 : g.fecha === manana
                   ? textos.manana
                   : fmt.format(aFecha(g.fecha))}
             </span>
-            <span className="font-mono text-[11px] tabular-nums text-muted-foreground/70">
+            <span className="tabular-nums text-[11px] tabular-nums text-muted-foreground/70">
               {g.entradas.length}
             </span>
           </h3>

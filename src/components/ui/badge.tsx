@@ -21,7 +21,7 @@ const badgeVariants = cva(
         default: "border-transparent bg-primary/10 text-primary",
         neutral: "border-border bg-muted text-muted-foreground",
         outline: "border-border text-foreground",
-        accent: "border-transparent bg-brand-accent/12 text-brand-accent",
+        accent: "border-transparent bg-gold/12 text-gold",
         // Semánticos — alineados con los tokens de dominio (capa 3).
         success: "border-transparent bg-nota-excelente-suave text-nota-excelente",
         info: "border-transparent bg-nota-buena-suave text-nota-buena",

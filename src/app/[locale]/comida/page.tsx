@@ -58,7 +58,7 @@ export default async function ComidaPage() {
           <ArrowLeft className="size-4" /> Global Effect
         </Link>
 
-        <div className="flex size-12 items-center justify-center rounded-lg bg-brand-gold/15 text-brand-gold">
+        <div className="flex size-12 items-center justify-center rounded-lg bg-gold/15 text-gold">
           <Utensils className="size-7" />
         </div>
 
@@ -68,7 +68,7 @@ export default async function ComidaPage() {
         </div>
 
         <div className="rounded-lg bg-muted px-4 py-3 text-center">
-          <div className="text-3xl font-bold text-brand-teal">{inscritos}</div>
+          <div className="text-3xl font-bold text-primary">{inscritos}</div>
           <div className="text-xs text-muted-foreground">{t("enrolledToday")}</div>
         </div>
 

@@ -61,7 +61,7 @@ export function Navbar() {
       className={cn(
         "fixed inset-x-0 top-0 z-50 transition-all duration-300",
         scrolled
-          ? "border-b border-white/8 bg-[#080c14]/90 backdrop-blur-xl"
+          ? "border-b border-white/8 bg-[#080c14]/90"
           : "bg-transparent",
       )}
     >
@@ -133,7 +133,7 @@ export function Navbar() {
       {open && (
         <nav
           id="mobile-menu"
-          className="border-t border-white/8 bg-[#080c14]/95 backdrop-blur-xl px-6 pb-6 pt-4 lg:hidden"
+          className="border-t border-white/8 bg-[#080c14]/95 px-6 pb-6 pt-4 lg:hidden"
         >
           <ul className="space-y-1">
             {NAV_LINKS.map(({ href, label }) => (

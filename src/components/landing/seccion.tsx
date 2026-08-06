@@ -33,7 +33,7 @@ export function SeccionEncabezado({
     <header className={cn("max-w-2xl", className)}>
       <p
         className={cn(
-          "flex items-center gap-3 font-mono text-xs uppercase tracking-[0.15em]",
+          "flex items-center gap-3 tabular-nums text-xs uppercase tracking-[0.15em]",
           tono === "claro" ? "text-primary" : "text-white/55",
         )}
       >

@@ -213,7 +213,7 @@ function ColumnaTablero({
         <h2 className="text-sm font-semibold text-foreground">
           {textos.columnas[columna]}
         </h2>
-        <span className="font-mono text-xs tabular-nums text-muted-foreground">
+        <span className="tabular-nums text-xs tabular-nums text-muted-foreground">
           {tareas.length}
         </span>
       </header>
@@ -291,7 +291,7 @@ function TarjetaTarea({
         setLevantada(false);
       }}
       className={cn(
-        "group relative rounded-md border border-border bg-surface p-3 shadow-plana",
+        "group relative rounded-md border border-border bg-surface p-3 shadow-sm",
         "border-l-[3px]",
         paletaDe(prioridad).riel, // el riel codifica la prioridad (§5)
         "transition-[box-shadow,opacity] duration-150 ease-out",
@@ -352,9 +352,9 @@ function TarjetaTarea({
         {tarea.fecha_limite && (
           <span
             className={cn(
-              "inline-flex items-center gap-1 font-mono text-[11px] tabular-nums",
+              "inline-flex items-center gap-1 tabular-nums text-[11px] tabular-nums",
               vencimiento === "vencida" && "font-semibold text-destructive",
-              vencimiento === "hoy" && "font-semibold text-brand-gold",
+              vencimiento === "hoy" && "font-semibold text-gold",
               vencimiento === "futura" && "text-muted-foreground",
             )}
           >

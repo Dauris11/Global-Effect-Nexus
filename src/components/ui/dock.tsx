@@ -196,7 +196,7 @@ export function DockLabel({
           className={cn(
             "pointer-events-none absolute left-full top-1/2 z-20 ml-3 -translate-y-1/2",
             "whitespace-nowrap rounded-md border border-border bg-surface-raised px-2 py-1",
-            "text-xs font-medium text-foreground shadow-flotante",
+            "text-xs font-medium text-foreground shadow-lg",
             className,
           )}
         >

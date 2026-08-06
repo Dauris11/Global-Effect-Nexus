@@ -45,7 +45,7 @@ export function PreguntasFrecuentes() {
       <div className="mx-auto max-w-6xl px-6">
         {/* Header */}
         <div className="text-center">
-          <p className="mb-3 font-mono text-xs uppercase tracking-[0.2em] text-[#60a5fa]">
+          <p className="mb-3 tabular-nums text-xs uppercase tracking-[0.2em] text-[#60a5fa]">
             {t("faqEyebrow")}
           </p>
           <h2

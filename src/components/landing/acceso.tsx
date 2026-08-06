@@ -31,7 +31,7 @@ export async function Acceso() {
       <div className="mx-auto max-w-6xl px-6">
         {/* Section header */}
         <div className="text-center">
-          <p className="mb-3 font-mono text-xs uppercase tracking-[0.2em] text-[#60a5fa]">
+          <p className="mb-3 tabular-nums text-xs uppercase tracking-[0.2em] text-[#60a5fa]">
             {t("accessEyebrow")}
           </p>
           <h2
@@ -83,7 +83,7 @@ export async function Acceso() {
                     </span>
                     <span
                       className={cn(
-                        "rounded-full px-3 py-1 font-mono text-[10px] font-semibold uppercase tracking-[0.15em]",
+                        "rounded-full px-3 py-1 tabular-nums text-[10px] font-semibold uppercase tracking-[0.15em]",
                         destacado
                           ? "bg-amber-400/10 text-amber-400"
                           : "bg-white/6 text-white/40",
@@ -123,7 +123,7 @@ export async function Acceso() {
                     <ArrowRight className="size-3.5 transition-transform duration-150 group-hover:translate-x-0.5" aria-hidden />
                   </span>
                   {destacado && (
-                    <span className="flex shrink-0 items-center gap-1 font-mono text-xs text-amber-400/70">
+                    <span className="flex shrink-0 items-center gap-1 tabular-nums text-xs text-amber-400/70">
                       <Clock className="size-3" aria-hidden />
                       {t("access_meals_hours")}
                     </span>

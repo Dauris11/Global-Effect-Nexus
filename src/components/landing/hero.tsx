@@ -236,7 +236,7 @@ export function Hero({
                   s.cta2Href.startsWith("http") ? (
                     <a
                       href={s.cta2Href}
-                      className="group inline-flex items-center gap-2.5 rounded-full border border-white/15 bg-white/5 px-7 py-3.5 text-sm font-semibold text-white/80 backdrop-blur-sm transition-all duration-300 hover:border-white/30 hover:bg-white/10 hover:text-white active:scale-[0.97]"
+                      className="group inline-flex items-center gap-2.5 rounded-full border border-white/15 bg-white/5 px-7 py-3.5 text-sm font-semibold text-white/80 transition-all duration-300 hover:border-white/30 hover:bg-white/10 hover:text-white active:scale-[0.97]"
                     >
                       {s.cta2Label}
                       <Download className="size-4" aria-hidden />
@@ -244,7 +244,7 @@ export function Hero({
                   ) : (
                     <Link
                       href={s.cta2Href}
-                      className="group inline-flex items-center gap-2.5 rounded-full border border-white/15 bg-white/5 px-7 py-3.5 text-sm font-semibold text-white/80 backdrop-blur-sm transition-all duration-300 hover:border-white/30 hover:bg-white/10 hover:text-white active:scale-[0.97]"
+                      className="group inline-flex items-center gap-2.5 rounded-full border border-white/15 bg-white/5 px-7 py-3.5 text-sm font-semibold text-white/80 transition-all duration-300 hover:border-white/30 hover:bg-white/10 hover:text-white active:scale-[0.97]"
                     >
                       {s.cta2Label}
                       <Download className="size-4" aria-hidden />
@@ -404,7 +404,7 @@ export function Hero({
 
                   {/* Tarjeta flotante glassmorphism */}
                   <div
-                    className="absolute -bottom-6 -right-2 sm:-right-6 z-10 w-[186px] rounded-2xl border border-white/10 p-4 shadow-2xl backdrop-blur-xl transition-transform duration-300 hover:scale-[1.04]"
+                    className="absolute -bottom-6 -right-2 sm:-right-6 z-10 w-[186px] rounded-2xl border border-white/10 p-4 shadow-2xl transition-transform duration-300 hover:scale-[1.04]"
                     style={{ backgroundColor: "rgba(10,20,45,0.88)" }}
                   >
                     <div className="flex items-start justify-between gap-2">
@@ -478,12 +478,12 @@ export function Hero({
               </dl>
 
               <div className="mt-6 flex flex-wrap items-center justify-between gap-3">
-                <p className="font-mono text-xs uppercase tracking-[0.14em] text-white/30">
+                <p className="tabular-nums text-xs uppercase tracking-[0.14em] text-white/30">
                   {pieDatos}
                 </p>
                 <a
                   href="#acceso"
-                  className="group inline-flex items-center gap-1.5 font-mono text-xs font-semibold uppercase tracking-[0.14em] text-[#60a5fa] transition-colors hover:text-white"
+                  className="group inline-flex items-center gap-1.5 tabular-nums text-xs font-semibold uppercase tracking-[0.14em] text-[#60a5fa] transition-colors hover:text-white"
                 >
                   {t("heroScroll")}
                   <ArrowDown

@@ -28,7 +28,7 @@ export async function Labor() {
       <div className="mx-auto max-w-6xl px-6">
         {/* Header */}
         <div className="text-center">
-          <p className="mb-3 font-mono text-xs uppercase tracking-[0.2em] text-[#60a5fa]">
+          <p className="mb-3 tabular-nums text-xs uppercase tracking-[0.2em] text-[#60a5fa]">
             {t("workEyebrow")}
           </p>
           <h2
@@ -74,7 +74,7 @@ export async function Labor() {
                       <Icono className="size-6" strokeWidth={1.5} aria-hidden />
                     </span>
                     <span
-                      className="rounded-full px-3 py-1 font-mono text-[10px] font-semibold uppercase tracking-[0.15em]"
+                      className="rounded-full px-3 py-1 tabular-nums text-[10px] font-semibold uppercase tracking-[0.15em]"
                       style={{ backgroundColor: `${color}12`, color: `${color}cc` }}
                     >
                       {t(`work_${clave}_tag` as never)}

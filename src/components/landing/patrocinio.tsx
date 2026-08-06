@@ -40,7 +40,7 @@ export async function Patrocinio() {
       <div className="relative mx-auto max-w-6xl px-6">
         {/* Header */}
         <div className="text-center">
-          <p className="mb-3 font-mono text-xs uppercase tracking-[0.2em] text-[#60a5fa]">
+          <p className="mb-3 tabular-nums text-xs uppercase tracking-[0.2em] text-[#60a5fa]">
             {t("sponsorEyebrow")}
           </p>
           <h2
@@ -56,7 +56,7 @@ export async function Patrocinio() {
 
         {/* Chain label */}
         <div className="mt-16">
-          <p className="mb-5 flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.2em] text-white/40">
+          <p className="mb-5 flex items-center gap-2 tabular-nums text-[10px] uppercase tracking-[0.2em] text-white/40">
             <ShieldCheck className="size-3.5 text-[#60a5fa]" aria-hidden />
             {t("chainTitle")}
           </p>
@@ -85,12 +85,12 @@ export async function Patrocinio() {
                     >
                       <Icono className="size-6" strokeWidth={1.5} aria-hidden />
                     </span>
-                    <span className="font-mono text-2xl font-bold tabular-nums text-white/15">
+                    <span className="tabular-nums text-2xl font-bold tabular-nums text-white/15">
                       {String(i + 1).padStart(2, "0")}
                     </span>
                   </div>
 
-                  <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-white/40">
+                  <p className="tabular-nums text-[10px] uppercase tracking-[0.18em] text-white/40">
                     {t(`chain_${clave}_label` as never)}
                   </p>
                   <p className="mt-1 font-display text-lg font-semibold text-white">

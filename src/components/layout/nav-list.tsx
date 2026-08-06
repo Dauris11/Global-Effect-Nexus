@@ -90,7 +90,7 @@ export function NavList({
         <>
           <p
             className={cn(
-              "px-3 pb-1 pt-5 font-mono text-[10px] uppercase tracking-[0.14em]",
+              "px-3 pb-1 pt-5 tabular-nums text-[10px] uppercase tracking-[0.14em]",
               tone === "dark" ? "text-slate-500" : "text-muted-foreground",
             )}
           >
@@ -114,7 +114,7 @@ export function NavList({
                 <span className="flex-1">{t(item.labelKey)}</span>
                 <span
                   className={cn(
-                    "shrink-0 rounded-full px-1.5 py-0.5 font-mono text-[9px] uppercase tracking-wide",
+                    "shrink-0 rounded-full px-1.5 py-0.5 tabular-nums text-[9px] uppercase tracking-wide",
                     tone === "dark"
                       ? "bg-white/[0.06] text-slate-500"
                       : "bg-muted text-muted-foreground",

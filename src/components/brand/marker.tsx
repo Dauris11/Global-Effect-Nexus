@@ -15,7 +15,7 @@ export function Marker({ className = "" }: { className?: string }) {
       <path
         className="marker-path"
         d="M5 16 C 60 7, 130 7, 182 12 C 232 17, 268 14, 295 8"
-        stroke="var(--brand-teal)"
+        stroke="var(--primary)"
         strokeWidth="8"
         strokeLinecap="round"
       />

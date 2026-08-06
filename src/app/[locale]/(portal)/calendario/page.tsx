@@ -81,7 +81,7 @@ export default async function CalendarioPage({
 
   return (
     <div className="space-y-6">
-      <div className="animate-fade-up">
+      <div className="animate-in fade-in-0 slide-in-from-bottom-2 duration-200 ease-out">
         <PageHeader
           eyebrow={t("eyebrow")}
           title={t("title")}
@@ -89,7 +89,7 @@ export default async function CalendarioPage({
         />
       </div>
 
-      <div className="animate-fade-up" style={{ animationDelay: "60ms" }}>
+      <div className="animate-in fade-in-0 slide-in-from-bottom-2 duration-200 ease-out" style={{ animationDelay: "60ms" }}>
         <GestorEventos
           entradas={entradas}
           locale={locale}

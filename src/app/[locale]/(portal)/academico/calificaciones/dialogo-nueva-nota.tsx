@@ -245,7 +245,7 @@ export function DialogoNuevaNota({
                     value={nota}
                     onChange={(e) => setNota(e.target.value)}
                     className={cn(
-                      "font-mono tabular-nums",
+                      "tabular-nums tabular-nums",
                       notaValida && paletaDe(banda).texto,
                     )}
                   />

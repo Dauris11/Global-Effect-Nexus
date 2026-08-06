@@ -178,7 +178,7 @@ export default async function PortalEstudiantePage({
 
   return (
     <div className="space-y-8">
-      <div className="animate-fade-up">
+      <div className="animate-in fade-in-0 slide-in-from-bottom-2 duration-200 ease-out">
         <PageHeader
           eyebrow={t("eyebrow")}
           title={t("greeting", { name: estudiante.nombre.split(" ")[0] })}
@@ -193,24 +193,24 @@ export default async function PortalEstudiantePage({
 
       {/* Banner de GPA — #396 */}
       <Card
-        className={cn("animate-fade-up border-l-[3px] p-6", paletaGpa.riel)}
+        className={cn("animate-in fade-in-0 slide-in-from-bottom-2 duration-200 ease-out border-l-[3px] p-6", paletaGpa.riel)}
         style={{ animationDelay: "40ms" }}
       >
         <div className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <p className="font-mono text-[11px] uppercase tracking-[0.12em] text-muted-foreground">
+            <p className="tabular-nums text-[11px] uppercase tracking-[0.12em] text-muted-foreground">
               {t("gpaLabel")}
             </p>
             <div className="mt-1 flex items-baseline gap-2">
               <span
                 className={cn(
-                  "font-mono text-5xl font-semibold tabular-nums tracking-tight",
+                  "tabular-nums text-5xl font-semibold tabular-nums tracking-tight",
                   resumen.gpa != null ? paletaGpa.texto : "text-muted-foreground",
                 )}
               >
                 {resumen.gpa != null ? resumen.gpa.toFixed(2) : "—"}
               </span>
-              <span className="font-mono text-sm text-muted-foreground">
+              <span className="tabular-nums text-sm text-muted-foreground">
                 {t("gpaScale")}
               </span>
             </div>
@@ -222,10 +222,10 @@ export default async function PortalEstudiantePage({
           <dl className="grid grid-cols-2 gap-x-8 gap-y-3 sm:grid-cols-4 sm:text-right">
             {acompanan.map((c) => (
               <div key={c.clave}>
-                <dt className="font-mono text-[11px] uppercase tracking-[0.12em] text-muted-foreground">
+                <dt className="tabular-nums text-[11px] uppercase tracking-[0.12em] text-muted-foreground">
                   {t(`stats.${c.clave}` as never)}
                 </dt>
-                <dd className="mt-1 font-mono text-xl font-semibold tabular-nums">
+                <dd className="mt-1 tabular-nums text-xl font-semibold tabular-nums">
                   {c.valor}
                 </dd>
               </div>
@@ -237,7 +237,7 @@ export default async function PortalEstudiantePage({
       <div className="grid gap-6 lg:grid-cols-3">
         <div className="space-y-6 lg:col-span-2">
           {/* Materias en curso — #397 */}
-          <Card className="animate-fade-up" style={{ animationDelay: "80ms" }}>
+          <Card className="animate-in fade-in-0 slide-in-from-bottom-2 duration-200 ease-out" style={{ animationDelay: "80ms" }}>
             <CardHeader>
               <CardTitle>{t("subjectsTitle")}</CardTitle>
             </CardHeader>
@@ -252,12 +252,12 @@ export default async function PortalEstudiantePage({
                       <p className="truncate text-sm font-medium text-foreground">
                         {m.nombre}
                       </p>
-                      <span className="shrink-0 font-mono text-xs tabular-nums text-muted-foreground">
+                      <span className="shrink-0 tabular-nums text-xs tabular-nums text-muted-foreground">
                         {t("creditsShort", { count: m.creditos })}
                       </span>
                     </div>
                     <p className="mt-0.5 flex flex-wrap items-center gap-x-3 gap-y-0.5 text-[13px] text-muted-foreground">
-                      {m.codigo && <span className="font-mono">{m.codigo}</span>}
+                      {m.codigo && <span className="tabular-nums">{m.codigo}</span>}
                       {m.profesor_nombre && <span>{m.profesor_nombre}</span>}
                       {m.horario && <span>{m.horario}</span>}
                       {m.aula && <span>{m.aula}</span>}
@@ -276,7 +276,7 @@ export default async function PortalEstudiantePage({
           </Card>
 
           {/* Calificaciones por cuatrimestre — #397 */}
-          <Card className="animate-fade-up" style={{ animationDelay: "120ms" }}>
+          <Card className="animate-in fade-in-0 slide-in-from-bottom-2 duration-200 ease-out" style={{ animationDelay: "120ms" }}>
             <CardHeader>
               <CardTitle>{t("gradesTitle")}</CardTitle>
             </CardHeader>
@@ -285,10 +285,10 @@ export default async function PortalEstudiantePage({
                 cuatrimestres.map((c) => (
                   <section key={c.cuatrimestre} className="space-y-2">
                     <div className="flex items-baseline justify-between gap-3">
-                      <h3 className="font-mono text-[11px] uppercase tracking-[0.12em] text-muted-foreground">
+                      <h3 className="tabular-nums text-[11px] uppercase tracking-[0.12em] text-muted-foreground">
                         {c.cuatrimestre}
                       </h3>
-                      <p className="font-mono text-xs tabular-nums text-muted-foreground">
+                      <p className="tabular-nums text-xs tabular-nums text-muted-foreground">
                         {t("termSummary", {
                           gpa: c.gpa != null ? c.gpa.toFixed(2) : "—",
                           average: c.promedio != null ? c.promedio.toFixed(1) : "—",
@@ -313,7 +313,7 @@ export default async function PortalEstudiantePage({
                               <TableCell className="font-medium">{n.materia}</TableCell>
                               <TableCell
                                 className={cn(
-                                  "text-right font-mono tabular-nums",
+                                  "text-right tabular-nums tabular-nums",
                                   paletaDe(banda).texto,
                                 )}
                               >
@@ -324,7 +324,7 @@ export default async function PortalEstudiantePage({
                                     el color solo nunca comunica un estado (§3.2). */}
                                 <ChipEstado estado={banda}>{n.nota_letra}</ChipEstado>
                               </TableCell>
-                              <TableCell className="text-right font-mono tabular-nums text-muted-foreground">
+                              <TableCell className="text-right tabular-nums tabular-nums text-muted-foreground">
                                 {n.gpa.toFixed(2)}
                               </TableCell>
                             </TableRow>
@@ -348,7 +348,7 @@ export default async function PortalEstudiantePage({
 
         <div className="space-y-6">
           {/* Condición en la fundación — #398 */}
-          <Card className="animate-fade-up" style={{ animationDelay: "160ms" }}>
+          <Card className="animate-in fade-in-0 slide-in-from-bottom-2 duration-200 ease-out" style={{ animationDelay: "160ms" }}>
             <CardHeader>
               <CardTitle>{t("standingTitle")}</CardTitle>
             </CardHeader>
@@ -406,7 +406,7 @@ export default async function PortalEstudiantePage({
           </Card>
 
           {/* Próximos eventos — #399 */}
-          <Card className="animate-fade-up" style={{ animationDelay: "200ms" }}>
+          <Card className="animate-in fade-in-0 slide-in-from-bottom-2 duration-200 ease-out" style={{ animationDelay: "200ms" }}>
             <CardHeader>
               <CardTitle>{t("eventsTitle")}</CardTitle>
             </CardHeader>
@@ -417,7 +417,7 @@ export default async function PortalEstudiantePage({
                     key={e.id}
                     className="flex items-center gap-3 rounded-md px-2 py-2 transition-colors hover:bg-muted/60"
                   >
-                    <span className="flex size-9 shrink-0 flex-col items-center justify-center rounded-md bg-muted font-mono text-[10px] leading-none text-muted-foreground">
+                    <span className="flex size-9 shrink-0 flex-col items-center justify-center rounded-md bg-muted tabular-nums text-[10px] leading-none text-muted-foreground">
                       {formatearDia(e.fecha)
                         .split(" ")
                         .map((s, i) => (
@@ -435,7 +435,7 @@ export default async function PortalEstudiantePage({
                       </p>
                       <p className="flex items-center gap-2 truncate text-xs text-muted-foreground">
                         <span className="capitalize">{e.tipo}</span>
-                        {e.hora_inicio && <span className="font-mono">{e.hora_inicio}</span>}
+                        {e.hora_inicio && <span className="tabular-nums">{e.hora_inicio}</span>}
                         {e.ubicacion && (
                           <span className="inline-flex items-center gap-1">
                             <MapPin className="size-3" aria-hidden />

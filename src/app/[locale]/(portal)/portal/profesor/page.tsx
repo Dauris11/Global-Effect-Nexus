@@ -152,7 +152,7 @@ export default async function PortalProfesorPage({
 
   return (
     <div className="space-y-8">
-      <div className="animate-fade-up">
+      <div className="animate-in fade-in-0 slide-in-from-bottom-2 duration-200 ease-out">
         <PageHeader
           eyebrow={t("eyebrow")}
           title={t("greeting", { name: user.nombre.split(" ")[0] })}
@@ -165,7 +165,7 @@ export default async function PortalProfesorPage({
         {cifras.map((c, i) => (
           <div
             key={c.clave}
-            className="animate-fade-up"
+            className="animate-in fade-in-0 slide-in-from-bottom-2 duration-200 ease-out"
             style={{ animationDelay: `${i * 40}ms` }}
           >
             <StatCard
@@ -182,7 +182,7 @@ export default async function PortalProfesorPage({
       {/* Accesos rápidos — #403 */}
       {accesos.length > 0 && (
         <section className="space-y-3">
-          <h2 className="font-mono text-[11px] uppercase tracking-[0.12em] text-muted-foreground">
+          <h2 className="tabular-nums text-[11px] uppercase tracking-[0.12em] text-muted-foreground">
             {t("shortcutsTitle")}
           </h2>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -192,7 +192,7 @@ export default async function PortalProfesorPage({
                 <Link
                   key={a.clave}
                   href={a.href}
-                  className="animate-fade-up rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+                  className="animate-in fade-in-0 slide-in-from-bottom-2 duration-200 ease-out rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
                   style={{ animationDelay: `${160 + i * 40}ms` }}
                 >
                   <Card className="h-full p-5 transition-colors hover:bg-accent/40">
@@ -215,7 +215,7 @@ export default async function PortalProfesorPage({
 
       {/* Cursos — #402 */}
       <section className="space-y-3">
-        <h2 className="font-mono text-[11px] uppercase tracking-[0.12em] text-muted-foreground">
+        <h2 className="tabular-nums text-[11px] uppercase tracking-[0.12em] text-muted-foreground">
           {t("coursesTitle")}
         </h2>
 
@@ -237,7 +237,7 @@ export default async function PortalProfesorPage({
               return (
                 <Card
                   key={c.id}
-                  className={cn("animate-fade-up border-l-[3px] p-5", paletaDe(banda).riel)}
+                  className={cn("animate-in fade-in-0 slide-in-from-bottom-2 duration-200 ease-out border-l-[3px] p-5", paletaDe(banda).riel)}
                   style={{ animationDelay: `${Math.min(i, 8) * 40}ms` }}
                 >
                   <div className="flex items-start justify-between gap-3">
@@ -249,10 +249,10 @@ export default async function PortalProfesorPage({
 
                   <div className="mt-4 space-y-2">
                     <div className="flex items-baseline justify-between gap-2">
-                      <span className="font-mono text-[11px] uppercase tracking-[0.12em] text-muted-foreground">
+                      <span className="tabular-nums text-[11px] uppercase tracking-[0.12em] text-muted-foreground">
                         {t("occupancy")}
                       </span>
-                      <span className="font-mono text-xs tabular-nums text-muted-foreground">
+                      <span className="tabular-nums text-xs tabular-nums text-muted-foreground">
                         {c.inscritos} / {c.capacidad}
                       </span>
                     </div>
@@ -271,7 +271,7 @@ export default async function PortalProfesorPage({
                     {c.periodo_nombre && (
                       <div>
                         <dt className="sr-only">{t("term")}</dt>
-                        <dd className="font-mono">{c.periodo_nombre}</dd>
+                        <dd className="tabular-nums">{c.periodo_nombre}</dd>
                       </div>
                     )}
                     {c.horario && (
@@ -292,7 +292,7 @@ export default async function PortalProfesorPage({
                     {c.promedio != null ? (
                       <span
                         className={cn(
-                          "font-mono text-sm font-semibold tabular-nums",
+                          "tabular-nums text-sm font-semibold tabular-nums",
                           paletaDe(bandaDeNota(c.promedio)).texto,
                         )}
                       >
@@ -315,7 +315,7 @@ export default async function PortalProfesorPage({
           formato de lista: un profesor de materia consulta horario y aula, no
           cupo, así que no necesitan la barra de ocupación de arriba. */}
       {materias.length > 0 && (
-        <Card className="animate-fade-up">
+        <Card className="animate-in fade-in-0 slide-in-from-bottom-2 duration-200 ease-out">
           <CardHeader>
             <CardTitle>{t("subjectsTitle")}</CardTitle>
           </CardHeader>
@@ -328,13 +328,13 @@ export default async function PortalProfesorPage({
                 <div className="min-w-0">
                   <p className="truncate text-sm font-medium text-foreground">{m.nombre}</p>
                   <p className="flex flex-wrap items-center gap-x-3 text-[13px] text-muted-foreground">
-                    {m.codigo && <span className="font-mono">{m.codigo}</span>}
-                    {m.periodo_nombre && <span className="font-mono">{m.periodo_nombre}</span>}
+                    {m.codigo && <span className="tabular-nums">{m.codigo}</span>}
+                    {m.periodo_nombre && <span className="tabular-nums">{m.periodo_nombre}</span>}
                     {m.horario && <span>{m.horario}</span>}
                     {m.aula && <span>{m.aula}</span>}
                   </p>
                 </div>
-                <span className="shrink-0 font-mono text-xs tabular-nums text-muted-foreground">
+                <span className="shrink-0 tabular-nums text-xs tabular-nums text-muted-foreground">
                   {t("enrolledCount", { count: m.inscritos })}
                 </span>
               </div>

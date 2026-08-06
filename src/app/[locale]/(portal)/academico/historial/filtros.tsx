@@ -67,7 +67,7 @@ export function FiltroHistorial({
           name="cuatrimestre"
           defaultValue={valores.cuatrimestre}
           onChange={() => form.current?.requestSubmit()}
-          className="h-10 w-full rounded-md border border-input bg-surface px-3 font-mono text-[15px] tabular-nums focus-visible:border-ring focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/25 sm:w-40"
+          className="h-10 w-full rounded-md border border-input bg-surface px-3 tabular-nums text-[15px] tabular-nums focus-visible:border-ring focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/25 sm:w-40"
         >
           <option value="">{textos.todos}</option>
           {cuatrimestres.map((c) => (

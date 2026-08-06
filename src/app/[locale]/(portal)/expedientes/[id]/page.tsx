@@ -66,13 +66,13 @@ function Dato({
   if (!valor) return null;
   return (
     <div className={cn(ancho && "sm:col-span-2")}>
-      <dt className="font-mono text-[11px] uppercase tracking-[0.12em] text-muted-foreground">
+      <dt className="tabular-nums text-[11px] uppercase tracking-[0.12em] text-muted-foreground">
         {etiqueta}
       </dt>
       <dd
         className={cn(
           "mt-1 whitespace-pre-line text-[15px]",
-          mono && "font-mono tabular-nums",
+          mono && "tabular-nums tabular-nums",
         )}
       >
         {valor}
@@ -97,7 +97,7 @@ function Seccion({
 }) {
   return (
     <section className="space-y-3">
-      <h2 className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.12em] text-muted-foreground">
+      <h2 className="flex items-center gap-2 tabular-nums text-[11px] uppercase tracking-[0.12em] text-muted-foreground">
         <Icono className="size-3.5" aria-hidden />
         {titulo}
       </h2>
@@ -202,7 +202,7 @@ export default async function ExpedientePage({
 
   return (
     <div className="space-y-8">
-      <div className="animate-fade-up">
+      <div className="animate-in fade-in-0 slide-in-from-bottom-2 duration-200 ease-out">
         <PageHeader
           eyebrow={t("eyebrow")}
           title={e.nombre}
@@ -261,16 +261,16 @@ export default async function ExpedientePage({
       {/* GPA y evolución */}
       <div className="grid gap-4 lg:grid-cols-[minmax(0,18rem)_1fr]">
         <Card
-          className={cn("animate-fade-up border-l-[3px] p-5", paletaGpa.riel)}
+          className={cn("animate-in fade-in-0 slide-in-from-bottom-2 duration-200 ease-out border-l-[3px] p-5", paletaGpa.riel)}
         >
-          <p className="font-mono text-[11px] uppercase tracking-[0.12em] text-muted-foreground">
+          <p className="tabular-nums text-[11px] uppercase tracking-[0.12em] text-muted-foreground">
             {t("detail.gpa")}
           </p>
           {expediente.gpa != null ? (
             <>
               <p
                 className={cn(
-                  "mt-2 font-mono text-4xl font-semibold tabular-nums",
+                  "mt-2 tabular-nums text-4xl font-semibold tabular-nums",
                   paletaGpa.texto,
                 )}
               >
@@ -298,8 +298,8 @@ export default async function ExpedientePage({
           </dl>
         </Card>
 
-        <Card className="animate-fade-up p-5" style={{ animationDelay: "60ms" }}>
-          <p className="font-mono text-[11px] uppercase tracking-[0.12em] text-muted-foreground">
+        <Card className="animate-in fade-in-0 slide-in-from-bottom-2 duration-200 ease-out p-5" style={{ animationDelay: "60ms" }}>
+          <p className="tabular-nums text-[11px] uppercase tracking-[0.12em] text-muted-foreground">
             {t("detail.evolution")}
           </p>
           {expediente.evolucion.length > 0 ? (
@@ -409,10 +409,10 @@ export default async function ExpedientePage({
                       {t(`relation.${f.parentesco}` as never)}
                     </TableCell>
                     <TableCell className="font-medium">{f.nombre}</TableCell>
-                    <TableCell className="text-right font-mono text-sm tabular-nums">
+                    <TableCell className="text-right tabular-nums text-sm tabular-nums">
                       {f.edad ?? "—"}
                     </TableCell>
-                    <TableCell className="font-mono text-[13px] tabular-nums">
+                    <TableCell className="tabular-nums text-[13px] tabular-nums">
                       {f.telefono ?? "—"}
                     </TableCell>
                     <TableCell className="text-[13px]">{f.profesion ?? "—"}</TableCell>

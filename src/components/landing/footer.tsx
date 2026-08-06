@@ -46,7 +46,7 @@ export function LandingFooter() {
               </span>
               <div>
                 <p className="font-display text-sm font-bold text-white">Global Effect</p>
-                <p className="font-mono text-[10px] uppercase tracking-[0.15em] text-white/35">Foundation</p>
+                <p className="tabular-nums text-[10px] uppercase tracking-[0.15em] text-white/35">Foundation</p>
               </div>
             </div>
 
@@ -73,7 +73,7 @@ export function LandingFooter() {
 
           {/* Nav column */}
           <div>
-            <h3 className="mb-5 font-mono text-[10px] uppercase tracking-[0.2em] text-white/50">
+            <h3 className="mb-5 tabular-nums text-[10px] uppercase tracking-[0.2em] text-white/50">
               {t("footerThisPage")}
             </h3>
             <ul className="space-y-3 text-sm">
@@ -93,7 +93,7 @@ export function LandingFooter() {
 
           {/* Access column */}
           <div>
-            <h3 className="mb-5 font-mono text-[10px] uppercase tracking-[0.2em] text-white/50">
+            <h3 className="mb-5 tabular-nums text-[10px] uppercase tracking-[0.2em] text-white/50">
               {t("footerAccess")}
             </h3>
             <ul className="mb-8 space-y-3 text-sm">
@@ -114,7 +114,7 @@ export function LandingFooter() {
         </div>
 
         {/* Sub-footer */}
-        <div className="mt-14 flex flex-col items-center justify-between gap-4 border-t border-white/6 pt-8 font-mono text-xs text-white/25 md:flex-row">
+        <div className="mt-14 flex flex-col items-center justify-between gap-4 border-t border-white/6 pt-8 tabular-nums text-xs text-white/25 md:flex-row">
           <div className="flex items-center gap-2">
             <ShieldCheck className="size-3.5 shrink-0" aria-hidden />
             <span>

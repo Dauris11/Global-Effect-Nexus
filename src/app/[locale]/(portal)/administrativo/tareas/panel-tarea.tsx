@@ -72,9 +72,9 @@ export function PanelTarea({
             {tarea.fecha_limite ? (
               <span
                 className={cn(
-                  "font-mono tabular-nums",
+                  "tabular-nums tabular-nums",
                   vencimiento === "vencida" && "font-semibold text-destructive",
-                  vencimiento === "hoy" && "font-semibold text-brand-gold",
+                  vencimiento === "hoy" && "font-semibold text-gold",
                 )}
               >
                 {formatearFecha(tarea.fecha_limite, locale)}
@@ -103,7 +103,7 @@ export function PanelTarea({
 
           {tarea.descripcion && (
             <div className="space-y-2">
-              <p className="font-mono text-[11px] uppercase tracking-[0.12em] text-muted-foreground">
+              <p className="tabular-nums text-[11px] uppercase tracking-[0.12em] text-muted-foreground">
                 {textos.descripcion}
               </p>
               <p className="whitespace-pre-wrap text-[15px] leading-relaxed text-foreground">
@@ -131,7 +131,7 @@ function Dato({
     <div className="flex gap-3">
       <Icono className="mt-0.5 size-4 shrink-0 text-muted-foreground" aria-hidden />
       <div className="min-w-0 flex-1 space-y-1">
-        <p className="font-mono text-[11px] uppercase tracking-[0.12em] text-muted-foreground">
+        <p className="tabular-nums text-[11px] uppercase tracking-[0.12em] text-muted-foreground">
           {etiqueta}
         </p>
         <div className="text-[15px] text-foreground">{children}</div>

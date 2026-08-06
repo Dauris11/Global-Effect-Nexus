@@ -163,7 +163,7 @@ export default async function PeriodosPage({
 
   return (
     <div className="space-y-8">
-      <div className="animate-fade-up">
+      <div className="animate-in fade-in-0 slide-in-from-bottom-2 duration-200 ease-out">
         <PageHeader
           eyebrow={t("eyebrow")}
           title={t("terms.title")}
@@ -177,13 +177,13 @@ export default async function PeriodosPage({
           {cifras.map((c, i) => (
             <Card
               key={c.clave}
-              className="animate-fade-up p-5"
+              className="animate-in fade-in-0 slide-in-from-bottom-2 duration-200 ease-out p-5"
               style={{ animationDelay: `${i * 40}ms` }}
             >
-              <p className="font-mono text-[11px] uppercase tracking-[0.12em] text-muted-foreground">
+              <p className="tabular-nums text-[11px] uppercase tracking-[0.12em] text-muted-foreground">
                 {t(`terms.stats.${c.clave}` as never)}
               </p>
-              <p className="mt-2 font-mono text-3xl font-semibold tabular-nums">{c.valor}</p>
+              <p className="mt-2 tabular-nums text-3xl font-semibold tabular-nums">{c.valor}</p>
             </Card>
           ))}
         </div>
@@ -215,11 +215,11 @@ export default async function PeriodosPage({
             return (
               <Card
                 key={p.id}
-                className={cn("animate-fade-up border-l-[3px] p-5", paletaDe(banda).riel)}
+                className={cn("animate-in fade-in-0 slide-in-from-bottom-2 duration-200 ease-out border-l-[3px] p-5", paletaDe(banda).riel)}
                 style={{ animationDelay: `${Math.min(i, 8) * 40}ms` }}
               >
                 <div className="flex items-start justify-between gap-3">
-                  <h2 className="font-mono text-xl font-semibold tabular-nums">
+                  <h2 className="tabular-nums text-xl font-semibold tabular-nums">
                     {p.nombre}
                   </h2>
                   <div className="flex shrink-0 items-start gap-1">
@@ -243,7 +243,7 @@ export default async function PeriodosPage({
                   </div>
                 </div>
 
-                <p className="mt-2 font-mono text-[13px] tabular-nums text-muted-foreground">
+                <p className="mt-2 tabular-nums text-[13px] tabular-nums text-muted-foreground">
                   {formatear(p.fecha_inicio)} → {formatear(p.fecha_fin)}
                 </p>
 
@@ -264,10 +264,10 @@ export default async function PeriodosPage({
                     ] as const
                   ).map((d) => (
                     <div key={d.clave}>
-                      <dt className="font-mono text-[11px] uppercase tracking-[0.12em] text-muted-foreground">
+                      <dt className="tabular-nums text-[11px] uppercase tracking-[0.12em] text-muted-foreground">
                         {t(`terms.counts.${d.clave}` as never)}
                       </dt>
-                      <dd className="mt-1 font-mono text-lg font-semibold tabular-nums">
+                      <dd className="mt-1 tabular-nums text-lg font-semibold tabular-nums">
                         {d.valor}
                       </dd>
                     </div>

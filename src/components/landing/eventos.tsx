@@ -62,7 +62,7 @@ export function Eventos({ eventos }: { eventos: EventoPublico[] }) {
         {/* Header row */}
         <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
           <div>
-            <p className="mb-3 font-mono text-xs uppercase tracking-[0.2em] text-[#60a5fa]">
+            <p className="mb-3 tabular-nums text-xs uppercase tracking-[0.2em] text-[#60a5fa]">
               {t("eyebrowCalendar")}
             </p>
             <h2
@@ -141,10 +141,10 @@ export function Eventos({ eventos }: { eventos: EventoPublico[] }) {
                         )}
                         aria-hidden
                       >
-                        <span className="font-mono text-2xl font-bold leading-none tabular-nums">
+                        <span className="tabular-nums text-2xl font-bold leading-none tabular-nums">
                           {fmt.dia.format(fecha)}
                         </span>
-                        <span className="mt-1 font-mono text-[10px] font-semibold uppercase tracking-[0.12em] text-[#60a5fa]">
+                        <span className="mt-1 tabular-nums text-[10px] font-semibold uppercase tracking-[0.12em] text-[#60a5fa]">
                           {fmt.mes.format(fecha).replace(".", "")}
                         </span>
                       </div>
@@ -157,7 +157,7 @@ export function Eventos({ eventos }: { eventos: EventoPublico[] }) {
                         <div className="flex flex-wrap items-center gap-2">
                           <span
                             className={cn(
-                              "rounded-full px-2.5 py-0.5 font-mono text-[10px] font-semibold uppercase tracking-[0.1em]",
+                              "rounded-full px-2.5 py-0.5 tabular-nums text-[10px] font-semibold uppercase tracking-[0.1em]",
                               urgente
                                 ? "bg-amber-400/15 text-amber-400"
                                 : "bg-white/6 text-white/35",
@@ -169,7 +169,7 @@ export function Eventos({ eventos }: { eventos: EventoPublico[] }) {
                                 ? t("eventsTomorrow")
                                 : t("eventsInDays", { n: dias })}
                           </span>
-                          <span className="font-mono text-[10px] uppercase tracking-[0.1em] text-white/25">
+                          <span className="tabular-nums text-[10px] uppercase tracking-[0.1em] text-white/25">
                             {t(`eventType_${TIPOS.includes(e.tipo as never) ? e.tipo : "otro"}` as never)}
                           </span>
                         </div>
@@ -208,7 +208,7 @@ export function Eventos({ eventos }: { eventos: EventoPublico[] }) {
             {filtrando && filtrados.length > 0 && (
               <p
                 aria-live="polite"
-                className="mt-6 font-mono text-[10px] uppercase tracking-[0.15em] text-white/30"
+                className="mt-6 tabular-nums text-[10px] uppercase tracking-[0.15em] text-white/30"
               >
                 {t("eventsCount", { n: filtrados.length, total: eventos.length })}
               </p>
@@ -235,7 +235,7 @@ function FilterTab({
       onClick={onClick}
       aria-pressed={active}
       className={cn(
-        "inline-flex items-center gap-1.5 rounded-full border px-4 py-1.5 font-mono text-[10px] uppercase tracking-[0.12em] transition-all duration-150",
+        "inline-flex items-center gap-1.5 rounded-full border px-4 py-1.5 tabular-nums text-[10px] uppercase tracking-[0.12em] transition-all duration-150",
         "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1d4ed8]",
         active
           ? "border-[#1d4ed8] bg-[#1d4ed8] text-white shadow-[0_0_20px_rgba(29,78,216,0.35)]"

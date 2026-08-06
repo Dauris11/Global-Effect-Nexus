@@ -27,7 +27,7 @@ export async function Portales() {
 
   return (
     <div>
-      <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-white/30">
+      <p className="tabular-nums text-[11px] uppercase tracking-[0.2em] text-white/30">
         {t("portalsLabel")}
       </p>
 
