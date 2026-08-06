@@ -1,11 +1,12 @@
 /**
  * Formulario de inicio de sesión (Impact Editorial) con diseño de doble cara deslizable.
  * Permite cambiar entre el portal de Estudiante y el portal de Personal/Docente.
- * Ambos portales comparten el inicio de sesión pero cambian la interfaz y explicaciones.
+ * Si el usuario entra desde un enlace directo de un portal específico, muestra únicamente
+ * la tarjeta de acceso dedicada sin el conmutador deslizable para una mejor experiencia de usuario.
  */
 "use client";
 
-import { useActionState, useState } from "react";
+import { useActionState, useState, useEffect } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { useSearchParams } from "next/navigation";
 import { login, type LoginState } from "./actions";
@@ -46,14 +47,30 @@ export function LoginForm() {
   const locale = useLocale();
   const params = useSearchParams();
   const redirectTo = params.get("redirectTo") ?? "";
+  const portalParam = params.get("portal");
   const urlError = params.get("error") ?? "";
   const [state, formAction, pending] = useActionState(login, initialState);
   const [googleLoading, setGoogleLoading] = useState(false);
   const [googleError, setGoogleError] = useState("");
   const errorKey = state.error || googleError || urlError;
 
-  // Estado del panel deslizable: false = Estudiante, true = Personal (Docente/Admin)
+  // Detecta si es un acceso directo a un portal específico
+  const isDirectStudent = portalParam === "estudiante" || redirectTo.includes("/portal/estudiante") || redirectTo.includes("/cita-psicologia");
+  const isDirectPersonal = portalParam === "personal" || portalParam === "docente" || redirectTo.includes("/portal/profesor") || redirectTo.includes("/dashboard") || redirectTo.includes("/expedientes") || redirectTo.includes("/academico") || redirectTo.includes("/calendario") || redirectTo.includes("/psicologia") || redirectTo.includes("/contabilidad");
+
+  const isDirect = isDirectStudent || isDirectPersonal;
+
+  // Estado del conmutador deslizable (para cuando no es acceso directo): false = Estudiante, true = Personal
   const [isStaff, setIsStaff] = useState(false);
+
+  // Sincroniza el estado inicial del panel con el parámetro si existe, para que empiece en el correcto
+  useEffect(() => {
+    if (isDirectPersonal) {
+      setIsStaff(true);
+    } else if (isDirectStudent) {
+      setIsStaff(false);
+    }
+  }, [isDirectStudent, isDirectPersonal]);
 
   async function loginConGoogle() {
     setGoogleLoading(true);
@@ -71,6 +88,117 @@ export function LoginForm() {
     }
   }
 
+  // ── RENDER ACCESO DIRECTO (Tarjeta de Formulario Único Dedicado) ──
+  if (isDirect) {
+    const showStudentForm = isDirectStudent;
+    return (
+      <div className="w-full max-w-md relative overflow-hidden rounded-[2rem] border border-white/10 bg-[#0a0f1d]/50 backdrop-blur-md shadow-2xl p-8 sm:p-10 text-white">
+        {/* Glow de fondo */}
+        <div className="absolute top-[-10%] right-[-10%] size-40 rounded-full bg-white/5 blur-2xl pointer-events-none" />
+        
+        {/* Logo superior */}
+        <div className="flex justify-center mb-8">
+          <Logo className="h-8 w-auto brightness-0 invert drop-shadow-[0_0_12px_rgba(96,165,250,0.5)]" />
+        </div>
+
+        <div className="space-y-6">
+          <div className="space-y-1.5 text-center">
+            <span className={cn(
+              "inline-block rounded-full px-3 py-1 font-mono text-[10px] font-semibold uppercase tracking-[0.15em]",
+              showStudentForm ? "bg-primary/10 text-primary" : "bg-emerald-400/10 text-emerald-400"
+            )}>
+              {showStudentForm ? "Portal Estudiante" : "Portal Personal & Docente"}
+            </span>
+            <h1 className="font-display text-2xl font-bold tracking-tight">
+              {t("signInTitle")}
+            </h1>
+            <p className="text-xs text-white/40">{t("inviteOnly")}</p>
+          </div>
+
+          {/* Google OAuth */}
+          <Button
+            type="button"
+            variant="outline"
+            size="lg"
+            onClick={loginConGoogle}
+            disabled={googleLoading}
+            className="w-full px-4 font-semibold border-white/10 bg-white/5 text-white hover:bg-white/10"
+          >
+            <GoogleIcon />
+            {t("continueWithGoogle")}
+          </Button>
+
+          <div className="flex items-center gap-3 text-xs text-white/30">
+            <span className="h-px flex-1 bg-white/10" />
+            {t("orEmail")}
+            <span className="h-px flex-1 bg-white/10" />
+          </div>
+
+          {/* Formulario */}
+          <form action={formAction} className="space-y-4">
+            <input type="hidden" name="locale" value={locale} />
+            <input type="hidden" name="redirectTo" value={redirectTo} />
+
+            <Field label={t("email")} requerido htmlFor="direct-email">
+              {(campo) => (
+                <Input 
+                  {...campo} 
+                  id="direct-email" 
+                  name="email" 
+                  type="email" 
+                  autoComplete="email" 
+                  required 
+                  className={cn(
+                    "bg-white/5 border-white/10 text-white placeholder:text-white/20",
+                    showStudentForm ? "focus:border-primary/50" : "focus:border-emerald-500/50"
+                  )} 
+                />
+              )}
+            </Field>
+
+            <Field label={t("password")} requerido htmlFor="direct-password">
+              {(campo) => (
+                <Input
+                  {...campo}
+                  id="direct-password"
+                  name="password"
+                  type="password"
+                  autoComplete="current-password"
+                  required
+                  className={cn(
+                    "bg-white/5 border-white/10 text-white placeholder:text-white/20",
+                    showStudentForm ? "focus:border-primary/50" : "focus:border-emerald-500/50"
+                  )}
+                />
+              )}
+            </Field>
+
+            {errorKey && (
+              <p role="alert" className="text-sm font-medium text-destructive">
+                {t(errorKey)}
+              </p>
+            )}
+
+            <Button 
+              type="submit" 
+              size="lg" 
+              className={cn(
+                "w-full text-white transition-all duration-300",
+                showStudentForm 
+                  ? "bg-primary hover:bg-primary/95 shadow-[0_0_20px_rgba(29,78,216,0.3)]" 
+                  : "bg-emerald-600 hover:bg-emerald-500 shadow-[0_0_20px_rgba(16,185,129,0.2)]"
+              )} 
+              disabled={pending}
+            >
+              {t("signIn")}
+            </Button>
+          </form>
+        </div>
+      </div>
+    );
+  }
+
+  // ── RENDER CON CONMUTADOR DESLIZABLE (Acceso General / Selector) ──
   return (
     <div className="w-full max-w-4xl relative overflow-hidden rounded-[2.5rem] border border-white/10 bg-[#0a0f1d]/50 backdrop-blur-md shadow-2xl min-h-[600px] flex transition-all duration-300">
       

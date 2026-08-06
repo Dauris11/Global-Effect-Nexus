@@ -10,7 +10,7 @@ import { cn } from "@/lib/utils";
 const PUERTAS = [
   { clave: "portal",      href: "/login",   icono: LogIn,       destacado: false },
   { clave: "meals",       href: "/comida",  icono: Utensils,    destacado: true  },
-  { clave: "appointment", href: "/login",   icono: CalendarPlus,destacado: false },
+  { clave: "appointment", href: "/login?portal=estudiante&redirectTo=/cita-psicologia",   icono: CalendarPlus,destacado: false },
 ] as const;
 
 export async function Acceso() {
