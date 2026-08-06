@@ -353,18 +353,6 @@ export function Hero({
             >
               {idx === 0 ? (
                 <div className="relative flex items-center justify-center w-full aspect-square max-w-[400px] lg:max-w-[440px] overflow-visible">
-                  {/* Custom CSS animations for side-to-side drift and rotation */}
-                  <style>{`
-                    @keyframes float-side {
-                      0%, 100% { transform: translate(-20px, 0px); }
-                      50% { transform: translate(20px, -15px); }
-                    }
-                    @keyframes rotate-globe {
-                      from { transform: rotate(0deg); }
-                      to { transform: rotate(360deg); }
-                    }
-                  `}</style>
-
                   {/* Glow de fondo azul marino (Nebula) */}
                   <div
                     aria-hidden
@@ -427,10 +415,7 @@ export function Hero({
                   </div>
 
                   {/* Central Logo Container (Floating Side-to-Side) */}
-                  <div 
-                    className="relative z-10 flex items-center justify-center size-60 sm:size-72 select-none"
-                    style={{ animation: "float-side 8s ease-in-out infinite" }}
-                  >
+                  <div className="relative z-10 flex items-center justify-center size-60 sm:size-72 select-none animate-float-side">
                     {/* Outer spinning ring */}
                     <div 
                       className="absolute inset-[-8%] rounded-full border border-dashed border-primary/20 animate-[spin_50s_linear_infinite]"
@@ -440,8 +425,7 @@ export function Hero({
                     <img
                       src="/icon-transparent.png"
                       alt="Global Effect"
-                      className="size-full object-contain filter drop-shadow-[0_0_40px_rgba(29,78,216,0.35)] opacity-95"
-                      style={{ animation: "rotate-globe 60s linear infinite" }}
+                      className="size-full object-contain filter drop-shadow-[0_0_40px_rgba(29,78,216,0.35)] opacity-95 animate-rotate-globe"
                     />
 
                     {/* Locator Pins (Pulsing Nodes on top of the logo) */}

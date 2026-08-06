@@ -445,3 +445,22 @@
   color-scheme: dark;
 }
 
+/* ── Animaciones del Hero Slider ── */
+@keyframes float-side {
+  0%, 100% { transform: translate(-20px, 0px); }
+  50% { transform: translate(20px, -15px); }
+}
+
+@keyframes rotate-globe {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.animate-float-side {
+  animation: float-side 8s ease-in-out infinite;
+}
+
+.animate-rotate-globe {
+  animation: rotate-globe 60s linear infinite;
+}
+

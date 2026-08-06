@@ -9,6 +9,7 @@ import { MapPin, Mail, ShieldCheck } from "lucide-react";
 import { Link } from "@/i18n/navigation";
 import { SelectorIdioma } from "@/components/layout/selector-idioma";
 import Image from "next/image";
+import { Logo } from "@/components/brand/logo";
 
 export function LandingFooter() {
   const t = useTranslations("landing");
@@ -41,14 +42,8 @@ export function LandingFooter() {
           {/* Brand column */}
           <div>
             {/* Logo mark */}
-            <div className="flex items-center gap-3">
-              <span className="flex size-10 items-center justify-center rounded-xl border border-[#1d4ed8]/40 bg-[#1d4ed8]/15 font-bold text-lg text-white">
-                G
-              </span>
-              <div>
-                <p className="font-display text-sm font-bold text-white">Global Effect</p>
-                <p className="font-mono text-[10px] uppercase tracking-[0.15em] text-white/35">Foundation</p>
-              </div>
+            <div className="flex items-center">
+              <Logo className="h-9 w-auto brightness-0 invert drop-shadow-[0_0_12px_rgba(96,165,250,0.4)]" />
             </div>
 
             <p className="mt-5 max-w-xs text-sm italic leading-relaxed text-white/40">
