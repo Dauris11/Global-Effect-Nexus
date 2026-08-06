@@ -25,7 +25,8 @@ Toda la documentación del proyecto está centralizada en esta carpeta: **un arc
 ### 04 · Modelo de datos
 - [Diagrama Entidad-Relación](04-modelo-de-datos/diagrama-entidad-relacion.md) — ERD Mermaid (global + por dominio) y matriz de relaciones.
 - [Diagrama de Flujo de Datos (DFD)](04-modelo-de-datos/diagrama-flujo-datos.md) — contexto y procesos (Cuarta Entrega).
-- [Diccionario de Datos](04-modelo-de-datos/diccionario-de-datos.md) — 36 tablas, 333 columnas, generado desde la BD real.
+- [Diccionario de Datos](04-modelo-de-datos/diccionario-de-datos.md) — generado desde la BD real.
+  ⚠️ Refleja el esquema hasta la migración `0019`; falta regenerarlo tras `0020_noticia`.
 - [Normalización y Escalabilidad](04-modelo-de-datos/normalizacion-y-escalabilidad.md) — SMART, 1NF–3NF, escalabilidad e IA.
 - Formatos de diagrama: [`esquema.dbml`](04-modelo-de-datos/esquema.dbml) (dbdiagram.io) · [`diagrama-flujo-datos.drawio`](04-modelo-de-datos/diagrama-flujo-datos.drawio) (draw.io).
 
@@ -45,7 +46,7 @@ Toda la documentación del proyecto está centralizada en esta carpeta: **un arc
 | [`../db/README.md`](../db/README.md) | Guía de despliegue y verificación de la base de datos. |
 | `../.env.example` | Plantilla de variables de entorno. |
 
-## Estado del proyecto (2026-07-30)
+## Estado del proyecto (2026-08-06)
 
 - ✅ **S0–S3 (Base de datos):** diseñada, normalizada (1NF–3NF), desplegada y verificada en Supabase — 36 tablas, RBAC, pgvector.
 - ✅ **Documentación de cimientos** completa (visión, arquitectura, módulos, ERD, DFD, diccionario, normalización, plan) + [stack definitivo](08-stack-tecnologico.md).
@@ -54,13 +55,21 @@ Toda la documentación del proyecto está centralizada en esta carpeta: **un arc
 - ✅ **S5 — Expedientes y Panel:** CRUD de expedientes por pestañas, detalle con GPA y gráficos, OCR con IA y panel principal armado por permisos.
 - ✅ **S9 — Administrativo y Calendario:** Kanban con automatizaciones (correo + evento espejo), proyectos con avance calculado, personal y calendario mensual.
 - ✅ **S6 — Académico y portales por rol:** materias, cursos, calificaciones, historial, prematrícula y períodos; **Portal Estudiante** y **Portal Profesor**, con el vínculo docente ↔ usuario resuelto por FK en la migración `0019`.
+- ✅ **Los seis portales del catálogo:** se suman Administrativo, Psicología, Contabilidad, Cursos Técnicos (selector) y Estudiante CT, sobre un patrón común (`components/portal/`). Cada uno con su **login propio** (`/login/<portal>`).
+- ✅ **Psicología (módulo 15) y Contabilidad (módulo 14):** citas confidenciales con filtros y alta de registros; ingresos, egresos y balance. Se añade **Cita de Psicología (módulo 22)**, la mitad estudiantil del flujo.
+- ✅ **Expediente completo en diálogo** de siete pestañas, con el **OCR por IA** accesible también desde Psicología.
+- ✅ **Sistema visual y su norma:** ver [09 · Estándar de Diseño](09-estandar-de-diseno.md).
+- ✅ **Blog público** (migración `0020`): noticias redactadas por administración + actividades ya celebradas, en una sola rejilla.
 
 Ver los próximos pasos en [Plan de Trabajo](05-plan-de-trabajo.md).
 
 ## Resumen de la base de datos
 
 - **Motor:** PostgreSQL 17 (Supabase). SQL a mano, sin ORM, consultas parametrizadas.
-- **37 tablas · 347 columnas · 7 enums · 47 FKs · 94 índices · 20 triggers.** (Sin contar `_migracion`, tabla de control del runner.)
+- **38 tablas · 358 columnas · 7 enums · 47 FKs · 95 índices · 21 triggers.** (Sin contar `_migracion`, tabla de control del runner.)
 - **Extensiones:** `pgcrypto`, `citext`, `pg_trgm`, `vector` (pgvector 0.8, índice HNSW).
 - **Extensibilidad:** columna `metadata JSONB` en las 14 entidades principales.
-- **Credenciales semilla:** `admin@globaleffect.org` / `admin123` (super_admin).
+- **Credenciales semilla:** las seis cuentas de demostración comparten la contraseña
+  `GlobalEffect2026!` (ver la tabla completa en el [README raíz](../README.md)).
+  Se generan con `npm run db:seed:usuarios`; la contraseña se puede cambiar con
+  `DEMO_PASSWORD` antes de correr el script.

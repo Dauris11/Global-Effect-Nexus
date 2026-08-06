@@ -2,10 +2,13 @@
 
 Plataforma web integral para la gestión académica y administrativa de la **Fundación Global Effect** (La Vega, República Dominicana). Proyecto final de grado — UCATECI.
 
-> **Estado (2026-07-28):** base de datos desplegada en Supabase (36 tablas, RBAC, pgvector) y app en **Next.js 16 + Tailwind 4** con **Supabase Auth + RBAC**, i18n `es/en` y capa `server/` por dominio.
-> **Sin estilos a propósito:** no hay tokens, fuentes ni utilidades de Tailwind generadas, a la espera de definir un sistema visual nuevo. Los 25 componentes de `src/components/ui/` siguen en pie, sin pintar.
-> **Pantallas terminadas:** landing, login por invitación, panel, inscripción de comida y el **módulo Administrativo completo (S9)** — tareas (Kanban), proyectos, personal y calendario.
-> Build, tipos y lint en verde.
+> **Estado (2026-08-06):** base de datos desplegada en Supabase (38 tablas, RBAC, pgvector) y app en **Next.js 16 + Tailwind 4** con **Supabase Auth + RBAC**, i18n `es/en` y capa `server/` por dominio.
+>
+> **Sistema visual definido.** Turquesa institucional `#2096BA` sobre base slate, una sola familia tipográfica (Inter) y los seis colores de rol. La norma está escrita en [09 · Estándar de Diseño](docs/09-estandar-de-diseno.md), que es la fuente de verdad: si una pantalla y el documento no coinciden, gana el documento.
+>
+> **Pantallas terminadas:** landing pública (hero configurable, acceso a los seis portales, eventos y blog), login general y **un login por portal**, los **seis portales por rol** (estudiante, docente, administrativo, psicología, contabilidad y cursos técnicos), Académico, Expedientes con **OCR por IA**, Psicología, Contabilidad, Administrativo (S9) y Calendario.
+>
+> Build, tipos, lint e i18n en verde.
 
 ---
 
