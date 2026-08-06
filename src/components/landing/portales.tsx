@@ -1,149 +1,95 @@
 /**
- * Bloque "Portales" — las seis puertas de entrada por rol.
+ * Tira de acceso a los portales — va pegada bajo el hero.
  *
- * Están los seis del catálogo (03-modulos-funcionales.md § Portales por rol),
- * no solo los que tienen pantalla propia: la landing es pública y su trabajo
- * aquí es que cada persona reconozca la suya de un vistazo, aunque el acceso
- * real lo decida el rol de su cuenta.
+ * Ocupa el sitio donde antes estaban las cifras institucionales. El cambio es
+ * de propósito: una landing cuya primera fila son estadísticas se lee como un
+ * folleto; una cuya primera fila son las puertas de entrada se lee como la
+ * portada de un sistema, que es lo que esto es.
  *
- * Cada tarjeta lleva el color de su portal en tres sitios coordinados —barra
- * superior, azulejo del icono y flecha del CTA— y ese color es el mismo del
- * banner que se encontrará al entrar. Las clases van literales y completas
- * porque Tailwind no genera las que se construyen por concatenación.
+ * Son los seis portales del catálogo (03-modulos-funcionales.md § Portales por
+ * rol), cada uno con el color que se encontrará en el banner al entrar, para
+ * que el icono de aquí y la cabecera de allá sean reconociblemente lo mismo.
+ *
+ * **Un solo color, un solo tono de fondo.** Los seis azulejos comparten el
+ * mismo neutro y los seis glifos el turquesa institucional. Seis colores
+ * distintos, uno al lado del otro, se pelean entre sí y ninguno gana: la fila
+ * deja de leerse como un grupo y pasa a leerse como seis cosas sueltas. Lo que
+ * distingue a cada portal aquí es el icono y el nombre, no el color; el color
+ * de rol aparece dentro, en el banner de cada portal, donde ya no compite con
+ * nada.
+ *
+ * El azulejo es lo interactivo: al enfocarlo o pasar el cursor se eleva, se
+ * tiñe de turquesa y el glifo crece. Todo en 200ms y con `ease-out`, y todo
+ * anulado por `prefers-reduced-motion` desde `globals.css`.
+ *
+ * Las clases van literales y completas: Tailwind no genera las que se
+ * construyen por concatenación.
  */
-import {
-  ArrowRight,
-  BookMarked,
-  BookOpen,
-  ClipboardList,
-  DollarSign,
-  GraduationCap,
-  Heart,
-  type LucideIcon,
-} from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
+import { PORTALES } from "@/lib/portales";
 
-interface Portal {
-  clave: string;
-  href: string;
-  icono: LucideIcon;
-  barra: string;
-  azulejo: string;
-  acento: string;
-}
-
-const PORTALES: Portal[] = [
-  {
-    clave: "estudiante",
-    href: "/portal/estudiante",
-    icono: GraduationCap,
-    barra: "bg-gradient-to-r from-[#2096BA] to-[#0a6a8a]",
-    azulejo: "bg-gradient-to-br from-[#2096BA] to-[#0a6a8a]",
-    acento: "text-[#2096BA]",
-  },
-  {
-    clave: "docente",
-    href: "/portal/profesor",
-    icono: BookOpen,
-    barra: "bg-gradient-to-r from-emerald-500 to-emerald-700",
-    azulejo: "bg-gradient-to-br from-emerald-500 to-emerald-700",
-    acento: "text-emerald-600",
-  },
-  {
-    clave: "administrativo",
-    href: "/portal/administrativo",
-    icono: ClipboardList,
-    barra: "bg-gradient-to-r from-orange-500 to-orange-700",
-    azulejo: "bg-gradient-to-br from-orange-500 to-orange-700",
-    acento: "text-orange-600",
-  },
-  {
-    clave: "psicologia",
-    href: "/portal/psicologia",
-    icono: Heart,
-    barra: "bg-gradient-to-r from-rose-500 to-rose-700",
-    azulejo: "bg-gradient-to-br from-rose-500 to-rose-700",
-    acento: "text-rose-600",
-  },
-  {
-    clave: "contabilidad",
-    href: "/portal/contabilidad",
-    icono: DollarSign,
-    barra: "bg-gradient-to-r from-violet-500 to-violet-700",
-    azulejo: "bg-gradient-to-br from-violet-500 to-violet-700",
-    acento: "text-violet-600",
-  },
-  {
-    clave: "cursos_tecnicos",
-    href: "/portal/cursos-tecnicos",
-    icono: BookMarked,
-    barra: "bg-gradient-to-r from-[#d97706] to-[#b45309]",
-    azulejo: "bg-gradient-to-br from-[#d97706] to-[#b45309]",
-    acento: "text-[#d97706]",
-  },
-];
 
 export function Portales() {
   const t = useTranslations("landing");
 
   return (
-    <section id="portales" className="bg-slate-50 py-14 md:py-20">
-      <div className="mx-auto max-w-6xl px-4 md:px-6">
-        <p className="text-xs uppercase tracking-widest text-[#2096BA]">
+    <section
+      id="portales"
+      aria-labelledby="portales-titulo"
+      className="border-b border-slate-200 bg-white"
+    >
+      <div className="mx-auto max-w-6xl px-4 py-10 md:px-6">
+        {/* El titular existe para los lectores de pantalla y para dar contexto
+            sin robarle protagonismo a la fila de iconos. */}
+        <h2
+          id="portales-titulo"
+          className="text-center text-xs uppercase tracking-widest text-[#2096BA]"
+        >
           {t("accessEyebrow")}
-        </p>
-        <h2 className="font-heading mt-2 text-3xl font-bold text-slate-900 md:text-4xl">
-          {t("accessTitle")}
         </h2>
-        <p className="mt-3 max-w-2xl text-slate-600">{t("accessIntro")}</p>
 
-        <ul className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <ul className="mt-7 grid grid-cols-3 gap-x-3 gap-y-7 sm:gap-x-6 md:grid-cols-6">
           {PORTALES.map((p) => {
             const Icono = p.icono;
             return (
               <li key={p.clave}>
                 <Link
-                  href={p.href}
-                  className="group flex h-full flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white transition-all duration-200 hover:-translate-y-1.5 hover:shadow-xl"
+                  href={`/login/${p.clave}`}
+                  className="group flex h-full flex-col items-center rounded-xl p-2 text-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2096BA] focus-visible:ring-offset-2"
                 >
                   <span
                     aria-hidden
-                    className={`h-1 w-full opacity-0 transition-opacity duration-200 group-hover:opacity-100 ${p.barra}`}
-                  />
+                    className="
+                      flex h-16 w-16 items-center justify-center rounded-2xl
+                      border border-slate-200 bg-slate-100 text-[#2096BA]
+                      transition-all duration-200 ease-out
+                      group-hover:-translate-y-1.5 group-hover:border-[#2096BA]/40
+                      group-hover:bg-[#2096BA]/10 group-hover:shadow-lg
+                      group-hover:shadow-[#2096BA]/20
+                      group-focus-visible:-translate-y-1.5
+                      group-focus-visible:border-[#2096BA]/40
+                      group-focus-visible:bg-[#2096BA]/10
+                    "
+                  >
+                    {/* El glifo crece un punto más que el azulejo: el conjunto
+                        se siente vivo sin que la fila se mueva de sitio. */}
+                    <Icono className="h-7 w-7 transition-transform duration-200 ease-out group-hover:scale-110 group-focus-visible:scale-110" />
+                  </span>
 
-                  <div className="flex flex-1 flex-col p-6">
-                    <span
-                      aria-hidden
-                      className={`flex h-12 w-12 items-center justify-center rounded-xl text-white ${p.azulejo}`}
-                    >
-                      <Icono className="h-6 w-6" />
-                    </span>
-
-                    <h3 className="font-heading mt-5 text-lg font-bold text-slate-900">
-                      {t(`portal_${p.clave}` as "portal_estudiante")}
-                    </h3>
-                    <p className="mt-2 flex-1 text-sm leading-relaxed text-slate-600">
-                      {t(`portal_${p.clave}_desc` as "portal_estudiante_desc")}
-                    </p>
-
-                    <span
-                      className={`mt-5 inline-flex items-center gap-1.5 text-sm font-semibold ${p.acento}`}
-                    >
-                      {t("access_portal_cta")}
-                      <ArrowRight
-                        aria-hidden
-                        className="h-4 w-4 transition-transform group-hover:translate-x-1"
-                      />
-                    </span>
-                  </div>
+                  {/* Altura fija en la etiqueta: "Administración" y "Cursos
+                      técnicos" ocupan dos líneas y sin esto la fila quedaba
+                      con los azulejos a distinta altura. */}
+                  <span className="mt-3 flex min-h-[2.25rem] items-start justify-center text-xs font-semibold leading-tight text-slate-700 transition-colors duration-200 group-hover:text-[#2096BA] sm:text-sm">
+                    {t(p.nombreKey as "portal_estudiante")}
+                  </span>
                 </Link>
               </li>
             );
           })}
         </ul>
 
-        <p className="mt-8 text-sm text-slate-500">{t("portalsRoleNote")}</p>
+        <p className="mt-8 text-center text-xs text-slate-500">{t("portalsRoleNote")}</p>
       </div>
     </section>
   );

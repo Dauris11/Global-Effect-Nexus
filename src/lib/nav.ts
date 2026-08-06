@@ -142,7 +142,7 @@ export const NAV_ITEMS: NavItem[] = [
 
   // Pantallas pendientes (S6–S11). El backend ya está en `src/server/*`.
   { href: "/patrocinadores", labelKey: "sponsors", permiso: "patrocinadores.leer", icon: "HeartHandshake", disponible: false },
-  { href: "/contabilidad", labelKey: "accounting", permiso: "finanzas.leer", icon: "Wallet", disponible: false },
-  { href: "/psicologia", labelKey: "psychology", permiso: "psicologia.leer", icon: "Brain", disponible: false },
+  { href: "/contabilidad", labelKey: "accounting", permiso: "finanzas.leer", icon: "Wallet" },
+  { href: "/psicologia", labelKey: "psychology", permiso: "psicologia.leer", icon: "Brain" },
   { href: "/reportes", labelKey: "reports", permiso: "finanzas.leer", icon: "BarChart3", disponible: false },
 ];

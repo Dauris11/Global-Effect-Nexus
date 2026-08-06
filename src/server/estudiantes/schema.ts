@@ -98,6 +98,9 @@ export const CrearExpediente = z.object({
   nacionalidad: texto,
   genero: z.enum(GENEROS).optional().or(z.literal("")).transform((v) => (v ? v : null)),
   religion: texto,
+  /* Faltaban en la escritura aunque la tabla los tiene desde 0005: sin ellos
+     estas columnas eran de solo lectura y nunca se podían rellenar. */
+  sexo_documento: texto,
 
   // 2 · Situación académica e institucional
   tipo: z.enum(TIPOS_ESTUDIANTE).default("regular"),
@@ -107,6 +110,7 @@ export const CrearExpediente = z.object({
   universidad: texto,
   fecha_ingreso: fecha,
   centro_educativo: texto,
+  director_centro: texto,
   facilitador_habitudes: texto,
   breve_historia_habitudes: texto,
 
@@ -153,6 +157,11 @@ export const CrearExpediente = z.object({
     .optional(),
 
   notas_adicionales: texto,
+  /* Seguimiento del cuatrimestre (`si` · `no` · `justificado` · `pendiente`). */
+  amonestaciones: texto,
+  solicitudes_pendientes: texto,
+  envio_correo_patrocinador: texto,
+  asistio_reunion_mensual: texto,
 });
 
 /**

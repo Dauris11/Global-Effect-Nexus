@@ -27,8 +27,10 @@ export function Navbar() {
         aria-label={t("portalsLabel")}
         className="mx-auto flex h-full max-w-6xl items-center justify-between gap-4 px-4 md:px-6"
       >
-        <Link href="/" className="shrink-0">
-          <Logo className="h-9 w-auto" tono="oscuro" priority />
+        <Link href="/" className="min-w-0 shrink">
+          {/* El logotipo es apaisado (2400×524): a 36px de alto ocupa unos
+              165px de ancho y en móvil no deja sitio al botón de comida. */}
+          <Logo className="h-7 w-auto sm:h-9" tono="oscuro" priority />
         </Link>
 
         <div className="hidden items-center gap-8 md:flex">
@@ -43,7 +45,7 @@ export function Navbar() {
           ))}
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex shrink-0 items-center gap-3">
           <span className="hidden items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-xs font-medium text-emerald-600 sm:inline-flex">
             <span
               aria-hidden
@@ -54,9 +56,11 @@ export function Navbar() {
 
           <Link
             href="/comida"
-            className="rounded-xl bg-amber-500 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-amber-600"
+            className="whitespace-nowrap rounded-xl bg-amber-500 px-3 py-2 text-sm font-semibold text-white transition-colors hover:bg-amber-600 sm:px-4"
           >
-            {t("heroCta2")}
+            {/* En móvil solo cabe la palabra; el destino es el mismo. */}
+            <span className="sm:hidden">{t("navMealsShort")}</span>
+            <span className="hidden sm:inline">{t("heroCta2")}</span>
           </Link>
         </div>
       </nav>

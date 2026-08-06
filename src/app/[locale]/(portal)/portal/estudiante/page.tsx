@@ -101,14 +101,13 @@ const ACCESOS: AccesoRapido[] = [
     azulejo: "bg-orange-50 text-orange-600",
   },
   {
-    // El módulo de psicología aún no tiene pantalla; se marca apagado en vez
-    // de enlazar a un 404. Ver `NavItem.disponible` en `lib/nav.ts`.
-    href: "/psicologia",
+    // `/psicologia` exige `psicologia.leer`, que el rol estudiante no tiene.
+    // Su puerta es el módulo 22, que solo pide sesión.
+    href: "/cita-psicologia",
     icono: Heart,
     titulo: "Cita de Psicología",
-    descripcion: "Agenda confidencial",
+    descripcion: "Pide una cita confidencial",
     azulejo: "bg-rose-50 text-rose-600",
-    disponible: false,
   },
 ];
 

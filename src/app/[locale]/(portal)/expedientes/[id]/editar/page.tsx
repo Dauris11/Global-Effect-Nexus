@@ -71,6 +71,7 @@ export default async function EditarExpedientePage({
     relation: t.raw("relation"),
     type: t.raw("type"),
     status: t.raw("status"),
+    followUp: t.raw("followUp"),
   };
 
   return (

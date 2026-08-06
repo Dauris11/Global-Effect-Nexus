@@ -21,18 +21,22 @@ export const dynamic = "force-dynamic";
 
 const ACCESOS: AccesoRapido[] = [
   {
-    href: "/administrativo",
+    href: "/contabilidad",
     icono: Wallet,
     titulo: "Contabilidad",
     descripcion: "Ingresos, egresos y categorías",
     azulejo: "bg-violet-50 text-violet-600",
   },
   {
-    href: "/dashboard",
+    // Reportes (módulo 23) tiene backend en `server/reportes` pero aún no
+    // pantalla. Antes enlazaba a /dashboard, que el rol contabilidad tampoco
+    // puede abrir.
+    href: "/reportes",
     icono: FileBarChart,
     titulo: "Reportes",
     descripcion: "Balance y evolución mensual",
     azulejo: "bg-blue-50 text-blue-600",
+    disponible: false,
   },
 ];
 

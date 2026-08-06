@@ -64,10 +64,12 @@ const ACCESOS: AccesoRapido[] = [
     disponible: false,
   },
   {
+    // Exige `usuarios.administrar`, que solo tiene super_admin: para un admin
+    // corriente este acceso llevaba a una puerta cerrada.
     href: "/administrativo/personal",
     icono: UserCog,
     titulo: "Personal",
-    descripcion: "Equipo y roles del sistema",
+    descripcion: "Equipo y roles (solo super admin)",
     azulejo: "bg-sky-50 text-sky-600",
   },
   {

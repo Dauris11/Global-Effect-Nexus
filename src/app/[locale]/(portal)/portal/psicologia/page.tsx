@@ -21,14 +21,11 @@ export const dynamic = "force-dynamic";
 
 const ACCESOS: AccesoRapido[] = [
   {
-    // El módulo de psicología (backend en `server/psicologia`) todavía no
-    // tiene pantalla propia; se marca apagado en vez de enlazar a un 404.
     href: "/psicologia",
     icono: Heart,
     titulo: "Citas y Seguimientos",
     descripcion: "Agenda y notas confidenciales",
     azulejo: "bg-rose-50 text-rose-600",
-    disponible: false,
   },
   {
     href: "/expedientes",

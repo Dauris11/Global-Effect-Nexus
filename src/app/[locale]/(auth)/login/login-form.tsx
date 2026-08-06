@@ -56,11 +56,21 @@ function GoogleIcon() {
   );
 }
 
-export function LoginForm() {
+export function LoginForm({
+  /**
+   * Destino cuando la URL no trae `redirectTo`. Lo usan los logins por portal
+   * (`/login/psicologia`), donde la puerta ya sabe a dónde va. Lo que venga en
+   * la URL manda: si el middleware rebotó desde una ruta concreta, esa es la
+   * que la persona quería.
+   */
+  redirectPorDefecto = "",
+}: {
+  redirectPorDefecto?: string;
+} = {}) {
   const t = useTranslations("auth");
   const locale = useLocale();
   const params = useSearchParams();
-  const redirectTo = params.get("redirectTo") ?? "";
+  const redirectTo = params.get("redirectTo") ?? redirectPorDefecto;
   const urlError = params.get("error") ?? "";
   const [state, formAction, pending] = useActionState(login, initialState);
   const [googleLoading, setGoogleLoading] = useState(false);

@@ -7,6 +7,8 @@
 import { revalidatePath } from "next/cache";
 import { query, transaction } from "@/lib/db";
 import { requirePermission } from "@/lib/rbac";
+import { obtenerExpedienteCompleto } from "./queries";
+import { notasPorCuatrimestre } from "@/server/portales/queries";
 import {
   ActualizarExpediente,
   CrearEstudiante,
@@ -60,14 +62,18 @@ export async function crearExpediente(input: unknown): Promise<string> {
     const { rows } = await q(
       `INSERT INTO estudiante (
          nombre, cedula, email, telefono, fecha_nacimiento, lugar_nacimiento,
-         nacionalidad, genero, religion, tipo, estado, programa, donde_estudia,
-         universidad, fecha_ingreso, centro_educativo, facilitador_habitudes,
-         breve_historia_habitudes, notas_adicionales
+         nacionalidad, genero, sexo_documento, religion, tipo, estado, programa,
+         donde_estudia, universidad, fecha_ingreso, centro_educativo,
+         director_centro, facilitador_habitudes, breve_historia_habitudes,
+         notas_adicionales, amonestaciones, solicitudes_pendientes,
+         envio_correo_patrocinador, asistio_reunion_mensual
        ) VALUES (
          $1, $2, $3, $4, $5, $6,
-         $7, $8::genero, $9, $10::tipo_estudiante, $11::estado_estudiante, $12, $13,
+         $7, $8::genero, $9, $10, $11::tipo_estudiante, $12::estado_estudiante, $13,
          $14, $15, $16, $17,
-         $18, $19
+         $18, $19, $20,
+         $21, $22, $23,
+         $24, $25
        ) RETURNING id`,
       [
         d.nombre,
@@ -78,6 +84,7 @@ export async function crearExpediente(input: unknown): Promise<string> {
         d.lugar_nacimiento,
         d.nacionalidad,
         d.genero,
+        d.sexo_documento,
         d.religion,
         d.tipo,
         d.estado,
@@ -86,9 +93,14 @@ export async function crearExpediente(input: unknown): Promise<string> {
         d.universidad,
         d.fecha_ingreso,
         d.centro_educativo,
+        d.director_centro,
         d.facilitador_habitudes,
         d.breve_historia_habitudes,
         d.notas_adicionales,
+        d.amonestaciones,
+        d.solicitudes_pendientes,
+        d.envio_correo_patrocinador,
+        d.asistio_reunion_mensual,
       ],
     );
     const estudianteId = rows[0].id as string;
@@ -202,11 +214,14 @@ export async function actualizarExpediente(input: unknown): Promise<void> {
       `UPDATE estudiante SET
          nombre = $2, cedula = $3, email = $4, telefono = $5,
          fecha_nacimiento = $6, lugar_nacimiento = $7, nacionalidad = $8,
-         genero = $9::genero, religion = $10, tipo = $11::tipo_estudiante,
-         estado = $12::estado_estudiante, programa = $13, donde_estudia = $14,
-         universidad = $15, fecha_ingreso = $16, centro_educativo = $17,
-         facilitador_habitudes = $18, breve_historia_habitudes = $19,
-         notas_adicionales = $20
+         genero = $9::genero, sexo_documento = $10, religion = $11,
+         tipo = $12::tipo_estudiante, estado = $13::estado_estudiante,
+         programa = $14, donde_estudia = $15, universidad = $16,
+         fecha_ingreso = $17, centro_educativo = $18, director_centro = $19,
+         facilitador_habitudes = $20, breve_historia_habitudes = $21,
+         notas_adicionales = $22, amonestaciones = $23,
+         solicitudes_pendientes = $24, envio_correo_patrocinador = $25,
+         asistio_reunion_mensual = $26
        WHERE id = $1`,
       [
         d.id,
@@ -218,6 +233,7 @@ export async function actualizarExpediente(input: unknown): Promise<void> {
         d.lugar_nacimiento,
         d.nacionalidad,
         d.genero,
+        d.sexo_documento,
         d.religion,
         d.tipo,
         d.estado,
@@ -226,9 +242,14 @@ export async function actualizarExpediente(input: unknown): Promise<void> {
         d.universidad,
         d.fecha_ingreso,
         d.centro_educativo,
+        d.director_centro,
         d.facilitador_habitudes,
         d.breve_historia_habitudes,
         d.notas_adicionales,
+        d.amonestaciones,
+        d.solicitudes_pendientes,
+        d.envio_correo_patrocinador,
+        d.asistio_reunion_mensual,
       ],
     );
 
@@ -407,4 +428,26 @@ export async function eliminarExpediente(
   revalidatePath("/expedientes");
   revalidatePath("/dashboard");
   return { ok: true };
+}
+
+/**
+ * Carga el expediente completo bajo demanda, para el diálogo que se abre desde
+ * Psicología.
+ *
+ * Es una lectura, pero vive aquí y no en `queries.ts` porque el cliente la
+ * invoca al pulsar: una Server Action es la única forma de que el navegador
+ * pida datos sin exponer la consulta ni montar un endpoint propio. El permiso
+ * se comprueba igual que en las escrituras — `expedientes.leer`, el que tiene
+ * el rol `psicologo`.
+ *
+ * Devuelve el expediente y las notas por cuatrimestre juntas: el diálogo las
+ * necesita a la vez y así el usuario paga una sola espera.
+ */
+export async function cargarExpedienteParaDialogo(estudianteId: string) {
+  await requirePermission("expedientes.leer");
+  const [expediente, cuatrimestres] = await Promise.all([
+    obtenerExpedienteCompleto(estudianteId),
+    notasPorCuatrimestre(estudianteId).catch(() => []),
+  ]);
+  return { expediente, cuatrimestres };
 }

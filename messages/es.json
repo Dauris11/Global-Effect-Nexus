@@ -27,7 +27,11 @@
     "gateNote": "Entras con tu cuenta y el sistema te lleva al portal de tu rol. No hace falta que elijas.",
     "gatePortals": "Estudiante · Profesor · Administrativo · Psicología · Contabilidad · Cursos técnicos",
     "backHome": "Volver al inicio",
-    "needAccess": "¿No tienes acceso? Los usuarios se invitan desde administración."
+    "needAccess": "¿No tienes acceso? Los usuarios se invitan desde administración.",
+    "portalGateNote": "Entra con la cuenta que la Fundación te asignó. Si tu rol es otro, el sistema te llevará a tu portal.",
+    "otherPortals": "¿No es tu portal? Ver todos los accesos",
+    "genericGate": "Acceso general",
+    "portalGateEyebrow": "Acceso al portal"
   },
   "nav": {
     "dashboard": "Panel",
@@ -221,7 +225,13 @@
     "portal_contabilidad_desc": "Ingresos, egresos, becas y balance.",
     "portal_psicologia_desc": "Citas confidenciales y seguimiento de bienestar.",
     "portal_cursos_tecnicos_desc": "Entrada al programa técnico, como estudiante o docente.",
-    "portalsRoleNote": "Cada puerta abre solo para su rol. Si entras con otra cuenta, el sistema te lleva a la tuya."
+    "portalsRoleNote": "Cada puerta abre solo para su rol. Si entras con otra cuenta, el sistema te lleva a la tuya.",
+    "navMealsShort": "Comida",
+    "blogEyebrow": "Lo que hacemos",
+    "blogTitle": "Noticias y actividades",
+    "blogIntro": "Lo que ha pasado en la Fundación: entregas, encuentros, convenios y actividades ya celebradas.",
+    "blogTagNews": "Noticia",
+    "blogTagEvent": "Actividad"
   },
   "comida": {
     "title": "Inscripción de comida",
@@ -637,7 +647,13 @@
       "scholarshipReason": "Motivo de la beca",
       "academicGoals": "Metas académicas",
       "notes": "Notas adicionales",
-      "optional": "Opcional"
+      "optional": "Opcional",
+      "sexDocument": "Sexo (documento)",
+      "schoolDirector": "Director del centro",
+      "sponsorEmail": "Correo al patrocinador",
+      "monthlyMeeting": "Reunión mensual",
+      "warnings": "Amonestaciones del cuatrimestre",
+      "pendingRequests": "Solicitudes pendientes"
     },
     "family": {
       "add": "Añadir familiar",
@@ -718,6 +734,13 @@
         "notes": "Notas de seguimiento",
         "service": "Servicio y reuniones"
       }
+    },
+    "followUp": {
+      "unset": "Sin especificar",
+      "pendiente": "Pendiente",
+      "si": "Sí",
+      "no": "No",
+      "justificado": "Justificado"
     }
   },
   "academic": {

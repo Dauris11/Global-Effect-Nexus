@@ -4,25 +4,29 @@
  * Página pública de entrada. Orden de lectura:
  *   1. Navbar          · barra fija con acceso a comida y estado del sistema.
  *   2. Hero            · carrusel de 72vh con la propuesta y los CTA.
- *   3. Cifras          · datos reales de la plataforma.
- *   4. Portales        · las puertas de entrada por rol.
- *   5. Eventos         · próximas actividades (se oculta si no hay).
+ *   3. Portales        · las seis puertas de entrada por rol, pegadas al hero.
+ *   4. Eventos         · próximas actividades (se oculta si no hay).
+ *   5. Blog            · noticias y actividades ya celebradas.
  *   6. Propuesta       · qué resuelve la plataforma.
  *   7. Footer          · contacto y accesos.
  *
+ * La franja de cifras institucionales que iba entre el hero y los portales se
+ * retiró: ese sitio —lo primero que se ve al bajar— vale más como puerta de
+ * entrada que como folleto de estadísticas.
+ *
  * Los datos salen de Supabase; si la base no responde, la página se sigue
- * pintando con los slides de respaldo y sin cifras.
+ * pintando con los slides de respaldo y sin la sección de eventos.
  */
 import { getTranslations } from "next-intl/server";
 import { Navbar } from "@/components/landing/navbar";
 import { Hero, type HeroSlide } from "@/components/landing/hero";
-import { StatsBar } from "@/components/landing/stats-bar";
 import { Portales } from "@/components/landing/portales";
 import { Eventos } from "@/components/landing/eventos";
 import { PropuestaValor } from "@/components/landing/propuesta-valor";
+import { Blog } from "@/components/landing/blog";
 import { LandingFooter } from "@/components/landing/footer";
-import { slidesActivos, estadisticasLanding, eventosPublicos } from "@/server/landing/queries";
-import type { LandingSlide, LandingEstadisticas, EventoPublico } from "@/server/landing/types";
+import { slidesActivos, eventosPublicos, entradasDelBlog } from "@/server/landing/queries";
+import type { LandingSlide, EventoPublico, EntradaBlog } from "@/server/landing/types";
 
 export const dynamic = "force-dynamic";
 
@@ -30,13 +34,13 @@ export default async function LandingPage() {
   const t = await getTranslations("landing");
 
   let dbSlides: LandingSlide[] = [];
-  let stats: LandingEstadisticas = { estudiantes_activos: 0, materias: 0, patrocinadores: 0 };
   let eventos: EventoPublico[] = [];
+  let blog: EntradaBlog[] = [];
   try {
-    [dbSlides, stats, eventos] = await Promise.all([
+    [dbSlides, eventos, blog] = await Promise.all([
       slidesActivos(),
-      estadisticasLanding(),
       eventosPublicos(),
+      entradasDelBlog(),
     ]);
   } catch {
     /* BD no disponible: la página se ve completa igual. */
@@ -85,31 +89,14 @@ export default async function LandingPage() {
         },
       ];
 
-  const cifras = [
-    {
-      clave: "estudiantes",
-      valor: String(stats.estudiantes_activos),
-      label: t("statsStudents", { n: stats.estudiantes_activos }),
-    },
-    {
-      clave: "materias",
-      valor: String(stats.materias),
-      label: t("statsSubjects", { n: stats.materias }),
-    },
-    {
-      clave: "patrocinadores",
-      valor: String(stats.patrocinadores),
-      label: t("statsSponsors", { n: stats.patrocinadores }),
-    },
-  ];
 
   return (
     <div className="flex min-h-screen flex-col bg-slate-50">
       <Navbar />
       <Hero slides={heroSlides} />
-      <StatsBar cifras={cifras} />
       <Portales />
       <Eventos eventos={eventos} />
+      <Blog entradas={blog} />
       <PropuestaValor />
       <LandingFooter />
     </div>

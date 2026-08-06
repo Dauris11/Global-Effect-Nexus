@@ -9,7 +9,7 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { query } from "@/lib/db";
 import { requirePermission } from "@/lib/rbac";
-import { GuardarSlide } from "./schema";
+import { GuardarSlide, GuardarNoticia } from "./schema";
 
 /** Crea o actualiza una diapositiva del hero. */
 export async function guardarSlide(input: unknown): Promise<string> {
@@ -105,5 +105,68 @@ export async function cambiarVisibilidadSlide(input: unknown): Promise<void> {
   await requirePermission("landing.administrar");
   const d = CambiarVisibilidad.parse(input);
   await query(`UPDATE landing_slide SET activo = $2 WHERE id = $1`, [d.id, d.activo]);
+  revalidatePath("/", "layout");
+}
+
+/* ── Noticias del blog ───────────────────────────────────────────────────
+   Mismo permiso que el hero (`landing.administrar`): las dos cosas son la
+   cara pública del sitio y las gestiona la misma persona. */
+
+/** Crea o actualiza una noticia. */
+export async function guardarNoticia(input: unknown): Promise<string> {
+  await requirePermission("landing.administrar");
+  const d = GuardarNoticia.parse(input);
+
+  if (d.id) {
+    await query(
+      `UPDATE noticia
+          SET titulo=$2, resumen=$3, contenido=$4, imagen_url=$5,
+              fecha=$6, autor=$7, publicada=$8
+        WHERE id=$1`,
+      [
+        d.id,
+        d.titulo,
+        d.resumen || null,
+        d.contenido || null,
+        d.imagen_url || null,
+        d.fecha,
+        d.autor || null,
+        d.publicada,
+      ],
+    );
+    revalidatePath("/", "layout");
+    return d.id;
+  }
+
+  const { rows } = await query(
+    `INSERT INTO noticia (titulo, resumen, contenido, imagen_url, fecha, autor, publicada)
+     VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING id`,
+    [
+      d.titulo,
+      d.resumen || null,
+      d.contenido || null,
+      d.imagen_url || null,
+      d.fecha,
+      d.autor || null,
+      d.publicada,
+    ],
+  );
+  revalidatePath("/", "layout");
+  return rows[0].id as string;
+}
+
+/** Publica o retira una noticia sin borrarla. */
+export async function cambiarPublicacionNoticia(input: unknown): Promise<void> {
+  await requirePermission("landing.administrar");
+  const d = z.object({ id: z.string().uuid(), publicada: z.coerce.boolean() }).parse(input);
+  await query(`UPDATE noticia SET publicada = $2 WHERE id = $1`, [d.id, d.publicada]);
+  revalidatePath("/", "layout");
+}
+
+/** Borra una noticia. */
+export async function eliminarNoticia(input: unknown): Promise<void> {
+  await requirePermission("landing.administrar");
+  const { id } = z.object({ id: z.string().uuid() }).parse(input);
+  await query(`DELETE FROM noticia WHERE id = $1`, [id]);
   revalidatePath("/", "layout");
 }

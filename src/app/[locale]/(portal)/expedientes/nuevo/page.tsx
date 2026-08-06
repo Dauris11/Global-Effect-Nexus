@@ -63,6 +63,7 @@ export default async function NuevoExpedientePage({
     relation: t.raw("relation"),
     type: t.raw("type"),
     status: t.raw("status"),
+    followUp: t.raw("followUp"),
   };
 
   return (
