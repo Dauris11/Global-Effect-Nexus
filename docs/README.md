@@ -15,12 +15,12 @@ Toda la documentación del proyecto está centralizada en esta carpeta: **un arc
 | 06 | [Plan de Entregas](06-plan-de-entregas.md) | Guía para producir las entregas de la tesis (E2–E6). |
 | 07 | [Guía de Desarrollo](07-guia-desarrollo.md) | Convenciones, patrón de módulos, RBAC, i18n, migraciones y flujo de Git (para desarrollar). |
 | 08 | [Stack Tecnológico](08-stack-tecnologico.md) | Stack definitivo (fuente de verdad): framework, Supabase Auth, integraciones, versiones. |
+| 09 | [Estándar de Diseño](09-estandar-de-diseno.md) | Fuente de verdad de la capa visual: paleta, tipografía, forma, patrones de componente y reglas técnicas. |
 
-> **Sin documentación de diseño.** Los documentos 09 (guía de diseño), 10
-> (estándar de interfaz) y 11 (brief) se retiraron al dejar el proyecto sin
-> estilos. No hay, a propósito, ninguna norma visual vigente: el sistema nuevo
-> se documentará cuando se defina. Lo que había —«Impact Editorial»— vive solo
-> en el historial de git.
+> **El estándar de diseño manda sobre el código.** Si una pantalla y el
+> documento 09 no coinciden, gana el documento. El proyecto pasó por tres
+> sistemas visuales y cada cambio dejó clases apuntando a tokens inexistentes
+> —que no dan error, simplemente no pintan—; el 09 existe para cerrar eso.
 
 ### 04 · Modelo de datos
 - [Diagrama Entidad-Relación](04-modelo-de-datos/diagrama-entidad-relacion.md) — ERD Mermaid (global + por dominio) y matriz de relaciones.
