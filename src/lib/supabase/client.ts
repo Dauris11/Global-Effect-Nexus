@@ -11,8 +11,11 @@
 import { createBrowserClient } from "@supabase/ssr";
 
 export function createClient() {
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL || "";
+  const safeUrl = url.includes("[PROJECT_REF]") ? "https://placeholder.supabase.co" : url;
+  
   return createBrowserClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL || "https://placeholder.supabase.co",
+    safeUrl || "https://placeholder.supabase.co",
     process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.dummy_key",
   );
 }
