@@ -115,31 +115,31 @@ export default async function LandingPage() {
         pieDatos={t("statsFootnote")}
       />
 
-      {/* 2 · Portales — BLANCO */}
-      <section id="portales" className="relative bg-white py-14">
-        {/* Wave top separator */}
+      {/* 2 · Portales — BLANCO (franja-clara) */}
+      <section id="portales" className="franja-clara relative bg-background py-14">
+        {/* Blue accent bar */}
         <div
           aria-hidden
-          className="pointer-events-none absolute left-0 top-0 h-1 w-full bg-gradient-to-r from-[#1d4ed8] via-[#60a5fa] to-[#1d4ed8]"
+          className="pointer-events-none absolute left-0 top-0 h-1 w-full bg-gradient-to-r from-primary via-primary/60 to-primary"
         />
         <div className="mx-auto max-w-6xl px-6">
           <Portales />
         </div>
       </section>
 
-      {/* 3 · Patrocinio — AZUL */}
+      {/* 3 · Patrocinio — AZUL (franja-oscura) */}
       <Patrocinio />
 
-      {/* 4 · Acceso — BLANCO */}
+      {/* 4 · Acceso — BLANCO (franja-clara) */}
       <Acceso />
 
-      {/* 5 · Labor — AZUL */}
+      {/* 5 · Labor — AZUL (franja-oscura) */}
       <Labor />
 
-      {/* 6 · Eventos — BLANCO */}
+      {/* 6 · Eventos — BLANCO (franja-clara) */}
       <Eventos eventos={eventos} />
 
-      {/* 7 · FAQ — AZUL */}
+      {/* 7 · FAQ — AZUL (franja-oscura) */}
       <PreguntasFrecuentes />
 
       {/* 8 · Footer — OSCURO */}

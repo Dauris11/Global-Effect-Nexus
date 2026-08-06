@@ -29,12 +29,12 @@ export function PreguntasFrecuentes() {
     <section
       id="faq"
       aria-labelledby="faq-title"
-      className="relative bg-[#080c14] py-24 md:py-32"
+      className="franja-oscura relative bg-[#080c14] py-24 md:py-32"
     >
       {/* Blue accent top bar */}
       <div
         aria-hidden
-        className="pointer-events-none absolute left-0 top-0 h-1 w-full bg-gradient-to-r from-[#1d4ed8] via-[#60a5fa] to-[#1d4ed8]"
+        className="pointer-events-none absolute left-0 top-0 h-1 w-full bg-gradient-to-r from-primary via-primary/60 to-primary"
       />
       {/* Bottom glow */}
       <div

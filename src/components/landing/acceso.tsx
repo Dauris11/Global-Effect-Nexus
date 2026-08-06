@@ -20,23 +20,23 @@ export async function Acceso() {
     <section
       id="acceso"
       aria-labelledby="acceso-title"
-      className="relative overflow-hidden bg-white py-24 md:py-32"
+      className="franja-clara relative overflow-hidden bg-background py-24 md:py-32"
     >
-      {/* Blue top accent line */}
+      {/* Blue accent top bar */}
       <div
         aria-hidden
-        className="pointer-events-none absolute left-0 top-0 h-1 w-full bg-gradient-to-r from-[#1d4ed8] via-[#60a5fa] to-[#1d4ed8]"
+        className="pointer-events-none absolute left-0 top-0 h-1 w-full bg-gradient-to-r from-primary via-primary/60 to-primary"
       />
 
       <div className="mx-auto max-w-6xl px-6">
         {/* Section header */}
         <div className="text-center">
-          <p className="mb-3 font-mono text-xs uppercase tracking-[0.2em] text-[#1d4ed8]">
+          <p className="mb-3 font-mono text-xs uppercase tracking-[0.2em] text-primary">
             {t("accessEyebrow")}
           </p>
           <h2
             id="acceso-title"
-            className="font-display text-[clamp(2rem,5vw,3.5rem)] font-bold leading-tight text-[#0f172a]"
+            className="font-display text-[clamp(2rem,5vw,3.5rem)] font-bold leading-tight text-foreground"
           >
             {t("accessTitle")}
           </h2>
@@ -50,11 +50,11 @@ export async function Acceso() {
                 href={href}
                 className={cn(
                   "group relative flex h-full flex-col overflow-hidden rounded-2xl border p-7 transition-all duration-300 ease-out",
-                  "hover:-translate-y-1 hover:shadow-[0_20px_60px_rgba(0,0,0,0.4)]",
-                  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1d4ed8]",
+                  "hover:-translate-y-1 hover:shadow-flotante",
+                  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
                   destacado
-                    ? "border-amber-400/35 bg-amber-400/[0.06] hover:border-amber-400/60 hover:bg-amber-400/[0.12] shadow-sm"
-                    : "border-[#1d4ed8]/15 bg-[#1d4ed8]/[0.03] hover:border-[#1d4ed8]/40 hover:bg-[#1d4ed8]/[0.07] shadow-sm",
+                    ? "border-amber-400/35 bg-amber-400/[0.06] hover:border-amber-400/60 hover:bg-amber-400/[0.12]"
+                    : "border-border bg-card hover:border-primary/40 hover:bg-primary/[0.04]",
                 )}
               >
                 {/* Glow overlay on hover */}
@@ -64,7 +64,7 @@ export async function Acceso() {
                     "pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100",
                     destacado
                       ? "bg-[radial-gradient(ellipse_at_top,rgba(251,191,36,0.08),transparent_60%)]"
-                      : "bg-[radial-gradient(ellipse_at_top,rgba(29,78,216,0.1),transparent_60%)]",
+                      : "bg-[radial-gradient(ellipse_at_top,rgba(32,150,186,0.08),transparent_60%)]",
                   )}
                 />
 
@@ -76,7 +76,7 @@ export async function Acceso() {
                         "flex size-14 items-center justify-center rounded-xl transition-all duration-200 group-hover:scale-110",
                         destacado
                           ? "bg-amber-400/15 text-amber-400"
-                          : "bg-[#1d4ed8]/15 text-[#60a5fa]",
+                          : "bg-primary/15 text-primary",
                       )}
                     >
                       <Icono className="size-7" strokeWidth={1.5} aria-hidden />
@@ -86,7 +86,7 @@ export async function Acceso() {
                         "rounded-full px-3 py-1 font-mono text-[10px] font-semibold uppercase tracking-[0.15em]",
                         destacado
                           ? "bg-amber-400/10 text-amber-400"
-                          : "bg-white/6 text-white/40",
+                          : "bg-muted text-muted-foreground",
                       )}
                     >
                       {t(`access_${clave}_tag` as never)}
@@ -96,27 +96,27 @@ export async function Acceso() {
                   {/* Text */}
                   <h3
                     className={cn(
-                      "mt-6 font-display text-xl font-semibold leading-snug text-[#0f172a] transition-colors duration-200",
+                      "mt-6 font-display text-xl font-semibold leading-snug text-foreground transition-colors duration-200",
                       destacado
                         ? "group-hover:text-amber-600"
-                        : "group-hover:text-[#1d4ed8]",
+                        : "group-hover:text-primary",
                     )}
                   >
                     {t(`access_${clave}_title` as never)}
                   </h3>
-                  <p className="mt-2 text-sm leading-relaxed text-[#475569]">
+                  <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
                     {t(`access_${clave}_desc` as never)}
                   </p>
                 </div>
 
                 {/* Footer CTA */}
-                <div className="relative mt-7 flex items-center justify-between gap-3 border-t border-[#1d4ed8]/10 pt-5">
+                <div className="relative mt-7 flex items-center justify-between gap-3 border-t border-border pt-5">
                   <span
                     className={cn(
                       "flex items-center gap-1.5 text-sm font-semibold transition-colors duration-200",
                       destacado
                         ? "text-amber-400 group-hover:text-amber-300"
-                        : "text-[#60a5fa] group-hover:text-white",
+                        : "text-primary group-hover:text-primary/80",
                     )}
                   >
                     {t(`access_${clave}_cta` as never)}

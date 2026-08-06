@@ -20,7 +20,7 @@ export async function Patrocinio() {
     <section
       id="patrocinio"
       aria-labelledby="patrocinio-title"
-      className="relative overflow-hidden bg-[#050810] py-24 md:py-32"
+      className="franja-oscura relative overflow-hidden bg-[#050810] py-24 md:py-32"
     >
       {/* Background mesh */}
       <div
@@ -34,7 +34,7 @@ export async function Patrocinio() {
       {/* Blue accent top bar */}
       <div
         aria-hidden
-        className="pointer-events-none absolute left-0 top-0 h-1 w-full bg-gradient-to-r from-[#1d4ed8] via-[#60a5fa] to-[#1d4ed8]"
+        className="pointer-events-none absolute left-0 top-0 h-1 w-full bg-gradient-to-r from-primary via-primary/60 to-primary"
       />
 
       <div className="relative mx-auto max-w-6xl px-6">
