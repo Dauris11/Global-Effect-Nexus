@@ -353,6 +353,18 @@ export function Hero({
             >
               {idx === 0 ? (
                 <div className="relative flex items-center justify-center w-full aspect-square max-w-[400px] lg:max-w-[440px] overflow-visible">
+                  {/* Custom CSS animations for side-to-side drift and rotation */}
+                  <style>{`
+                    @keyframes float-side {
+                      0%, 100% { transform: translate(-20px, 0px); }
+                      50% { transform: translate(20px, -15px); }
+                    }
+                    @keyframes rotate-globe {
+                      from { transform: rotate(0deg); }
+                      to { transform: rotate(360deg); }
+                    }
+                  `}</style>
+
                   {/* Glow de fondo azul marino (Nebula) */}
                   <div
                     aria-hidden
@@ -367,13 +379,13 @@ export function Hero({
                     <div className="absolute bottom-[20%] right-[25%] size-1 bg-[#60a5fa] rounded-full animate-pulse opacity-30" />
                   </div>
 
-                  {/* Outlined Background Typography: GLOBAL EFFECT */}
+                  {/* Outlined Background Typography: GLOBAL EFFECT (Larger & higher contrast) */}
                   <div 
-                    className="absolute select-none pointer-events-none font-display font-black text-center flex flex-col justify-center items-center tracking-[0.12em] leading-[0.95] uppercase"
+                    className="absolute select-none pointer-events-none font-display font-black text-center flex flex-col justify-center items-center tracking-[0.14em] leading-[0.92] uppercase"
                     style={{
-                      WebkitTextStroke: "1.5px rgba(255, 255, 255, 0.06)",
-                      color: "transparent",
-                      fontSize: "min(12vw, 84px)",
+                      WebkitTextStroke: "1.5px rgba(96, 165, 250, 0.22)",
+                      color: "rgba(96, 165, 250, 0.02)",
+                      fontSize: "min(15vw, 108px)",
                     }}
                   >
                     <span>GLOBAL</span>
@@ -414,36 +426,36 @@ export function Hero({
                     />
                   </div>
 
-                  {/* Central Logo Container (Floating & Rotating) */}
-                  <div className="relative z-10 flex items-center justify-center size-48 sm:size-56 animate-float">
+                  {/* Central Logo Container (Floating Side-to-Side) */}
+                  <div 
+                    className="relative z-10 flex items-center justify-center size-60 sm:size-72 select-none"
+                    style={{ animation: "float-side 8s ease-in-out infinite" }}
+                  >
                     {/* Outer spinning ring */}
                     <div 
-                      className="absolute inset-[-10%] rounded-full border border-dashed border-primary/20 animate-[spin_50s_linear_infinite]"
+                      className="absolute inset-[-8%] rounded-full border border-dashed border-primary/20 animate-[spin_50s_linear_infinite]"
                     />
 
-                    {/* Main Logo Image */}
-                    <div className="relative size-full rounded-full overflow-hidden shadow-[0_0_50px_rgba(29,78,216,0.3)] bg-slate-900/40 backdrop-blur-sm border border-white/10 group">
-                      <img
-                        src="/icon.png"
-                        alt="Global Effect"
-                        className="size-full object-cover opacity-90 transition-transform duration-300 group-hover:scale-105"
-                      />
-                      {/* Glow overlay */}
-                      <div className="absolute inset-0 bg-gradient-to-tr from-primary/10 via-transparent to-[#60a5fa]/5 pointer-events-none" />
-                    </div>
+                    {/* Main Logo Image (Rotating on center) */}
+                    <img
+                      src="/icon.png"
+                      alt="Global Effect"
+                      className="size-full object-contain filter drop-shadow-[0_0_40px_rgba(29,78,216,0.35)] opacity-95"
+                      style={{ animation: "rotate-globe 60s linear infinite" }}
+                    />
 
                     {/* Locator Pins (Pulsing Nodes on top of the logo) */}
-                    <span className="absolute top-[35%] left-[45%] flex h-3 w-3">
+                    <span className="absolute top-[35%] left-[45%] flex h-3.5 w-3.5">
                       <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-                      <span className="relative inline-flex h-3 w-3 rounded-full bg-emerald-500" />
+                      <span className="relative inline-flex h-3.5 w-3.5 rounded-full bg-emerald-500" />
                     </span>
-                    <span className="absolute bottom-[40%] right-[30%] flex h-2.5 w-2.5">
+                    <span className="absolute bottom-[40%] right-[30%] flex h-3 w-3">
                       <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75" />
-                      <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-cyan-500" />
+                      <span className="relative inline-flex h-3 w-3 rounded-full bg-cyan-500" />
                     </span>
-                    <span className="absolute top-[60%] left-[25%] flex h-2 w-2">
+                    <span className="absolute top-[60%] left-[25%] flex h-2.5 w-2.5">
                       <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75" />
-                      <span className="relative inline-flex h-2 w-2 rounded-full bg-amber-500" />
+                      <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-amber-500" />
                     </span>
                   </div>
 
