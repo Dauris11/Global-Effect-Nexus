@@ -499,7 +499,7 @@ export function Hero({
                   />
 
                   {/* Foto circular con AnimatePresence */}
-                  <div className="relative overflow-hidden rounded-full aspect-square">
+                  <div className="relative overflow-hidden rounded-full aspect-square w-full">
                     <AnimatePresence mode="wait">
                       <m.div
                         key={s.id}
