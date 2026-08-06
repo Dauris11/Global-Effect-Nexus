@@ -116,7 +116,7 @@ export function Hero({
   /** Inicia / reinicia el intervalo de auto-avance. */
   const iniciar = () => {
     limpiar();
-    if (items.length < 2 || reduce || pausado) return;
+    if (items.length < 2 || pausado) return;
     setProgreso(0);
     const inicio = Date.now();
     timerRef.current = setInterval(() => {
