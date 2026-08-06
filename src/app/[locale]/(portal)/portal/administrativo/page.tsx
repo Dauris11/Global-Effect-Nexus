@@ -14,7 +14,7 @@ import {
   ClipboardList,
   FolderOpen,
   HeartHandshake,
-  LayoutDashboard,
+  Bot,
   ListTodo,
   Salad,
   UserCog,
@@ -106,11 +106,14 @@ const ACCESOS: AccesoRapido[] = [
     azulejo: "bg-rose-50 text-rose-600",
   },
   {
-    href: "/dashboard",
-    icono: LayoutDashboard,
-    titulo: "Panel General",
-    descripcion: "Métricas de la fundación",
+    // El catálogo (03-modulos-funcionales.md) lista Chat IA como el octavo
+    // acceso. El backend existe (`server/ia`), la pantalla todavía no.
+    href: "/ia",
+    icono: Bot,
+    titulo: "Chat IA",
+    descripcion: "Consultas sobre los datos de la fundación",
     azulejo: "bg-slate-100 text-slate-600",
+    disponible: false,
   },
 ];
 

@@ -1,50 +1,27 @@
 /**
- * Portal Profesor — ClickUp S6 · #400 (#401–#403).
+ * Portal Profesor — ClickUp S6 · #400 (#401–#402).
  *
- * El docente entra al sistema para hacer tres cosas: ver cuántos tiene
- * inscritos, saber qué le falta por calificar y llegar rápido a la pantalla de
- * notas. Esta pantalla es exactamente eso y nada más — no es un panel de
- * gestión recortado, es el atajo a su trabajo del día.
+ * El vínculo docente ↔ usuario se resuelve por FK (migración `0019`), no por
+ * coincidencia de nombre: un docente sin usuario enlazado ve sus cifras en
+ * cero, no las de otra persona.
  *
- * **"Mío" lo decide una clave foránea, no un nombre.** `curso.docente_usuario_id`
- * y `materia.profesor_usuario_id` (migración 0019). Comparar `curso.docente`
- * con el nombre del usuario parecía suficiente y no lo es: dos docentes
- * homónimos verían los cursos del otro, y "Juan A. Pérez" no vería los suyos.
- * En un portal que enseña notas de estudiantes, eso no es un fallo cosmético.
- *
- * **Los cursos cerrados también aparecen.** Ordenados detrás de los activos:
- * un docente vuelve al curso que acaba de terminar para repasar notas, y
- * esconderlo lo obligaría a salir del portal a buscarlo al catálogo.
- *
- * **Cada acceso rápido se comprueba contra el permiso real.** El rol docente
- * los tiene todos, pero el portal también lo abre `super_admin` y quien lo
- * herede mañana puede no tenerlos; un atajo que lleva a "no autorizado" es
- * peor que no estar.
+ * La lista de cursos muestra la ocupación (inscritos sobre capacidad) porque
+ * es el dato con el que un docente decide si puede aceptar a alguien más, y
+ * el promedio del curso solo cuando ya hay notas: un "0%" antes de calificar
+ * se lee como un curso que va mal, no como un curso sin empezar.
  */
-import Link from "next/link";
 import { redirect } from "next/navigation";
 import { getTranslations } from "next-intl/server";
-import { BookOpen, CalendarDays, ClipboardList, GraduationCap } from "lucide-react";
+import { BookOpen, Calendar, ClipboardList, GraduationCap, Layers } from "lucide-react";
 import { currentUser } from "@/lib/auth";
-import { can } from "@/lib/rbac";
-import { bandaDeNota, paletaDe, type EstadoDominio } from "@/lib/estados";
-import { cn } from "@/lib/utils";
-import {
-  cursosDelDocente,
-  materiasDelDocente,
-  resumenDelDocente,
-} from "@/server/portales/queries";
-import type {
-  CursoDelDocente,
-  MateriaDelDocente,
-  ResumenDelDocente,
-} from "@/server/portales/types";
-import { PageHeader } from "@/components/ui/page-header";
-import { StatCard } from "@/components/ui/stat-card";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { ChipEstado } from "@/components/ui/chip-estado";
-import { BarraProgreso } from "@/components/ui/barra-progreso";
-import { EmptyState } from "@/components/ui/empty-state";
+import { cursosDelDocente, resumenDelDocente } from "@/server/portales/queries";
+import type { CursoDelDocente, ResumenDelDocente } from "@/server/portales/types";
+import { BannerRol } from "@/components/portal/banner-rol";
+import { AccesosRapidos, type AccesoRapido } from "@/components/portal/accesos-rapidos";
+import { CardLista, ItemLista, EstadoVacio } from "@/components/portal/card-lista";
+import { Badge } from "@/components/ui/badge";
+
+export const dynamic = "force-dynamic";
 
 const RESUMEN_VACIO: ResumenDelDocente = {
   cursos_activos: 0,
@@ -52,35 +29,6 @@ const RESUMEN_VACIO: ResumenDelDocente = {
   notas: 0,
   materias: 0,
 };
-
-/** Estado del curso → color del sistema (mismo criterio que /academico/cursos). */
-function bandaDeCurso(estado: string): EstadoDominio {
-  switch (estado) {
-    case "activo":
-      return "tarea-progreso";
-    case "finalizado":
-      return "tarea-completada";
-    default:
-      return "tarea-pendiente";
-  }
-}
-
-/** Color de la barra de cupo. Pasarse de capacidad es lo único crítico. */
-function bandaDeCupo(inscritos: number, capacidad: number): EstadoDominio {
-  if (capacidad <= 0) return "neutral";
-  if (inscritos > capacidad) return "prioridad-urgente";
-  if (inscritos === capacidad) return "tarea-completada";
-  return "tarea-progreso";
-}
-
-async function cargar(usuarioId: string) {
-  const [resumen, cursos, materias] = await Promise.all([
-    resumenDelDocente(usuarioId).catch(() => RESUMEN_VACIO),
-    cursosDelDocente(usuarioId).catch(() => [] as CursoDelDocente[]),
-    materiasDelDocente(usuarioId).catch(() => [] as MateriaDelDocente[]),
-  ]);
-  return { resumen, cursos, materias };
-}
 
 export default async function PortalProfesorPage({
   params,
@@ -91,257 +39,96 @@ export default async function PortalProfesorPage({
   const user = await currentUser();
   if (!user) redirect(`/${locale}/login`);
 
-  const [t, verAcademico, registrarNotas, verOperaciones] = await Promise.all([
-    getTranslations("teacherPortal"),
-    can(user.rol, "academico.leer"),
-    can(user.rol, "calificaciones.registrar"),
-    can(user.rol, "operaciones.leer"),
+  const t = await getTranslations("teacherPortal");
+
+  // Cada bloque con su propio `catch`: si falla el listado de cursos, las
+  // cifras del banner siguen siendo útiles, y al revés.
+  const [resumen, cursos] = await Promise.all([
+    resumenDelDocente(user.id).catch(() => RESUMEN_VACIO),
+    cursosDelDocente(user.id).catch(() => [] as CursoDelDocente[]),
   ]);
 
-  const { resumen, cursos, materias } = await cargar(user.id);
-
-  const cifras = [
+  const accesos: AccesoRapido[] = [
     {
-      clave: "courses",
-      valor: resumen.cursos_activos,
-      icono: "BookOpen",
-      acento: "teal" as const,
+      href: "/academico/cursos",
+      icono: BookOpen,
+      titulo: t("shortcuts.courses.label"),
+      descripcion: t("shortcuts.courses.hint"),
+      azulejo: "bg-emerald-50 text-emerald-600",
     },
     {
-      clave: "students",
-      valor: resumen.inscritos,
-      icono: "Users",
-      acento: "coral" as const,
+      href: "/academico/materias",
+      icono: Layers,
+      titulo: t("shortcuts.subjects.label"),
+      descripcion: t("shortcuts.subjects.hint"),
+      azulejo: "bg-blue-50 text-blue-600",
     },
     {
-      clave: "grades",
-      valor: resumen.notas,
-      icono: "ClipboardList",
-      acento: "teal" as const,
+      href: "/academico/calificaciones",
+      icono: ClipboardList,
+      titulo: t("shortcuts.grades.label"),
+      descripcion: t("shortcuts.grades.hint"),
+      azulejo: "bg-orange-50 text-orange-600",
     },
     {
-      clave: "subjects",
-      valor: resumen.materias,
-      icono: "GraduationCap",
-      acento: "gold" as const,
+      href: "/calendario",
+      icono: Calendar,
+      titulo: t("shortcuts.calendar.label"),
+      descripcion: t("shortcuts.calendar.hint"),
+      azulejo: "bg-violet-50 text-violet-600",
     },
   ];
 
-  const accesos = [
-    verAcademico && {
-      clave: "courses",
-      href: `/${locale}/academico/cursos`,
-      icono: BookOpen,
-    },
-    verAcademico && {
-      clave: "subjects",
-      href: `/${locale}/academico/materias`,
-      icono: GraduationCap,
-    },
-    registrarNotas && {
-      clave: "grades",
-      href: `/${locale}/academico/calificaciones`,
-      icono: ClipboardList,
-    },
-    verOperaciones && {
-      clave: "calendar",
-      href: `/${locale}/calendario`,
-      icono: CalendarDays,
-    },
-  ].filter(Boolean) as { clave: string; href: string; icono: typeof BookOpen }[];
-
   return (
-    <div className="space-y-8">
-      <div className="animate-in fade-in-0 slide-in-from-bottom-2 duration-200 ease-out">
-        <PageHeader
-          eyebrow={t("eyebrow")}
-          title={t("greeting", { name: user.nombre.split(" ")[0] })}
-          description={t("summary")}
-        />
-      </div>
+    <div className="space-y-6 p-4 md:p-6">
+      <BannerRol
+        icono={BookOpen}
+        eyebrow={t("eyebrow")}
+        iconoEyebrow={GraduationCap}
+        titulo={t("greeting", { name: user.nombre.split(" ")[0] })}
+        subtitulo={t("summary")}
+        gradiente="bg-gradient-to-br from-emerald-500 to-emerald-700"
+        kpis={[
+          { valor: String(resumen.cursos_activos), label: t("stats.courses") },
+          { valor: String(resumen.inscritos), label: t("stats.students") },
+          { valor: String(resumen.notas), label: t("stats.grades") },
+        ]}
+      />
 
-      {/* Banner — #401 */}
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        {cifras.map((c, i) => (
-          <div
-            key={c.clave}
-            className="animate-in fade-in-0 slide-in-from-bottom-2 duration-200 ease-out"
-            style={{ animationDelay: `${i * 40}ms` }}
-          >
-            <StatCard
-              label={t(`stats.${c.clave}` as never)}
-              value={c.valor}
-              icon={c.icono}
-              accent={c.acento}
-              locale={locale}
-            />
-          </div>
-        ))}
-      </div>
+      <AccesosRapidos accesos={accesos} />
 
-      {/* Accesos rápidos — #403 */}
-      {accesos.length > 0 && (
-        <section className="space-y-3">
-          <h2 className="tabular-nums text-[11px] uppercase tracking-[0.12em] text-muted-foreground">
-            {t("shortcutsTitle")}
-          </h2>
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {accesos.map((a, i) => {
-              const Icono = a.icono;
-              return (
-                <Link
-                  key={a.clave}
-                  href={a.href}
-                  className="animate-in fade-in-0 slide-in-from-bottom-2 duration-200 ease-out rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
-                  style={{ animationDelay: `${160 + i * 40}ms` }}
-                >
-                  <Card className="h-full p-5 transition-colors hover:bg-accent/40">
-                    <span className="flex size-9 items-center justify-center rounded-lg bg-primary/10 text-primary">
-                      <Icono className="size-4" aria-hidden />
-                    </span>
-                    <p className="mt-3 text-sm font-medium text-foreground">
-                      {t(`shortcuts.${a.clave}.label` as never)}
-                    </p>
-                    <p className="mt-0.5 text-[13px] text-muted-foreground">
-                      {t(`shortcuts.${a.clave}.hint` as never)}
-                    </p>
-                  </Card>
-                </Link>
-              );
-            })}
-          </div>
-        </section>
-      )}
-
-      {/* Cursos — #402 */}
-      <section className="space-y-3">
-        <h2 className="tabular-nums text-[11px] uppercase tracking-[0.12em] text-muted-foreground">
-          {t("coursesTitle")}
-        </h2>
-
+      <CardLista titulo={t("coursesTitle")} icono={BookOpen}>
         {cursos.length === 0 ? (
-          <EmptyState
-            icon={BookOpen}
-            title={t("coursesEmpty")}
-            description={t("coursesEmptyHint")}
-          />
+          <EstadoVacio mensaje={t("coursesEmpty")} />
         ) : (
-          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-            {cursos.map((c, i) => {
-              const banda = bandaDeCurso(c.estado);
-              const porcentaje =
-                c.capacidad > 0
-                  ? Math.min(100, Math.round((c.inscritos / c.capacidad) * 100))
-                  : 0;
-
-              return (
-                <Card
-                  key={c.id}
-                  className={cn("animate-in fade-in-0 slide-in-from-bottom-2 duration-200 ease-out border-l-[3px] p-5", paletaDe(banda).riel)}
-                  style={{ animationDelay: `${Math.min(i, 8) * 40}ms` }}
-                >
-                  <div className="flex items-start justify-between gap-3">
-                    <h3 className="text-lg font-semibold leading-tight">{c.nombre}</h3>
-                    <ChipEstado estado={banda} punto className="shrink-0">
-                      {t(`courseStatus.${c.estado}` as never)}
-                    </ChipEstado>
-                  </div>
-
-                  <div className="mt-4 space-y-2">
-                    <div className="flex items-baseline justify-between gap-2">
-                      <span className="tabular-nums text-[11px] uppercase tracking-[0.12em] text-muted-foreground">
-                        {t("occupancy")}
-                      </span>
-                      <span className="tabular-nums text-xs tabular-nums text-muted-foreground">
-                        {c.inscritos} / {c.capacidad}
-                      </span>
-                    </div>
-                    <BarraProgreso
-                      valor={porcentaje}
-                      estado={bandaDeCupo(c.inscritos, c.capacidad)}
-                      etiqueta={`${t("occupancy")}: ${c.nombre}`}
-                    />
-                  </div>
-
-                  <dl className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-1 text-[13px] text-muted-foreground">
-                    <div>
-                      <dt className="sr-only">{t("mode")}</dt>
-                      <dd>{t(`courseMode.${c.modalidad}` as never)}</dd>
-                    </div>
-                    {c.periodo_nombre && (
-                      <div>
-                        <dt className="sr-only">{t("term")}</dt>
-                        <dd className="tabular-nums">{c.periodo_nombre}</dd>
-                      </div>
-                    )}
-                    {c.horario && (
-                      <div>
-                        <dt className="sr-only">{t("schedule")}</dt>
-                        <dd>{c.horario}</dd>
-                      </div>
-                    )}
-                  </dl>
-
-                  {/* Lo que le falta por calificar, que es la razón por la que
-                      el docente mira esta tarjeta. Sin notas no se inventa un
-                      promedio: se dice que no hay ninguna. */}
-                  <div className="mt-4 flex items-baseline justify-between gap-2 border-t border-border pt-3">
-                    <span className="text-[13px] text-muted-foreground">
-                      {t("gradesCount", { count: c.notas })}
-                    </span>
-                    {c.promedio != null ? (
-                      <span
-                        className={cn(
-                          "tabular-nums text-sm font-semibold tabular-nums",
-                          paletaDe(bandaDeNota(c.promedio)).texto,
-                        )}
-                      >
-                        {t("averageShort", { value: c.promedio.toFixed(1) })}
-                      </span>
-                    ) : (
-                      <span className="text-[13px] text-muted-foreground">
-                        {t("noGradesYet")}
-                      </span>
-                    )}
-                  </div>
-                </Card>
-              );
-            })}
-          </div>
+          cursos.map((c) => (
+            <ItemLista
+              key={c.id}
+              icono={BookOpen}
+              azulejo="bg-emerald-100 text-emerald-600"
+              titulo={c.nombre}
+              detalle={[
+                c.periodo_nombre,
+                // `enrolledCount` es un plural ICU y `averageShort` lleva su
+                // valor dentro: ambos reciben el argumento en vez de que se
+                // les pegue la cifra por fuera.
+                `${t("enrolledCount", { count: c.inscritos })} / ${c.capacidad}`,
+                // El promedio solo aparece cuando ya hay algo calificado.
+                c.promedio !== null
+                  ? t("averageShort", { value: `${c.promedio}%` })
+                  : t("noGradesYet"),
+              ]
+                .filter(Boolean)
+                .join(" · ")}
+              derecha={
+                <Badge variant="neutral" className="text-[10px] capitalize">
+                  {c.modalidad}
+                </Badge>
+              }
+            />
+          ))
         )}
-      </section>
-
-      {/* Materias del catálogo a su nombre. Van después de los cursos y en
-          formato de lista: un profesor de materia consulta horario y aula, no
-          cupo, así que no necesitan la barra de ocupación de arriba. */}
-      {materias.length > 0 && (
-        <Card className="animate-in fade-in-0 slide-in-from-bottom-2 duration-200 ease-out">
-          <CardHeader>
-            <CardTitle>{t("subjectsTitle")}</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-1">
-            {materias.map((m) => (
-              <div
-                key={m.id}
-                className="flex items-center justify-between gap-3 rounded-md px-2 py-2 transition-colors hover:bg-muted/60"
-              >
-                <div className="min-w-0">
-                  <p className="truncate text-sm font-medium text-foreground">{m.nombre}</p>
-                  <p className="flex flex-wrap items-center gap-x-3 text-[13px] text-muted-foreground">
-                    {m.codigo && <span className="tabular-nums">{m.codigo}</span>}
-                    {m.periodo_nombre && <span className="tabular-nums">{m.periodo_nombre}</span>}
-                    {m.horario && <span>{m.horario}</span>}
-                    {m.aula && <span>{m.aula}</span>}
-                  </p>
-                </div>
-                <span className="shrink-0 tabular-nums text-xs tabular-nums text-muted-foreground">
-                  {t("enrolledCount", { count: m.inscritos })}
-                </span>
-              </div>
-            ))}
-          </CardContent>
-        </Card>
-      )}
+      </CardLista>
     </div>
   );
 }

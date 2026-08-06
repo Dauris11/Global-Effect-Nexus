@@ -88,9 +88,9 @@ export function LoginForm() {
   }
 
   return (
-    <div className="w-full max-w-sm space-y-6">
+    <div className="w-full space-y-6 rounded-2xl border border-slate-200 bg-white p-8 shadow-sm">
       <div className="space-y-1">
-        <h1 className="font-heading text-3xl font-semibold tracking-tight text-foreground">
+        <h1 className="font-heading text-2xl font-bold tracking-tight text-slate-900">
           {t("signInTitle")}
         </h1>
         <p className="text-sm text-muted-foreground">{t("inviteOnly")}</p>
