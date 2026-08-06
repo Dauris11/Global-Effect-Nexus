@@ -81,20 +81,8 @@ export function LoginForm({
 
   async function loginConGoogle() {
     setGoogleLoading(true);
-    setGoogleError("");
-    const supabase = createClient();
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: "google",
-      options: {
-        redirectTo: `${window.location.origin}/auth/callback?locale=${locale}`,
-      },
-    });
-    // Si `signInWithOAuth` falla no hay redirección: sin este aviso el botón
-    // solo dejaría de girar y el usuario no sabría qué pasó.
-    if (error) {
-      setGoogleError("oauth");
-      setGoogleLoading(false);
-    }
+    // MOCK PARA DISEÑO: Redirige directamente sin usar Supabase Auth
+    window.location.href = `/${locale}/portal/estudiante`;
   }
 
   return (
