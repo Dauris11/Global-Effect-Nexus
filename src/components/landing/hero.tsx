@@ -96,6 +96,13 @@ export function Hero({
   const [progreso, setProgreso] = useState(0);
   const [pausado, setPausado]  = useState(false);
   const reduce = useReducedMotion();
+  /** Evita el hydration mismatch: las animaciones solo se aplican
+   *  después del primer render en el cliente. En SSR siempre initial=false. */
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => { setMounted(true); }, []);
+
+  /** initial seguro: "hidden" solo cuando ya estamos en el cliente. */
+  const initial = (mounted && !reduce) ? "hidden" : false;
 
   /** Timer ref — permite reiniciarlo limpiamente al avanzar un slide. */
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -178,7 +185,7 @@ export function Hero({
               <m.p
                 custom={0}
                 variants={FADE_UP}
-                initial={reduce ? false : "hidden"}
+                initial={initial}
                 animate="visible"
                 className="mb-4 text-sm font-normal tracking-wide text-[#60a5fa]"
               >
@@ -189,7 +196,7 @@ export function Hero({
               <AnimatePresence mode="wait">
                 <m.div
                   key={s.id}
-                  initial={reduce ? false : { opacity: 0, y: 16 }}
+                  initial={mounted ? (reduce ? false : { opacity: 0, y: 16 }) : false}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -12 }}
                   transition={{ duration: 0.45, ease: CURVA }}
@@ -209,7 +216,7 @@ export function Hero({
               <m.div
                 custom={2}
                 variants={FADE_UP}
-                initial={reduce ? false : "hidden"}
+                initial={initial}
                 animate="visible"
                 className="mt-10 flex flex-wrap items-center justify-center gap-4 md:justify-start"
               >
@@ -258,7 +265,7 @@ export function Hero({
                 <m.div
                   custom={3}
                   variants={FADE_UP}
-                  initial={reduce ? false : "hidden"}
+                  initial={initial}
                   animate="visible"
                   className="mt-10 flex items-center justify-center gap-3 md:justify-start"
                 >
@@ -338,7 +345,7 @@ export function Hero({
             <m.div
               custom={1}
               variants={FADE_UP}
-              initial={reduce ? false : "hidden"}
+              initial={initial}
               animate="visible"
               className="relative flex-shrink-0 w-full max-w-[320px] sm:max-w-[380px] md:max-w-[400px] lg:max-w-[440px]"
             >
@@ -374,7 +381,7 @@ export function Hero({
                     <AnimatePresence mode="wait">
                       <m.div
                         key={s.id}
-                        initial={reduce ? false : { opacity: 0, scale: 1.06 }}
+                        initial={mounted ? (reduce ? false : { opacity: 0, scale: 1.06 }) : false}
                         animate={{ opacity: 1, scale: 1 }}
                         exit={{ opacity: 0, scale: 0.97 }}
                         transition={{ duration: 0.6, ease: CURVA }}
@@ -441,7 +448,7 @@ export function Hero({
             <m.div
               custom={5}
               variants={FADE_UP}
-              initial={reduce ? false : "hidden"}
+              initial={initial}
               animate="visible"
               className="mt-20 border-t pt-10"
               style={{ borderColor: "rgba(96,165,250,0.12)" }}

@@ -22,7 +22,7 @@
  */
 "use client";
 
-import type { ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import { LazyMotion, domAnimation, m, useReducedMotion } from "motion/react";
 
 const CURVA = [0.23, 1, 0.32, 1] as const;
@@ -46,11 +46,15 @@ export function Revelar({
   const reducido = useReducedMotion();
   const Elemento = como === "li" ? m.li : m.div;
 
+  /** Evita hydration mismatch: initial solo se aplica tras montar en el cliente. */
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => { setMounted(true); }, []);
+
   return (
     <LazyMotion features={domAnimation}>
       <Elemento
         className={className}
-        initial={reducido ? false : { opacity: 0, y }}
+        initial={mounted && !reducido ? { opacity: 0, y } : false}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, amount: 0.15 }}
         transition={{ duration: 0.4, ease: CURVA, delay: reducido ? 0 : retardo }}
