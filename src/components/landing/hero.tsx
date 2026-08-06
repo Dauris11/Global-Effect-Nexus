@@ -343,15 +343,139 @@ export function Hero({
               )}
             </div>
 
-            {/* ── COLUMNA DERECHA: foto o PanelVivo ── */}
+            {/* ── COLUMNA DERECHA: foto, animación de logo o PanelVivo ── */}
             <m.div
               custom={1}
               variants={FADE_UP}
               initial={initial}
               animate="visible"
-              className="relative flex-shrink-0 w-full max-w-[320px] sm:max-w-[380px] md:max-w-[400px] lg:max-w-[440px]"
+              className="relative flex-shrink-0 w-full max-w-[320px] sm:max-w-[380px] md:max-w-[400px] lg:max-w-[440px] flex items-center justify-center"
             >
-              {conFoto ? (
+              {idx === 0 ? (
+                <div className="relative flex items-center justify-center w-full aspect-square max-w-[400px] lg:max-w-[440px] overflow-visible">
+                  {/* Glow de fondo azul marino (Nebula) */}
+                  <div
+                    aria-hidden
+                    className="absolute size-72 rounded-full bg-gradient-to-r from-primary/30 to-[#60a5fa]/20 blur-3xl opacity-70 animate-[pulse_4s_ease-in-out_infinite]"
+                  />
+
+                  {/* Floating Star Particles */}
+                  <div className="absolute inset-0 pointer-events-none" aria-hidden>
+                    <div className="absolute top-[10%] left-[20%] size-1 bg-white rounded-full animate-ping opacity-40 duration-1000" />
+                    <div className="absolute top-[80%] left-[15%] size-1.5 bg-[#60a5fa] rounded-full animate-pulse opacity-60" />
+                    <div className="absolute top-[30%] right-[10%] size-1 bg-white rounded-full animate-ping opacity-50 duration-700" />
+                    <div className="absolute bottom-[20%] right-[25%] size-1 bg-[#60a5fa] rounded-full animate-pulse opacity-30" />
+                  </div>
+
+                  {/* Outlined Background Typography: GLOBAL EFFECT */}
+                  <div 
+                    className="absolute select-none pointer-events-none font-display font-black text-center flex flex-col justify-center items-center tracking-[0.12em] leading-[0.95] uppercase"
+                    style={{
+                      WebkitTextStroke: "1.5px rgba(255, 255, 255, 0.06)",
+                      color: "transparent",
+                      fontSize: "min(12vw, 84px)",
+                    }}
+                  >
+                    <span>GLOBAL</span>
+                    <span>EFFECT</span>
+                  </div>
+
+                  {/* Orbit Paths */}
+                  <div className="absolute inset-0 flex items-center justify-center pointer-events-none" aria-hidden>
+                    {/* Orbit Path 1 (Tilted) */}
+                    <div 
+                      className="absolute size-[280px] rounded-full border border-white/[0.04] border-dashed"
+                      style={{ transform: "rotateX(75deg) rotateY(15deg)" }}
+                    />
+                    {/* Orbit Path 2 (Opposite tilt) */}
+                    <div 
+                      className="absolute size-[320px] rounded-full border border-[#60a5fa]/[0.03] border-dashed"
+                      style={{ transform: "rotateX(65deg) rotateY(-25deg)" }}
+                    />
+                  </div>
+
+                  {/* Orbiting Satellites (Moons) */}
+                  {/* Satellite 1 */}
+                  <div 
+                    className="absolute size-full animate-[spin_12s_linear_infinite]"
+                    style={{ transformStyle: "preserve-3d" }}
+                  >
+                    <div 
+                      className="absolute size-3 rounded-full bg-[#60a5fa] shadow-[0_0_10px_#60a5fa] top-[15%] left-[50%] -translate-x-1/2"
+                    />
+                  </div>
+                  {/* Satellite 2 */}
+                  <div 
+                    className="absolute size-full animate-[spin_18s_linear_infinite_reverse]"
+                    style={{ transformStyle: "preserve-3d" }}
+                  >
+                    <div 
+                      className="absolute size-2 rounded-full bg-emerald-400 shadow-[0_0_8px_#34d399] top-[80%] left-[50%] -translate-x-1/2"
+                    />
+                  </div>
+
+                  {/* Central Logo Container (Floating & Rotating) */}
+                  <div className="relative z-10 flex items-center justify-center size-48 sm:size-56 animate-float">
+                    {/* Outer spinning ring */}
+                    <div 
+                      className="absolute inset-[-10%] rounded-full border border-dashed border-primary/20 animate-[spin_50s_linear_infinite]"
+                    />
+
+                    {/* Main Logo Image */}
+                    <div className="relative size-full rounded-full overflow-hidden shadow-[0_0_50px_rgba(29,78,216,0.3)] bg-slate-900/40 backdrop-blur-sm border border-white/10 group">
+                      <img
+                        src="/icon.png"
+                        alt="Global Effect"
+                        className="size-full object-cover opacity-90 transition-transform duration-300 group-hover:scale-105"
+                      />
+                      {/* Glow overlay */}
+                      <div className="absolute inset-0 bg-gradient-to-tr from-primary/10 via-transparent to-[#60a5fa]/5 pointer-events-none" />
+                    </div>
+
+                    {/* Locator Pins (Pulsing Nodes on top of the logo) */}
+                    <span className="absolute top-[35%] left-[45%] flex h-3 w-3">
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+                      <span className="relative inline-flex h-3 w-3 rounded-full bg-emerald-500" />
+                    </span>
+                    <span className="absolute bottom-[40%] right-[30%] flex h-2.5 w-2.5">
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75" />
+                      <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-cyan-500" />
+                    </span>
+                    <span className="absolute top-[60%] left-[25%] flex h-2 w-2">
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75" />
+                      <span className="relative inline-flex h-2 w-2 rounded-full bg-amber-500" />
+                    </span>
+                  </div>
+
+                  {/* Tarjeta flotante glassmorphism */}
+                  <div
+                    className="absolute -bottom-6 -right-2 sm:-right-6 z-10 w-[186px] rounded-2xl border border-white/10 p-4 shadow-2xl backdrop-blur-xl transition-transform duration-300 hover:scale-[1.04]"
+                    style={{ backgroundColor: "rgba(10,20,45,0.88)" }}
+                  >
+                    <div className="flex items-start justify-between gap-2">
+                      <div>
+                        <p className="text-sm font-semibold text-white leading-snug">
+                          {t("heroStatusOnline")}
+                        </p>
+                        <p className="mt-1 text-[11px] text-white/45 leading-relaxed">
+                          {t("heroStatusText")}
+                        </p>
+                      </div>
+                      <span className="relative mt-0.5 flex h-2.5 w-2.5 shrink-0">
+                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+                        <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-emerald-500" />
+                      </span>
+                    </div>
+                    <Link
+                      href="/login"
+                      className="mt-3 flex items-center justify-end gap-1 text-[11px] font-semibold text-[#60a5fa] transition-colors hover:text-white"
+                    >
+                      {t("heroStatusCta")}
+                      <ArrowRight className="size-3" aria-hidden />
+                    </Link>
+                  </div>
+                </div>
+              ) : conFoto ? (
                 <>
                   {/* Glow de fondo azul marino */}
                   <div
