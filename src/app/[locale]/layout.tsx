@@ -57,6 +57,7 @@ export default async function LocaleLayout({
         {/* Anti-FOUC: el claro es el predeterminado, así que solo hay que
             adelantarse cuando la persona pidió el oscuro explícitamente. */}
         <script
+          suppressHydrationWarning
           dangerouslySetInnerHTML={{
             __html: `(function(){try{if(localStorage.getItem("theme")==="dark"){document.documentElement.classList.add("dark");}}catch(e){}})();`,
           }}
