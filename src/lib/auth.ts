@@ -38,27 +38,15 @@ export async function getAuthUser() {
  * está inactivo. El rol se usa en `rbac.ts` para autorizar acciones.
  */
 export async function currentUser(): Promise<UsuarioActual | null> {
-  const authUser = await getAuthUser();
-  if (!authUser) return null;
-
-  const { rows } = await query(
-    `SELECT u.id, u.auth_user_id, u.email, u.nombre, u.idioma, u.activo, r.nombre AS rol
-       FROM usuario u
-       JOIN rol r ON r.id = u.rol_id
-      WHERE u.auth_user_id = $1 AND u.activo = TRUE`,
-    [authUser.id],
-  );
-  const u = rows[0];
-  if (!u) return null;
-
+  // MOCK PARA DISEÑO: Devuelve un estudiante falso para evitar el login
   return {
-    id: u.id,
-    authUserId: u.auth_user_id,
-    email: u.email,
-    nombre: u.nombre,
-    idioma: u.idioma,
-    activo: u.activo,
-    rol: u.rol,
+    id: "mock-id-123",
+    authUserId: "mock-auth-id",
+    email: "estudiante@ejemplo.com",
+    nombre: "Estudiante de Prueba",
+    idioma: "es",
+    activo: true,
+    rol: "estudiante",
   };
 }
 

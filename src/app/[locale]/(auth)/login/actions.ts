@@ -20,22 +20,8 @@ export async function login(
   _prev: LoginState,
   formData: FormData,
 ): Promise<LoginState> {
-  const email = String(formData.get("email") ?? "").trim();
-  const password = String(formData.get("password") ?? "");
   const locale = String(formData.get("locale") ?? "es");
 
-  if (!email || !password) return { error: "required" };
-
-  const supabase = await createClient();
-  const { error } = await supabase.auth.signInWithPassword({ email, password });
-  if (error) return { error: "invalidCredentials" };
-
-  // Refuerzo de invitación: debe existir un `usuario` activo enlazable.
-  const usuario = await resolverUsuario();
-  if (!usuario) {
-    await supabase.auth.signOut();
-    return { error: "notRegistered" };
-  }
-
-  redirect(`/${locale}${rutaPorRol(usuario.rol)}`);
+  // MOCK PARA DISEÑO: Simula inicio de sesión exitoso y redirige directo
+  redirect(`/${locale}/portal/estudiante`);
 }
