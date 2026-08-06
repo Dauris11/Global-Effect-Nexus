@@ -438,7 +438,7 @@ export function Hero({
 
                     {/* Main Logo Image (Rotating on center) */}
                     <img
-                      src="/icon.png"
+                      src="/icon-transparent.png"
                       alt="Global Effect"
                       className="size-full object-contain filter drop-shadow-[0_0_40px_rgba(29,78,216,0.35)] opacity-95"
                       style={{ animation: "rotate-globe 60s linear infinite" }}
