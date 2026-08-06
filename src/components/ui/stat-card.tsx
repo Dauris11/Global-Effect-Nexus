@@ -14,10 +14,18 @@ import { Card } from "./card";
 import { Icono } from "./icono";
 import { cn } from "@/lib/utils";
 
+/**
+ * Acentos del azulejo del icono.
+ *
+ * `coral` y `gold` apuntaban a `bg-gold`, un token que no existe en el sistema
+ * actual: las clases no generaban nada y el azulejo salía transparente. Se
+ * sustituyen por los colores de estado que sí usa el resto del portal.
+ */
 const ACCENTS = {
   teal: "bg-primary/10 text-primary",
-  coral: "bg-gold/12 text-gold",
-  gold: "bg-gold/14 text-gold",
+  esmeralda: "bg-emerald-100 text-emerald-600",
+  ambar: "bg-amber-100 text-amber-600",
+  rojo: "bg-red-100 text-red-500",
   neutral: "bg-muted text-muted-foreground",
 } as const;
 

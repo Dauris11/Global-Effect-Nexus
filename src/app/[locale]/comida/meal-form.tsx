@@ -83,7 +83,7 @@ export function MealForm({ dias }: { dias: DiaOpcion[] }) {
             </p>
           )}
           {state.duplicados.length > 0 && (
-            <p className="text-gold">
+            <p className="text-amber-600">
               {t("alreadyDays")}: {state.duplicados.length}
             </p>
           )}

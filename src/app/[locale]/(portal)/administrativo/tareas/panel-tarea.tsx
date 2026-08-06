@@ -74,7 +74,7 @@ export function PanelTarea({
                 className={cn(
                   "tabular-nums tabular-nums",
                   vencimiento === "vencida" && "font-semibold text-destructive",
-                  vencimiento === "hoy" && "font-semibold text-gold",
+                  vencimiento === "hoy" && "font-semibold text-amber-600",
                 )}
               >
                 {formatearFecha(tarea.fecha_limite, locale)}

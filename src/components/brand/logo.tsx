@@ -33,7 +33,17 @@ export function Logo({
          variante de 3840px: 97 KB en vez de 5 KB. */
       sizes="250px"
       priority={priority}
-      className={cn(className, tono === "oscuro" && "invert")}
+      className={cn(
+        /* `self-start` no es cosmético: cuando el logo es hijo directo de un
+           contenedor `flex flex-col` —los paneles de los logins—, el
+           `align-items: stretch` por defecto lo estira a todo el ancho del
+           panel, y con la altura fijada por `h-9` la imagen sale deformada
+           (165px de ancho reales contra 550px pintados). `align-self` lo
+           anula y es inofensivo fuera de un flex. */
+        "self-start",
+        className,
+        tono === "oscuro" && "invert",
+      )}
     />
   );
 }

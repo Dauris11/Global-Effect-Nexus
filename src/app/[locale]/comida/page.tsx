@@ -58,7 +58,7 @@ export default async function ComidaPage() {
           <ArrowLeft className="size-4" /> Global Effect
         </Link>
 
-        <div className="flex size-12 items-center justify-center rounded-lg bg-gold/15 text-gold">
+        <div className="flex size-12 items-center justify-center rounded-lg bg-amber-100 text-amber-600">
           <Utensils className="size-7" />
         </div>
 

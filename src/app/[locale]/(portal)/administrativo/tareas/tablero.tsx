@@ -354,7 +354,7 @@ function TarjetaTarea({
             className={cn(
               "inline-flex items-center gap-1 tabular-nums text-[11px] tabular-nums",
               vencimiento === "vencida" && "font-semibold text-destructive",
-              vencimiento === "hoy" && "font-semibold text-gold",
+              vencimiento === "hoy" && "font-semibold text-amber-600",
               vencimiento === "futura" && "text-muted-foreground",
             )}
           >

@@ -133,7 +133,7 @@ export default async function DashboardPage({
       label: t("scholarships"),
       value: metricas.becados,
       icon: "HeartHandshake",
-      accent: "coral" as const,
+      accent: "esmeralda" as const,
       href: `/${locale}/expedientes?tipo=becado`,
     },
     verAcademico && {
@@ -157,7 +157,7 @@ export default async function DashboardPage({
         label: t("balance"),
         value: balance,
         icon: "Wallet",
-        accent: "gold" as const,
+        accent: "ambar" as const,
         format: "currency" as const,
         hint: t("thisMonth"),
       },
@@ -166,7 +166,7 @@ export default async function DashboardPage({
     label: string;
     value: number;
     icon: string;
-    accent: "teal" | "coral" | "gold";
+    accent: "teal" | "esmeralda" | "ambar";
     format?: "currency";
     hint?: string;
     href?: string;
