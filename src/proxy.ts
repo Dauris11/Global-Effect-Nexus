@@ -52,6 +52,8 @@ export async function proxy(request: NextRequest) {
   // MOCK PARA DISEÑO: Hacemos creer al middleware que siempre hay un usuario
   // para que no nos rebote al login al intentar ver las pantallas internas.
   let user: any = { id: "mock-id", email: "mock@ejemplo.com" };
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
 
   if (
     supabaseUrl &&
