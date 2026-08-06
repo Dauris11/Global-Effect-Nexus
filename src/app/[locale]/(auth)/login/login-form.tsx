@@ -1,15 +1,7 @@
 /**
- * Formulario de inicio de sesión (Impact Editorial). Solo entran usuarios ya
- * invitados. Dos vías, ambas restringidas y con redirección por rol:
- *   • Google (OAuth, para todos) — cliente Supabase → /auth/callback.
- *   • Correo + contraseña — Server Action `login`.
- *
- * Los controles salen del inventario del estándar (`Field` + `Input` + `Button`),
- * no de inputs con clases propias: la puerta del sistema es la primera pantalla
- * que se ve y tiene que verse como el resto.
- *
- * Los errores se muestran traducidos y vienen de tres sitios: la Server Action,
- * el callback de OAuth (`?error=`) y el fallo al abrir el diálogo de Google.
+ * Formulario de inicio de sesión (Impact Editorial) con diseño de doble cara deslizable.
+ * Permite cambiar entre el portal de Estudiante y el portal de Personal/Docente.
+ * Ambos portales comparten el inicio de sesión pero cambian la interfaz y explicaciones.
  */
 "use client";
 
@@ -21,18 +13,11 @@ import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Field } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import { Logo } from "@/components/brand/logo";
+import { cn } from "@/lib/utils";
 
 const initialState: LoginState = {};
 
-/**
- * Icono de Google (SVG oficial multicolor).
- *
- * **Única excepción permitida a "ningún hex literal"**: los cuatro
- * colores son la marca de Google, no la nuestra. Pasarlos por la capa 3 daría a
- * entender que son tokens del sistema —reutilizables, sujetos a tema— y no lo
- * son: sus valores los fija Google y deben respetarse exactos. Un token que
- * nadie más puede usar y que no puede cambiar no es un token.
- */
 function GoogleIcon() {
   return (
     <svg viewBox="0 0 24 24" className="size-4" aria-hidden>
@@ -65,9 +50,10 @@ export function LoginForm() {
   const [state, formAction, pending] = useActionState(login, initialState);
   const [googleLoading, setGoogleLoading] = useState(false);
   const [googleError, setGoogleError] = useState("");
-
-  // Orden de precedencia: lo que acaba de fallar manda sobre lo que traía la URL.
   const errorKey = state.error || googleError || urlError;
+
+  // Estado del panel deslizable: false = Estudiante, true = Personal (Docente/Admin)
+  const [isStaff, setIsStaff] = useState(false);
 
   async function loginConGoogle() {
     setGoogleLoading(true);
@@ -79,8 +65,6 @@ export function LoginForm() {
         redirectTo: `${window.location.origin}/auth/callback?locale=${locale}`,
       },
     });
-    // Si `signInWithOAuth` falla no hay redirección: sin este aviso el botón
-    // solo dejaría de girar y el usuario no sabría qué pasó.
     if (error) {
       setGoogleError("oauth");
       setGoogleLoading(false);
@@ -88,66 +72,342 @@ export function LoginForm() {
   }
 
   return (
-    <div className="w-full max-w-sm space-y-6">
-      <div className="space-y-1">
-        <h1 className="font-display text-3xl font-semibold tracking-tight text-foreground">
-          {t("signInTitle")}
-        </h1>
-        <p className="text-sm text-muted-foreground">{t("inviteOnly")}</p>
+    <div className="w-full max-w-4xl relative overflow-hidden rounded-[2.5rem] border border-white/10 bg-[#0a0f1d]/50 backdrop-blur-md shadow-2xl min-h-[600px] flex transition-all duration-300">
+      
+      {/* ── VISTA DESKTOP (Efecto Deslizable Pinterest) ── */}
+      <div className="hidden lg:flex w-full relative min-h-[600px]">
+        
+        {/* PANEL DE FORMULARIO ESTUDIANTE (Izquierda por defecto, se mueve a la derecha) */}
+        <div className={cn(
+          "absolute top-0 left-0 w-1/2 h-full flex flex-col justify-center px-16 py-10 transition-all duration-600 ease-in-out",
+          isStaff ? "translate-x-full opacity-0 pointer-events-none z-10" : "translate-x-0 opacity-100 z-20"
+        )}>
+          <div className="space-y-6">
+            <div className="space-y-1.5">
+              <span className="inline-block rounded-full bg-primary/10 px-3 py-1 font-mono text-[10px] font-semibold uppercase tracking-[0.15em] text-primary">
+                Portal Estudiante
+              </span>
+              <h1 className="font-display text-3xl font-bold tracking-tight text-white">
+                {t("signInTitle")}
+              </h1>
+              <p className="text-sm text-white/40">{t("inviteOnly")}</p>
+            </div>
+
+            {/* Google OAuth */}
+            <Button
+              type="button"
+              variant="outline"
+              size="lg"
+              onClick={loginConGoogle}
+              disabled={googleLoading}
+              className="w-full px-4 font-semibold border-white/10 bg-white/5 text-white hover:bg-white/10"
+            >
+              <GoogleIcon />
+              {t("continueWithGoogle")}
+            </Button>
+
+            <div className="flex items-center gap-3 text-xs text-white/30">
+              <span className="h-px flex-1 bg-white/10" />
+              {t("orEmail")}
+              <span className="h-px flex-1 bg-white/10" />
+            </div>
+
+            {/* Formulario Correo + Contraseña */}
+            <form action={formAction} className="space-y-4">
+              <input type="hidden" name="locale" value={locale} />
+              <input type="hidden" name="redirectTo" value={redirectTo} />
+
+              <Field label={t("email")} requerido htmlFor="student-email">
+                {(campo) => (
+                  <Input {...campo} id="student-email" name="email" type="email" autoComplete="email" required className="bg-white/5 border-white/10 text-white placeholder:text-white/20 focus:border-primary/50" />
+                )}
+              </Field>
+
+              <Field label={t("password")} requerido htmlFor="student-password">
+                {(campo) => (
+                  <Input
+                    {...campo}
+                    id="student-password"
+                    name="password"
+                    type="password"
+                    autoComplete="current-password"
+                    required
+                    className="bg-white/5 border-white/10 text-white placeholder:text-white/20 focus:border-primary/50"
+                  />
+                )}
+              </Field>
+
+              {errorKey && (
+                <p role="alert" className="text-sm font-medium text-destructive">
+                  {t(errorKey)}
+                </p>
+              )}
+
+              <Button type="submit" size="lg" className="w-full bg-primary text-white hover:bg-primary/95 shadow-[0_0_20px_rgba(29,78,216,0.3)]" disabled={pending}>
+                {t("signIn")}
+              </Button>
+            </form>
+          </div>
+        </div>
+
+        {/* PANEL DE FORMULARIO PERSONAL/DOCENTE (Izquierda por defecto, se mueve a la derecha, oculto al inicio) */}
+        <div className={cn(
+          "absolute top-0 left-0 w-1/2 h-full flex flex-col justify-center px-16 py-10 transition-all duration-600 ease-in-out",
+          isStaff ? "translate-x-full opacity-100 z-20" : "translate-x-0 opacity-0 pointer-events-none z-10"
+        )}>
+          <div className="space-y-6">
+            <div className="space-y-1.5">
+              <span className="inline-block rounded-full bg-emerald-400/10 px-3 py-1 font-mono text-[10px] font-semibold uppercase tracking-[0.15em] text-emerald-400">
+                Portal Docente & Personal
+              </span>
+              <h1 className="font-display text-3xl font-bold tracking-tight text-white">
+                {t("signInTitle")}
+              </h1>
+              <p className="text-sm text-white/40">{t("inviteOnly")}</p>
+            </div>
+
+            {/* Google OAuth */}
+            <Button
+              type="button"
+              variant="outline"
+              size="lg"
+              onClick={loginConGoogle}
+              disabled={googleLoading}
+              className="w-full px-4 font-semibold border-white/10 bg-white/5 text-white hover:bg-white/10"
+            >
+              <GoogleIcon />
+              {t("continueWithGoogle")}
+            </Button>
+
+            <div className="flex items-center gap-3 text-xs text-white/30">
+              <span className="h-px flex-1 bg-white/10" />
+              {t("orEmail")}
+              <span className="h-px flex-1 bg-white/10" />
+            </div>
+
+            {/* Formulario Correo + Contraseña */}
+            <form action={formAction} className="space-y-4">
+              <input type="hidden" name="locale" value={locale} />
+              <input type="hidden" name="redirectTo" value={redirectTo} />
+
+              <Field label={t("email")} requerido htmlFor="staff-email">
+                {(campo) => (
+                  <Input {...campo} id="staff-email" name="email" type="email" autoComplete="email" required className="bg-white/5 border-white/10 text-white placeholder:text-white/20 focus:border-emerald-500/50" />
+                )}
+              </Field>
+
+              <Field label={t("password")} requerido htmlFor="staff-password">
+                {(campo) => (
+                  <Input
+                    {...campo}
+                    id="staff-password"
+                    name="password"
+                    type="password"
+                    autoComplete="current-password"
+                    required
+                    className="bg-white/5 border-white/10 text-white placeholder:text-white/20 focus:border-emerald-500/50"
+                  />
+                )}
+              </Field>
+
+              {errorKey && (
+                <p role="alert" className="text-sm font-medium text-destructive">
+                  {t(errorKey)}
+                </p>
+              )}
+
+              <Button type="submit" size="lg" className="w-full bg-emerald-600 text-white hover:bg-emerald-500 shadow-[0_0_20px_rgba(16,185,129,0.2)]" disabled={pending}>
+                {t("signIn")}
+              </Button>
+            </form>
+          </div>
+        </div>
+
+        {/* CONTENEDOR DESLIZABLE DE TOGGLE (Derecha por defecto, se mueve a la izquierda) */}
+        <div className={cn(
+          "absolute top-0 left-1/2 w-1/2 h-full overflow-hidden transition-all duration-600 ease-in-out rounded-[2.2rem] z-[100] p-1.5",
+          isStaff ? "-translate-x-full" : "translate-x-0"
+        )}>
+          {/* Panel interno de doble ancho */}
+          <div className={cn(
+            "absolute top-0 -left-full w-[200%] h-full bg-gradient-to-br from-[#1d4ed8] to-[#0b2574] transition-all duration-600 ease-in-out relative overflow-hidden",
+            isStaff ? "translate-x-1/2" : "translate-x-0"
+          )}>
+            {/* Círculos decorativos en el panel */}
+            <div className="absolute top-[-20%] left-[-10%] size-60 rounded-full bg-white/5 blur-2xl pointer-events-none" />
+            <div className="absolute bottom-[-30%] right-[-10%] size-80 rounded-full bg-white/5 blur-3xl pointer-events-none" />
+
+            {/* Cara Izquierda (Se muestra cuando isStaff es true) */}
+            <div className={cn(
+              "absolute top-0 left-0 w-1/2 h-full flex flex-col items-center justify-center p-12 text-center transition-all duration-600 ease-in-out text-white",
+              isStaff ? "translate-x-0" : "-translate-x-[200%]"
+            )}>
+              <Logo className="h-9 w-auto mb-6 brightness-0 invert drop-shadow-[0_0_12px_rgba(96,165,250,0.6)]" />
+              <h2 className="font-display text-2xl font-bold mb-3">¿Eres Estudiante?</h2>
+              <p className="text-sm text-white/70 mb-8 max-w-xs leading-relaxed">
+                Entra por aquí para consultar tus materias abiertas, calificaciones de tus períodos activos e inscribirte al comedor diario.
+              </p>
+              <Button 
+                variant="outline" 
+                size="lg" 
+                onClick={() => setIsStaff(false)}
+                className="border-white/20 text-white hover:bg-white/10 hover:text-white rounded-full px-8 font-semibold transition-all duration-300 hover:scale-105 active:scale-95"
+              >
+                Portal Estudiante
+              </Button>
+            </div>
+
+            {/* Cara Derecha (Se muestra cuando isStaff es false) */}
+            <div className={cn(
+              "absolute top-0 right-0 w-1/2 h-full flex flex-col items-center justify-center p-12 text-center transition-all duration-600 ease-in-out text-white",
+              isStaff ? "translate-x-[200%]" : "translate-x-0"
+            )}>
+              <Logo className="h-9 w-auto mb-6 brightness-0 invert drop-shadow-[0_0_12px_rgba(96,165,250,0.6)]" />
+              <h2 className="font-display text-2xl font-bold mb-3">¿Docente o Personal?</h2>
+              <p className="text-sm text-white/70 mb-8 max-w-xs leading-relaxed">
+                Accede por este portal para registrar tus calificaciones, dar seguimiento a expedientes o administrar las operaciones de la fundación.
+              </p>
+              <Button 
+                variant="outline" 
+                size="lg" 
+                onClick={() => setIsStaff(true)}
+                className="border-white/20 text-white hover:bg-white/10 hover:text-white rounded-full px-8 font-semibold transition-all duration-300 hover:scale-105 active:scale-95"
+              >
+                Portal Personal / Docente
+              </Button>
+            </div>
+
+          </div>
+        </div>
+
       </div>
 
-      {/* Google (para todos) */}
-      <Button
-        type="button"
-        variant="outline"
-        size="lg"
-        onClick={loginConGoogle}
-        disabled={googleLoading}
-        className="w-full px-4 font-semibold"
-      >
-        <GoogleIcon />
-        {t("continueWithGoogle")}
-      </Button>
+      {/* ── VISTA MÓVIL (Pestaña Switcher Adaptable) ── */}
+      <div className="flex lg:hidden w-full flex-col p-6 space-y-6">
+        {/* Logo */}
+        <div className="flex justify-center">
+          <Logo className="h-8 w-auto brightness-0 invert drop-shadow-[0_0_12px_rgba(96,165,250,0.6)]" />
+        </div>
 
-      <div className="flex items-center gap-3 text-xs text-muted-foreground">
-        <span className="h-px flex-1 bg-border" />
-        {t("orEmail")}
-        <span className="h-px flex-1 bg-border" />
+        {/* Tab switcher */}
+        <div className="grid grid-cols-2 gap-1.5 bg-white/5 p-1 rounded-full border border-white/10">
+          <button 
+            type="button" 
+            onClick={() => setIsStaff(false)}
+            className={cn(
+              "py-2.5 text-xs font-bold rounded-full transition-all duration-300",
+              !isStaff ? "bg-primary text-white shadow-[0_0_12px_rgba(29,78,216,0.3)]" : "text-white/40 hover:text-white/80"
+            )}
+          >
+            Estudiante
+          </button>
+          <button 
+            type="button" 
+            onClick={() => setIsStaff(true)}
+            className={cn(
+              "py-2.5 text-xs font-bold rounded-full transition-all duration-300",
+              isStaff ? "bg-emerald-600 text-white shadow-[0_0_12px_rgba(16,185,129,0.2)]" : "text-white/40 hover:text-white/80"
+            )}
+          >
+            Personal
+          </button>
+        </div>
+
+        {/* Formulario adaptativo */}
+        <div className="transition-all duration-300">
+          <div className="space-y-1.5 mb-6">
+            <span className={cn(
+              "inline-block rounded-full px-2.5 py-0.5 font-mono text-[9px] font-semibold uppercase tracking-[0.12em]",
+              isStaff ? "bg-emerald-400/10 text-emerald-400" : "bg-primary/10 text-primary"
+            )}>
+              {isStaff ? "Portal Docente & Personal" : "Portal Estudiante"}
+            </span>
+            <h1 className="font-display text-2xl font-bold tracking-tight text-white">
+              {t("signInTitle")}
+            </h1>
+            <p className="text-xs text-white/40">{t("inviteOnly")}</p>
+          </div>
+
+          {/* Google OAuth */}
+          <Button
+            type="button"
+            variant="outline"
+            size="lg"
+            onClick={loginConGoogle}
+            disabled={googleLoading}
+            className="w-full px-4 font-semibold border-white/10 bg-white/5 text-white hover:bg-white/10 mb-6"
+          >
+            <GoogleIcon />
+            {t("continueWithGoogle")}
+          </Button>
+
+          <div className="flex items-center gap-3 text-xs text-white/30 mb-6">
+            <span className="h-px flex-1 bg-white/10" />
+            {t("orEmail")}
+            <span className="h-px flex-1 bg-white/10" />
+          </div>
+
+          <form action={formAction} className="space-y-4">
+            <input type="hidden" name="locale" value={locale} />
+            <input type="hidden" name="redirectTo" value={redirectTo} />
+
+            <Field label={t("email")} requerido htmlFor="mobile-email">
+              {(campo) => (
+                <Input 
+                  {...campo} 
+                  id="mobile-email" 
+                  name="email" 
+                  type="email" 
+                  autoComplete="email" 
+                  required 
+                  className={cn(
+                    "bg-white/5 border-white/10 text-white placeholder:text-white/20",
+                    isStaff ? "focus:border-emerald-500/50" : "focus:border-primary/50"
+                  )} 
+                />
+              )}
+            </Field>
+
+            <Field label={t("password")} requerido htmlFor="mobile-password">
+              {(campo) => (
+                <Input
+                  {...campo}
+                  id="mobile-password"
+                  name="password"
+                  type="password"
+                  autoComplete="current-password"
+                  required
+                  className={cn(
+                    "bg-white/5 border-white/10 text-white placeholder:text-white/20",
+                    isStaff ? "focus:border-emerald-500/50" : "focus:border-primary/50"
+                  )}
+                />
+              )}
+            </Field>
+
+            {errorKey && (
+              <p role="alert" className="text-sm font-medium text-destructive mt-2">
+                {t(errorKey)}
+              </p>
+            )}
+
+            <Button 
+              type="submit" 
+              size="lg" 
+              className={cn(
+                "w-full text-white mt-4 transition-all duration-300",
+                isStaff 
+                  ? "bg-emerald-600 hover:bg-emerald-500 shadow-[0_0_20px_rgba(16,185,129,0.2)]" 
+                  : "bg-primary hover:bg-primary/95 shadow-[0_0_20px_rgba(29,78,216,0.3)]"
+              )} 
+              disabled={pending}
+            >
+              {t("signIn")}
+            </Button>
+          </form>
+        </div>
       </div>
 
-      {/* Correo + contraseña */}
-      <form action={formAction} className="space-y-4">
-        <input type="hidden" name="locale" value={locale} />
-        <input type="hidden" name="redirectTo" value={redirectTo} />
-
-        <Field label={t("email")} requerido>
-          {(campo) => (
-            <Input {...campo} name="email" type="email" autoComplete="email" required />
-          )}
-        </Field>
-
-        <Field label={t("password")} requerido>
-          {(campo) => (
-            <Input
-              {...campo}
-              name="password"
-              type="password"
-              autoComplete="current-password"
-              required
-            />
-          )}
-        </Field>
-
-        {errorKey && (
-          <p role="alert" className="text-sm font-medium text-destructive">
-            {t(errorKey)}
-          </p>
-        )}
-
-        <Button type="submit" size="lg" className="w-full" disabled={pending}>
-          {t("signIn")}
-        </Button>
-      </form>
     </div>
   );
 }
