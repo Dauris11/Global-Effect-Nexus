@@ -88,46 +88,48 @@ export function Hero({ slides }: { slides: HeroSlide[] }) {
       />
 
       <div className="mx-auto w-full max-w-6xl px-4 md:px-6">
-        {slide.tag && (
-          <p className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/10 px-3 py-1 text-xs font-medium text-white">
-            <Sparkles aria-hidden className="h-3.5 w-3.5" />
-            {slide.tag}
-          </p>
-        )}
+        <div key={slide.id} className="animate-in fade-in slide-in-from-bottom-4 duration-700 ease-out fill-mode-both">
+          {slide.tag && (
+            <p className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/10 px-3 py-1 text-xs font-medium text-white">
+              <Sparkles aria-hidden className="h-3.5 w-3.5" />
+              {slide.tag}
+            </p>
+          )}
 
-        <h1
-          className="font-heading max-w-3xl font-bold leading-[1.05] text-white"
-          style={{ fontSize: "clamp(28px, 5.5vw, 56px)", letterSpacing: "-0.03em" }}
-        >
-          {slide.titulo}
-        </h1>
-
-        {slide.texto && (
-          <p
-            className="mt-5 max-w-xl leading-relaxed text-slate-300"
-            style={{ fontSize: "clamp(14px, 2vw, 18px)" }}
+          <h1
+            className="font-heading max-w-3xl font-bold leading-[1.05] text-white"
+            style={{ fontSize: "clamp(28px, 5.5vw, 56px)", letterSpacing: "-0.03em" }}
           >
-            {slide.texto}
-          </p>
-        )}
+            {slide.titulo}
+          </h1>
 
-        <div className="mt-8 flex flex-wrap items-center gap-3">
-          {slide.ctaLabel && slide.ctaHref && (
-            <Link
-              href={slide.ctaHref}
-              className="rounded-xl bg-[#2096BA] px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-[#2096BA]/30 transition-all hover:-translate-y-0.5 hover:bg-[#187a99]"
+          {slide.texto && (
+            <p
+              className="mt-5 max-w-xl leading-relaxed text-slate-300"
+              style={{ fontSize: "clamp(14px, 2vw, 18px)" }}
             >
-              {slide.ctaLabel}
-            </Link>
+              {slide.texto}
+            </p>
           )}
-          {slide.cta2Label && slide.cta2Href && (
-            <Link
-              href={slide.cta2Href}
-              className="rounded-xl border border-white/25 bg-white/10 px-6 py-3 text-sm font-semibold text-white backdrop-blur-sm transition-colors hover:bg-white/20"
-            >
-              {slide.cta2Label}
-            </Link>
-          )}
+
+          <div className="mt-8 flex flex-wrap items-center gap-3">
+            {slide.ctaLabel && slide.ctaHref && (
+              <Link
+                href={slide.ctaHref}
+                className="rounded-xl bg-[#2096BA] px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-[#2096BA]/30 transition-all hover:-translate-y-0.5 hover:bg-[#187a99]"
+              >
+                {slide.ctaLabel}
+              </Link>
+            )}
+            {slide.cta2Label && slide.cta2Href && (
+              <Link
+                href={slide.cta2Href}
+                className="rounded-xl border border-white/25 bg-white/10 px-6 py-3 text-sm font-semibold text-white backdrop-blur-sm transition-colors hover:bg-white/20"
+              >
+                {slide.cta2Label}
+              </Link>
+            )}
+          </div>
         </div>
 
         {total > 1 && (
