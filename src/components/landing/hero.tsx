@@ -39,7 +39,6 @@ export function Hero({ slides }: { slides: HeroSlide[] }) {
 
   useEffect(() => {
     if (pausado || total <= 1) return;
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     const id = setInterval(() => setIdx((i) => (i + 1) % total), INTERVALO);
     return () => clearInterval(id);
   }, [pausado, total]);
