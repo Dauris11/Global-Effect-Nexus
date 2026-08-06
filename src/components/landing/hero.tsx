@@ -397,7 +397,7 @@ export function Hero({
                   {/* Orbiting Satellites (Moons) */}
                   {/* Satellite 1 */}
                   <div 
-                    className="absolute size-full animate-[spin_12s_linear_infinite]"
+                    className="absolute size-full animate-satellite-1"
                     style={{ transformStyle: "preserve-3d" }}
                   >
                     <div 
@@ -406,7 +406,7 @@ export function Hero({
                   </div>
                   {/* Satellite 2 */}
                   <div 
-                    className="absolute size-full animate-[spin_18s_linear_infinite_reverse]"
+                    className="absolute size-full animate-satellite-2"
                     style={{ transformStyle: "preserve-3d" }}
                   >
                     <div 
@@ -418,7 +418,7 @@ export function Hero({
                   <div className="relative z-10 flex items-center justify-center size-60 sm:size-72 select-none animate-float-side">
                     {/* Outer spinning ring */}
                     <div 
-                      className="absolute inset-[-8%] rounded-full border border-dashed border-primary/20 animate-[spin_50s_linear_infinite]"
+                      className="absolute inset-[-8%] rounded-full border border-dashed border-primary/20 animate-spin-ring"
                     />
 
                     {/* Main Logo Image (Rotating on center) */}

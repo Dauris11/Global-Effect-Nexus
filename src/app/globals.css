@@ -464,3 +464,34 @@
   animation: rotate-globe 60s linear infinite;
 }
 
+.animate-spin-ring {
+  animation: spin 50s linear infinite;
+}
+
+.animate-satellite-1 {
+  animation: spin 12s linear infinite;
+}
+
+.animate-satellite-2 {
+  animation: spin 18s linear infinite reverse;
+}
+
+/* Fuerza la ejecución de estas animaciones del Hero incluso si el OS tiene movimiento reducido activado */
+@media (prefers-reduced-motion: reduce) {
+  .animate-rotate-globe {
+    animation: rotate-globe 60s linear infinite !important;
+  }
+  .animate-float-side {
+    animation: float-side 8s ease-in-out infinite !important;
+  }
+  .animate-spin-ring {
+    animation: spin 50s linear infinite !important;
+  }
+  .animate-satellite-1 {
+    animation: spin 12s linear infinite !important;
+  }
+  .animate-satellite-2 {
+    animation: spin 18s linear infinite reverse !important;
+  }
+}
+
