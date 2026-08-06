@@ -49,10 +49,9 @@ export async function proxy(request: NextRequest) {
   // 1. Respuesta base de i18n (rewrite/redirect con el locale resuelto).
   const response = intlMiddleware(request);
 
-  // 2. Refresco de sesión: enlazamos Supabase a las cookies de esta petición.
-  let user = null;
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
+  // MOCK PARA DISEÑO: Hacemos creer al middleware que siempre hay un usuario
+  // para que no nos rebote al login al intentar ver las pantallas internas.
+  let user: any = { id: "mock-id", email: "mock@ejemplo.com" };
 
   if (
     supabaseUrl &&
@@ -75,7 +74,7 @@ export async function proxy(request: NextRequest) {
       });
 
       const { data } = await supabase.auth.getUser();
-      user = data?.user ?? null;
+      user = data?.user ?? user;
     } catch {
       // Ignorar en desarrollo sin credenciales configuradas
     }
@@ -91,6 +90,7 @@ export async function proxy(request: NextRequest) {
     (p) => rutaSinLocale === p || rutaSinLocale.startsWith(p + "/"),
   );
 
+  // Desactivamos la redirección forzosa al login para el modo de diseño
   if (esProtegida && !user) {
     const url = request.nextUrl.clone();
     url.pathname = `/${locale}/login`;
