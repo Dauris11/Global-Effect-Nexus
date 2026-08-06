@@ -104,6 +104,8 @@ export function Hero({
   /** initial seguro: "hidden" solo cuando ya estamos en el cliente. */
   const initial = (mounted && !reduce) ? "hidden" : false;
 
+  const isReduced = mounted ? reduce : false;
+
   /** Timer ref — permite reiniciarlo limpiamente al avanzar un slide. */
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
@@ -296,7 +298,7 @@ export function Hero({
                         }}
                       >
                         {/* Progress fill for the active dot */}
-                        {i === idx && !reduce && (
+                        {i === idx && !isReduced && (
                           <span
                             className="absolute inset-y-0 left-0 rounded-full"
                             style={{
@@ -306,7 +308,7 @@ export function Hero({
                             }}
                           />
                         )}
-                        {i === idx && reduce && (
+                        {i === idx && isReduced && (
                           <span
                             className="absolute inset-0 rounded-full bg-[#60a5fa]"
                           />
