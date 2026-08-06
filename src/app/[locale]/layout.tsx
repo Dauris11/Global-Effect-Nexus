@@ -4,36 +4,26 @@
  * componentes cliente. Define <html>/<body> y los estilos globales.
  *
  * Tipografía:
- *   - Fraunces (serif variable): titulares. Es lo que le da carácter editorial
- *     y cálido a la identidad (`--font-fraunces` → `font-display`).
- *   - Inter: cuerpo e interfaz (`--font-inter` → `font-sans`).
- *   No se auto-hospeda ninguna monoespaciada: el sistema nuevo no usa
- *   etiquetas monoespaciadas como decoración.
+ *   Una sola familia, Inter (300–900). Cubre cuerpo, interfaz y titulares:
+ *   `--font-inter` alimenta tanto `font-sans` como `font-heading`.
  *
  * Tema:
- *   El claro ("Esperanza") es el predeterminado. El script inline aplica
- *   `.dark` ("Espresso", oscuro cálido) antes del primer paint solo si la
- *   persona lo eligió antes; el ThemeToggle lo actualiza en tiempo real.
+ *   El claro es el predeterminado. El script inline aplica `.dark` antes del
+ *   primer paint solo si la persona lo eligió antes.
  */
 import type { Metadata } from "next";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
 import { notFound } from "next/navigation";
-import { Fraunces, Inter } from "next/font/google";
+import { Inter } from "next/font/google";
 import { routing, type Locale } from "@/i18n/routing";
 import "../globals.css";
 
 const inter = Inter({
   subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700", "800", "900"],
   variable: "--font-inter",
   display: "swap",
-});
-
-const fraunces = Fraunces({
-  subsets: ["latin"],
-  variable: "--font-fraunces",
-  display: "swap",
-  axes: ["SOFT", "WONK", "opsz"],
 });
 
 export const metadata: Metadata = {
@@ -61,7 +51,7 @@ export default async function LocaleLayout({
     <html
       lang={locale}
       suppressHydrationWarning
-      className={`${inter.variable} ${fraunces.variable}`}
+      className={inter.variable}
     >
       <head>
         {/* Anti-FOUC: el claro es el predeterminado, así que solo hay que

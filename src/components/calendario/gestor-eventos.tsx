@@ -260,7 +260,7 @@ export function GestorEventos({
       {/* Barra de control: rótulo + navegación · vistas · acción principal */}
       <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
         <div className="flex items-center gap-3">
-          <h2 className="font-display text-lg font-semibold capitalize text-foreground">
+          <h2 className="font-heading text-lg font-semibold capitalize text-foreground">
             {rotulo}
           </h2>
           {vista !== "lista" && (

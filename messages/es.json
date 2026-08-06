@@ -44,7 +44,11 @@
     "courses": "Cursos técnicos",
     "grades": "Calificaciones",
     "studentPortal": "Mi portal",
-    "teacherPortal": "Mis cursos"
+    "teacherPortal": "Mis cursos",
+    "adminPortal": "Portal administrativo",
+    "psychologyPortal": "Portal de psicología",
+    "accountingPortal": "Portal de contabilidad",
+    "technicalCourses": "Cursos técnicos"
   },
   "landing": {
     "enter": "Acceder",
@@ -198,7 +202,9 @@
     "eventType_administrativo": "Administrativo",
     "eventType_social": "Social",
     "eventType_reunion": "Reunión",
-    "eventType_otro": "Otro"
+    "eventType_otro": "Otro",
+    "navContact": "Contacto",
+    "navSystemActive": "Sistema activo"
   },
   "comida": {
     "title": "Inscripción de comida",

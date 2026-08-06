@@ -63,8 +63,12 @@ const HOME_POR_ROL: Record<string, string> = {
   admin: "/dashboard",
   docente: "/portal/profesor",
   estudiante: "/portal/estudiante",
-  psicologo: "/dashboard",
-  contabilidad: "/dashboard",
+  // Psicología y Contabilidad ya tienen portal propio, así que aterrizan ahí
+  // por el mismo motivo que el estudiante y el docente: el panel general
+  // enseña cifras de la institución que a estos dos roles se les recortan
+  // casi por completo.
+  psicologo: "/portal/psicologia",
+  contabilidad: "/portal/contabilidad",
 };
 
 export function rutaPorRol(rol: string): string {
@@ -90,6 +94,30 @@ export const NAV_ITEMS: NavItem[] = [
     labelKey: "teacherPortal",
     roles: ["docente"],
     icon: "BookOpen",
+  },
+  {
+    href: "/portal/administrativo",
+    labelKey: "adminPortal",
+    roles: ["admin", "super_admin"],
+    icon: "ClipboardList",
+  },
+  {
+    href: "/portal/psicologia",
+    labelKey: "psychologyPortal",
+    roles: ["psicologo"],
+    icon: "Heart",
+  },
+  {
+    href: "/portal/contabilidad",
+    labelKey: "accountingPortal",
+    roles: ["contabilidad"],
+    icon: "DollarSign",
+  },
+  {
+    href: "/portal/cursos-tecnicos",
+    labelKey: "technicalCourses",
+    roles: ["estudiante", "docente"],
+    icon: "BookMarked",
   },
   { href: "/dashboard", labelKey: "dashboard", icon: "LayoutDashboard" },
   { href: "/administrativo", labelKey: "admin", permiso: "operaciones.leer", icon: "FolderKanban" },

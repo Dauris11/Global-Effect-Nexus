@@ -44,7 +44,11 @@
     "courses": "Technical courses",
     "grades": "Grades",
     "studentPortal": "My portal",
-    "teacherPortal": "My courses"
+    "teacherPortal": "My courses",
+    "adminPortal": "Administrative portal",
+    "psychologyPortal": "Psychology portal",
+    "accountingPortal": "Accounting portal",
+    "technicalCourses": "Technical courses"
   },
   "landing": {
     "enter": "Sign in",
@@ -198,7 +202,9 @@
     "eventType_administrativo": "Administrative",
     "eventType_social": "Social",
     "eventType_reunion": "Meeting",
-    "eventType_otro": "Other"
+    "eventType_otro": "Other",
+    "navContact": "Contact",
+    "navSystemActive": "System active"
   },
   "comida": {
     "title": "Meal sign-up",

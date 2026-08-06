@@ -24,7 +24,7 @@ export default function LoginPage() {
           }}
         />
         <Logo className="relative h-8 w-auto" />
-        <p className="relative max-w-md font-display text-3xl italic leading-snug text-white/90">
+        <p className="relative max-w-md font-heading text-3xl italic leading-snug text-white/90">
           Bringing Hope · Changing Lives · Transforming Communities
         </p>
         <p className="relative tabular-nums text-xs uppercase tracking-[0.2em] text-white/50">
