@@ -10,6 +10,7 @@
 import { AlertTriangle, Calendar, FolderOpen, Heart, Lock } from "lucide-react";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
+import { aFecha } from "@/lib/fechas";
 import { BannerRol } from "@/components/portal/banner-rol";
 import { AccesosRapidos, type AccesoRapido } from "@/components/portal/accesos-rapidos";
 import { CardLista, ItemLista, EstadoVacio } from "@/components/portal/card-lista";
@@ -95,7 +96,7 @@ export default async function PortalPsicologiaPage() {
               azulejo="bg-rose-100 text-rose-600"
               titulo={c.estudiante_nombre ?? "Estudiante"}
               detalle={[
-                format(new Date(c.fecha), "dd MMM", { locale: es }),
+                format(aFecha(c.fecha), "dd MMM", { locale: es }),
                 c.hora,
                 c.tipo_registro,
               ]

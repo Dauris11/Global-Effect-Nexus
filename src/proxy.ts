@@ -13,6 +13,7 @@ import createMiddleware from "next-intl/middleware";
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 import { routing, type Locale } from "./i18n/routing";
+import { MODO_DISENO, USUARIO_DISENO } from "./lib/modo-diseno";
 
 const intlMiddleware = createMiddleware(routing);
 
@@ -49,9 +50,12 @@ export async function proxy(request: NextRequest) {
   // 1. Respuesta base de i18n (rewrite/redirect con el locale resuelto).
   const response = intlMiddleware(request);
 
-  // MOCK PARA DISEÑO: Hacemos creer al middleware que siempre hay un usuario
-  // para que no nos rebote al login al intentar ver las pantallas internas.
-  let user: any = { id: "mock-id", email: "mock@ejemplo.com" };
+  // 2. Refresco de sesión: enlazamos Supabase a las cookies de esta petición.
+  //    En modo diseño se da por buena una sesión ficticia para poder recorrer
+  //    las pantallas internas sin Supabase (ver lib/modo-diseno.ts).
+  let user: { id: string } | null = MODO_DISENO
+    ? { id: USUARIO_DISENO.authUserId }
+    : null;
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
 
@@ -77,6 +81,8 @@ export async function proxy(request: NextRequest) {
 
       const { data } = await supabase.auth.getUser();
       user = data?.user ?? user;
+      // `?? user` conserva la sesión ficticia del modo diseño; fuera de él
+      // `user` parte de `null`, así que equivale a `?? null`.
     } catch {
       // Ignorar en desarrollo sin credenciales configuradas
     }
@@ -92,7 +98,6 @@ export async function proxy(request: NextRequest) {
     (p) => rutaSinLocale === p || rutaSinLocale.startsWith(p + "/"),
   );
 
-  // Desactivamos la redirección forzosa al login para el modo de diseño
   if (esProtegida && !user) {
     const url = request.nextUrl.clone();
     url.pathname = `/${locale}/login`;

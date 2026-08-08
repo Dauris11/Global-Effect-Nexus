@@ -42,6 +42,12 @@ export default async function PortalLayout({
       <Sidebar items={items} />
       
       <div className="flex min-w-0 flex-1 flex-col">
+        {/* El TopBar vive aquí y no dentro de cada pantalla: es donde están el
+            cierre de sesión, el selector de idioma y el cajón de navegación
+            móvil, y los siete portales los necesitan por igual. */}
+        <div className="mx-auto w-full max-w-[1600px] px-4 md:px-6">
+          <TopBar nombre={user.nombre} rol={user.rol} items={items} />
+        </div>
         <main className="flex-1 pb-16">{children}</main>
       </div>
     </div>

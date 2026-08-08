@@ -106,6 +106,50 @@ const MIMES_OCR = [
 ];
 
 /**
+ * Identifica al estudiante de un documento escaneado — ClickUp S5 · #209.
+ *
+ * Es el OCR del módulo de Psicología: la psicóloga llega con la ficha en papel
+ * y no con el nombre tecleado. Lee el documento y devuelve el nombre y la
+ * cédula para preseleccionar al joven en el formulario.
+ *
+ * Se diferencia de `procesarOcr` en tres cosas, y por eso es una acción aparte
+ * y no un parámetro de aquella:
+ *
+ *   • **No sube nada.** El archivo se lee en memoria y se descarta. Aquí no se
+ *     está archivando el documento en el expediente, se está preguntando de
+ *     quién es; guardar una copia de cada intento llenaría Storage de basura.
+ *   • **No deja traza en `extraccion_ocr`.** Esa tabla registra extracciones
+ *     que alimentan un expediente. Una identificación fallida no es un dato que
+ *     nadie vaya a revisar después.
+ *   • **No exige `expedientes.escribir`.** No escribe en ninguna ficha. El
+ *     psicólogo tiene `expedientes.leer` y nada más, y con esto le basta.
+ */
+export async function identificarEstudianteEnDocumento(
+  formData: FormData,
+): Promise<{ nombre: string | null; cedula: string | null; confianza: number }> {
+  await requirePermission("ia.usar");
+
+  const archivo = formData.get("archivo");
+  if (!(archivo instanceof File) || archivo.size === 0) {
+    throw new Error("No se recibió ningún archivo");
+  }
+  if (archivo.size > MAX_BYTES) {
+    throw new Error("El archivo pasa de 10 MB");
+  }
+  if (!MIMES_OCR.includes(archivo.type)) {
+    throw new Error(`Formato no admitido: ${archivo.type || "desconocido"}`);
+  }
+
+  const base64 = Buffer.from(await archivo.arrayBuffer()).toString("base64");
+  const { campos, confianza } = await ocrExpediente(base64, archivo.type);
+
+  // Del expediente completo solo salen dos campos: es lo único que hace falta
+  // para encontrar a la persona, y devolver los otros cincuenta invitaría a
+  // usarlos sin la revisión humana que `procesarOcr` sí impone.
+  return { nombre: campos.nombre, cedula: campos.cedula, confianza };
+}
+
+/**
  * Sube un documento del expediente y le pasa el OCR — ClickUp S5 · #209.
  *
  * El flujo completo en una sola acción, porque los tres pasos solo tienen

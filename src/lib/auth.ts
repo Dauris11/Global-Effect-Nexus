@@ -8,6 +8,7 @@
  */
 import { createClient } from "./supabase/server";
 import { query } from "./db";
+import { MODO_DISENO, USUARIO_DISENO } from "./modo-diseno";
 
 /** Perfil del usuario autenticado combinando Supabase Auth + tabla usuario. */
 export interface UsuarioActual {
@@ -38,15 +39,30 @@ export async function getAuthUser() {
  * está inactivo. El rol se usa en `rbac.ts` para autorizar acciones.
  */
 export async function currentUser(): Promise<UsuarioActual | null> {
-  // MOCK PARA DISEÑO: Devuelve un estudiante falso para evitar el login
+  // Atajo de diseño (solo con MODO_DISENO=1 fuera de producción).
+  if (MODO_DISENO) return { ...USUARIO_DISENO };
+
+  const authUser = await getAuthUser();
+  if (!authUser) return null;
+
+  const { rows } = await query(
+    `SELECT u.id, u.auth_user_id, u.email, u.nombre, u.idioma, u.activo, r.nombre AS rol
+       FROM usuario u
+       JOIN rol r ON r.id = u.rol_id
+      WHERE u.auth_user_id = $1 AND u.activo = TRUE`,
+    [authUser.id],
+  );
+  const u = rows[0];
+  if (!u) return null;
+
   return {
-    id: "mock-id-123",
-    authUserId: "mock-auth-id",
-    email: "estudiante@ejemplo.com",
-    nombre: "Estudiante de Prueba",
-    idioma: "es",
-    activo: true,
-    rol: "estudiante",
+    id: u.id,
+    authUserId: u.auth_user_id,
+    email: u.email,
+    nombre: u.nombre,
+    idioma: u.idioma,
+    activo: u.activo,
+    rol: u.rol,
   };
 }
 

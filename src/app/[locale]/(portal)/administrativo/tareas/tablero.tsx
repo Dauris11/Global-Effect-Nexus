@@ -33,6 +33,7 @@ import {
   DropdownMenuLabel,
 } from "@/components/ui/dropdown-menu";
 import { PanelTarea } from "./panel-tarea";
+import { aFecha } from "@/lib/fechas";
 
 /** Las tres columnas del tablero. `cancelada` no tiene columna (§10). */
 const COLUMNAS = ["pendiente", "en_progreso", "completada"] as const;
@@ -405,8 +406,5 @@ export function estadoDeVencimiento(
 
 /** Fecha corta en el idioma activo, sin desfase de zona horaria. */
 export function formatearFecha(fecha: string, locale: string): string {
-  const [a, m, d] = fecha.split("-").map(Number);
-  return new Intl.DateTimeFormat(locale, { day: "2-digit", month: "short" }).format(
-    new Date(a, m - 1, d),
-  );
+  return new Intl.DateTimeFormat(locale, { day: "2-digit", month: "short" }).format(aFecha(fecha));
 }

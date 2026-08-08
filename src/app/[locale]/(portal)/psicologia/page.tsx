@@ -38,7 +38,12 @@ export default async function PsicologiaPage() {
     getLocale(),
     getTranslations("records"),
   ]);
-  const puedeEscribir = usuario ? await can(usuario.rol, "expedientes.escribir") : false;
+  const [puedeEscribir, puedeGestionar] = usuario
+    ? await Promise.all([
+        can(usuario.rol, "expedientes.escribir"),
+        can(usuario.rol, "psicologia.escribir"),
+      ])
+    : [false, false];
 
   let citas: CitaPsicologia[] = [];
   let stats: PsicologiaEstadisticas = {
@@ -72,6 +77,7 @@ export default async function PsicologiaPage() {
         stats={stats}
         estudiantes={estudiantes}
         puedeEscribir={puedeEscribir}
+        puedeGestionar={puedeGestionar}
         locale={locale}
         textosOcr={tRecords.raw("ocr")}
       />

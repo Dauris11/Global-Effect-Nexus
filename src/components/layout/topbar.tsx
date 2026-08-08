@@ -23,6 +23,16 @@ import {
 } from "@/components/ui/dropdown-menu";
 import type { NavItem } from "@/lib/nav";
 
+/** Roles con título propio en `messages/*.json` (`portal.title.<rol>`). */
+const ROLES_CON_TITULO = [
+  "estudiante",
+  "docente",
+  "psicologo",
+  "contabilidad",
+  "admin",
+  "super_admin",
+];
+
 /** Iniciales para el avatar (máx. 2). */
 function iniciales(nombre: string) {
   return nombre
@@ -43,8 +53,11 @@ export function TopBar({
   items: NavItem[];
 }) {
   const tAuth = useTranslations("auth");
-  const tStudent = useTranslations("studentPortal");
+  const tPortal = useTranslations("portal");
   const locale = useLocale();
+  // El TopBar es común a los siete portales: el título sale del rol, no de la
+  // pantalla. Un rol sin título propio cae en el genérico.
+  const claveTitulo = ROLES_CON_TITULO.includes(rol) ? rol : "default";
 
   return (
     <header className="flex w-full items-center justify-between py-2 mb-2">
@@ -53,10 +66,10 @@ export function TopBar({
         <MobileNav items={items} />
         <div className="hidden md:flex flex-col">
           <span className="text-[10px] font-extrabold tracking-[0.2em] uppercase text-[#2096ba] dark:text-[#38bdf8]">
-            {tStudent("foundationHeader")}
+            {tPortal("foundation")}
           </span>
           <h1 className="text-xl font-bold tracking-tight text-slate-900 dark:text-white">
-            {tStudent("studentPortalHeader")}
+            {tPortal(`title.${claveTitulo}`)}
           </h1>
         </div>
       </div>

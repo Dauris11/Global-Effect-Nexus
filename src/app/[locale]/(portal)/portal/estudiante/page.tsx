@@ -32,12 +32,12 @@ import {
   Heart,
   MinusCircle,
   UserRound,
-  Wrench,
   XCircle,
-  CalendarDays,
 } from "lucide-react";
 import { currentUser } from "@/lib/auth";
+import { MODO_DISENO, USUARIO_DISENO } from "@/lib/modo-diseno";
 import { cn } from "@/lib/utils";
+import { aFecha } from "@/lib/fechas";
 import {
   condicionEnLaFundacion,
   estudianteDelUsuario,
@@ -64,9 +64,6 @@ import { EmptyState } from "@/components/ui/empty-state";
 import { Button } from "@/components/ui/button";
 import { Link } from "@/i18n/navigation";
 import { MiniCalendar } from "@/components/portal/mini-calendar";
-import { TopBar } from "@/components/layout/topbar";
-import { NAV_ITEMS } from "@/lib/nav";
-import { permisosDeRol } from "@/lib/rbac";
 
 export const dynamic = "force-dynamic";
 
@@ -150,8 +147,12 @@ export default async function PortalEstudiantePage({
 
   const t = await getTranslations("studentPortal");
   const fechaLocale = locale === "en" ? enUS : esLocale;
-  // MOCK PARA DISEÑO: Forzar que el estudiante exista para ver el dashboard y no el estado vacío
-  const estudiante = { id: "mock-id", usuario_id: user.id, tipo: "becado" };
+  // En modo diseño se da por hecho que el expediente existe, para ver el
+  // tablero en vez del estado vacío (las consultas de `cargar` ya caen a
+  // valores vacíos cuando no hay BD detrás).
+  const estudiante = MODO_DISENO
+    ? { id: USUARIO_DISENO.id, tipo: "becado" as const }
+    : await estudianteDelUsuario(user.id).catch(() => null);
 
   if (!estudiante) {
     return (
@@ -172,22 +173,10 @@ export default async function PortalEstudiantePage({
 
   const { resumen, materias, cuatrimestres, condicion, eventos, asignaciones } = await cargar(estudiante.id);
 
-  const permisos = user.rol === "super_admin" ? null : await permisosDeRol(user.rol);
-  const items = NAV_ITEMS.filter((i) => {
-    if (i.roles && !i.roles.includes(user.rol)) return false;
-    if (permisos === null) return true;
-    if (i.permiso && !permisos.includes(i.permiso)) return false;
-    if (i.permisos && !i.permisos.some((p) => permisos.includes(p))) return false;
-    return true;
-  });
-
   return (
     <div className="mx-auto flex w-full max-w-[1600px] flex-col gap-6 p-4 md:p-6 lg:flex-row lg:gap-8 items-start">
       {/* Columna Izquierda (Principal) */}
       <div className="min-w-0 flex-1 space-y-6">
-        {/* TopBar alineado con el inicio del contenido izquierdo */}
-        <TopBar nombre={user.nombre} rol={user.rol} items={items} />
-
         {/* Hero Banner (Eventos/Anuncios) */}
         <HeroBanner 
           eventoDestacado={eventos[0]}
@@ -343,6 +332,8 @@ export default async function PortalEstudiantePage({
           ]} 
         />
 
+        {/* `id` anclado desde el CTA del banner cuando destaca un evento. */}
+        <div id="eventos" className="scroll-mt-6">
         <CardLista titulo={t("eventsTitle")} icono={CalendarClock}>
           {eventos.length === 0 && asignaciones.length === 0 ? (
             <EstadoVacio mensaje={t("eventsEmpty")} />
@@ -355,7 +346,7 @@ export default async function PortalEstudiantePage({
                 azulejo="bg-primary/10 text-primary"
                 titulo={e.titulo}
                 detalle={[
-                  format(new Date(e.fecha), "dd MMM", { locale: fechaLocale }),
+                  format(aFecha(e.fecha), "dd MMM", { locale: fechaLocale }),
                   e.hora_inicio,
                   e.ubicacion,
                 ]
@@ -385,6 +376,7 @@ export default async function PortalEstudiantePage({
             </>
           )}
         </CardLista>
+        </div>
 
         {/* Condición en la fundación. Un mes sin registrar se marca aparte: no
             es lo mismo que no haber cumplido. */}

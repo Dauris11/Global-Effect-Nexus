@@ -8,17 +8,47 @@
  */
 import { pool } from "./db";
 import { currentUser, type UsuarioActual } from "./auth";
+import { MODO_DISENO } from "./modo-diseno";
+import { NAV_ITEMS } from "./nav";
+
+/**
+ * Todos los códigos de permiso declarados en la navegación. Solo se usa en
+ * modo diseño, donde no hay BD que consultar y el menú debe verse completo.
+ */
+const PERMISOS_DE_DISENO = Array.from(
+  new Set(NAV_ITEMS.flatMap((i) => [...(i.permiso ? [i.permiso] : []), ...(i.permisos ?? [])])),
+);
 
 /** Devuelve los códigos de permiso asociados a un rol. */
 export async function permisosDeRol(rol: string): Promise<string[]> {
-  // MOCK PARA DISEÑO: Devolver todos los permisos simulados
-  return ["leer", "escribir", "admin"];
+  if (MODO_DISENO) return PERMISOS_DE_DISENO;
+
+  const { rows } = await pool.query(
+    `SELECT p.codigo
+       FROM permiso p
+       JOIN rol_permiso rp ON rp.permiso_id = p.id
+       JOIN rol r ON r.id = rp.rol_id
+      WHERE r.nombre = $1`,
+    [rol],
+  );
+  return rows.map((r) => r.codigo as string);
 }
 
 /** ¿El rol tiene el permiso indicado? super_admin siempre puede. */
 export async function can(rol: string, permiso: string): Promise<boolean> {
-  // MOCK PARA DISEÑO: Siempre otorgar permiso
-  return true;
+  if (MODO_DISENO) return true;
+  if (rol === "super_admin") return true;
+
+  const { rows } = await pool.query(
+    `SELECT 1
+       FROM permiso p
+       JOIN rol_permiso rp ON rp.permiso_id = p.id
+       JOIN rol r ON r.id = rp.rol_id
+      WHERE r.nombre = $1 AND p.codigo = $2
+      LIMIT 1`,
+    [rol, permiso],
+  );
+  return rows.length > 0;
 }
 
 /**

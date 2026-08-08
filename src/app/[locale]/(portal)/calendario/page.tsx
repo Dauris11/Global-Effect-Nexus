@@ -26,7 +26,7 @@ import type { EntradaAgenda } from "@/server/operaciones/types";
 import { PageHeader } from "@/components/ui/page-header";
 import { GestorEventos } from "@/components/calendario/gestor-eventos";
 import { BotonNuevoEvento } from "./dialogo-nuevo-evento";
-import { esMesValido, mesActual, nombresDeDias, hoyISO } from "./fechas";
+import { esMesValido, mesActual, nombresDeDias, hoyISO } from "@/lib/fechas";
 
 /** Carga tolerante: sin base de datos el calendario se ve vacío, no roto. */
 async function cargar(mes: string, usuarioId: string, puedeLeer: boolean) {

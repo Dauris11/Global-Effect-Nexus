@@ -48,6 +48,12 @@ import {
 } from "@/components/ui/table";
 import { GraficoGpa } from "./grafico-gpa";
 import { PanelDocumentos } from "./panel-documentos";
+import { PsicologoDelExpediente } from "./psicologo-asignado";
+import { aFecha } from "@/lib/fechas";
+import {
+  psicologoDeExpediente,
+  psicologosDisponibles,
+} from "@/server/psicologia/queries";
 
 /** Un dato de la ficha: etiqueta arriba, valor abajo. Oculta lo que no hay. */
 function Dato({
@@ -180,6 +186,17 @@ export default async function ExpedientePage({
   const expediente = await obtenerExpedienteCompleto(id).catch(() => null);
   if (!expediente) notFound();
 
+  /* Acompañamiento psicológico. Se pide solo si el rol tiene `psicologia.leer`
+     —las consultas lo exigen y lanzarían—, y el resultado nulo apaga la
+     tarjeta entera: administración lleva el expediente, pero a quién acompaña
+     a cada joven lo decide y lo ve psicología. */
+  const puedeAsignarPsicologo = await can(user.rol, "psicologia.escribir");
+  const psicologia = (await can(user.rol, "psicologia.leer"))
+    ? await Promise.all([psicologoDeExpediente(id), psicologosDisponibles()])
+        .then(([asignado, disponibles]) => ({ asignado, disponibles }))
+        .catch(() => null)
+    : null;
+
   const { estudiante: e, familiares, vivienda: v, salud: s, socioeconomico: so } =
     expediente;
 
@@ -194,8 +211,7 @@ export default async function ExpedientePage({
   /** Formatea una fecha `YYYY-MM-DD` sin pasar por la zona horaria del servidor. */
   const formatear = (f: string | null) => {
     if (!f) return null;
-    const [a, m, d] = f.split("-").map(Number);
-    return fecha.format(new Date(a, m - 1, d));
+    return fecha.format(aFecha(f));
   };
 
   const edad = edadDe(e.fecha_nacimiento);
@@ -509,7 +525,36 @@ export default async function ExpedientePage({
         </Card>
       </Seccion>
 
-      {/* 7 · Documentos y OCR */}
+      {/* 7 · Acompañamiento psicológico. Solo para el equipo de psicología:
+          `psicologoDeExpediente` exige `psicologia.leer`, así que para
+          administración la tarjeta no existe en vez de salir vacía. */}
+      {psicologia && (
+        <Seccion
+          titulo={t("detail.psychologist")}
+          icono={HeartHandshake}
+          vacia={false}
+          textoVacio={t("detail.noSection")}
+        >
+          <PsicologoDelExpediente
+            estudianteId={e.id}
+            asignado={psicologia.asignado}
+            disponibles={psicologia.disponibles}
+            puedeAsignar={puedeAsignarPsicologo}
+            textos={{
+              titulo: t("detail.psychologist"),
+              etiqueta: t("detail.psychologistLabel"),
+              sinAsignar: t("detail.psychologistNone"),
+              sinAsignarPista: t("detail.psychologistEmpty"),
+              soloLectura: t("detail.psychologistReadOnly"),
+              guardando: t("detail.psychologistSaving"),
+              error: t("detail.psychologistError"),
+              ayuda: t("detail.psychologistHint"),
+            }}
+          />
+        </Seccion>
+      )}
+
+      {/* 8 · Documentos y OCR */}
       <PanelDocumentos
         estudianteId={e.id}
         documentos={expediente.documentos}

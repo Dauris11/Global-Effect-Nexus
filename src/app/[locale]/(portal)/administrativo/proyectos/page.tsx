@@ -20,6 +20,7 @@ import { ChipEstado } from "@/components/ui/chip-estado";
 import { BarraProgreso } from "@/components/ui/barra-progreso";
 import { EmptyState } from "@/components/ui/empty-state";
 import { BotonNuevoProyecto } from "./dialogo-nuevo-proyecto";
+import { aFecha } from "@/lib/fechas";
 
 /** Estado del proyecto → color del sistema. */
 function bandaDeProyecto(estado: string): EstadoDominio {
@@ -61,8 +62,7 @@ export default async function ProyectosPage({
   const fecha = new Intl.DateTimeFormat(locale, { day: "2-digit", month: "short", year: "numeric" });
   const formatear = (f: string | null) => {
     if (!f) return null;
-    const [a, m, d] = f.split("-").map(Number);
-    return fecha.format(new Date(a, m - 1, d));
+    return fecha.format(aFecha(f));
   };
 
   const textosDialogo = {

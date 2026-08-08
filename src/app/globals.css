@@ -149,6 +149,21 @@
     outline: 2px solid var(--ring);
     outline-offset: 2px;
   }
+
+  /* Quien pide menos movimiento en su sistema no debe recibir el carrusel del
+     hero, la magnificación del dock ni el panel deslizante del login. Varios
+     componentes dan por hecho que esta regla existe (ver dock.tsx y
+     portales.tsx), así que vive aquí y no en cada uno. */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
 }
 
 @layer utilities {

@@ -13,18 +13,35 @@ import {
   isSameMonth,
   isSameDay,
   isToday,
+  startOfDay,
 } from "date-fns";
 import { es, enUS } from "date-fns/locale";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useLocale } from "next-intl";
 import { cn } from "@/lib/utils";
+import { aFecha } from "@/lib/fechas";
 
 interface MiniCalendarProps {
   /** Lista de fechas (strings o objetos Date) que tienen eventos programados */
   fechasConEventos: (string | Date)[];
+  /**
+   * Si se pasa, el calendario deja de ser solo lectura: cada día se vuelve un
+   * botón. Se usa para pedir cita de psicología; en el portal se omite y el
+   * calendario sigue siendo un panel informativo.
+   */
+  onSeleccionar?: (fecha: Date) => void;
+  /** Día marcado como elegido (solo con `onSeleccionar`). */
+  seleccionada?: Date | null;
+  /** Día más antiguo elegible; los anteriores salen deshabilitados. */
+  minima?: Date;
 }
 
-export function MiniCalendar({ fechasConEventos }: MiniCalendarProps) {
+export function MiniCalendar({
+  fechasConEventos,
+  onSeleccionar,
+  seleccionada,
+  minima,
+}: MiniCalendarProps) {
   const localeStr = useLocale();
   const dateLocale = localeStr === "en" ? enUS : es;
   const [currentDate, setCurrentDate] = React.useState(new Date());
@@ -48,8 +65,9 @@ export function MiniCalendar({ fechasConEventos }: MiniCalendarProps) {
     end: endOfWeek(new Date(), { locale: dateLocale }),
   }).map((day) => format(day, "EE", { locale: dateLocale }));
 
-  // Convertir todas las fechas de eventos a Date para fácil comparación
-  const eventDates = fechasConEventos.map((fecha) => new Date(fecha));
+  // Las fechas llegan como "YYYY-MM-DD": hay que leerlas en horario local o el
+  // punto del evento aparece un día antes (ver `aFecha`).
+  const eventDates = fechasConEventos.map(aFecha);
 
   return (
     <div className="rounded-2xl border bg-card p-5 shadow-sm text-card-foreground">
@@ -94,29 +112,56 @@ export function MiniCalendar({ fechasConEventos }: MiniCalendarProps) {
           const isSelectedMonth = isSameMonth(day, monthStart);
           const isDayToday = isToday(day);
           const hasEvent = eventDates.some((eventDate) => isSameDay(eventDate, day));
+          const esElegida = seleccionada != null && isSameDay(seleccionada, day);
+          // `startOfDay` en ambos lados: comparar un Date con hora contra la
+          // medianoche de hoy dejaría el propio día de hoy fuera.
+          const bloqueada = minima != null && startOfDay(day) < startOfDay(minima);
 
-          return (
-            <div
-              key={idx}
-              className={cn(
-                "relative flex h-8 w-full items-center justify-center rounded-full text-[13px] font-medium transition-colors",
-                !isSelectedMonth && "text-muted-foreground/30",
-                isSelectedMonth && !isDayToday && "hover:bg-muted",
-                isDayToday && "bg-primary text-primary-foreground shadow-sm",
-              )}
-            >
-              <span className={cn("z-10", hasEvent && !isDayToday && "mb-1")}>{format(day, dateFormat)}</span>
-              
-              {/* Indicador de evento */}
+          const contenido = (
+            <>
+              <span className={cn("z-10", hasEvent && !isDayToday && "mb-1")}>
+                {format(day, dateFormat)}
+              </span>
               {hasEvent && (
                 <span
                   className={cn(
                     "absolute bottom-1 h-1 w-1 rounded-full",
-                    isDayToday ? "bg-primary-foreground" : "bg-primary"
+                    isDayToday || esElegida ? "bg-primary-foreground" : "bg-primary",
                   )}
                 />
               )}
-            </div>
+            </>
+          );
+
+          const clases = cn(
+            "relative flex h-8 w-full items-center justify-center rounded-full text-[13px] font-medium transition-colors",
+            !isSelectedMonth && "text-muted-foreground/30",
+            isSelectedMonth && !isDayToday && !esElegida && "hover:bg-muted",
+            isDayToday && !esElegida && "bg-primary text-primary-foreground shadow-sm",
+            esElegida && "bg-[#0a6a8a] text-white shadow-sm ring-2 ring-[#0a6a8a]/30",
+            bloqueada && "cursor-not-allowed opacity-40 hover:bg-transparent",
+          );
+
+          if (!onSeleccionar) {
+            return (
+              <div key={idx} className={clases}>
+                {contenido}
+              </div>
+            );
+          }
+
+          return (
+            <button
+              key={idx}
+              type="button"
+              disabled={bloqueada}
+              onClick={() => onSeleccionar(day)}
+              aria-pressed={esElegida}
+              aria-label={format(day, "EEEE d 'de' MMMM yyyy", { locale: dateLocale })}
+              className={clases}
+            >
+              {contenido}
+            </button>
           );
         })}
       </div>

@@ -45,6 +45,7 @@ import {
 import { ChipEstado } from "@/components/ui/chip-estado";
 import { EmptyState } from "@/components/ui/empty-state";
 import { BalanceChart } from "./balance-chart";
+import { aFecha } from "@/lib/fechas";
 
 const METRICAS_VACIAS: DashboardMetricas = {
   estudiantes_activos: 0,
@@ -113,8 +114,7 @@ export default async function DashboardPage({
   });
   /** Formatea `YYYY-MM-DD` sin pasar por la zona horaria del servidor. */
   const formatearDia = (f: string) => {
-    const [a, m, d] = f.split("-").map(Number);
-    return fechaCorta.format(new Date(a, m - 1, d));
+    return fechaCorta.format(aFecha(f));
   };
 
   // Los iconos van por nombre: StatCard es un componente cliente y React no

@@ -1,15 +1,28 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import Image from "next/image";
+/**
+ * Banner rotatorio del Portal Estudiante. Alterna entre el próximo evento de
+ * la Fundación (o el saludo, si no hay ninguno), el historial académico y la
+ * cita de psicología.
+ *
+ * Los tres destinos son rutas que el rol `estudiante` puede abrir: el catálogo
+ * y el historial por sus propios permisos, y la cita de psicología porque el
+ * módulo 22 solo exige sesión (el estudiante nunca entra a `/psicologia`).
+ */
+
+import { useEffect, useMemo, useState } from "react";
 import { format } from "date-fns";
 import { es, enUS } from "date-fns/locale";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
-import { Calendar, ArrowRight, Sparkles, GraduationCap, LineChart } from "lucide-react";
-import { motion, AnimatePresence } from "motion/react";
+import { Link } from "@/i18n/navigation";
+import { Calendar, ArrowRight, Sparkles, GraduationCap, Heart } from "lucide-react";
+import { motion, AnimatePresence, useReducedMotion } from "motion/react";
 import { cn } from "@/lib/utils";
+import { aFecha } from "@/lib/fechas";
 import type { EventoDelPortal } from "@/server/portales/types";
+
+const INTERVALO = 6000;
 
 export function HeroBanner({
   eventoDestacado,
@@ -21,90 +34,94 @@ export function HeroBanner({
   subtitle: string;
 }) {
   const locale = useLocale();
-  const fechaLocale = locale === "en" ? enUS : es;
+  const t = useTranslations("studentPortal");
+  const fechaLocaleFns = locale === "en" ? enUS : es;
+  const reducirMovimiento = useReducedMotion();
   const [currentSlide, setCurrentSlide] = useState(0);
 
-  // Definir las diapositivas (slides)
-  const slides = [];
+  const slides = useMemo(() => {
+    const lista = [];
 
-  // Slide 1: Próximo Evento (si existe)
-  if (eventoDestacado) {
-    slides.push({
-      id: "evento",
-      badge: "PRÓXIMO EVENTO",
-      badgeColor: "bg-red-500/20 text-red-400",
-      badgeIcon: Sparkles,
-      title: eventoDestacado.titulo,
-      meta: (
-        <div className="mb-6 flex flex-wrap items-center gap-4 text-sm text-slate-300">
-          <span className="flex items-center gap-1.5 bg-white/10 px-3 py-1.5 rounded-lg text-primary-foreground font-medium">
-            <Calendar className="h-4 w-4 text-primary" />
-            {format(new Date(eventoDestacado.fecha), "dd 'de' MMMM", { locale: fechaLocale })}
-          </span>
-          <span className="opacity-80">{eventoDestacado.hora_inicio}</span>
-          <span className="opacity-80 hidden sm:inline">•</span>
-          <span className="opacity-80 capitalize">{eventoDestacado.tipo}</span>
-        </div>
-      ),
-      buttonText: "Ver Detalles",
-      image: "/hero-illustration.png",
+    // Diapositiva 1: el próximo evento; si no hay ninguno, el saludo.
+    if (eventoDestacado) {
+      lista.push({
+        id: "evento",
+        badge: t("heroEventBadge"),
+        badgeIcon: Sparkles,
+        title: eventoDestacado.titulo,
+        meta: (
+          <div className="mb-6 flex flex-wrap items-center gap-4 text-sm text-slate-300">
+            <span className="flex items-center gap-1.5 rounded-lg bg-white/10 px-3 py-1.5 font-medium text-white">
+              <Calendar className="h-4 w-4" />
+              {format(aFecha(eventoDestacado.fecha), "dd MMMM", { locale: fechaLocaleFns })}
+            </span>
+            <span className="opacity-80">{eventoDestacado.hora_inicio}</span>
+            <span className="hidden opacity-80 sm:inline">•</span>
+            <span className="capitalize opacity-80">{eventoDestacado.tipo}</span>
+          </div>
+        ),
+        cta: t("heroEventCta"),
+        href: "#eventos",
+      });
+    } else {
+      lista.push({
+        id: "bienvenida",
+        badge: t("heroWelcomeBadge"),
+        badgeIcon: Sparkles,
+        title,
+        meta: <p className="mb-6 text-slate-300">{subtitle}</p>,
+        cta: t("viewCatalog"),
+        href: "/academico/materias",
+      });
+    }
+
+    lista.push({
+      id: "historial",
+      badge: t("heroGradesBadge"),
+      badgeIcon: GraduationCap,
+      title: t("heroGradesTitle"),
+      meta: <p className="mb-6 text-slate-300">{t("heroGradesText")}</p>,
+      cta: t("viewHistory"),
+      href: "/academico/historial",
     });
-  } else {
-    // Si no hay evento, Slide 1 es el saludo general
-    slides.push({
-      id: "bienvenida",
-      badge: "BIENVENIDO AL PORTAL",
-      badgeColor: "bg-primary/20 text-primary",
-      badgeIcon: Sparkles,
-      title: title,
-      meta: <p className="mb-6 text-slate-300">{subtitle}</p>,
-      buttonText: "Ir al Dashboard",
-      image: "/hero-illustration.png",
+
+    lista.push({
+      id: "psicologia",
+      badge: t("heroPsychologyBadge"),
+      badgeIcon: Heart,
+      title: t("heroPsychologyTitle"),
+      meta: <p className="mb-6 text-slate-300">{t("heroPsychologyText")}</p>,
+      cta: t("requestAppointment"),
+      href: "/cita-psicologia",
     });
-  }
 
-  // Slide 2: Historial Académico
-  slides.push({
-    id: "historial",
-    badge: "DESEMPEÑO ACADÉMICO",
-    badgeColor: "bg-emerald-500/20 text-emerald-400",
-    badgeIcon: GraduationCap,
-    title: "Consulta tus notas y progreso",
-    meta: <p className="mb-6 text-slate-300">Mantente al tanto de tu índice académico (GPA) y créditos acumulados este cuatrimestre.</p>,
-    buttonText: "Ver Calificaciones",
-    image: "/hero-illustration-2.png",
-  });
-
-  // Slide 3: Datos de la Fundación
-  slides.push({
-    id: "datos",
-    badge: "MÉTRICAS CLAVE",
-    badgeColor: "bg-blue-500/20 text-blue-400",
-    badgeIcon: LineChart,
-    title: "Transparencia de la Fundación",
-    meta: <p className="mb-6 text-slate-300">Revisa cómo vamos impactando con becas y oportunidades de estudio a nivel nacional.</p>,
-    buttonText: "Ver Reportes",
-    image: "/hero-illustration-3.png",
-  });
+    return lista;
+  }, [eventoDestacado, title, subtitle, t, fechaLocaleFns]);
 
   useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % slides.length);
-    }, 6000); // Cambia cada 6 segundos
+    // Quien pide menos movimiento no debe recibir un carrusel que se adelanta
+    // solo: el reset de CSS apaga la transición, no el `setInterval`.
+    if (reducirMovimiento || slides.length <= 1) return;
+    const timer = setInterval(
+      () => setCurrentSlide((prev) => (prev + 1) % slides.length),
+      INTERVALO,
+    );
     return () => clearInterval(timer);
-  }, [slides.length]);
+  }, [slides.length, reducirMovimiento]);
 
-  const slide = slides[currentSlide];
+  const slide = slides[currentSlide] ?? slides[0];
 
   return (
-    <div className={cn(
-      "relative overflow-hidden p-8 md:p-10 text-white mb-6 min-h-[300px] flex flex-col justify-center",
-      "rounded-[2rem] bg-[#0a6a8a] shadow-sm dark:bg-[#0c232f]",
-      "border border-white/10"
-    )}>
-      {/* Elementos Decorativos Estáticos */}
-      <div className="absolute top-0 right-0 h-full w-1/2 bg-gradient-to-l from-white/10 to-transparent" />
-      
+    <div
+      className={cn(
+        "relative mb-6 flex min-h-[300px] flex-col justify-center overflow-hidden p-8 text-white md:p-10",
+        "rounded-[2rem] bg-[#0a6a8a] shadow-sm dark:bg-[#0c232f]",
+        "border border-white/10",
+      )}
+    >
+      {/* Elementos decorativos estáticos */}
+      <div className="absolute right-0 top-0 h-full w-1/2 bg-gradient-to-l from-white/10 to-transparent" />
+
       <div className="relative z-10 max-w-xl">
         <AnimatePresence mode="wait">
           <motion.div
@@ -114,50 +131,61 @@ export function HeroBanner({
             exit={{ opacity: 0, y: -15 }}
             transition={{ duration: 0.3 }}
           >
-            <div className={cn("mb-4 inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold bg-white/15 text-white border border-white/20")}>
+            <div className="mb-4 inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-white/15 px-3 py-1 text-xs font-semibold text-white">
               <slide.badgeIcon className="h-3.5 w-3.5" />
               {slide.badge}
             </div>
-            
-            <h2 className="mb-3 text-3xl md:text-4xl font-bold leading-tight tracking-tight text-white">
+
+            <h2 className="mb-3 text-3xl font-bold leading-tight tracking-tight text-white md:text-4xl">
               {slide.title}
             </h2>
-            
+
             {slide.meta}
-            
-            <Button className="bg-[#2096ba] text-white font-bold hover:bg-[#187a99] rounded-[1rem] px-8 py-6 h-auto transition-transform hover:scale-105 shadow-md shadow-[#2096ba]/20">
-              {slide.buttonText} <ArrowRight className="ml-2 h-4 w-4" />
+
+            <Button
+              asChild
+              className="h-auto rounded-[1rem] bg-[#2096ba] px-8 py-6 font-bold text-white shadow-md shadow-[#2096ba]/20 transition-transform hover:scale-105 hover:bg-[#187a99]"
+            >
+              {slide.href.startsWith("#") ? (
+                <a href={slide.href}>
+                  {slide.cta} <ArrowRight className="ml-2 h-4 w-4" />
+                </a>
+              ) : (
+                <Link href={slide.href}>
+                  {slide.cta} <ArrowRight className="ml-2 h-4 w-4" />
+                </Link>
+              )}
             </Button>
           </motion.div>
         </AnimatePresence>
       </div>
 
-      {/* Círculos concéntricos (Diseño Turquesa Institucional) */}
-      <div className="absolute right-0 top-1/2 -translate-y-1/2 w-[400px] h-[400px] md:w-[600px] md:h-[600px] opacity-[0.25] pointer-events-none overflow-hidden flex items-center justify-end pr-0 md:pr-10">
-        <div className="relative flex items-center justify-center translate-x-1/4">
-          <div className="absolute w-[100px] h-[100px] rounded-full border border-cyan-200" />
-          <div className="absolute w-[200px] h-[200px] rounded-full border border-cyan-200" />
-          <div className="absolute w-[300px] h-[300px] rounded-full border border-cyan-200" />
-          <div className="absolute w-[400px] h-[400px] rounded-full border border-cyan-200" />
-          <div className="absolute w-[500px] h-[500px] rounded-full border border-cyan-200" />
-          <div className="absolute w-[600px] h-[600px] rounded-full border border-cyan-200" />
-          <div className="absolute w-[700px] h-[700px] rounded-full border border-cyan-200" />
-          {/* Central solid circle */}
-          <div className="absolute w-[40px] h-[40px] rounded-full bg-cyan-200 opacity-60" />
+      {/* Círculos concéntricos (diseño turquesa institucional) */}
+      <div className="pointer-events-none absolute right-0 top-1/2 flex h-[400px] w-[400px] -translate-y-1/2 items-center justify-end overflow-hidden pr-0 opacity-[0.25] md:h-[600px] md:w-[600px] md:pr-10">
+        <div className="relative flex translate-x-1/4 items-center justify-center">
+          {[100, 200, 300, 400, 500, 600, 700].map((d) => (
+            <div
+              key={d}
+              className="absolute rounded-full border border-cyan-200"
+              style={{ width: d, height: d }}
+            />
+          ))}
+          <div className="absolute h-[40px] w-[40px] rounded-full bg-cyan-200 opacity-60" />
         </div>
       </div>
 
-      {/* Controles del Carousel (Puntitos) */}
-      <div className="absolute bottom-4 left-0 right-0 flex justify-center gap-2 z-20">
-        {slides.map((_, index) => (
+      {/* Controles del carrusel */}
+      <div className="absolute bottom-4 left-0 right-0 z-20 flex justify-center gap-2">
+        {slides.map((s, index) => (
           <button
-            key={index}
+            key={s.id}
+            type="button"
             onClick={() => setCurrentSlide(index)}
             className={cn(
               "h-1.5 rounded-full transition-all duration-300",
-              currentSlide === index ? "w-6 bg-primary" : "w-2 bg-white/30 hover:bg-white/50"
+              currentSlide === index ? "w-6 bg-primary" : "w-2 bg-white/30 hover:bg-white/50",
             )}
-            aria-label={`Ir a la diapositiva ${index + 1}`}
+            aria-label={t("heroGoToSlide", { n: index + 1 })}
           />
         ))}
       </div>

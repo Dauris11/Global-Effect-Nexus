@@ -22,12 +22,16 @@
 "use client";
 
 import { useMemo, useState, useTransition } from "react";
+import { useRouter } from "next/navigation";
 import {
   AlertTriangle,
+  CheckCircle2,
   FolderOpen,
   Heart,
+  Inbox,
   Lock,
   Search,
+  XCircle,
 } from "lucide-react";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
@@ -39,8 +43,11 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { StatCard } from "@/components/ui/stat-card";
 import { EmptyState } from "@/components/ui/empty-state";
 import { ExpedienteDetalle } from "@/components/expedientes/expediente-detalle";
+import { BuscadorEstudiantes } from "@/components/expedientes/buscador-estudiantes";
 import { cargarExpedienteParaDialogo } from "@/server/estudiantes/actions";
+import { cambiarEstadoCita } from "@/server/psicologia/actions";
 import { cn } from "@/lib/utils";
+import { aFecha } from "@/lib/fechas";
 import type { CitaPsicologia, PsicologiaEstadisticas } from "@/server/psicologia/types";
 import type { ExpedienteCompleto } from "@/server/estudiantes/types";
 import type { CuatrimestreDelEstudiante } from "@/server/portales/types";
@@ -78,22 +85,50 @@ export function PanelPsicologia({
   stats,
   estudiantes,
   puedeEscribir = false,
+  puedeGestionar = false,
   locale = "es",
   textosOcr,
 }: {
   citas: CitaPsicologia[];
   stats: PsicologiaEstadisticas;
   estudiantes: { id: string; nombre: string }[];
+  /** `expedientes.escribir` — habilita el OCR dentro del expediente. */
   puedeEscribir?: boolean;
+  /** `psicologia.escribir` — habilita completar y cancelar citas. */
+  puedeGestionar?: boolean;
   locale?: string;
   textosOcr?: Record<string, string> & { status?: Record<string, string> };
 }) {
+  const router = useRouter();
   const [filtro, setFiltro] = useState<string>("todos");
   const [busqueda, setBusqueda] = useState("");
   const [expediente, setExpediente] = useState<ExpedienteCompleto | null>(null);
   const [cuatrimestres, setCuatrimestres] = useState<CuatrimestreDelEstudiante[]>([]);
   const [abierto, setAbierto] = useState(false);
   const [cargando, iniciarCarga] = useTransition();
+  /** Id de la cita cuyo cambio de estado está en vuelo, para bloquear solo esa. */
+  const [ocupada, setOcupada] = useState<string | null>(null);
+  const [errorEstado, setErrorEstado] = useState<{ id: string; mensaje: string } | null>(
+    null,
+  );
+
+  async function cambiarEstado(id: string, estado: "completada" | "cancelada") {
+    setErrorEstado(null);
+    setOcupada(id);
+    try {
+      await cambiarEstadoCita({ id, estado });
+      // La lista viene del servidor: `refresh` la vuelve a pedir en vez de
+      // parchear el estado local y arriesgarse a pintar algo que no se guardó.
+      router.refresh();
+    } catch (e) {
+      setErrorEstado({
+        id,
+        mensaje: e instanceof Error ? e.message : "No se pudo cambiar el estado.",
+      });
+    } finally {
+      setOcupada(null);
+    }
+  }
 
   const visibles = useMemo(() => {
     const q = busqueda.trim().toLowerCase();
@@ -125,22 +160,19 @@ export function PanelPsicologia({
           <FolderOpen aria-hidden className="h-4 w-4 text-primary" />
           Abrir el expediente de un estudiante
         </label>
-        <select
-          id="buscador-expediente"
-          defaultValue=""
-          disabled={cargando}
-          onChange={(ev) => ev.target.value && abrirExpediente(ev.target.value)}
-          className="mt-2 h-10 w-full rounded-lg border border-input bg-card px-3 text-sm disabled:opacity-50"
-        >
-          <option value="">
-            {cargando ? "Cargando expediente…" : "Selecciona un estudiante…"}
-          </option>
-          {estudiantes.map((e) => (
-            <option key={e.id} value={e.id}>
-              {e.nombre}
-            </option>
-          ))}
-        </select>
+        <div className="mt-2">
+          <BuscadorEstudiantes
+            id="buscador-expediente"
+            estudiantes={estudiantes}
+            deshabilitado={cargando}
+            placeholder={
+              cargando ? "Cargando expediente…" : "Escribe el nombre del estudiante…"
+            }
+            // No se guarda selección: elegir aquí abre el expediente y se
+            // vacía, porque el buscador es una puerta, no un campo.
+            onElegir={(e) => e.id && abrirExpediente(e.id)}
+          />
+        </div>
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -212,9 +244,27 @@ export function PanelPsicologia({
                   </div>
 
                   <p className="text-xs text-muted-foreground">
-                    {format(new Date(c.fecha), "dd MMM yyyy", { locale: es })}
+                    {format(aFecha(c.fecha), "dd MMM yyyy", { locale: es })}
                     {c.hora ? ` · ${c.hora}` : ""}
                   </p>
+
+                  {/* Una cita que pidió el joven está esperando respuesta; una
+                      que agendó el equipo ya está pactada. En estado
+                      `programada` las dos se veían idénticas y la solicitud se
+                      perdía entre las demás (migración 0021). */}
+                  {c.solicitada_por_estudiante && (
+                    <div className="rounded-lg border border-amber-200 bg-amber-50 p-2">
+                      <p className="flex items-center gap-1.5 text-xs font-medium text-amber-900">
+                        <Inbox aria-hidden className="h-3.5 w-3.5 shrink-0" />
+                        La pidió el estudiante
+                      </p>
+                      {c.motivo_estudiante && (
+                        <p className="mt-1 line-clamp-2 text-xs text-amber-900/80">
+                          {c.motivo_estudiante}
+                        </p>
+                      )}
+                    </div>
+                  )}
 
                   <p className="flex items-center gap-1.5 text-xs">
                     <Lock
@@ -228,6 +278,15 @@ export function PanelPsicologia({
                     <span className="font-medium capitalize">{c.nivel_confidencialidad}</span>
                   </p>
 
+                  {/* Resumen de la última nota, recortado a dos líneas. La
+                      nota completa se lee en el expediente; aquí solo sirve
+                      para reconocer la cita sin abrirla. */}
+                  {c.ultima_nota && (
+                    <p className="line-clamp-2 rounded-lg bg-muted/40 p-2 text-xs text-muted-foreground">
+                      {c.ultima_nota}
+                    </p>
+                  )}
+
                   {c.riesgos && (
                     <p className="flex items-start gap-1.5 rounded-lg bg-orange-50 p-2 text-xs text-orange-900">
                       <AlertTriangle
@@ -238,17 +297,54 @@ export function PanelPsicologia({
                     </p>
                   )}
 
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    className="w-full"
-                    disabled={cargando}
-                    onClick={() => abrirExpediente(c.estudiante_id)}
-                  >
-                    <FolderOpen aria-hidden />
-                    Ver expediente
-                  </Button>
+                  <div className="space-y-2 pt-1">
+                    {/* Cerrar y cancelar solo tienen sentido sobre lo que sigue
+                        programado, y solo para quien puede escribir. */}
+                    {c.estado === "programada" && puedeGestionar && (
+                      <div className="flex gap-2">
+                        <Button
+                          type="button"
+                          variant="outline"
+                          size="sm"
+                          className="flex-1"
+                          disabled={ocupada === c.id}
+                          onClick={() => cambiarEstado(c.id, "completada")}
+                        >
+                          <CheckCircle2 aria-hidden />
+                          Completar
+                        </Button>
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="sm"
+                          className="flex-1 text-destructive hover:text-destructive"
+                          disabled={ocupada === c.id}
+                          onClick={() => cambiarEstado(c.id, "cancelada")}
+                        >
+                          <XCircle aria-hidden />
+                          Cancelar
+                        </Button>
+                      </div>
+                    )}
+
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      className="w-full"
+                      disabled={cargando}
+                      onClick={() => abrirExpediente(c.estudiante_id)}
+                    >
+                      <FolderOpen aria-hidden />
+                      Ver expediente
+                    </Button>
+
+                    {errorEstado?.id === c.id && (
+                      <p role="alert" className="text-xs text-destructive">
+                        {errorEstado.mensaje}
+                      </p>
+                    )}
+                  </div>
                 </CardContent>
               </Card>
             </li>

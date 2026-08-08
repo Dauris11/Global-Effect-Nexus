@@ -39,6 +39,9 @@ export function Hero({ slides }: { slides: HeroSlide[] }) {
 
   useEffect(() => {
     if (pausado || total <= 1) return;
+    // El reset de globals.css apaga las transiciones, pero no un `setInterval`
+    // que cambia el contenido solo: eso hay que frenarlo aquí.
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     const id = setInterval(() => setIdx((i) => (i + 1) % total), INTERVALO);
     return () => clearInterval(id);
   }, [pausado, total]);

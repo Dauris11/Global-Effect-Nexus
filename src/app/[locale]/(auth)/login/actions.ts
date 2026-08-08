@@ -11,6 +11,7 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { resolverUsuario } from "@/lib/auth";
 import { rutaPorRol } from "@/lib/nav";
+import { MODO_DISENO, USUARIO_DISENO } from "@/lib/modo-diseno";
 
 export interface LoginState {
   error?: string;
@@ -22,6 +23,24 @@ export async function login(
 ): Promise<LoginState> {
   const locale = String(formData.get("locale") ?? "es");
 
-  // MOCK PARA DISEÑO: Simula inicio de sesión exitoso y redirige directo
-  redirect(`/${locale}/portal/estudiante`);
+  // En modo diseño no hay Supabase contra el que validar: se entra directo.
+  if (MODO_DISENO) redirect(`/${locale}${rutaPorRol(USUARIO_DISENO.rol)}`);
+
+  const email = String(formData.get("email") ?? "").trim();
+  const password = String(formData.get("password") ?? "");
+
+  if (!email || !password) return { error: "required" };
+
+  const supabase = await createClient();
+  const { error } = await supabase.auth.signInWithPassword({ email, password });
+  if (error) return { error: "invalidCredentials" };
+
+  // Refuerzo de invitación: debe existir un `usuario` activo enlazable.
+  const usuario = await resolverUsuario();
+  if (!usuario) {
+    await supabase.auth.signOut();
+    return { error: "notRegistered" };
+  }
+
+  redirect(`/${locale}${rutaPorRol(usuario.rol)}`);
 }

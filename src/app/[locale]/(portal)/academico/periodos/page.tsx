@@ -31,6 +31,7 @@ import { EmptyState } from "@/components/ui/empty-state";
 import { BotonNuevoPeriodo, type TextosNuevoPeriodo } from "./dialogo-nuevo-periodo";
 import { AccionesPeriodo } from "./acciones-periodo";
 import type { TextosAcciones } from "../acciones-registro";
+import { aFecha } from "@/lib/fechas";
 
 /** Estado declarado del período → color del sistema. */
 function bandaDePeriodo(estado: string): EstadoDominio {
@@ -96,8 +97,7 @@ export default async function PeriodosPage({
     year: "numeric",
   });
   const formatear = (f: string) => {
-    const [a, m, d] = f.split("-").map(Number);
-    return fecha.format(new Date(a, m - 1, d));
+    return fecha.format(aFecha(f));
   };
 
   const textosDialogo: TextosNuevoPeriodo = {

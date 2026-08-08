@@ -8,6 +8,8 @@
  */
 const API_URL = "https://api.anthropic.com/v1/messages";
 const MODEL = process.env.ANTHROPIC_MODEL ?? "claude-sonnet-5";
+/** El OCR va por su cuenta: ver la nota en `ocrExpediente`. */
+const MODELO_OCR = process.env.ANTHROPIC_MODEL_OCR ?? "claude-opus-5";
 const VERSION = "2023-06-01";
 
 /** Cabeceras comunes de la API. Lanza si falta la clave. */
@@ -62,50 +64,102 @@ export async function chatAnthropic(
 /** Formatos que la API acepta como imagen. El PDF va por otra vía. */
 const IMAGENES_ACEPTADAS = ["image/jpeg", "image/png", "image/gif", "image/webp"] as const;
 
-/** Campos que el OCR intenta sacar de una ficha o un documento de identidad. */
-export interface CamposExpedienteOcr {
-  nombre: string | null;
-  cedula: string | null;
-  fecha_nacimiento: string | null;
-  lugar_nacimiento: string | null;
-  nacionalidad: string | null;
-  genero: string | null;
-  telefono: string | null;
-  email: string | null;
-  direccion: string | null;
-  comunidad: string | null;
-  centro_educativo: string | null;
-  programa: string | null;
-  nombre_padre: string | null;
-  nombre_madre: string | null;
-  telefono_emergencia: string | null;
-  observaciones: string | null;
-}
-
-export interface ResultadoOcr {
-  campos: CamposExpedienteOcr;
-  /** 0–100. Lo estima el modelo sobre la legibilidad del documento. */
-  confianza: number;
-}
-
-const CAMPOS_OCR: (keyof CamposExpedienteOcr)[] = [
+/**
+ * Campos de texto que el OCR intenta sacar de la ficha social.
+ *
+ * La lista sigue el expediente real, no un subconjunto cómodo: la ficha que
+ * llena la Fundación cubre identificación, situación académica, Habitudes,
+ * familia, vivienda, salud y los narrativos de historia de vida. Extraer solo
+ * los datos de la cédula obligaba a teclear el resto a mano, que es justo el
+ * trabajo que el OCR venía a quitar.
+ *
+ * Los nombres coinciden con las columnas de la BD (`estudiante`,
+ * `perfil_vivienda`, `perfil_salud`, `perfil_socioeconomico`, `familiar`) para
+ * que la revisión humana sea un mapeo directo y no una tabla de equivalencias.
+ */
+const CAMPOS_TEXTO = [
+  // Identificación
   "nombre",
   "cedula",
   "fecha_nacimiento",
   "lugar_nacimiento",
   "nacionalidad",
   "genero",
+  "sexo_documento",
+  "religion",
   "telefono",
   "email",
+  // Residencia
   "direccion",
   "comunidad",
-  "centro_educativo",
+  "ciudad_residencia",
+  "pais_residencia",
+  // Académico / institucional
   "programa",
-  "nombre_padre",
-  "nombre_madre",
-  "telefono_emergencia",
+  "donde_estudia",
+  "universidad",
+  "fecha_ingreso",
+  // Habitudes
+  "facilitador_habitudes",
+  "centro_educativo",
+  "director_centro",
+  "breve_historia_habitudes",
+  // Familia
+  "padre_nombre",
+  "padre_telefono",
+  "padre_profesion",
+  "madre_nombre",
+  "madre_telefono",
+  "madre_profesion",
+  "tutor_nombre",
+  "tutor_telefono",
+  "tutor_profesion",
+  // Convivencia y vivienda
+  "con_quien_vive",
+  "por_que_vive_con_esa_persona",
+  "hermanos_edades",
+  "hermanas_edades",
+  "casa_propia",
+  "tipo_casa",
+  "bano_dentro",
+  "quienes_duermen_cama",
+  // Salud y emergencia
+  "enfermedades",
+  "alergias",
+  "contacto_emergencia_nombre",
+  "contacto_emergencia_telefono",
+  // Narrativos
+  "historia_de_vida",
+  "situacion_familiar",
+  "situacion_economica",
+  "motivo_beca",
+  "metas_academicas",
+  // Cajón de sastre
   "observaciones",
-];
+] as const;
+
+/**
+ * Campos numéricos. Van aparte porque el esquema los declara `integer` y no
+ * `string`: una edad leída como "12 años" tiene que llegar como 12, o la
+ * revisión humana acaba limpiando texto en vez de confirmar datos.
+ */
+const CAMPOS_NUMERO = [
+  "padre_edad",
+  "madre_edad",
+  "tutor_edad",
+  "hermanos_cantidad",
+  "habitaciones",
+  "camas",
+] as const;
+
+export type CamposExpedienteOcr = Record<(typeof CAMPOS_TEXTO)[number], string | null> &
+  Record<(typeof CAMPOS_NUMERO)[number], number | null>;
+
+export interface ResultadoOcr {
+  campos: CamposExpedienteOcr;
+  /** 0–100. Lo estima el modelo sobre la legibilidad del documento. */
+  confianza: number;
+}
 
 /**
  * Esquema JSON de la extracción.
@@ -121,6 +175,7 @@ const CAMPOS_OCR: (keyof CamposExpedienteOcr)[] = [
  */
 function esquemaOcr() {
   const textoOpcional = { anyOf: [{ type: "string" }, { type: "null" }] };
+  const numeroOpcional = { anyOf: [{ type: "integer" }, { type: "null" }] };
   const properties: Record<string, unknown> = {
     confianza: {
       type: "integer",
@@ -128,12 +183,13 @@ function esquemaOcr() {
         "Confianza global de 0 a 100 según la legibilidad del documento y la certeza de los campos leídos.",
     },
   };
-  for (const campo of CAMPOS_OCR) properties[campo] = textoOpcional;
+  for (const campo of CAMPOS_TEXTO) properties[campo] = textoOpcional;
+  for (const campo of CAMPOS_NUMERO) properties[campo] = numeroOpcional;
 
   return {
     type: "object",
     properties,
-    required: ["confianza", ...CAMPOS_OCR],
+    required: ["confianza", ...CAMPOS_TEXTO, ...CAMPOS_NUMERO],
     additionalProperties: false,
   };
 }
@@ -146,6 +202,9 @@ Reglas:
 - Si un campo no aparece en el documento, devuelve null. Nunca inventes un valor plausible.
 - Las fechas van en formato YYYY-MM-DD. Si solo hay año, devuelve null.
 - La cédula dominicana va con guiones: 000-0000000-0.
+- Los campos numéricos (edades, cantidad de hermanos, habitaciones, camas) van como número entero, sin la palabra "años".
+- Los campos narrativos (historia_de_vida, situacion_familiar, situacion_economica, motivo_beca, metas_academicas, breve_historia_habitudes) se transcriben completos, respetando los saltos de párrafo.
+- Una ficha manuscrita rara vez trae todos los campos. Que la mayoría salga null es normal y correcto; rellenar por parecido es el error grave.
 - En "observaciones" anota lo que veas y no encaje en ningún campo, o las partes ilegibles.
 - Ajusta "confianza" a la realidad: un documento borroso o manuscrito difícil baja la confianza aunque hayas leído algo.`;
 
@@ -180,8 +239,15 @@ export async function ocrExpediente(
     method: "POST",
     headers: cabeceras(),
     body: JSON.stringify({
-      model: MODEL,
-      max_tokens: 4096,
+      // El OCR usa un modelo aparte del chat: leer una ficha manuscrita,
+      // borrosa o fotografiada de lado es la tarea de visión más exigente de
+      // la plataforma, y equivocarse aquí mete datos falsos en el expediente
+      // de un joven. Se sobreescribe con ANTHROPIC_MODEL_OCR.
+      model: MODELO_OCR,
+      // Con ~55 campos y narrativos completos, 4096 se quedaba corto y el JSON
+      // llegaba cortado. El límite cubre además el razonamiento del modelo,
+      // que en visión se lleva su parte.
+      max_tokens: 16000,
       system: SISTEMA_OCR,
       output_config: { format: { type: "json_schema", schema: esquemaOcr() } },
       messages: [
@@ -235,14 +301,20 @@ export async function ocrExpediente(
 
   // Normalización: el esquema garantiza la forma, no que los textos vengan
   // limpios. Una cadena vacía o un "N/A" del documento se guardan como null.
-  const campos = Object.fromEntries(
-    CAMPOS_OCR.map((campo) => {
+  const campos = Object.fromEntries([
+    ...CAMPOS_TEXTO.map((campo) => {
       const v = bruto[campo];
       if (typeof v !== "string") return [campo, null];
       const limpio = v.trim();
       return [campo, limpio && !/^(n\/?a|ninguno|no aplica|-{1,})$/i.test(limpio) ? limpio : null];
     }),
-  ) as unknown as CamposExpedienteOcr;
+    // Un número negativo o absurdo es lectura fallida, no dato: mejor null que
+    // meter "-3 hermanos" en el expediente para que alguien lo corrija luego.
+    ...CAMPOS_NUMERO.map((campo) => {
+      const n = Number(bruto[campo]);
+      return [campo, Number.isInteger(n) && n >= 0 && n < 200 ? n : null];
+    }),
+  ]) as unknown as CamposExpedienteOcr;
 
   const confianza = Number(bruto.confianza);
 
