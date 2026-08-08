@@ -170,7 +170,7 @@ export default async function PortalEstudiantePage({
     );
   }
 
-  const { resumen, materias, cuatrimestres, condicion, eventos } = await cargar(estudiante.id);
+  const { resumen, materias, cuatrimestres, condicion, eventos, asignaciones } = await cargar(estudiante.id);
 
   const permisos = user.rol === "super_admin" ? null : await permisosDeRol(user.rol);
   const items = NAV_ITEMS.filter((i) => {
