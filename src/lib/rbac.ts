@@ -21,7 +21,10 @@ const PERMISOS_DE_DISENO = Array.from(
 
 /** Devuelve los códigos de permiso asociados a un rol. */
 export async function permisosDeRol(rol: string): Promise<string[]> {
-  if (MODO_DISENO) return PERMISOS_DE_DISENO;
+  if (MODO_DISENO) {
+    if (rol === "estudiante") return [];
+    return PERMISOS_DE_DISENO;
+  }
 
   const { rows } = await pool.query(
     `SELECT p.codigo
