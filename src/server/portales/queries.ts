@@ -260,6 +260,104 @@ export async function proximosEventosDelPortal(
   return rows as EventoDelPortal[];
 }
 
+/**
+ * Próximas asignaciones del Aula Virtual (#LMS).
+ * NOTA: Esta función utiliza datos simulados temporales para el prototipo 
+ * hasta que se aplique la migración 0021_aula_virtual.sql.
+ */
+export async function proximasAsignacionesDelEstudiante(
+  estudianteId: string,
+): Promise<import('./types').AsignacionDelEstudiante[]> {
+  // Simulamos datos de asignaciones. En producción se hará un query a la tabla `asignacion` 
+  // cruzada con `entrega_estudiante` y `inscripcion`.
+  const now = new Date();
+  
+  // Tarea que vence hoy
+  const today = new Date();
+  
+  // Tarea en 3 días
+  const in3Days = new Date();
+  in3Days.setDate(now.getDate() + 3);
+
+  // Material (sin fecha límite)
+  // Entregadas...
+
+  return [
+    {
+      id: "a1",
+      materia_id: "m1",
+      materia_nombre: "Estructura de Datos",
+      materia_codigo: "ISC-215",
+      titulo: "Tarea 4 · Árboles binarios de búsqueda",
+      descripcion: "Implementa inserción, eliminación y recorrido in-order de un BST en el lenguaje visto en clase. Sube tu código como .zip o enlace a repositorio.",
+      tipo: "tarea",
+      fecha_vencimiento: today.toISOString(),
+      estado_entrega: "pendiente",
+      calificacion: null,
+    },
+    {
+      id: "a2",
+      materia_id: "m2",
+      materia_nombre: "Bases de Datos II",
+      materia_codigo: "ISC-233",
+      titulo: "Informe de normalización",
+      descripcion: "Realiza el proceso de normalización hasta 3NF para el caso de estudio dado.",
+      tipo: "tarea",
+      fecha_vencimiento: in3Days.toISOString(),
+      estado_entrega: "pendiente",
+      calificacion: null,
+    },
+    {
+      id: "a3",
+      materia_id: "m1",
+      materia_nombre: "Estructura de Datos",
+      materia_codigo: "ISC-215",
+      titulo: "Segundo parcial",
+      descripcion: "Cubre listas enlazadas, pilas, colas y árboles. Modalidad presencial, dura 90 minutos. Trae tu carnet estudiantil.",
+      tipo: "examen",
+      fecha_vencimiento: in3Days.toISOString(),
+      estado_entrega: "pendiente",
+      calificacion: null,
+    },
+    {
+      id: "a4",
+      materia_id: "m1",
+      materia_nombre: "Estructura de Datos",
+      materia_codigo: "ISC-215",
+      titulo: "Slides · Árboles balanceados (AVL)",
+      descripcion: "",
+      tipo: "material",
+      fecha_vencimiento: null,
+      estado_entrega: null,
+      calificacion: null,
+    },
+    {
+      id: "a5",
+      materia_id: "m1",
+      materia_nombre: "Estructura de Datos",
+      materia_codigo: "ISC-215",
+      titulo: "Tarea 3 · Pilas y colas",
+      descripcion: "",
+      tipo: "tarea",
+      fecha_vencimiento: null,
+      estado_entrega: "entregado",
+      calificacion: null,
+    },
+    {
+      id: "a6",
+      materia_id: "m1",
+      materia_nombre: "Estructura de Datos",
+      materia_codigo: "ISC-215",
+      titulo: "Tarea 2 · Listas enlazadas",
+      descripcion: "Buena implementación de la lista doble. Te faltó manejar el caso de eliminar el único nodo — revísalo antes del parcial.",
+      tipo: "tarea",
+      fecha_vencimiento: null,
+      estado_entrega: "calificado",
+      calificacion: 92,
+    }
+  ];
+}
+
 // ---------------------------------------------------------------------------
 // Portal Profesor — #400
 // ---------------------------------------------------------------------------

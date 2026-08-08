@@ -106,6 +106,19 @@ export interface EventoDelPortal {
   ubicacion: string | null;
 }
 
+export interface AsignacionDelEstudiante {
+  id: string;
+  materia_id: string;
+  titulo: string;
+  descripcion: string | null;
+  tipo: string; // 'tarea', 'examen', 'material', 'anuncio'
+  fecha_vencimiento: string | null; // 'YYYY-MM-DDTHH:mm:ssZ'
+  estado_entrega: string | null; // 'pendiente', 'entregado', 'calificado', 'tarde'
+  calificacion: number | null;
+  materia_nombre: string;
+  materia_codigo: string | null;
+}
+
 // ---------------------------------------------------------------------------
 // Portal Profesor — #400
 // ---------------------------------------------------------------------------

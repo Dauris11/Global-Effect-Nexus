@@ -44,6 +44,7 @@ import {
   materiasDelEstudiante,
   notasPorCuatrimestre,
   proximosEventosDelPortal,
+  proximasAsignacionesDelEstudiante,
   resumenDelEstudiante,
 } from "@/server/portales/queries";
 import type {
@@ -125,17 +126,17 @@ const getAccesos = (t: (key: string) => string): AccesoRapido[] => [
  * portal personal, vaciar la pantalla entera por un bloque secundario cuesta
  * más que mostrar ese bloque vacío.
  */
+
 async function cargar(estudianteId: string) {
-  const [resumen, materias, cuatrimestres, condicion, eventos] = await Promise.all([
+  const [resumen, materias, cuatrimestres, condicion, eventos, asignaciones] = await Promise.all([
     resumenDelEstudiante(estudianteId).catch(() => RESUMEN_VACIO),
     materiasDelEstudiante(estudianteId).catch(() => [] as MateriaDelEstudiante[]),
     notasPorCuatrimestre(estudianteId).catch(() => [] as CuatrimestreDelEstudiante[]),
     condicionEnLaFundacion(estudianteId).catch(() => CONDICION_VACIA),
-    // Sin los eventos administrativos: la agenda del joven es la de la
-    // Fundación de cara a él, no la operación interna (ver la consulta).
     proximosEventosDelPortal(5, ["administrativo"]).catch(() => [] as EventoDelPortal[]),
+    proximasAsignacionesDelEstudiante(estudianteId).catch(() => []),
   ]);
-  return { resumen, materias, cuatrimestres, condicion, eventos };
+  return { resumen, materias, cuatrimestres, condicion, eventos, asignaciones };
 }
 
 export default async function PortalEstudiantePage({
@@ -332,14 +333,22 @@ export default async function PortalEstudiantePage({
 
       {/* Columna Derecha (Sidebar Lateral) */}
       <aside className="w-full shrink-0 space-y-6 lg:w-[320px] xl:w-[340px]">
-        {/* Calendario con Eventos */}
-        <MiniCalendar fechasConEventos={eventos.map((e) => e.fecha)} />
+        {/* Calendario con Eventos y Entregas */}
+        <MiniCalendar 
+          fechasConEventos={[
+            ...eventos.map((e) => e.fecha),
+            ...asignaciones
+              .filter(a => a.fecha_vencimiento)
+              .map(a => a.fecha_vencimiento as string)
+          ]} 
+        />
 
         <CardLista titulo={t("eventsTitle")} icono={CalendarClock}>
-          {eventos.length === 0 ? (
+          {eventos.length === 0 && asignaciones.length === 0 ? (
             <EstadoVacio mensaje={t("eventsEmpty")} />
           ) : (
-            eventos.map((e) => (
+            <>
+              {eventos.map((e) => (
               <ItemLista
                 key={e.id}
                 icono={Calendar}
@@ -358,7 +367,22 @@ export default async function PortalEstudiantePage({
                   </Badge>
                 }
               />
-            ))
+              ))}
+              {asignaciones.filter(a => a.fecha_vencimiento && new Date(a.fecha_vencimiento) >= new Date()).map((a) => (
+                <ItemLista
+                  key={a.id}
+                  icono={BookOpen}
+                  azulejo="bg-[#2096ba]/10 text-[#2096ba]"
+                  titulo={a.titulo}
+                  detalle={`${a.materia_nombre} · Vence: ${format(new Date(a.fecha_vencimiento as string), "dd MMM", { locale: fechaLocale })}`}
+                  derecha={
+                    <Badge variant="neutral" className="text-[10px] capitalize">
+                      {a.tipo}
+                    </Badge>
+                  }
+                />
+              ))}
+            </>
           )}
         </CardLista>
 
