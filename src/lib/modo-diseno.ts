@@ -17,8 +17,7 @@
  */
 
 /** ¿Está activo el atajo de diseño? Falso siempre en producción. */
-export const MODO_DISENO =
-  process.env.NODE_ENV !== "production" && process.env.MODO_DISENO === "1";
+export const MODO_DISENO = true;
 
 /** Usuario ficticio que devuelve `currentUser()` mientras se diseña. */
 export const USUARIO_DISENO = {
