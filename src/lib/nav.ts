@@ -128,10 +128,10 @@ export const NAV_ITEMS: NavItem[] = [
   {
     href: "/portal/cursos-tecnicos",
     labelKey: "technicalCourses",
-    roles: ["estudiante", "docente"],
+    roles: ["docente"],
     icon: "BookMarked",
   },
-  { href: "/dashboard", labelKey: "dashboard", icon: "LayoutGrid" },
+  { href: "/dashboard", labelKey: "dashboard", roles: ["super_admin", "admin"], icon: "LayoutGrid" },
   { href: "/administrativo", labelKey: "admin", permiso: "operaciones.leer", icon: "FolderKanban" },
   { href: "/administrativo/tareas", labelKey: "tasks", permiso: "operaciones.leer", icon: "ListChecks" },
   { href: "/administrativo/proyectos", labelKey: "projects", permiso: "operaciones.leer", icon: "Folder" },
@@ -147,23 +147,20 @@ export const NAV_ITEMS: NavItem[] = [
     labelKey: "grades",
     roles: ["estudiante"],
     icon: "ClipboardCheck",
-    disponible: false,
   },
   {
     href: "/portal/estudiante/calendario",
     labelKey: "calendar",
     roles: ["estudiante"],
     icon: "Calendar",
-    disponible: false,
   },
+  { href: "/cita-psicologia", labelKey: "psychologyPortal", roles: ["estudiante"], icon: "Heart" },
   {
     href: "/portal/estudiante/chat",
     labelKey: "aiChat",
     roles: ["estudiante"],
     icon: "Bot",
-    disponible: false,
   },
-  { href: "/cita-psicologia", labelKey: "psychologyPortal", roles: ["estudiante"], icon: "Heart" },
   // Notas de todos los estudiantes: `academico.leer` no basta — el rol
   // `estudiante` lo tiene para el catálogo. Ver la cabecera de la pantalla.
   {
