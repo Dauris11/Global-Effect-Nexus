@@ -136,6 +136,8 @@
   html {
     -webkit-text-size-adjust: 100%;
     accent-color: var(--primary);
+    scrollbar-width: thin;
+    scrollbar-color: var(--primary) var(--secondary);
   }
 
   body {
@@ -143,6 +145,31 @@
     color: var(--foreground);
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
+    scrollbar-color: var(--primary) var(--secondary);
+  }
+
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--primary) var(--secondary);
+  }
+
+  *::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+
+  *::-webkit-scrollbar-track {
+    background: var(--secondary);
+  }
+
+  *::-webkit-scrollbar-thumb {
+    background: var(--primary);
+    border-radius: 999px;
+    border: 2px solid var(--secondary);
+  }
+
+  *::-webkit-scrollbar-thumb:hover {
+    background: var(--primary-hover);
   }
 
   :focus-visible {

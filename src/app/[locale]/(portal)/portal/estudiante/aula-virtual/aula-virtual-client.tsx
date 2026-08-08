@@ -133,7 +133,7 @@ export function AulaVirtualClient({
                   </div>
                   <div className={styles.chcBody}>
                     <h4>{materia.nombre}</h4>
-                    <span>{materia.profesor || "Sin profesor asignado"}</span>
+                    <span>{materia.profesor_nombre || "Sin profesor asignado"}</span>
                   </div>
                 </div>
               );
@@ -145,7 +145,7 @@ export function AulaVirtualClient({
           <div className={styles.courseHeader}>
             <div>
               <h2>{selectedMateriaObj.nombre}</h2>
-              <span className={styles.meta}>Prof. {selectedMateriaObj.profesor || "N/A"}</span>
+              <span className={styles.meta}>Prof. {selectedMateriaObj.profesor_nombre || "N/A"}</span>
             </div>
             <span className={styles.courseCode}>{selectedMateriaObj.codigo}</span>
           </div>

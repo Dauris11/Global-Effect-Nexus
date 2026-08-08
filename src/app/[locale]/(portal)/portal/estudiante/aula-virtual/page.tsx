@@ -23,14 +23,70 @@ export default async function AulaVirtualPage({
     materiasDelEstudiante(estudianteId).catch(() => []),
   ]);
 
-  // Si no hay materias (ej: prototipo), inyectar datos falsos para poder ver el diseño
+  // Si no hay materias (ej: prototipo), inyectar datos falsos coherentes con
+  // el contrato `MateriaDelEstudiante` del portal.
   if (materias.length === 0) {
     materias = [
-      { id: "m1", codigo: "ISC-215", nombre: "Estructura de Datos", creditos: 4, profesor: "Manuel Reynoso", color: "blue", horario: "Lun/Mié 4:00 PM" },
-      { id: "m2", codigo: "ISC-233", nombre: "Bases de Datos II", creditos: 4, profesor: "Felix Almonte", color: "green", horario: "Mar/Jue 8:00 AM" },
-      { id: "m3", codigo: "MAT-201", nombre: "Cálculo Integral", creditos: 5, profesor: "Dariana Peña", color: "red", horario: "Vie 2:00 PM" },
-      { id: "m4", codigo: "ISC-310", nombre: "Filosofía de Sistemas", creditos: 3, profesor: "Domínguez", color: "yellow", horario: "Lun 10:00 AM" },
-      { id: "m5", codigo: "AMB-105", nombre: "Ecología y Medio Ambiente", creditos: 2, profesor: "Ciencias Ambientales", color: "blue", horario: "Jue 10:00 AM" },
+      {
+        inscripcion_id: "mock-inscripcion-1",
+        materia_id: "m1",
+        nombre: "Estructura de Datos",
+        codigo: "ISC-215",
+        creditos: 4,
+        profesor_nombre: "Manuel Reynoso",
+        horario: "Lun/Mié 4:00 PM",
+        aula: "Lab 2",
+        periodo_nombre: "2026-I",
+        estado: "activa",
+      },
+      {
+        inscripcion_id: "mock-inscripcion-2",
+        materia_id: "m2",
+        nombre: "Bases de Datos II",
+        codigo: "ISC-233",
+        creditos: 4,
+        profesor_nombre: "Felix Almonte",
+        horario: "Mar/Jue 8:00 AM",
+        aula: "Aula 3",
+        periodo_nombre: "2026-I",
+        estado: "activa",
+      },
+      {
+        inscripcion_id: "mock-inscripcion-3",
+        materia_id: "m3",
+        nombre: "Cálculo Integral",
+        codigo: "MAT-201",
+        creditos: 5,
+        profesor_nombre: "Dariana Peña",
+        horario: "Vie 2:00 PM",
+        aula: "Aula 2",
+        periodo_nombre: "2026-I",
+        estado: "activa",
+      },
+      {
+        inscripcion_id: "mock-inscripcion-4",
+        materia_id: "m4",
+        nombre: "Filosofía de Sistemas",
+        codigo: "ISC-310",
+        creditos: 3,
+        profesor_nombre: "Domínguez",
+        horario: "Lun 10:00 AM",
+        aula: "Aula 4",
+        periodo_nombre: "2026-I",
+        estado: "activa",
+      },
+      {
+        inscripcion_id: "mock-inscripcion-5",
+        materia_id: "m5",
+        nombre: "Ecología y Medio Ambiente",
+        codigo: "AMB-105",
+        creditos: 2,
+        profesor_nombre: "Ciencias Ambientales",
+        horario: "Jue 10:00 AM",
+        aula: "Aula 10",
+        periodo_nombre: "2026-I",
+        estado: "activa",
+      },
     ];
   }
 

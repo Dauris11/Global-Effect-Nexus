@@ -1,7 +1,13 @@
 /**
- * Configuración de navegación del portal. Cada ítem declara el permiso que
- * lo habilita; el layout filtra el menú según los permisos del rol activo
- * (super_admin ve todo). Las etiquetas se resuelven vía i18n (namespace "nav").
+ * Configuración de navegación del portal.
+ *
+ * La arquitectura ahora se modela como una colección de portales por rol: cada
+ * `rol` recibe un conjunto de rutas y enlaces exclusivamente reconocidos para
+ * la dimensión que le corresponde.
+ *
+ * `NAV_ITEMS` permanece como catálogo de módulos compartidos del sistema, pero
+ * el layout del área de portales se filtra contra un subconjunto por rol para
+ * evitar que un mismo shell pinte un menú amplio y mezclado.
  */
 export interface NavItem {
   href: string;
@@ -10,39 +16,17 @@ export interface NavItem {
   permiso?: string;
   /**
    * Alternativa a `permiso`: basta con tener **uno** de estos.
-   *
-   * Existe por Calificaciones. Ver el listado completo de notas no encaja en un
-   * solo permiso: lo necesita el docente (que registra, pero no tiene
-   * `expedientes.leer`) y también quien lleva expedientes (que no registra
-   * notas). Un `permiso` único dejaría fuera a uno de los dos.
-   *
-   * Si se declaran ambos campos, se exige `permiso` **y** alguno de `permisos`.
    */
   permisos?: string[];
   /**
    * Roles exactos que ven el ítem. Si se omite, lo ve cualquiera que cumpla
    * los permisos de arriba.
-   *
-   * Existe por los portales por rol (S6). Un portal no se protege con un
-   * permiso —el Portal Estudiante no lee nada que un permiso pueda nombrar,
-   * lee *tu propia fila*— así que el filtro tiene que ser el rol. Y a
-   * diferencia de `permiso`, esta lista **también aplica a `super_admin`**:
-   * enseñarle "Portal estudiante" a quien no tiene expediente solo le ofrece
-   * una pantalla que no puede contener nada suyo.
    */
   roles?: string[];
   /** Nombre del icono de lucide-react. */
   icon: string;
   /**
    * `false` si la pantalla todavía no existe.
-   *
-   * El backend de los 27 módulos está construido, pero la UI va por sprints.
-   * Un enlace a una pantalla que aún no existe lleva a un 404, y un 404 en el
-   * menú principal se lee como "la aplicación está rota", no como "esto se
-   * entrega en el sprint 10". Estos ítems se muestran apagados y marcados
-   * como próximos: el usuario ve el alcance completo sin chocar con nada.
-   *
-   * Al construir la pantalla se borra la marca — no se añade nada.
    */
   disponible?: false;
 }
@@ -80,57 +64,91 @@ export function rutaPorRol(rol: string): string {
  * corresponden a módulos cuyo backend existe pero cuya pantalla llega en un
  * sprint posterior (ver docs/05-plan-de-trabajo.md).
  */
+export const PORTAL_NAV_BY_ROLE: Record<string, NavItem[]> = {
+  estudiante: [
+    {
+      href: "/portal/estudiante",
+      labelKey: "studentPortal",
+      roles: ["estudiante"],
+      icon: "Home",
+    },
+    {
+      href: "/portal/estudiante/aula-virtual",
+      labelKey: "virtualClassroom",
+      roles: ["estudiante"],
+      icon: "MonitorStop",
+    },
+    {
+      href: "/portal/estudiante/prematricula",
+      labelKey: "preenrollment",
+      roles: ["estudiante"],
+      icon: "CheckCircle",
+    },
+    {
+      href: "/portal/estudiante/calificaciones",
+      labelKey: "grades",
+      roles: ["estudiante"],
+      icon: "ClipboardCheck",
+    },
+    {
+      href: "/portal/estudiante/calendario",
+      labelKey: "calendar",
+      roles: ["estudiante"],
+      icon: "Calendar",
+    },
+    { href: "/cita-psicologia", labelKey: "psychologyPortal", roles: ["estudiante"], icon: "Heart" },
+    {
+      href: "/portal/estudiante/chat",
+      labelKey: "aiChat",
+      roles: ["estudiante"],
+      icon: "Bot",
+    },
+  ],
+  docente: [
+    {
+      href: "/portal/profesor",
+      labelKey: "teacherPortal",
+      roles: ["docente"],
+      icon: "BookOpen",
+    },
+    {
+      href: "/portal/cursos-tecnicos",
+      labelKey: "technicalCourses",
+      roles: ["docente"],
+      icon: "BookMarked",
+    },
+  ],
+  admin: [
+    {
+      href: "/portal/administrativo",
+      labelKey: "adminPortal",
+      roles: ["admin", "super_admin"],
+      icon: "ClipboardList",
+    },
+    { href: "/dashboard", labelKey: "dashboard", roles: ["super_admin", "admin"], icon: "LayoutGrid" },
+  ],
+  psicologo: [
+    {
+      href: "/portal/psicologia",
+      labelKey: "psychologyPortal",
+      roles: ["psicologo"],
+      icon: "Heart",
+    },
+  ],
+  contabilidad: [
+    {
+      href: "/portal/contabilidad",
+      labelKey: "accountingPortal",
+      roles: ["contabilidad"],
+      icon: "DollarSign",
+    },
+  ],
+};
+
 export const NAV_ITEMS: NavItem[] = [
-  // Los portales van primero y solo para su rol: son la portada de esas dos
-  // personas, no un módulo más del menú.
-  {
-    href: "/portal/estudiante",
-    labelKey: "studentPortal",
-    roles: ["estudiante"],
-    icon: "Home",
-  },
-  {
-    href: "/portal/estudiante/aula-virtual",
-    labelKey: "virtualClassroom",
-    roles: ["estudiante"],
-    icon: "MonitorStop", // Closest to the terminal monitor icon in the screenshot
-  },
-  {
-    href: "/portal/estudiante/prematricula",
-    labelKey: "preenrollment", // Or whatever translation key is appropriate
-    roles: ["estudiante"],
-    icon: "CheckCircle",
-  },
-  {
-    href: "/portal/profesor",
-    labelKey: "teacherPortal",
-    roles: ["docente"],
-    icon: "BookOpen",
-  },
-  {
-    href: "/portal/administrativo",
-    labelKey: "adminPortal",
-    roles: ["admin", "super_admin"],
-    icon: "ClipboardList",
-  },
-  {
-    href: "/portal/psicologia",
-    labelKey: "psychologyPortal",
-    roles: ["psicologo"],
-    icon: "Heart",
-  },
-  {
-    href: "/portal/contabilidad",
-    labelKey: "accountingPortal",
-    roles: ["contabilidad"],
-    icon: "DollarSign",
-  },
-  {
-    href: "/portal/cursos-tecnicos",
-    labelKey: "technicalCourses",
-    roles: ["docente"],
-    icon: "BookMarked",
-  },
+  // Este catálogo sigue siendo útil para las pantallas que no son portal
+  // ni para el login. El layout del portal se filtra contra la colección
+  // `PORTAL_NAV_BY_ROLE` y no contra el catálogo completo.
   { href: "/dashboard", labelKey: "dashboard", roles: ["super_admin", "admin"], icon: "LayoutGrid" },
   { href: "/administrativo", labelKey: "admin", permiso: "operaciones.leer", icon: "FolderKanban" },
   { href: "/administrativo/tareas", labelKey: "tasks", permiso: "operaciones.leer", icon: "ListChecks" },
@@ -143,37 +161,19 @@ export const NAV_ITEMS: NavItem[] = [
   { href: "/academico/materias", labelKey: "academic", permiso: "academico.leer", icon: "GraduationCap" },
   { href: "/academico/cursos", labelKey: "courses", permiso: "academico.leer", icon: "BookOpen" },
   {
-    href: "/portal/estudiante/calificaciones",
-    labelKey: "grades",
-    roles: ["estudiante"],
-    icon: "ClipboardCheck",
-  },
-  {
-    href: "/portal/estudiante/calendario",
-    labelKey: "calendar",
-    roles: ["estudiante"],
-    icon: "Calendar",
-  },
-  { href: "/cita-psicologia", labelKey: "psychologyPortal", roles: ["estudiante"], icon: "Heart" },
-  {
-    href: "/portal/estudiante/chat",
-    labelKey: "aiChat",
-    roles: ["estudiante"],
-    icon: "Bot",
-  },
-  // Notas de todos los estudiantes: `academico.leer` no basta — el rol
-  // `estudiante` lo tiene para el catálogo. Ver la cabecera de la pantalla.
-  {
     href: "/academico/calificaciones",
     labelKey: "grades",
     permisos: ["calificaciones.registrar", "expedientes.leer"],
     icon: "ClipboardList",
   },
   { href: "/configuracion", labelKey: "settings", permiso: "landing.administrar", icon: "Settings" },
-
-  // Pantallas pendientes (S6–S11). El backend ya está en `src/server/*`.
   { href: "/patrocinadores", labelKey: "sponsors", permiso: "patrocinadores.leer", icon: "HeartHandshake", disponible: false },
   { href: "/contabilidad", labelKey: "accounting", permiso: "finanzas.leer", icon: "Wallet" },
   { href: "/psicologia", labelKey: "psychology", permiso: "psicologia.leer", icon: "Brain" },
   { href: "/reportes", labelKey: "reports", permiso: "finanzas.leer", icon: "BarChart3", disponible: false },
 ];
+
+export function portalNavPorRol(rol: string): NavItem[] {
+  return PORTAL_NAV_BY_ROLE[rol] ?? [];
+}
+

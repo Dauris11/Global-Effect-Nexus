@@ -7,7 +7,7 @@
 import { redirect } from "next/navigation";
 import { currentUser } from "@/lib/auth";
 import { permisosDeRol } from "@/lib/rbac";
-import { NAV_ITEMS } from "@/lib/nav";
+import { portalNavPorRol } from "@/lib/nav";
 import { Sidebar } from "@/components/layout/sidebar";
 import { TopBar } from "@/components/layout/topbar";
 
@@ -22,16 +22,12 @@ export default async function PortalLayout({
   const user = await currentUser();
   if (!user) redirect(`/${locale}/login`);
 
-  // super_admin ve todo; el resto según sus permisos.
+  // Los portales ya no se construyen con el menú del sistema. Cada rol obtiene
+  // su colección de enlaces y el layout se ambienta a esa navegación.
   const permisos = user.rol === "super_admin" ? null : await permisosDeRol(user.rol);
-  const items = NAV_ITEMS.filter((i) => {
-    // `roles` se comprueba antes que nada y también para super_admin: un portal
-    // por rol no es un módulo con permiso, es la pantalla de una persona
-    // concreta (ver lib/nav.ts).
+  const items = portalNavPorRol(user.rol).filter((i) => {
     if (i.roles && !i.roles.includes(user.rol)) return false;
     if (permisos === null) return true;
-
-    // `permiso` es obligatorio; `permisos` es "basta con uno" (ver lib/nav.ts).
     if (i.permiso && !permisos.includes(i.permiso)) return false;
     if (i.permisos && !i.permisos.some((p) => permisos.includes(p))) return false;
     return true;
@@ -40,11 +36,8 @@ export default async function PortalLayout({
   return (
     <div className="flex min-h-screen bg-slate-50 dark:bg-[#101322] transition-colors duration-300 font-inter">
       <Sidebar items={items} />
-      
+
       <div className="flex min-w-0 flex-1 flex-col">
-        {/* El TopBar vive aquí y no dentro de cada pantalla: es donde están el
-            cierre de sesión, el selector de idioma y el cajón de navegación
-            móvil, y los siete portales los necesitan por igual. */}
         <div className="mx-auto w-full max-w-[1600px] px-4 md:px-6">
           <TopBar nombre={user.nombre} rol={user.rol} items={items} />
         </div>
