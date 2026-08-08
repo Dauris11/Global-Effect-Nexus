@@ -12,12 +12,10 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { useToast } from "@/components/ui/use-toast";
 
 export function UploadButton({ asignacionId, title }: { asignacionId: string; title: string }) {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
-  const { toast } = useToast();
 
   const handleUpload = () => {
     setLoading(true);
@@ -25,11 +23,7 @@ export function UploadButton({ asignacionId, title }: { asignacionId: string; ti
     setTimeout(() => {
       setLoading(false);
       setOpen(false);
-      toast({
-        title: "¡Entrega enviada!",
-        description: `Tu archivo para "${title}" ha sido subido con éxito.`,
-        icon: <CheckCircle2 className="h-4 w-4 text-emerald-500" />,
-      });
+      alert(`¡Entrega enviada con éxito para la tarea "${title}"!`);
     }, 1500);
   };
 
