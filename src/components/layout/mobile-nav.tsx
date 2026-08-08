@@ -43,7 +43,7 @@ export function MobileNav({ items }: { items: NavItem[] }) {
             </Dialog.Close>
           </div>
           <div className="flex-1 overflow-y-auto px-3 py-2">
-            <NavList items={items} tone="dark" onNavigate={() => setOpen(false)} />
+            <NavList items={items} onNavigate={() => setOpen(false)} />
           </div>
         </Dialog.Content>
       </Dialog.Portal>

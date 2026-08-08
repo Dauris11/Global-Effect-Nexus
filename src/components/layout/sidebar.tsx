@@ -2,44 +2,50 @@
 
 /**
  * Barra lateral del portal (escritorio).
- * Ahora con tema claro, bordes sutiles y capacidad de colapsarse para dar
- * más espacio al contenido principal.
+ * Implementada con el diseño "Rail" solicitado.
  */
-import { useState } from "react";
-import { ChevronLeft, Menu } from "lucide-react";
-import { Logo } from "@/components/brand/logo";
-import { NavList } from "./nav-list";
 import { cn } from "@/lib/utils";
+import { NavList } from "./nav-list";
 import type { NavItem } from "@/lib/nav";
+import { HelpCircle } from "lucide-react";
 
 export function Sidebar({ items }: { items: NavItem[] }) {
   return (
     <aside
       className={cn(
-        "hidden shrink-0 flex-col transition-all duration-300 md:flex",
-        "bg-[#0a6a8a] text-white shadow-lg dark:bg-[#0c232f] border-r border-white/10",
-        "w-[90px]",
-        "sticky top-0 h-screen z-20"
+        "flex flex-col items-center bg-[#1F3D2E]",
+        "py-[22px] pb-[18px]",
+        "w-[84px] h-screen sticky top-0 z-20",
+        // En móvil se vuelve bottom bar (adaptación responsiva)
+        "max-md:fixed max-md:bottom-0 max-md:top-auto max-md:left-0 max-md:right-0 max-md:h-auto max-md:w-full max-md:flex-row max-md:px-2.5 max-md:py-2.5 max-md:shadow-[0_-6px_20px_rgba(0,0,0,0.15)] max-md:justify-around"
       )}
+      aria-label="Navegación principal"
     >
-      <div className="flex flex-col h-full w-full overflow-hidden items-center py-6">
-        
-        {/* Logo (Brand Mark Circle) */}
-        <div className="flex h-12 w-12 items-center justify-center rounded-full border border-white/30 text-white shrink-0 mb-8 bg-white/10">
-           <div className="h-4 w-4 bg-white rounded-full shadow-sm" />
-        </div>
-        
-        <div className="flex-1 overflow-y-auto overflow-x-hidden w-full scrollbar-hide relative z-10 px-2">
-          <NavList items={items} isCollapsed={true} />
-        </div>
-
-        {/* Ayuda Widget (Bottom) */}
-        <div className="mt-auto pt-6 shrink-0">
-          <button className="flex h-10 w-10 items-center justify-center rounded-full border border-white/30 text-white hover:bg-white/15 transition-colors">
-            <span className="font-bold text-sm">?</span>
-          </button>
-        </div>
+      {/* Logo mark: anillos concéntricos */}
+      <svg 
+        className="w-10 h-10 mb-[30px] text-[#E7A73E] shrink-0 max-md:hidden" 
+        viewBox="0 0 40 40" 
+        fill="none" 
+        aria-hidden="true"
+      >
+        <circle cx="20" cy="20" r="18" stroke="currentColor" strokeWidth="1.4" opacity="0.35"/>
+        <circle cx="20" cy="20" r="12.5" stroke="currentColor" strokeWidth="1.6" opacity="0.65"/>
+        <circle cx="20" cy="20" r="7" fill="currentColor"/>
+      </svg>
+      
+      <div className="flex flex-col gap-1.5 w-full items-center flex-1 max-md:flex-row max-md:justify-around">
+        <NavList items={items} />
       </div>
+
+      <div className="w-8 h-[1px] bg-white/12 my-2.5 shrink-0 max-md:hidden" />
+
+      <a 
+        href="#" 
+        className="w-14 h-14 rounded-full bg-[#28503C] border border-white/15 flex items-center justify-center text-[#E7A73E] no-underline transition-transform hover:-translate-y-0.5 shrink-0 max-md:w-11 max-md:h-11" 
+        title="Soporte técnico"
+      >
+        <HelpCircle className="w-[22px] h-[22px] stroke-[1.6px]" />
+      </a>
     </aside>
   );
 }
