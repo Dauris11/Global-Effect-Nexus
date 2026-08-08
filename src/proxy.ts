@@ -45,7 +45,7 @@ const RUTAS_PROTEGIDAS = [
   "/portal",
 ];
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   // 1. Respuesta base de i18n (rewrite/redirect con el locale resuelto).
   const response = intlMiddleware(request);
 
