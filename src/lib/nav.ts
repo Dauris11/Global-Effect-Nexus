@@ -90,6 +90,12 @@ export const NAV_ITEMS: NavItem[] = [
     icon: "GraduationCap",
   },
   {
+    href: "/portal/estudiante/aula-virtual",
+    labelKey: "virtualClassroom",
+    roles: ["estudiante"],
+    icon: "MonitorPlay",
+  },
+  {
     href: "/portal/profesor",
     labelKey: "teacherPortal",
     roles: ["docente"],
