@@ -15,6 +15,7 @@ import type { Metadata } from "next";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
 import { notFound } from "next/navigation";
+import Script from "next/script";
 import { Inter } from "next/font/google";
 import { routing, type Locale } from "@/i18n/routing";
 import "../globals.css";
@@ -53,13 +54,16 @@ export default async function LocaleLayout({
       suppressHydrationWarning
       className={inter.variable}
     >
-      <body>
-        <script
-          suppressHydrationWarning
+      <head>
+        <Script
+          id="theme-script"
+          strategy="beforeInteractive"
           dangerouslySetInnerHTML={{
             __html: `(function(){try{if(localStorage.getItem("theme")==="dark" || (!("theme" in localStorage) && window.matchMedia("(prefers-color-scheme: dark)").matches)){document.documentElement.classList.add("dark");}else{document.documentElement.classList.remove("dark");}}catch(_){}})();`,
           }}
         />
+      </head>
+      <body>
         <NextIntlClientProvider messages={messages}>
           {children}
         </NextIntlClientProvider>

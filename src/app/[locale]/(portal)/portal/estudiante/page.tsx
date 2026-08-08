@@ -94,7 +94,7 @@ const COLOR_LETRA: Record<string, string> = {
 
 const getAccesos = (t: (key: string) => string): AccesoRapido[] => [
   {
-    href: "/academico/materias",
+    href: "/portal/estudiante/aula-virtual",
     icono: BookOpen,
     titulo: t("mySubjectsTitle"),
     descripcion: t("mySubjectsDesc"),

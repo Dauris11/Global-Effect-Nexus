@@ -35,11 +35,11 @@ export function NavList({
             onClick={onNavigate}
             aria-current={active ? "page" : undefined}
             className={cn(
-              "flex flex-col items-center gap-[5px] w-[60px] py-[9px] rounded-[11px] no-underline transition-colors duration-150 ease-in-out focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#E7A73E]",
-              "max-md:w-auto max-md:py-[6px] max-md:px-1",
+              "flex flex-col items-center justify-center gap-[5px] w-[68px] min-h-[64px] py-[9px] rounded-[11px] no-underline transition-colors duration-150 ease-in-out focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#E7A73E]",
+              "max-md:w-auto max-md:min-h-0 max-md:py-[6px] max-md:px-2",
               active
-                ? "bg-[#E7A73E] text-[#1F3D2E]"
-                : "text-[#F1F4EC]/55 hover:text-[#F1F4EC]/90 hover:bg-white/5",
+                ? "bg-[#E7A73E] text-[#0a6a8a]"
+                : "text-white/60 hover:text-white hover:bg-white/10",
             )}
           >
             {Icon && (

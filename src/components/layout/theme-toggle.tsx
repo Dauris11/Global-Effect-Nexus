@@ -8,7 +8,7 @@
  */
 "use client";
 
-import { useSyncExternalStore } from "react";
+import { useEffect, useSyncExternalStore } from "react";
 import { Moon, Sun } from "lucide-react";
 import { useTranslations } from "next-intl";
 
@@ -31,6 +31,19 @@ export function ThemeToggle() {
     () => document.documentElement.classList.contains("dark"),
     () => false,
   );
+
+  // Asegura que el tema se mantenga durante la navegación del cliente 
+  // (por ejemplo, al cambiar de idioma) donde React puede resetear el HTML class
+  useEffect(() => {
+    try {
+      const theme = localStorage.getItem("theme");
+      if (theme === "dark" || (!theme && window.matchMedia("(prefers-color-scheme: dark)").matches)) {
+        document.documentElement.classList.add("dark");
+      } else {
+        document.documentElement.classList.remove("dark");
+      }
+    } catch (_) {}
+  }, []);
 
   const toggle = () => {
     const next = !dark;

@@ -3,14 +3,14 @@
   grid-template-columns: 1fr 320px;
   min-height: 100%;
   --canvas: transparent;
-  --canvas-alt: #f1f5f9; /* slate-100 */
-  --ink: #0f172a; /* slate-900 */
-  --ink-soft: #64748b; /* slate-500 */
-  --line: #e2e8f0; /* slate-200 */
-  --forest: #0a6a8a; /* Dark portal blue */
-  --forest-2: #07526c; /* Darker portal blue */
-  --fern: #2096BA; /* Primary portal blue */
-  --fern-tint: #e6f4f8; /* Light blue */
+  --canvas-alt: #f1f5f9;
+  --ink: #0f172a;
+  --ink-soft: #64748b;
+  --line: #e2e8f0;
+  --forest: #0a6a8a;
+  --forest-2: #07526c;
+  --fern: #2096BA;
+  --fern-tint: #e6f4f8;
   --marigold: #E7A73E;
   --marigold-tint: #FBEDD3;
   --coral: #E2607A;
@@ -22,6 +22,16 @@
   --radius-lg: 22px;
   --radius-md: 16px;
   --radius-sm: 11px;
+}
+
+:global(.dark) .pvaContainer {
+  --canvas-alt: rgba(255, 255, 255, 0.05);
+  --ink: #f8fafc;
+  --ink-soft: #94a3b8;
+  --line: rgba(255, 255, 255, 0.1);
+  --white: #18181c;
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.4);
 }
 
 .eyebrow {
@@ -38,15 +48,6 @@
   min-width: 0;
 }
 
-/* ---------- RIGHT COLUMN ---------- */
-.side {
-  padding: 26px 30px 60px 0;
-  display: flex; 
-  flex-direction: column; 
-  gap: 16px;
-}
-
-/* ---------- PVA ---------- */
 .pageHead {
   margin-bottom: 22px;
 }
@@ -60,7 +61,6 @@
   font-size: 26px;
   margin: 0 0 6px;
   letter-spacing: -0.01em;
-  color: var(--ink);
 }
 .pageHead p {
   font-size: 14px;
@@ -68,80 +68,180 @@
   margin: 0;
 }
 
-.courseScroller {
-  display: flex;
-  gap: 10px;
-  overflow-x: auto;
-  padding-bottom: 6px;
-  margin-bottom: 22px;
+/* PVA CAROUSEL */
+.courseHero {
+  margin-bottom: 24px;
 }
-.courseScroller::-webkit-scrollbar {
-  height: 0;
-}
-
-.courseChip {
-  flex: 0 0 auto;
+.cheroHead {
   display: flex;
   align-items: center;
-  gap: 10px;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+.cheroHead strong {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+}
+.cheroNav {
+  display: flex;
+  gap: 6px;
+}
+.cheroNav button {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 1px solid var(--line);
   background: var(--white);
-  border: 1.5px solid var(--line);
-  border-radius: 999px;
-  padding: 8px 16px 8px 8px;
-  transition: border-color 0.16s ease, background 0.16s ease;
-  white-space: nowrap;
-  color: var(--ink);
-}
-.courseChip .cring {
-  width: 30px;
-  height: 30px;
-  flex-shrink: 0;
-  position: relative;
-}
-.courseChip .cring svg {
-  width: 30px;
-  height: 30px;
-  transform: rotate(-90deg);
-}
-.courseChip .cring .dot {
-  position: absolute;
-  inset: 0;
   display: flex;
   align-items: center;
   justify-content: center;
+  color: var(--ink-soft);
+  transition: border-color 0.16s ease, color 0.16s ease;
+  cursor: pointer;
+}
+.cheroNav button:hover {
+  border-color: var(--fern);
+  color: var(--fern);
+}
+.cheroNav svg {
+  width: 13px;
+  height: 13px;
+}
+
+.courseCarousel {
+  display: flex;
+  gap: 14px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+  scroll-snap-type: x proximity;
+  scroll-behavior: smooth;
+}
+.courseCarousel::-webkit-scrollbar {
+  height: 0;
+}
+
+.chc {
+  flex: 0 0 232px;
+  scroll-snap-align: start;
+  background: var(--white);
+  border: 1.5px solid var(--line);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  transition: transform 0.16s ease, box-shadow 0.16s ease, border-color 0.16s ease;
+  cursor: pointer;
+}
+.chc:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--fern);
+}
+.chc.active {
+  border-color: var(--fern);
+  box-shadow: 0 0 0 2px var(--fern-tint);
+}
+
+.chcBanner {
+  position: relative;
+  height: 104px;
+  overflow: hidden;
+  display: flex;
+  align-items: flex-end;
+}
+.chcRings {
+  position: absolute;
+  right: -30px;
+  top: -20px;
+  width: 150px;
+  height: 150px;
+  opacity: 0.5;
+}
+.chcCode {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9.5px;
+  font-weight: 700;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.22);
+  padding: 3px 8px;
+  border-radius: 6px;
+  letter-spacing: 0.02em;
+}
+.chcUnread {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--coral);
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.85);
+}
+.chcRing {
+  position: absolute;
+  right: 12px;
+  bottom: -14px;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: var(--white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.15);
+}
+.chcRing svg {
+  width: 38px;
+  height: 38px;
+  transform: rotate(-90deg);
+  position: absolute;
+}
+.chcRing span {
+  position: relative;
   font-family: 'Space Grotesk', sans-serif;
   font-size: 10px;
   font-weight: 700;
-  color: var(--forest);
+  color: var(--ink);
 }
-.courseChip strong {
-  font-size: 12.5px;
+
+.chcBody {
+  padding: 14px 14px 15px;
+}
+.chcBody h4 {
+  font-size: 13.5px;
   font-weight: 600;
-  display: block;
+  margin: 0 0 3px;
+  line-height: 1.25;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
-.courseChip small {
-  display: block;
-  font-size: 10.5px;
+.chcBody span {
+  font-size: 11.5px;
   color: var(--ink-soft);
-  font-family: 'JetBrains Mono', monospace;
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
-.courseChip.active {
-  border-color: var(--forest);
-  background: var(--forest);
+
+.bgForest {
+  background: linear-gradient(135deg, var(--forest-2), var(--forest));
 }
-.courseChip.active strong, .courseChip.active small {
-  color: #fff;
+.bgFern {
+  background: linear-gradient(135deg, #2087a8, var(--fern));
 }
-.courseChip.active small {
-  color: rgba(255, 255, 255, 0.6);
+.bgMarigold {
+  background: linear-gradient(135deg, #F0BE68, #D9922C);
 }
-.courseChip .unread {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: var(--coral);
-  margin-left: 2px;
-  box-shadow: 0 0 0 2px var(--white);
+.bgCoral {
+  background: linear-gradient(135deg, #EA8399, var(--coral));
 }
 
 .courseHeader {
@@ -156,7 +256,6 @@
   box-shadow: var(--shadow-sm);
   flex-wrap: wrap;
   gap: 12px;
-  color: var(--ink);
 }
 .courseHeader h2 {
   font-family: 'Space Grotesk', sans-serif;
@@ -249,7 +348,6 @@
   background: var(--forest);
   color: var(--marigold);
 }
-
 .feedBody {
   flex: 1;
   min-width: 0;
@@ -265,8 +363,6 @@
   font-family: 'Space Grotesk', sans-serif;
   font-size: 15px;
   margin: 0;
-  letter-spacing: -0.01em;
-  color: var(--ink);
 }
 .feedSub {
   font-size: 12px;
@@ -321,7 +417,6 @@
   padding-top: 14px;
   border-top: 1px dashed var(--line);
 }
-
 .fileChip {
   display: inline-flex;
   align-items: center;
@@ -331,7 +426,6 @@
   padding: 6px 11px;
   font-size: 12px;
   font-weight: 600;
-  color: var(--ink);
 }
 .fileChip svg {
   width: 14px;
@@ -352,7 +446,6 @@
   border-radius: 999px;
   transition: transform 0.16s ease;
   cursor: pointer;
-  font-family: inherit;
 }
 .uploadBtn:hover {
   transform: translateY(-2px);
@@ -367,7 +460,7 @@
   border-radius: 10px;
   padding: 10px 13px;
   font-size: 12.5px;
-  color: #0b455c;
+  color: var(--forest-2);
   margin-top: 12px;
   line-height: 1.5;
 }
@@ -375,14 +468,19 @@
   color: var(--forest);
 }
 
-/* SIDE CARDS */
+/* ---------- RIGHT COLUMN ---------- */
+.side {
+  padding: 26px 30px 60px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
 .sideCard {
   background: var(--white);
   border: 1px solid var(--line);
   border-radius: var(--radius-md);
   padding: 20px;
   box-shadow: var(--shadow-sm);
-  color: var(--ink);
 }
 .sideHead {
   display: flex;
@@ -410,7 +508,6 @@
 .deadlineRow:first-child {
   padding-top: 0;
 }
-
 .dlDate {
   width: 40px;
   height: 40px;
@@ -457,16 +554,6 @@
   height: 56px;
   transform: rotate(-90deg);
 }
-.streakCard .ringWrap .num {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: 'Space Grotesk', sans-serif;
-  font-weight: 700;
-  font-size: 16px;
-}
 .streakCard p {
   font-size: 12.5px;
   color: var(--ink-soft);
@@ -478,17 +565,12 @@
   display: block;
   font-size: 14px;
   margin-bottom: 2px;
+  color: var(--ink);
 }
 
 .sideEmpty {
   text-align: center;
   padding: 20px 8px 6px;
-}
-.sideEmpty svg {
-  width: 38px;
-  height: 38px;
-  color: var(--line);
-  margin-bottom: 10px;
 }
 .sideEmpty p {
   font-size: 12.5px;

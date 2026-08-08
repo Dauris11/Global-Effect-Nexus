@@ -87,13 +87,19 @@ export const NAV_ITEMS: NavItem[] = [
     href: "/portal/estudiante",
     labelKey: "studentPortal",
     roles: ["estudiante"],
-    icon: "GraduationCap",
+    icon: "Home",
   },
   {
     href: "/portal/estudiante/aula-virtual",
     labelKey: "virtualClassroom",
     roles: ["estudiante"],
-    icon: "MonitorPlay",
+    icon: "MonitorStop", // Closest to the terminal monitor icon in the screenshot
+  },
+  {
+    href: "/portal/estudiante/prematricula",
+    labelKey: "preenrollment", // Or whatever translation key is appropriate
+    roles: ["estudiante"],
+    icon: "CheckCircle",
   },
   {
     href: "/portal/profesor",
@@ -125,7 +131,7 @@ export const NAV_ITEMS: NavItem[] = [
     roles: ["estudiante", "docente"],
     icon: "BookMarked",
   },
-  { href: "/dashboard", labelKey: "dashboard", icon: "LayoutDashboard" },
+  { href: "/dashboard", labelKey: "dashboard", icon: "LayoutGrid" },
   { href: "/administrativo", labelKey: "admin", permiso: "operaciones.leer", icon: "FolderKanban" },
   { href: "/administrativo/tareas", labelKey: "tasks", permiso: "operaciones.leer", icon: "ListChecks" },
   { href: "/administrativo/proyectos", labelKey: "projects", permiso: "operaciones.leer", icon: "Folder" },
@@ -136,7 +142,7 @@ export const NAV_ITEMS: NavItem[] = [
   { href: "/expedientes", labelKey: "records", permiso: "expedientes.leer", icon: "Users" },
   { href: "/academico/materias", labelKey: "academic", permiso: "academico.leer", icon: "GraduationCap" },
   { href: "/academico/cursos", labelKey: "courses", permiso: "academico.leer", icon: "BookOpen" },
-  { href: "/academico/historial", labelKey: "grades", roles: ["estudiante"], icon: "ClipboardList" },
+  { href: "/academico/historial", labelKey: "grades", roles: ["estudiante"], icon: "ClipboardCheck" },
   { href: "/cita-psicologia", labelKey: "psychologyPortal", roles: ["estudiante"], icon: "Heart" },
   // Notas de todos los estudiantes: `academico.leer` no basta — el rol
   // `estudiante` lo tiene para el catálogo. Ver la cabecera de la pantalla.

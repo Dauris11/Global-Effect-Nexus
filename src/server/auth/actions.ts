@@ -9,5 +9,5 @@ import { signOut } from "@/lib/auth";
 
 export async function cerrarSesion(locale: string): Promise<void> {
   await signOut();
-  redirect(`/${locale}/login`);
+  redirect(`/${locale}`);
 }

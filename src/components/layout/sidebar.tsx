@@ -13,7 +13,7 @@ export function Sidebar({ items }: { items: NavItem[] }) {
   return (
     <aside
       className={cn(
-        "flex flex-col items-center bg-[#1F3D2E]",
+        "flex flex-col items-center bg-[#0a6a8a]",
         "py-[22px] pb-[18px]",
         "w-[84px] h-screen sticky top-0 z-20",
         // En móvil se vuelve bottom bar (adaptación responsiva)
@@ -23,7 +23,7 @@ export function Sidebar({ items }: { items: NavItem[] }) {
     >
       {/* Logo mark: anillos concéntricos */}
       <svg 
-        className="w-10 h-10 mb-[30px] text-[#E7A73E] shrink-0 max-md:hidden" 
+        className="w-10 h-10 mb-[30px] text-white shrink-0 max-md:hidden" 
         viewBox="0 0 40 40" 
         fill="none" 
         aria-hidden="true"
@@ -41,7 +41,7 @@ export function Sidebar({ items }: { items: NavItem[] }) {
 
       <a 
         href="#" 
-        className="w-14 h-14 rounded-full bg-[#28503C] border border-white/15 flex items-center justify-center text-[#E7A73E] no-underline transition-transform hover:-translate-y-0.5 shrink-0 max-md:w-11 max-md:h-11" 
+        className="w-14 h-14 rounded-full bg-[#187a99] border border-white/15 flex items-center justify-center text-white no-underline transition-transform hover:-translate-y-0.5 shrink-0 max-md:w-11 max-md:h-11" 
         title="Soporte técnico"
       >
         <HelpCircle className="w-[22px] h-[22px] stroke-[1.6px]" />
