@@ -7,11 +7,12 @@
  */
 "use server";
 
+import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { resolverUsuario } from "@/lib/auth";
 import { rutaPorRol } from "@/lib/nav";
-import { MODO_DISENO, USUARIO_DISENO } from "@/lib/modo-diseno";
+import { MODO_DISENO, PERFILES_DISENO } from "@/lib/modo-diseno";
 
 export interface LoginState {
   error?: string;
@@ -24,7 +25,30 @@ export async function login(
   const locale = String(formData.get("locale") ?? "es");
 
   // En modo diseño no hay Supabase contra el que validar: se entra directo.
-  if (MODO_DISENO) redirect(`/${locale}${rutaPorRol(USUARIO_DISENO.rol)}`);
+  if (MODO_DISENO) {
+    const email = String(formData.get("email") ?? "").toLowerCase().trim();
+    let rol = "estudiante";
+    if (email.includes("psico") || email.includes("bienestar")) {
+      rol = "psicologo";
+    } else if (email.includes("docente") || email.includes("profesor")) {
+      rol = "docente";
+    } else if (email.includes("admin") || email.includes("coordinad")) {
+      rol = "administrativo";
+    } else if (email.includes("conta") || email.includes("finanz")) {
+      rol = "contabilidad";
+    } else if (email.includes("super")) {
+      rol = "super_admin";
+    }
+
+    try {
+      const cookieStore = await cookies();
+      cookieStore.set("modo_diseno_rol", rol, { path: "/" });
+    } catch {
+      // ignore
+    }
+
+    redirect(`/${locale}${rutaPorRol(rol)}`);
+  }
 
   const email = String(formData.get("email") ?? "").trim();
   const password = String(formData.get("password") ?? "");

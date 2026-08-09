@@ -6,9 +6,10 @@
  * `usuario.auth_user_id → auth.users.id` (ver migración 0014). Estas
  * funciones resuelven el usuario autenticado y su rol para el RBAC.
  */
+import { cookies } from "next/headers";
 import { createClient } from "./supabase/server";
 import { query } from "./db";
-import { MODO_DISENO, USUARIO_DISENO } from "./modo-diseno";
+import { MODO_DISENO, PERFILES_DISENO, USUARIO_DISENO } from "./modo-diseno";
 
 /** Perfil del usuario autenticado combinando Supabase Auth + tabla usuario. */
 export interface UsuarioActual {
@@ -40,7 +41,28 @@ export async function getAuthUser() {
  */
 export async function currentUser(): Promise<UsuarioActual | null> {
   // Atajo de diseño (solo con MODO_DISENO=1 fuera de producción).
-  if (MODO_DISENO) return { ...USUARIO_DISENO };
+  if (MODO_DISENO) {
+    let rol = "estudiante";
+    try {
+      const cookieStore = await cookies();
+      const rolCookie = cookieStore.get("modo_diseno_rol")?.value;
+      if (rolCookie && PERFILES_DISENO[rolCookie]) {
+        rol = rolCookie;
+      }
+    } catch {
+      // Ignorar si se invoca fuera de petición de servidor con cookies
+    }
+    const perfil = PERFILES_DISENO[rol] ?? USUARIO_DISENO;
+    return {
+      id: perfil.id,
+      authUserId: perfil.authUserId,
+      email: perfil.email,
+      nombre: perfil.nombre,
+      idioma: "es",
+      activo: true,
+      rol: perfil.rol,
+    };
+  }
 
   const authUser = await getAuthUser();
   if (!authUser) return null;

@@ -99,6 +99,14 @@ const getAccesos = (t: (key: string) => string): AccesoRapido[] => [
     textoEnlace: t("viewCatalog"),
   },
   {
+    href: "/portal/estudiante/prematricula",
+    icono: CheckCircle2,
+    titulo: "Prematrícula",
+    descripcion: "Selección de asignaturas para el nuevo ciclo académico",
+    azulejo: "bg-blue-500/10 text-blue-600 dark:bg-blue-500/20 dark:text-blue-400",
+    textoEnlace: "Prematricularme",
+  },
+  {
     href: "/academico/historial",
     icono: ClipboardList,
     titulo: t("gradesSubTitle"),
@@ -223,7 +231,7 @@ export default async function PortalEstudiantePage({
           </div>
         </div>
 
-        <AccesosRapidos accesos={getAccesos(t)} columnas="sm:grid-cols-3" />
+        <AccesosRapidos accesos={getAccesos(t)} columnas="sm:grid-cols-2 lg:grid-cols-4" />
 
         <CardLista titulo={t("subjectsTitle")} icono={BookOpen}>
           {materias.length === 0 ? (

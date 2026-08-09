@@ -9,6 +9,8 @@
 import { ChevronDown, LogOut } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { cerrarSesion } from "@/server/auth/actions";
+import { MODO_DISENO } from "@/lib/modo-diseno";
+import { SelectorRolDiseno } from "./selector-rol-diseno";
 import { MobileNav } from "./mobile-nav";
 import { ThemeToggle } from "./theme-toggle";
 import { SelectorIdioma } from "./selector-idioma";
@@ -84,8 +86,9 @@ export function TopBar({
         </div>
       </div>
 
-      {/* Derecha: Selector de Idioma, Tema y Usuario */}
+      {/* Derecha: Selector de Idioma, Selector de Rol (si modo diseño), Tema y Usuario */}
       <div className="flex items-center gap-3">
+        {MODO_DISENO && <SelectorRolDiseno rolActual={rol} locale={locale} />}
         <SelectorIdioma tone="light" />
         <ThemeToggle />
 

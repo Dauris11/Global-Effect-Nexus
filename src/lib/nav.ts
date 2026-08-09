@@ -199,8 +199,11 @@ const ADMIN_NAV: NavItem[] = [
 export const PORTAL_NAV_BY_ROLE: Record<string, NavItem[]> = {
   estudiante: [
     { href: "/portal/estudiante", labelKey: "studentPortal", icon: "Home" },
+    { href: "/portal/estudiante/aula-virtual", labelKey: "virtualClassroom", icon: "BookOpen" },
+    { href: "/portal/estudiante/prematricula", labelKey: "preenrollment", icon: "CheckCircle" },
     { href: "/academico/materias", labelKey: "mySubjects", icon: "GraduationCap" },
     { href: "/portal/estudiante/calificaciones", labelKey: "grades", icon: "ClipboardCheck" },
+    { href: "/portal/estudiante/calendario", labelKey: "calendar", icon: "Calendar" },
     { href: "/cita-psicologia", labelKey: "psychologyAppointment", icon: "Heart" },
   ],
   docente: [
@@ -225,7 +228,7 @@ export const PORTAL_NAV_BY_ROLE: Record<string, NavItem[]> = {
   super_admin: ADMIN_NAV,
   psicologo: [
     { href: "/portal/psicologia", labelKey: "psychologyPortal", icon: "Heart" },
-    { href: "/psicologia", labelKey: "appointments", icon: "Calendar" },
+    { href: "/psicologia", labelKey: "appointments", icon: "Brain" },
     { href: "/expedientes", labelKey: "records", icon: "Users" },
     { href: "/calendario", labelKey: "calendar", icon: "Calendar" },
   ],

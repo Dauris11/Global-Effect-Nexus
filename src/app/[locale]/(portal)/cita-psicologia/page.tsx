@@ -33,13 +33,9 @@ import { EmptyState } from "@/components/ui/empty-state";
 import { CardLista, ItemLista, EstadoVacio } from "@/components/portal/card-lista";
 import { SolicitarCitaForm } from "./solicitar";
 
-export const dynamic = "force-dynamic";
+import { CitaPsicologiaClient } from "./cita-psicologia-client";
 
-const ESTADO: Record<string, string> = {
-  programada: "bg-blue-100 text-blue-700",
-  completada: "bg-emerald-100 text-emerald-700",
-  cancelada: "bg-red-100 text-red-700",
-};
+export const dynamic = "force-dynamic";
 
 export default async function CitaPsicologiaPage({
   params,
@@ -64,52 +60,10 @@ export default async function CitaPsicologiaPage({
     );
   }
 
-  // Ambas resuelven el expediente desde la sesión, no desde la URL. Sin BD
-  // detrás, la pantalla sigue mostrando el formulario y la lista vacía.
   const [mias, psicologo] = await Promise.all([
     citasDeEstudiante().catch(() => [] as CitaDelEstudiante[]),
     miPsicologo().catch(() => null as PsicologoAsignado | null),
   ]);
 
-  return (
-    <div className="mx-auto w-full max-w-[1600px] space-y-6 p-4 md:p-6">
-      <PageHeader
-        eyebrow="Bienestar"
-        title="Cita de psicología"
-        description="Pide una cita confidencial. Solo tú y el equipo de psicología ven esta información."
-      />
-
-      <div className="grid gap-6 lg:grid-cols-2">
-        <SolicitarCitaForm
-          psicologo={psicologo}
-          fechasOcupadas={mias
-            .filter((c) => c.estado === "programada")
-            .map((c) => c.fecha)}
-        />
-
-        <CardLista titulo="Mis citas" icono={Heart}>
-          {mias.length === 0 ? (
-            <EstadoVacio mensaje="Todavía no has pedido ninguna cita." />
-          ) : (
-            mias.map((c) => (
-              <ItemLista
-                key={c.id}
-                icono={Heart}
-                azulejo="bg-rose-100 text-rose-600"
-                titulo={format(aFecha(c.fecha), "EEEE d 'de' MMMM", { locale: es })}
-                detalle={[c.hora ?? "Hora por confirmar", c.psicologo_nombre]
-                  .filter(Boolean)
-                  .join(" · ")}
-                derecha={
-                  <Badge className={`text-[10px] capitalize ${ESTADO[c.estado] ?? ""}`}>
-                    {c.estado}
-                  </Badge>
-                }
-              />
-            ))
-          )}
-        </CardLista>
-      </div>
-    </div>
-  );
+  return <CitaPsicologiaClient locale={locale} mias={mias} psicologo={psicologo} />;
 }
