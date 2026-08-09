@@ -6,8 +6,13 @@ import { Pool } from "pg";
  */
 const globalForPg = globalThis as unknown as { pool?: Pool };
 
+const connectionString =
+  process.env.DATABASE_URL && process.env.DATABASE_URL.trim().length > 0
+    ? process.env.DATABASE_URL
+    : "postgres://postgres:postgres@127.0.0.1:5432/global_effect";
+
 export const pool =
-  globalForPg.pool ?? new Pool({ connectionString: process.env.DATABASE_URL });
+  globalForPg.pool ?? new Pool({ connectionString });
 
 if (process.env.NODE_ENV !== "production") globalForPg.pool = pool;
 

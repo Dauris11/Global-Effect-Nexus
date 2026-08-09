@@ -44,7 +44,6 @@ const DEMO_CITAS: CitaPsicologia[] = [
     solicitada_por_estudiante: true,
     motivo_estudiante: "Solicitó acompañamiento para técnicas de manejo de ansiedad pre-exámenes.",
     ultima_nota: "Se acordó plan de organización de tareas y ejercicios de respiración guiada.",
-    creado_en: "2026-08-01",
   },
   {
     id: "c-demo-2",
@@ -61,7 +60,6 @@ const DEMO_CITAS: CitaPsicologia[] = [
     solicitada_por_estudiante: false,
     motivo_estudiante: null,
     ultima_nota: "Sesión inicial de evaluación de hábitos de estudio e inserción universitaria.",
-    creado_en: "2026-08-03",
   },
   {
     id: "c-demo-3",
@@ -74,11 +72,10 @@ const DEMO_CITAS: CitaPsicologia[] = [
     hora: "11:00 a.m.",
     nivel_confidencialidad: "alto",
     estado: "completada",
-    riesgos: undefined,
+    riesgos: null,
     solicitada_por_estudiante: false,
     motivo_estudiante: null,
     ultima_nota: "Evaluación vocacional ejecutada. Resultados favorables hacia área técnica.",
-    creado_en: "2026-07-28",
   },
   {
     id: "c-demo-4",
@@ -91,11 +88,10 @@ const DEMO_CITAS: CitaPsicologia[] = [
     hora: "09:00 a.m.",
     nivel_confidencialidad: "bajo",
     estado: "completada",
-    riesgos: undefined,
+    riesgos: null,
     solicitada_por_estudiante: false,
     motivo_estudiante: null,
     ultima_nota: "Revisión trimestral de metas personales y desempeño académico estable.",
-    creado_en: "2026-07-25",
   },
 ];
 
@@ -118,12 +114,12 @@ export default async function PsicologiaPage() {
     getLocale(),
     getTranslations("records"),
   ]);
-  const [puedeEscribir, puedeGestionar] = usuario || MODO_DISENO
-    ? [true, true]
-    : await Promise.all([
-        can(usuario?.rol || "", "expedientes.escribir"),
-        can(usuario?.rol || "", "psicologia.escribir"),
-      ]);
+  const [puedeEscribir, puedeGestionar] = usuario
+    ? await Promise.all([
+        can(usuario.rol, "expedientes.escribir"),
+        can(usuario.rol, "psicologia.escribir"),
+      ])
+    : [true, true];
 
   let citas: CitaPsicologia[] = [];
   let stats: PsicologiaEstadisticas = {

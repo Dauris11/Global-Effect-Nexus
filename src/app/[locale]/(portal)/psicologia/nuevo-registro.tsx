@@ -229,11 +229,21 @@ export function NuevoRegistro({
           </div>
 
           <div className="space-y-1.5">
+            <Label htmlFor="notas">Notas confidenciales</Label>
+            <Textarea
+              id="notas"
+              name="notas"
+              rows={2}
+              placeholder="Notas u observaciones confidenciales para el expediente del psicólogo..."
+            />
+          </div>
+
+          <div className="space-y-1.5">
             <Label htmlFor="riesgos">Riesgos detectados</Label>
             <Textarea
               id="riesgos"
               name="riesgos"
-              rows={3}
+              rows={2}
               placeholder="Deja vacío si no se detectó ninguno."
             />
           </div>
