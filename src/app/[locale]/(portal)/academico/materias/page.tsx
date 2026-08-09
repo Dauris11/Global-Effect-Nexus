@@ -158,9 +158,9 @@ export default async function MateriasPage({
     menu: t("rowActions.menu"),
     editar: t("rowActions.edit"),
     eliminar: t("rowActions.delete"),
-    confirmarTitulo: t("rowActions.confirmTitle"),
+    confirmarTitulo: t.raw("rowActions.confirmTitle"),
     confirmarTexto: t("subjects.deleteHint"),
-    enUsoTitulo: t("rowActions.inUseTitle"),
+    enUsoTitulo: t.raw("rowActions.inUseTitle"),
     enUsoTexto: t("subjects.inUseHint"),
     dependencias: {
       enrollments: t("rowActions.deps.enrollments"),

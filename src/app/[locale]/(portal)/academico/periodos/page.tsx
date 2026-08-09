@@ -132,9 +132,9 @@ export default async function PeriodosPage({
     menu: t("rowActions.menu"),
     editar: t("rowActions.edit"),
     eliminar: t("rowActions.delete"),
-    confirmarTitulo: t("rowActions.confirmTitle"),
+    confirmarTitulo: t.raw("rowActions.confirmTitle"),
     confirmarTexto: t("terms.deleteHint"),
-    enUsoTitulo: t("rowActions.inUseTitle"),
+    enUsoTitulo: t.raw("rowActions.inUseTitle"),
     enUsoTexto: t("terms.inUseHint"),
     dependencias: {
       enrollments: t("rowActions.deps.enrollments"),

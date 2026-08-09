@@ -183,9 +183,9 @@ export default async function CursosPage({
     menu: t("rowActions.menu"),
     editar: t("rowActions.edit"),
     eliminar: t("rowActions.delete"),
-    confirmarTitulo: t("rowActions.confirmTitle"),
+    confirmarTitulo: t.raw("rowActions.confirmTitle"),
     confirmarTexto: t("courses.deleteHint"),
-    enUsoTitulo: t("rowActions.inUseTitle"),
+    enUsoTitulo: t.raw("rowActions.inUseTitle"),
     enUsoTexto: t("courses.inUseHint"),
     dependencias: {
       enrollments: t("rowActions.deps.enrollments"),
