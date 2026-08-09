@@ -47,11 +47,11 @@ export default async function PortalLayout({
     >
       <Sidebar items={items} rol={user.rol} theme={theme} />
 
-      <div className="flex min-w-0 flex-1 flex-col">
-        <div className="mx-auto w-full max-w-[1600px] px-4 md:px-6">
+      <div className="flex min-w-0 flex-1 flex-col px-6 md:px-10">
+        <div className="mx-auto w-full max-w-[1600px]">
           <TopBar nombre={user.nombre} rol={user.rol} items={items} theme={theme} />
         </div>
-        <main className="flex-1 pb-16">{children}</main>
+        <main className="mx-auto w-full max-w-[1600px] flex-1 pb-16">{children}</main>
       </div>
     </div>
   );

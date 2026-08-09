@@ -1,0 +1,303 @@
+.container {
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: 24px;
+  width: 100%;
+  max-width: 1600px;
+  margin: 0 auto;
+  min-height: 100%;
+
+  --canvas-alt: #f1f5f9;
+  --ink: #0f172a;
+  --ink-soft: #64748b;
+  --line: #e2e8f0;
+  --primary-blue: #0a6a8a;
+  --primary-bright: #2096ba;
+  --primary-tint: #e6f4f8;
+  --blue-dark: #07526c;
+  --white: #ffffff;
+  --shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.08);
+  --shadow-md: 0 8px 24px rgba(15, 23, 42, 0.12);
+  --radius-md: 16px;
+  --radius-sm: 10px;
+}
+
+:global(.dark) .container {
+  --canvas-alt: rgba(255, 255, 255, 0.05);
+  --ink: #f8fafc;
+  --ink-soft: #94a3b8;
+  --line: rgba(255, 255, 255, 0.1);
+  --white: #18181c;
+  --primary-tint: rgba(32, 150, 186, 0.15);
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+.eyebrow {
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--primary-bright);
+  display: block;
+  margin-bottom: 6px;
+}
+
+.main {
+  padding: 8px 0 60px;
+  min-width: 0;
+}
+
+/* Page Head */
+.pageHead {
+  margin-bottom: 24px;
+}
+.pageHead h1 {
+  font-family: var(--font-sans, sans-serif);
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--ink);
+  margin: 0 0 6px;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+}
+.pageHead p {
+  font-size: 14px;
+  color: var(--ink-soft);
+  margin: 0;
+}
+
+/* Courses Grid */
+.mcGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+.mcCard {
+  background: var(--white);
+  border: 1.5px solid var(--line);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  transition: transform 0.16s ease, box-shadow 0.16s ease, border-color 0.16s ease;
+}
+.mcCard:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--primary-bright);
+}
+
+/* Card Banners */
+.mcBanner {
+  position: relative;
+  height: 90px;
+  overflow: hidden;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 14px 16px;
+  background: linear-gradient(135deg, var(--primary-blue) 0%, var(--blue-dark) 100%);
+}
+
+.mcBannerBlue2 {
+  background: linear-gradient(135deg, #0284c7 0%, var(--primary-blue) 100%);
+}
+
+.mcBannerSky {
+  background: linear-gradient(135deg, var(--primary-bright) 0%, #0284c7 100%);
+}
+
+.mcBannerSlate {
+  background: linear-gradient(135deg, #475569 0%, #334155 100%);
+}
+
+.mcRings {
+  position: absolute;
+  right: -25px;
+  top: -25px;
+  width: 130px;
+  height: 130px;
+  opacity: 0.45;
+  pointer-events: none;
+}
+
+.mcCode {
+  position: relative;
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
+  font-size: 10.5px;
+  font-weight: 700;
+  color: #ffffff;
+  background: rgba(0, 0, 0, 0.25);
+  padding: 4px 10px;
+  border-radius: 6px;
+  backdrop-filter: blur(4px);
+}
+
+.mcSectionTag {
+  position: relative;
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
+  font-size: 10.5px;
+  font-weight: 700;
+  color: #ffffff;
+  background: rgba(0, 0, 0, 0.25);
+  padding: 4px 10px;
+  border-radius: 6px;
+  backdrop-filter: blur(4px);
+}
+
+/* Card Body */
+.mcBody {
+  padding: 18px 20px;
+}
+.mcBody h3 {
+  font-family: var(--font-sans, sans-serif);
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--ink);
+  margin: 0 0 4px;
+}
+.mcBody .meta {
+  font-size: 12px;
+  color: var(--ink-soft);
+  margin-bottom: 16px;
+  display: block;
+}
+
+.mcStats {
+  display: flex;
+  gap: 24px;
+}
+.mcStats div {
+  display: flex;
+  flex-direction: column;
+}
+.mcStats strong {
+  font-family: var(--font-sans, sans-serif);
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1.1;
+}
+.mcStats span {
+  font-size: 10px;
+  color: var(--ink-soft);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-weight: 600;
+  margin-top: 2px;
+}
+
+.mcFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px dashed var(--line);
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--primary-blue);
+}
+.mcFooter svg {
+  width: 15px;
+  height: 15px;
+  transition: transform 0.16s ease;
+}
+.mcCard:hover .mcFooter svg {
+  transform: translateX(3px);
+}
+
+/* Side Column */
+.side {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.sideCard {
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  padding: 20px;
+  box-shadow: var(--shadow-sm);
+}
+.sideHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+.sideHead strong {
+  font-family: var(--font-sans, sans-serif);
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.summaryRow {
+  display: flex;
+  justify-content: space-between;
+  padding: 9px 0;
+  border-bottom: 1px dashed var(--line);
+  font-size: 12.5px;
+}
+.summaryRow:last-of-type {
+  border-bottom: none;
+}
+.summaryRow span:first-child {
+  color: var(--ink-soft);
+}
+.summaryRow span:last-child {
+  font-weight: 700;
+  color: var(--ink);
+  text-align: right;
+}
+
+.ctaBtn {
+  display: block;
+  width: 100%;
+  margin-top: 14px;
+  background: var(--primary-blue);
+  color: #ffffff;
+  border: none;
+  font-weight: 700;
+  font-size: 13px;
+  padding: 11px 18px;
+  border-radius: 999px;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  transition: all 0.16s ease;
+  box-shadow: 0 4px 12px rgba(10, 106, 138, 0.2);
+}
+.ctaBtn:hover {
+  background: var(--primary-bright);
+  transform: translateY(-1px);
+}
+
+/* Responsiveness */
+@media (max-width: 1140px) {
+  .container {
+    grid-template-columns: 1fr;
+  }
+  .side {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+  .sideCard {
+    flex: 1 1 260px;
+  }
+}
+@media (max-width: 900px) {
+  .mcGrid {
+    grid-template-columns: 1fr;
+  }
+}
+@media (max-width: 760px) {
+  .side {
+    flex-direction: column;
+  }
+}

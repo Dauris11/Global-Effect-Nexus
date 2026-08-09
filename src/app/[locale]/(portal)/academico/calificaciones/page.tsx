@@ -94,6 +94,9 @@ async function cargar(buscar: string | undefined, puedeRegistrar: boolean) {
   }
 }
 
+import { DocenteCalificacionesClient } from "./docente-calificaciones-client";
+import { MODO_DISENO } from "@/lib/modo-diseno";
+
 export default async function CalificacionesPage({
   params,
   searchParams,
@@ -105,6 +108,10 @@ export default async function CalificacionesPage({
   const { q: qBruto } = await searchParams;
   const user = await currentUser();
   if (!user) redirect(`/${locale}/login`);
+
+  if (user.rol === "docente" || MODO_DISENO) {
+    return <DocenteCalificacionesClient locale={locale} nombreProfesor={user.nombre} />;
+  }
 
   const [puedeRegistrar, lleveExpedientes, t] = await Promise.all([
     can(user.rol, "calificaciones.registrar"),

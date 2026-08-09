@@ -2,9 +2,7 @@
 
 import React, { useState, useTransition } from "react";
 import styles from "./cita-psicologia.module.css";
-import { format } from "date-fns";
-import { es } from "date-fns/locale";
-import { Heart, MapPin, Video, Check, Loader2, Sparkles } from "lucide-react";
+import { Check, Loader2, Sparkles } from "lucide-react";
 import { solicitarCita } from "@/server/psicologia/actions";
 import type { CitaDelEstudiante, PsicologoAsignado } from "@/server/psicologia/types";
 
@@ -38,12 +36,12 @@ export function CitaPsicologiaClient({
   ];
 
   const times = [
-    { label: "09:00 a.m.", taken: false },
+    { label: "9:00 a.m.", taken: true },
     { label: "10:00 a.m.", taken: false },
     { label: "11:00 a.m.", taken: false },
-    { label: "01:00 p.m.", taken: false },
-    { label: "02:00 p.m.", taken: false },
-    { label: "03:00 p.m.", taken: false },
+    { label: "1:00 p.m.", taken: false },
+    { label: "2:00 p.m.", taken: true },
+    { label: "3:00 p.m.", taken: false },
   ];
 
   const handleConfirm = () => {
@@ -63,15 +61,31 @@ export function CitaPsicologiaClient({
     });
   };
 
+  const nombreConsejero = psicologo?.nombre
+    ? psicologo.nombre
+    : counselor === "MG"
+    ? "Lcda. Mariela Guzmán"
+    : "Lic. Rafael Tavárez";
+
   return (
     <div className={styles.container}>
       <main className={styles.main}>
+        {/* Trust Banner */}
         <div className={styles.trustBanner}>
           <div className={styles.ic}>
-            <Heart />
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="1.7"
+            >
+              <path d="M12 2l8 4v6c0 5-3.5 8-8 10-4.5-2-8-5-8-10V6l8-4z" />
+            </svg>
           </div>
           <div>
-            <strong>Este espacio es privado y confidencial</strong>
+            <strong>Este espacio es privado</strong>
             <p>
               Tu cita y lo que converses con el equipo de psicología no aparecen en tu expediente
               académico ni son visibles para profesores o administración. Solo tú y tu consejero/a
@@ -80,9 +94,10 @@ export function CitaPsicologiaClient({
           </div>
         </div>
 
+        {/* Page Head */}
         <div className={styles.pageHead}>
-          <span className={styles.eyebrow}>Bienestar Estudiantil</span>
-          <h1>Agenda tu cita de psicología</h1>
+          <span className={styles.eyebrow}>Portal de Psicología</span>
+          <h1>Agenda tu cita</h1>
           <p>Elige cómo, con quién y cuándo te gustaría conversar.</p>
         </div>
 
@@ -90,11 +105,11 @@ export function CitaPsicologiaClient({
           <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-6 text-emerald-900 dark:bg-emerald-950/40 dark:border-emerald-800 dark:text-emerald-200 space-y-3">
             <div className="flex items-center gap-2 text-lg font-bold text-emerald-700 dark:text-emerald-300">
               <Sparkles className="h-5 w-5" />
-              ¡Tu cita ha sido solicitada con éxito!
+              ¡Tu cita ha sido agendada con éxito!
             </div>
             <p className="text-sm">
               Hemos registrado tu solicitud para el <strong>{fecha}</strong> a las{" "}
-              <strong>{time}</strong> ({modality}). El profesional asignado confirmará tu horario a la brevedad.
+              <strong>{time}</strong> ({modality}). Tu consejero/a confirmará tu horario a la brevedad.
             </p>
             <button
               onClick={() => setEnviado(false)}
@@ -105,6 +120,7 @@ export function CitaPsicologiaClient({
           </div>
         ) : (
           <>
+            {/* Step 1 */}
             <div className={styles.stepSection}>
               <div className={styles.stepLabel}>
                 <span className={styles.stepNum}>1</span>
@@ -112,20 +128,43 @@ export function CitaPsicologiaClient({
               </div>
               <div className={styles.modalityRow}>
                 <div
-                  className={`${styles.modalityCard} ${modality === "presencial" ? styles.selected : ""}`}
+                  className={`${styles.modalityCard} ${
+                    modality === "presencial" ? styles.selected : ""
+                  }`}
                   onClick={() => setModality("presencial")}
                 >
-                  <MapPin />
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="M3 21h18" />
+                    <path d="M5 21V7l7-4 7 4v14" />
+                    <path d="M9 21v-6h6v6" />
+                  </svg>
                   <div>
                     <strong>Presencial</strong>
                     <span>Oficina de Bienestar Estudiantil</span>
                   </div>
                 </div>
                 <div
-                  className={`${styles.modalityCard} ${modality === "virtual" ? styles.selected : ""}`}
+                  className={`${styles.modalityCard} ${
+                    modality === "virtual" ? styles.selected : ""
+                  }`}
                   onClick={() => setModality("virtual")}
                 >
-                  <Video />
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="M15 10l5-3v10l-5-3" />
+                    <rect x="3" y="6" width="12" height="12" rx="2" />
+                  </svg>
                   <div>
                     <strong>Virtual</strong>
                     <span>Videollamada, enlace por correo</span>
@@ -134,6 +173,7 @@ export function CitaPsicologiaClient({
               </div>
             </div>
 
+            {/* Step 2 */}
             <div className={styles.stepSection}>
               <div className={styles.stepLabel}>
                 <span className={styles.stepNum}>2</span>
@@ -143,7 +183,9 @@ export function CitaPsicologiaClient({
                 {motivos.map((m) => (
                   <span
                     key={m}
-                    className={`${styles.motivoChip} ${motivo === m ? styles.selected : ""}`}
+                    className={`${styles.motivoChip} ${
+                      motivo === m ? styles.selected : ""
+                    }`}
                     onClick={() => setMotivo(m)}
                   >
                     {m}
@@ -152,6 +194,7 @@ export function CitaPsicologiaClient({
               </div>
             </div>
 
+            {/* Step 3 */}
             <div className={styles.stepSection}>
               <div className={styles.stepLabel}>
                 <span className={styles.stepNum}>3</span>
@@ -171,14 +214,26 @@ export function CitaPsicologiaClient({
                       <strong>{psicologo.nombre}</strong>
                       <span>Tu profesional de psicología asignado/a</span>
                     </div>
+                    <span className={styles.cNext}>Próximo cupo: mañana</span>
                     <div className={styles.cPick}>
-                      <Check />
+                      <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2.5"
+                      >
+                        <path d="M20 6L9 17l-5-5" />
+                      </svg>
                     </div>
                   </div>
                 ) : (
                   <>
                     <div
-                      className={`${styles.counselorCard} ${counselor === "MG" ? styles.selected : ""}`}
+                      className={`${styles.counselorCard} ${
+                        counselor === "MG" ? styles.selected : ""
+                      }`}
                       onClick={() => setCounselor("MG")}
                     >
                       <div className={styles.cAvatar}>MG</div>
@@ -186,12 +241,24 @@ export function CitaPsicologiaClient({
                         <strong>Lcda. Mariela Guzmán</strong>
                         <span>Psicología clínica · Ansiedad y estrés académico</span>
                       </div>
+                      <span className={styles.cNext}>Próximo cupo: mañana</span>
                       <div className={styles.cPick}>
-                        <Check />
+                        <svg
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2.5"
+                        >
+                          <path d="M20 6L9 17l-5-5" />
+                        </svg>
                       </div>
                     </div>
                     <div
-                      className={`${styles.counselorCard} ${counselor === "RT" ? styles.selected : ""}`}
+                      className={`${styles.counselorCard} ${
+                        counselor === "RT" ? styles.selected : ""
+                      }`}
                       onClick={() => setCounselor("RT")}
                     >
                       <div className={styles.cAvatar}>RT</div>
@@ -199,8 +266,18 @@ export function CitaPsicologiaClient({
                         <strong>Lic. Rafael Tavárez</strong>
                         <span>Orientación vocacional · Relaciones interpersonales</span>
                       </div>
+                      <span className={styles.cNext}>Próximo cupo: jue 13</span>
                       <div className={styles.cPick}>
-                        <Check />
+                        <svg
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2.5"
+                        >
+                          <path d="M20 6L9 17l-5-5" />
+                        </svg>
                       </div>
                     </div>
                   </>
@@ -208,15 +285,16 @@ export function CitaPsicologiaClient({
               </div>
             </div>
 
+            {/* Step 4 */}
             <div className={styles.stepSection} style={{ marginBottom: 0 }}>
               <div className={styles.stepLabel}>
                 <span className={styles.stepNum}>4</span>
                 <strong>Elige fecha y hora</strong>
               </div>
               <div className={styles.panel} style={{ padding: "20px 22px" }}>
-                <div className="mb-4">
+                <div className="mb-3">
                   <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
-                    Fecha de la cita:
+                    Fecha seleccionada:
                   </label>
                   <input
                     type="date"
@@ -230,19 +308,25 @@ export function CitaPsicologiaClient({
                   {times.map((t) => (
                     <span
                       key={t.label}
-                      className={`${styles.timeChip} ${time === t.label ? styles.selected : ""} ${t.taken ? styles.taken : ""}`}
+                      className={`${styles.timeChip} ${
+                        time === t.label ? styles.selected : ""
+                      } ${t.taken ? styles.taken : ""}`}
                       onClick={() => !t.taken && setTime(t.label)}
                     >
                       {t.label}
                     </span>
                   ))}
                 </div>
+                <p style={{ fontSize: "11.5px", color: "var(--ink-soft)", margin: "12px 0 0" }}>
+                  Mostrando disponibilidad de {nombreConsejero} para {fecha}.
+                </p>
               </div>
             </div>
           </>
         )}
       </main>
 
+      {/* Side Aside Column */}
       <aside className={styles.side}>
         <div className={styles.sideCard}>
           <div className={styles.sideHead}>
@@ -257,11 +341,8 @@ export function CitaPsicologiaClient({
             <span>{motivo}</span>
           </div>
           <div className={styles.summaryRow}>
-            <span>Consejero/a</span>
-            <span>
-              {psicologo?.nombre ??
-                (counselor === "MG" ? "Lcda. Mariela Guzmán" : "Lic. Rafael Tavárez")}
-            </span>
+            <span>Consejera</span>
+            <span>{nombreConsejero}</span>
           </div>
           <div className={styles.summaryRow}>
             <span>Fecha</span>
@@ -284,7 +365,16 @@ export function CitaPsicologiaClient({
             {isPending ? (
               <Loader2 className="h-4 w-4 animate-spin" />
             ) : (
-              <Check className="h-4 w-4" />
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2.5"
+              >
+                <path d="M20 6L9 17l-5-5" />
+              </svg>
             )}
             {isPending ? "Agendando..." : "Confirmar cita"}
           </button>
@@ -292,10 +382,31 @@ export function CitaPsicologiaClient({
 
         <div className={styles.sideCard}>
           <div className={styles.sideHead}>
-            <strong>Tus citas registradas</strong>
+            <strong>Tus citas anteriores</strong>
           </div>
           {mias.length === 0 ? (
-            <p className="text-xs text-slate-500 py-2">Todavía no has agendado citas.</p>
+            <>
+              <div className={styles.pastItem}>
+                <div className={styles.dlDate}>
+                  <span className={styles.d}>14</span>
+                  <span className={styles.m}>Jul</span>
+                </div>
+                <div>
+                  <strong>Sesión con Lcda. Guzmán</strong>
+                  <span>Completada · notas privadas</span>
+                </div>
+              </div>
+              <div className={styles.pastItem}>
+                <div className={styles.dlDate}>
+                  <span className={styles.d}>02</span>
+                  <span className={styles.m}>Jun</span>
+                </div>
+                <div>
+                  <strong>Sesión con Lcda. Guzmán</strong>
+                  <span>Completada · notas privadas</span>
+                </div>
+              </div>
+            </>
           ) : (
             mias.map((c) => (
               <div key={c.id} className={styles.pastItem}>
@@ -327,4 +438,3 @@ export function CitaPsicologiaClient({
     </div>
   );
 }
-

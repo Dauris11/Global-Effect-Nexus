@@ -53,14 +53,13 @@ export default async function LocaleLayout({
       suppressHydrationWarning
       className={inter.variable}
     >
-      <head>
+      <head />
+      <body>
         <script
           dangerouslySetInnerHTML={{
             __html: `(function(){try{if(localStorage.getItem("theme")==="dark" || (!("theme" in localStorage) && window.matchMedia("(prefers-color-scheme: dark)").matches)){document.documentElement.classList.add("dark");}else{document.documentElement.classList.remove("dark");}}catch(_){}})();`,
           }}
         />
-      </head>
-      <body>
         <NextIntlClientProvider messages={messages}>
           {children}
         </NextIntlClientProvider>

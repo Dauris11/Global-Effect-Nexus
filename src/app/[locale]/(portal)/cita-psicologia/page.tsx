@@ -35,6 +35,8 @@ import { SolicitarCitaForm } from "./solicitar";
 
 import { CitaPsicologiaClient } from "./cita-psicologia-client";
 
+import { MODO_DISENO, USUARIO_DISENO } from "@/lib/modo-diseno";
+
 export const dynamic = "force-dynamic";
 
 export default async function CitaPsicologiaPage({
@@ -46,9 +48,11 @@ export default async function CitaPsicologiaPage({
   const user = await currentUser();
   if (!user) redirect(`/${locale}/login`);
 
-  const estudiante = await estudianteDelUsuario(user.id).catch(() => null);
+  const estudiante = MODO_DISENO
+    ? { id: USUARIO_DISENO.id }
+    : await estudianteDelUsuario(user.id).catch(() => null);
 
-  if (!estudiante) {
+  if (!estudiante && !MODO_DISENO) {
     return (
       <div className="space-y-6 p-4 md:p-6">
         <EmptyState

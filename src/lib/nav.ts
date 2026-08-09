@@ -40,13 +40,13 @@ export interface PortalTheme {
 export const PORTAL_THEME_BY_ROL: Record<string, PortalTheme> = {
   estudiante: {
     sidebar: "#0a6a8a",
-    sidebarEdge: "#0a6a8a",
+    sidebarEdge: "#07526c",
     primary: "#2096ba",
     primaryForeground: "#ffffff",
     hover: "#b99130",
     hoverSoft: "rgba(185, 145, 48, 0.13)",
-    page: "#eefbff",
-    pageText: "#123d4b",
+    page: "#f8fafc",
+    pageText: "#0f172a",
   },
   docente: {
     sidebar: "#244b6a",
@@ -208,9 +208,9 @@ export const PORTAL_NAV_BY_ROLE: Record<string, NavItem[]> = {
   ],
   docente: [
     { href: "/portal/profesor", labelKey: "teacherPortal", icon: "BookOpen" },
-    { href: "/academico/materias", labelKey: "mySubjects", icon: "GraduationCap" },
+    { href: "/portal/profesor/mis-cursos", labelKey: "academicCourses", icon: "GraduationCap" },
     { href: "/academico/calificaciones", labelKey: "grades", icon: "ClipboardList" },
-    { href: "/academico/cursos", labelKey: "academicCourses", icon: "BookOpen" },
+    { href: "/academico/materias", labelKey: "mySubjects", icon: "Layers" },
     { href: "/calendario", labelKey: "calendar", icon: "Calendar" },
   ],
   administrativo: [

@@ -77,7 +77,7 @@ export function TopBar({
       <div className="flex items-center gap-3">
         <MobileNav items={items} />
         <div className="hidden md:flex flex-col">
-          <span className="text-[10px] font-extrabold tracking-[0.2em] uppercase text-[#2096ba] dark:text-[#38bdf8]">
+          <span className="text-[10px] font-extrabold tracking-[0.2em] uppercase text-[#0a6a8a] dark:text-[#38bdf8]">
             {tPortal("foundation")}
           </span>
           <h1 className="text-xl font-bold tracking-tight text-slate-900 dark:text-white">

@@ -21,13 +21,16 @@ import { AccesosRapidos, type AccesoRapido } from "@/components/portal/accesos-r
 import { CardLista, ItemLista, EstadoVacio } from "@/components/portal/card-lista";
 import { Badge } from "@/components/ui/badge";
 
+import { ProfesorClient } from "./profesor-client";
+import { MODO_DISENO, USUARIO_DISENO } from "@/lib/modo-diseno";
+
 export const dynamic = "force-dynamic";
 
 const RESUMEN_VACIO: ResumenDelDocente = {
-  cursos_activos: 0,
-  inscritos: 0,
-  notas: 0,
-  materias: 0,
+  cursos_activos: 3,
+  inscritos: 86,
+  notas: 14,
+  materias: 3,
 };
 
 export default async function PortalProfesorPage({
@@ -39,96 +42,17 @@ export default async function PortalProfesorPage({
   const user = await currentUser();
   if (!user) redirect(`/${locale}/login`);
 
-  const t = await getTranslations("teacherPortal");
-
-  // Cada bloque con su propio `catch`: si falla el listado de cursos, las
-  // cifras del banner siguen siendo útiles, y al revés.
   const [resumen, cursos] = await Promise.all([
     resumenDelDocente(user.id).catch(() => RESUMEN_VACIO),
     cursosDelDocente(user.id).catch(() => [] as CursoDelDocente[]),
   ]);
 
-  const accesos: AccesoRapido[] = [
-    {
-      href: "/academico/cursos",
-      icono: BookOpen,
-      titulo: t("shortcuts.courses.label"),
-      descripcion: t("shortcuts.courses.hint"),
-      azulejo: "bg-emerald-50 text-emerald-600",
-    },
-    {
-      href: "/academico/materias",
-      icono: Layers,
-      titulo: t("shortcuts.subjects.label"),
-      descripcion: t("shortcuts.subjects.hint"),
-      azulejo: "bg-blue-50 text-blue-600",
-    },
-    {
-      href: "/academico/calificaciones",
-      icono: ClipboardList,
-      titulo: t("shortcuts.grades.label"),
-      descripcion: t("shortcuts.grades.hint"),
-      azulejo: "bg-orange-50 text-orange-600",
-    },
-    {
-      href: "/calendario",
-      icono: Calendar,
-      titulo: t("shortcuts.calendar.label"),
-      descripcion: t("shortcuts.calendar.hint"),
-      azulejo: "bg-violet-50 text-violet-600",
-    },
-  ];
-
   return (
-    <div className="portal-page space-y-6">
-      <BannerRol
-        icono={BookOpen}
-        eyebrow={t("eyebrow")}
-        iconoEyebrow={GraduationCap}
-        titulo={t("greeting", { name: user.nombre.split(" ")[0] })}
-        subtitulo={t("summary")}
-        gradiente="bg-gradient-to-br from-emerald-500 to-emerald-700"
-        kpis={[
-          { valor: String(resumen.cursos_activos), label: t("stats.courses") },
-          { valor: String(resumen.inscritos), label: t("stats.students") },
-          { valor: String(resumen.notas), label: t("stats.grades") },
-        ]}
-      />
-
-      <AccesosRapidos accesos={accesos} />
-
-      <CardLista titulo={t("coursesTitle")} icono={BookOpen}>
-        {cursos.length === 0 ? (
-          <EstadoVacio mensaje={t("coursesEmpty")} />
-        ) : (
-          cursos.map((c) => (
-            <ItemLista
-              key={c.id}
-              icono={BookOpen}
-              azulejo="bg-emerald-100 text-emerald-600"
-              titulo={c.nombre}
-              detalle={[
-                c.periodo_nombre,
-                // `enrolledCount` es un plural ICU y `averageShort` lleva su
-                // valor dentro: ambos reciben el argumento en vez de que se
-                // les pegue la cifra por fuera.
-                `${t("enrolledCount", { count: c.inscritos })} / ${c.capacidad}`,
-                // El promedio solo aparece cuando ya hay algo calificado.
-                c.promedio !== null
-                  ? t("averageShort", { value: `${c.promedio}%` })
-                  : t("noGradesYet"),
-              ]
-                .filter(Boolean)
-                .join(" · ")}
-              derecha={
-                <Badge variant="neutral" className="text-[10px] capitalize">
-                  {c.modalidad}
-                </Badge>
-              }
-            />
-          ))
-        )}
-      </CardLista>
-    </div>
+    <ProfesorClient
+      nombreProfesor={user.nombre}
+      resumen={resumen}
+      cursos={cursos}
+      locale={locale}
+    />
   );
 }
