@@ -62,7 +62,7 @@ export default async function PortalPsicologiaPage() {
   const proximas = citas.slice(0, 6);
 
   return (
-    <div className="space-y-6 p-4 md:p-6">
+    <div className="portal-page space-y-6">
       <BannerRol
         icono={Heart}
         titulo="Portal de Psicología"

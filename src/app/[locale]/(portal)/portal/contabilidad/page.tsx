@@ -56,7 +56,7 @@ export default async function PortalContabilidadPage() {
   const ultimas = transacciones.slice(0, 6);
 
   return (
-    <div className="space-y-6 p-4 md:p-6">
+    <div className="portal-page space-y-6">
       <BannerRol
         icono={DollarSign}
         titulo="Portal de Contabilidad"

@@ -43,8 +43,8 @@ export interface NavItem {
  * panel es la portada correcta.
  */
 const HOME_POR_ROL: Record<string, string> = {
-  super_admin: "/dashboard",
-  admin: "/dashboard",
+  super_admin: "/portal/administrativo",
+  admin: "/portal/administrativo",
   docente: "/portal/profesor",
   estudiante: "/portal/estudiante",
   // Psicología y Contabilidad ya tienen portal propio, así que aterrizan ahí
@@ -119,6 +119,15 @@ export const PORTAL_NAV_BY_ROLE: Record<string, NavItem[]> = {
     },
   ],
   admin: [
+    {
+      href: "/portal/administrativo",
+      labelKey: "adminPortal",
+      roles: ["admin", "super_admin"],
+      icon: "ClipboardList",
+    },
+    { href: "/dashboard", labelKey: "dashboard", roles: ["super_admin", "admin"], icon: "LayoutGrid" },
+  ],
+  super_admin: [
     {
       href: "/portal/administrativo",
       labelKey: "adminPortal",

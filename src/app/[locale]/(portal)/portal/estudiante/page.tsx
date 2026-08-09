@@ -174,7 +174,7 @@ export default async function PortalEstudiantePage({
   const { resumen, materias, cuatrimestres, condicion, eventos, asignaciones } = await cargar(estudiante.id);
 
   return (
-    <div className="mx-auto flex w-full max-w-[1600px] flex-col gap-6 p-4 md:p-6 lg:flex-row lg:gap-8 items-start">
+    <div className="portal-page mx-auto flex w-full max-w-[1600px] flex-col gap-6 lg:flex-row lg:gap-8 items-start">
       {/* Columna Izquierda (Principal) */}
       <div className="min-w-0 flex-1 space-y-6">
         {/* Hero Banner (Eventos/Anuncios) */}

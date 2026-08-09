@@ -52,7 +52,7 @@ export function ItemLista({
   derecha?: React.ReactNode;
 }) {
   return (
-    <div className="flex items-center gap-3 rounded-lg bg-muted/40 p-3">
+    <div className="flex items-start gap-3 rounded-xl border border-transparent bg-muted/40 p-3">
       <span
         aria-hidden
         className={cn("flex h-9 w-9 shrink-0 items-center justify-center rounded-lg", azulejo)}
@@ -60,12 +60,12 @@ export function ItemLista({
         <Icono className="h-4 w-4" />
       </span>
 
-      <div className="min-w-0 flex-1">
-        <p className="truncate text-sm font-medium">{titulo}</p>
-        {detalle && <p className="truncate text-xs text-muted-foreground">{detalle}</p>}
+      <div className="min-w-0 flex-1 space-y-1">
+        <p className="portal-text line-clamp-2 text-sm font-medium leading-5">{titulo}</p>
+        {detalle && <p className="portal-text line-clamp-2 text-xs leading-4 text-muted-foreground">{detalle}</p>}
       </div>
 
-      {derecha && <div className="shrink-0">{derecha}</div>}
+      {derecha && <div className="shrink-0 self-center">{derecha}</div>}
     </div>
   );
 }
