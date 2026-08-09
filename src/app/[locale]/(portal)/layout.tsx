@@ -7,7 +7,7 @@
 import { redirect } from "next/navigation";
 import { currentUser } from "@/lib/auth";
 import { permisosDeRol } from "@/lib/rbac";
-import { portalNavPorRol } from "@/lib/nav";
+import { filtrarNav, portalNavPorRol, portalThemePorRol } from "@/lib/nav";
 import { Sidebar } from "@/components/layout/sidebar";
 import { TopBar } from "@/components/layout/topbar";
 
@@ -25,21 +25,31 @@ export default async function PortalLayout({
   // Los portales ya no se construyen con el menú del sistema. Cada rol obtiene
   // su colección de enlaces y el layout se ambienta a esa navegación.
   const permisos = user.rol === "super_admin" ? null : await permisosDeRol(user.rol);
-  const items = portalNavPorRol(user.rol).filter((i) => {
-    if (i.roles && !i.roles.includes(user.rol)) return false;
-    if (permisos === null) return true;
-    if (i.permiso && !permisos.includes(i.permiso)) return false;
-    if (i.permisos && !i.permisos.some((p) => permisos.includes(p))) return false;
-    return true;
-  });
+  const items = filtrarNav(portalNavPorRol(user.rol), user.rol, permisos);
+
+  const theme = portalThemePorRol(user.rol);
 
   return (
-    <div className="flex min-h-screen bg-slate-50 dark:bg-[#101322] transition-colors duration-300 font-inter">
-      <Sidebar items={items} />
+    <div
+      className="flex min-h-screen bg-slate-50 dark:bg-[#101322] transition-colors duration-300 font-inter"
+      style={
+        {
+          "--portal-sidebar": theme.sidebar,
+          "--portal-sidebar-edge": theme.sidebarEdge,
+          "--portal-primary": theme.primary,
+          "--portal-primary-foreground": theme.primaryForeground,
+          "--portal-hover": theme.hover,
+          "--portal-hover-soft": theme.hoverSoft,
+          "--portal-page": theme.page,
+          "--portal-page-text": theme.pageText,
+        } as React.CSSProperties
+      }
+    >
+      <Sidebar items={items} rol={user.rol} theme={theme} />
 
       <div className="flex min-w-0 flex-1 flex-col">
         <div className="mx-auto w-full max-w-[1600px] px-4 md:px-6">
-          <TopBar nombre={user.nombre} rol={user.rol} items={items} />
+          <TopBar nombre={user.nombre} rol={user.rol} items={items} theme={theme} />
         </div>
         <main className="flex-1 pb-16">{children}</main>
       </div>

@@ -6,19 +6,26 @@
  */
 import { cn } from "@/lib/utils";
 import { NavList } from "./nav-list";
-import type { NavItem } from "@/lib/nav";
+import type { NavItem, PortalTheme } from "@/lib/nav";
 import { HelpCircle } from "lucide-react";
 
-export function Sidebar({ items }: { items: NavItem[] }) {
+export function Sidebar({ items, rol, theme }: { items: NavItem[]; rol: string; theme: PortalTheme }) {
   return (
     <aside
       className={cn(
-        "flex flex-col items-center bg-[#0a6a8a]",
+        "flex flex-col items-center",
         "py-[22px] pb-[18px]",
         "w-[84px] h-screen sticky top-0 z-20",
         // En móvil se vuelve bottom bar (adaptación responsiva)
         "max-md:fixed max-md:bottom-0 max-md:top-auto max-md:left-0 max-md:right-0 max-md:h-auto max-md:w-full max-md:flex-row max-md:px-2.5 max-md:py-2.5 max-md:shadow-[0_-6px_20px_rgba(0,0,0,0.15)] max-md:justify-around"
       )}
+      style={{
+        backgroundColor: theme.sidebar,
+        borderColor: theme.sidebarEdge,
+        "--portal-primary": theme.primary,
+        "--portal-hover": theme.hover,
+        "--portal-hover-soft": theme.hoverSoft,
+      } as React.CSSProperties}
       aria-label="Navegación principal"
     >
       {/* Logo mark: anillos concéntricos */}
@@ -41,7 +48,8 @@ export function Sidebar({ items }: { items: NavItem[] }) {
 
       <a 
         href="#" 
-        className="w-14 h-14 rounded-full bg-[#187a99] border border-white/15 flex items-center justify-center text-white no-underline transition-transform hover:-translate-y-0.5 shrink-0 max-md:w-11 max-md:h-11" 
+        className="w-14 h-14 rounded-full border border-white/15 flex items-center justify-center text-white no-underline transition-transform hover:-translate-y-0.5 shrink-0 max-md:w-11 max-md:h-11"
+        style={{ backgroundColor: theme.sidebarEdge }}
         title="Soporte técnico"
       >
         <HelpCircle className="w-[22px] h-[22px] stroke-[1.6px]" />

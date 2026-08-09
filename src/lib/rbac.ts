@@ -9,14 +9,16 @@
 import { pool } from "./db";
 import { currentUser, type UsuarioActual } from "./auth";
 import { MODO_DISENO } from "./modo-diseno";
-import { NAV_ITEMS } from "./nav";
+import { hojasNav, NAV_ITEMS } from "./nav";
 
 /**
  * Todos los códigos de permiso declarados en la navegación. Solo se usa en
  * modo diseño, donde no hay BD que consultar y el menú debe verse completo.
  */
 const PERMISOS_DE_DISENO = Array.from(
-  new Set(NAV_ITEMS.flatMap((i) => [...(i.permiso ? [i.permiso] : []), ...(i.permisos ?? [])])),
+  new Set(
+    hojasNav(NAV_ITEMS).flatMap((i) => [...(i.permiso ? [i.permiso] : []), ...(i.permisos ?? [])]),
+  ),
 );
 
 /** Devuelve los códigos de permiso asociados a un rol. */

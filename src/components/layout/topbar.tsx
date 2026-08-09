@@ -9,7 +9,6 @@
 import { ChevronDown, LogOut } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { cerrarSesion } from "@/server/auth/actions";
-import { IconMark } from "@/components/brand/icon-mark";
 import { MobileNav } from "./mobile-nav";
 import { ThemeToggle } from "./theme-toggle";
 import { SelectorIdioma } from "./selector-idioma";
@@ -21,12 +20,13 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
-import type { NavItem } from "@/lib/nav";
+import type { NavItem, PortalTheme } from "@/lib/nav";
 
 /** Roles con título propio en `messages/*.json` (`portal.title.<rol>`). */
 const ROLES_CON_TITULO = [
   "estudiante",
   "docente",
+  "administrativo",
   "psicologo",
   "contabilidad",
   "admin",
@@ -47,10 +47,12 @@ export function TopBar({
   nombre,
   rol,
   items,
+  theme,
 }: {
   nombre: string;
   rol: string;
   items: NavItem[];
+  theme: PortalTheme;
 }) {
   const tAuth = useTranslations("auth");
   const tPortal = useTranslations("portal");
@@ -60,7 +62,15 @@ export function TopBar({
   const claveTitulo = ROLES_CON_TITULO.includes(rol) ? rol : "default";
 
   return (
-    <header className="flex w-full items-center justify-between py-2 mb-2">
+    <header
+      className="flex w-full items-center justify-between py-2 mb-2"
+      style={
+        {
+          "--portal-primary": theme.primary,
+          "--portal-hover": theme.hover,
+        } as React.CSSProperties
+      }
+    >
       {/* Izquierda: Título de la Fundación y Portal */}
       <div className="flex items-center gap-3">
         <MobileNav items={items} />
