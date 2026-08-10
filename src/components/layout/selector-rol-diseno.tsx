@@ -41,10 +41,10 @@ export function SelectorRolDiseno({
     <DropdownMenu>
       <DropdownMenuTrigger
         disabled={isPending}
-        className="flex items-center gap-1.5 rounded-full bg-amber-500/10 dark:bg-amber-500/20 border border-amber-500/30 px-3 py-1 text-xs font-bold text-amber-700 dark:text-amber-300 outline-none hover:bg-amber-500/20 transition-all cursor-pointer"
+        className="flex items-center gap-1.5 rounded-full bg-[#0a6a8a]/10 dark:bg-[#2096ba]/20 px-3 py-1.5 text-[11px] font-bold text-[#0a6a8a] dark:text-[#2096ba] outline-none hover:bg-[#0a6a8a]/20 dark:hover:bg-[#2096ba]/30 transition-all cursor-pointer"
         title="Cambiar de portal en Modo Diseño"
       >
-        <Sparkles className="h-3.5 w-3.5 text-amber-600 dark:text-amber-400 animate-pulse" />
+        <span className="font-black text-[#0a6a8a] dark:text-[#2096ba]">+</span>
         <span className="capitalize">{rolActual.replace(/_/g, " ")}</span>
       </DropdownMenuTrigger>
 

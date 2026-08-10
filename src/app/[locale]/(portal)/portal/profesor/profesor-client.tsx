@@ -143,7 +143,7 @@ export function ProfesorClient({
       <main className={styles.main}>
         {/* Header */}
         <div className={styles.pageHead}>
-          <span className={styles.eyebrow}>Panel del Profesor · Ciclo Actual 2026</span>
+
           <h1>Hola, Profesor {primerNombre} 👋</h1>
           <p>Esto es lo que necesita tu atención hoy en {escuela}.</p>
         </div>

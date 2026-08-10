@@ -67,7 +67,7 @@ export default async function PortalPsicologiaPage() {
         icono={Heart}
         titulo="Portal de Psicología"
         subtitulo="Seguimiento confidencial de bienestar estudiantil"
-        gradiente="bg-gradient-to-br from-rose-500 to-rose-700"
+        gradiente="bg-gradient-to-br from-[#0a6a8a] to-[#2096ba]"
         kpis={[
           { valor: String(stats.programadas), label: "Citas Programadas" },
           { valor: String(stats.confidenciales), label: "Alta Confidencial." },

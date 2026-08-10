@@ -49,7 +49,7 @@ export default async function PortalLayout({
 
       <div className="flex min-w-0 flex-1 flex-col px-6 md:px-10">
         <div className="mx-auto w-full max-w-[1600px]">
-          <TopBar nombre={user.nombre} rol={user.rol} items={items} theme={theme} />
+          <TopBar nombre={user.nombre} rol={user.rol} items={items} theme={theme} permisos={permisos} />
         </div>
         <main className="mx-auto w-full max-w-[1600px] flex-1 pb-16">{children}</main>
       </div>

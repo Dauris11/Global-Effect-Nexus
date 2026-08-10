@@ -28,17 +28,7 @@ export function Sidebar({ items, rol, theme }: { items: NavItem[]; rol: string; 
       } as React.CSSProperties}
       aria-label="Navegación principal"
     >
-      {/* Logo mark: anillos concéntricos */}
-      <svg 
-        className="w-10 h-10 mb-[30px] text-white shrink-0 max-md:hidden" 
-        viewBox="0 0 40 40" 
-        fill="none" 
-        aria-hidden="true"
-      >
-        <circle cx="20" cy="20" r="18" stroke="currentColor" strokeWidth="1.4" opacity="0.35"/>
-        <circle cx="20" cy="20" r="12.5" stroke="currentColor" strokeWidth="1.6" opacity="0.65"/>
-        <circle cx="20" cy="20" r="7" fill="currentColor"/>
-      </svg>
+
       
       <div className="flex flex-col gap-1.5 w-full items-center flex-1 max-md:flex-row max-md:justify-around">
         <NavList items={items} />

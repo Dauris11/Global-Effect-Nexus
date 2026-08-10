@@ -139,6 +139,7 @@ export async function resolverUsuario(
 
 /** Cierra la sesión activa en Supabase (usar dentro de una Server Action). */
 export async function signOut() {
+  if (MODO_DISENO) return;
   const supabase = await createClient();
   await supabase.auth.signOut();
 }

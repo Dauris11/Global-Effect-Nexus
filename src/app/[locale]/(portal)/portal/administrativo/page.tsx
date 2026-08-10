@@ -15,6 +15,7 @@ import {
   FolderOpen,
   HeartHandshake,
   Bot,
+  Brain,
   ListTodo,
   Salad,
   UserCog,
@@ -26,7 +27,11 @@ import { CardLista, EstadoVacio } from "@/components/portal/card-lista";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { resumenAdministrativo, tareasUrgentes } from "@/server/operaciones/queries";
+import { metricasDashboard } from "@/server/dashboard/queries";
 import type { TareaTablero } from "@/server/operaciones/types";
+import { DistributionChart } from "../../dashboard/distribution-chart";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Users } from "lucide-react";
 
 export const dynamic = "force-dynamic";
 
@@ -117,6 +122,13 @@ const ACCESOS: AccesoRapido[] = [
     azulejo: "bg-slate-100 text-slate-600",
     disponible: false,
   },
+  {
+    href: "/portal/psicologia",
+    icono: Brain,
+    titulo: "Psicología",
+    descripcion: "Citas confidenciales",
+    azulejo: "bg-pink-50 text-pink-600",
+  },
 ];
 
 export default async function PortalAdministrativoPage() {
@@ -127,8 +139,17 @@ export default async function PortalAdministrativoPage() {
     estudiantes_activos: 0,
   };
   let urgentes: TareaTablero[] = [];
+  let metricas = { estudiantes_activos: 0, becados: 0, cursos_activos: 0, tareas_pendientes: 0 };
+  
   try {
-    [resumen, urgentes] = await Promise.all([resumenAdministrativo(), tareasUrgentes()]);
+    const [res, urg, met] = await Promise.all([
+      resumenAdministrativo(), 
+      tareasUrgentes(),
+      metricasDashboard()
+    ]);
+    resumen = res;
+    urgentes = urg;
+    metricas = met;
   } catch {
     /* Sin BD el portal se pinta con estados vacíos. */
   }
@@ -139,7 +160,7 @@ export default async function PortalAdministrativoPage() {
         icono={ClipboardList}
         titulo="Portal Administrativo"
         subtitulo="Coordinación y gestión interna"
-        gradiente="bg-gradient-to-br from-orange-500 to-orange-700"
+        gradiente="bg-gradient-to-br from-[#0a6a8a] to-[#2096ba]"
         kpis={[
           { valor: String(resumen.tareas_abiertas), label: "Tareas Pendientes" },
           { valor: String(resumen.proyectos_activos), label: "Proyectos Activos" },
@@ -149,34 +170,59 @@ export default async function PortalAdministrativoPage() {
 
       <AccesosRapidos accesos={ACCESOS} columnas="sm:grid-cols-2 lg:grid-cols-3" />
 
-      <CardLista titulo="Tareas que apremian" icono={ListTodo}>
-        {urgentes.length === 0 ? (
-          <EstadoVacio mensaje="No hay tareas urgentes ahora mismo." />
-        ) : (
-          urgentes.map((tarea) => (
-            <div
-              key={tarea.id}
-              className="flex items-center gap-3 rounded-lg bg-muted/40 p-3"
-            >
-              <span
-                aria-hidden
-                className={cn("h-2 w-2 shrink-0 rounded-full", PUNTO_PRIORIDAD[tarea.prioridad] ?? "bg-slate-400")}
-              />
-              <div className="min-w-0 flex-1">
-                <p className="truncate text-sm font-medium">{tarea.titulo}</p>
-                {tarea.proyecto_nombre && (
-                  <p className="truncate text-xs text-muted-foreground">
-                    {tarea.proyecto_nombre}
-                  </p>
-                )}
+      <div className="grid gap-6 lg:grid-cols-2">
+        <CardLista titulo="Tareas que apremian" icono={ListTodo}>
+          {urgentes.length === 0 ? (
+            <EstadoVacio mensaje="No hay tareas urgentes ahora mismo." />
+          ) : (
+            urgentes.map((tarea) => (
+              <div
+                key={tarea.id}
+                className="flex items-center gap-3 rounded-lg bg-muted/40 p-3"
+              >
+                <span
+                  aria-hidden
+                  className={cn("h-2 w-2 shrink-0 rounded-full", PUNTO_PRIORIDAD[tarea.prioridad] ?? "bg-slate-400")}
+                />
+                <div className="min-w-0 flex-1">
+                  <p className="truncate text-sm font-medium">{tarea.titulo}</p>
+                  {tarea.proyecto_nombre && (
+                    <p className="truncate text-xs text-muted-foreground">
+                      {tarea.proyecto_nombre}
+                    </p>
+                  )}
+                </div>
+                <Badge variant="outline" className="shrink-0 text-[10px] capitalize">
+                  {tarea.prioridad}
+                </Badge>
               </div>
-              <Badge variant="outline" className="shrink-0 text-[10px] capitalize">
-                {tarea.prioridad}
-              </Badge>
-            </div>
-          ))
-        )}
-      </CardLista>
+            ))
+          )}
+        </CardLista>
+
+        {/* Gráfico de distribución de estudiantes */}
+        <Card className="shadow-sm border-slate-100 dark:border-zinc-800">
+          <CardHeader>
+            <CardTitle>Distribución Estudiantil</CardTitle>
+            <CardDescription>Becados vs Regulares</CardDescription>
+          </CardHeader>
+          <CardContent>
+            {metricas.estudiantes_activos > 0 ? (
+              <DistributionChart
+                becados={metricas.becados}
+                regulares={metricas.estudiantes_activos - metricas.becados}
+                locale="es"
+                textos={{
+                  becados: "Becados",
+                  regulares: "Regulares"
+                }}
+              />
+            ) : (
+              <EstadoVacio mensaje="No hay datos de estudiantes." />
+            )}
+          </CardContent>
+        </Card>
+      </div>
     </div>
   );
 }

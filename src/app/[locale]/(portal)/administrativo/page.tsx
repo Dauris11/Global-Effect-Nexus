@@ -24,6 +24,9 @@ import { ChipEstado } from "@/components/ui/chip-estado";
 import { AvatarGroup } from "@/components/ui/avatar";
 import { EmptyState } from "@/components/ui/empty-state";
 import { DockAccesos } from "./dock-accesos";
+import { metricasDashboard } from "@/server/dashboard/queries";
+import { DistributionChart } from "../dashboard/distribution-chart";
+import { Users } from "lucide-react";
 
 const VACIO = {
   proyectos_activos: 0,
@@ -34,13 +37,18 @@ const VACIO = {
 
 async function cargar() {
   try {
-    const [resumen, urgentes] = await Promise.all([
+    const [resumen, urgentes, metricas] = await Promise.all([
       resumenAdministrativo(),
       tareasUrgentes(6),
+      metricasDashboard(),
     ]);
-    return { resumen, urgentes };
+    return { resumen, urgentes, metricas };
   } catch {
-    return { resumen: VACIO, urgentes: [] as TareaTablero[] };
+    return { 
+      resumen: VACIO, 
+      urgentes: [] as TareaTablero[],
+      metricas: { estudiantes_activos: 0, becados: 0, cursos_activos: 0, tareas_pendientes: 0 }
+    };
   }
 }
 
@@ -57,7 +65,7 @@ export default async function AdministrativoPage({
     can(user.rol, "operaciones.escribir"),
     getTranslations("admin"),
   ]);
-  const { resumen, urgentes } = await cargar();
+  const { resumen, urgentes, metricas } = await cargar();
 
   const cifras = [
     { clave: "openTasks", valor: resumen.tareas_abiertas, alerta: false },
@@ -82,6 +90,9 @@ export default async function AdministrativoPage({
     { href: "/expedientes", clave: "records", icono: "Users" },
     { href: "/servicios-mensuales", clave: "services", icono: "ClipboardList" },
     { href: "/reportes", clave: "reports", icono: "BarChart3" },
+    { href: "/patrocinadores", clave: "sponsors", icono: "HeartHandshake", disabled: true },
+    { href: "/portal/psicologia", clave: "psychology", icono: "Brain" },
+    { href: "/ia", clave: "ai", icono: "Bot", disabled: true },
   ] as const;
 
   const fechaCorta = new Intl.DateTimeFormat(locale, { day: "2-digit", month: "short" });
@@ -222,6 +233,32 @@ export default async function AdministrativoPage({
               })}
             </div>
           )}
+        </section>
+
+        {/* Columna Derecha: Gráfico de Distribución Estudiantil */}
+        <section className="space-y-3">
+          <h2 className="tabular-nums text-[11px] uppercase tracking-[0.12em] text-muted-foreground">
+            {t("hub.distribution") || "Distribución Estudiantil"}
+          </h2>
+          <Card className="animate-in fade-in-0 slide-in-from-bottom-2 duration-200 ease-out shadow-sm h-full max-h-[400px]">
+            {metricas.estudiantes_activos > 0 ? (
+              <DistributionChart
+                becados={metricas.becados}
+                regulares={metricas.estudiantes_activos - metricas.becados}
+                locale={locale}
+                textos={{
+                  becados: "Becados",
+                  regulares: "Regulares"
+                }}
+              />
+            ) : (
+              <EmptyState
+                icon={Users}
+                title="Sin datos"
+                description="No hay estudiantes registrados"
+              />
+            )}
+          </Card>
         </section>
       </div>
     </div>

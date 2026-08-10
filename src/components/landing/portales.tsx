@@ -25,13 +25,16 @@
  * Las clases van literales y completas: Tailwind no genera las que se
  * construyen por concatenación.
  */
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { PORTALES } from "@/lib/portales";
+import { MODO_DISENO } from "@/lib/modo-diseno";
+import { cambiarRolDiseno } from "@/server/auth/actions";
 
 
 export function Portales() {
   const t = useTranslations("landing");
+  const locale = useLocale();
 
   return (
     <section
@@ -52,38 +55,46 @@ export function Portales() {
         <ul className="mt-7 grid grid-cols-3 gap-x-3 gap-y-7 sm:gap-x-6 md:grid-cols-6">
           {PORTALES.map((p) => {
             const Icono = p.icono;
+
+            const Contenido = (
+              <>
+                <span
+                  aria-hidden
+                  className="
+                    flex h-16 w-16 items-center justify-center rounded-2xl
+                    border border-slate-200 bg-slate-100 text-[#2096BA]
+                    transition-all duration-200 ease-out
+                    group-hover:-translate-y-1.5 group-hover:border-[#2096BA]/40
+                    group-hover:bg-[#2096BA]/10 group-hover:shadow-lg
+                    group-hover:shadow-[#2096BA]/20
+                    group-focus-visible:-translate-y-1.5
+                    group-focus-visible:border-[#2096BA]/40
+                    group-focus-visible:bg-[#2096BA]/10
+                  "
+                >
+                  <Icono className="h-7 w-7 transition-transform duration-200 ease-out group-hover:scale-110 group-focus-visible:scale-110" />
+                </span>
+                <span className="mt-3 flex min-h-[2.25rem] items-start justify-center text-xs font-semibold leading-tight text-slate-700 transition-colors duration-200 group-hover:text-[#2096BA] sm:text-sm">
+                  {t(p.nombreKey as "portal_estudiante")}
+                </span>
+              </>
+            );
+
+            const className = "group flex h-full w-full flex-col items-center rounded-xl p-2 text-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2096BA] focus-visible:ring-offset-2";
+
             return (
               <li key={p.clave}>
-                <Link
-                  href={`/login/${p.clave}`}
-                  className="group flex h-full flex-col items-center rounded-xl p-2 text-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#2096BA] focus-visible:ring-offset-2"
-                >
-                  <span
-                    aria-hidden
-                    className="
-                      flex h-16 w-16 items-center justify-center rounded-2xl
-                      border border-slate-200 bg-slate-100 text-[#2096BA]
-                      transition-all duration-200 ease-out
-                      group-hover:-translate-y-1.5 group-hover:border-[#2096BA]/40
-                      group-hover:bg-[#2096BA]/10 group-hover:shadow-lg
-                      group-hover:shadow-[#2096BA]/20
-                      group-focus-visible:-translate-y-1.5
-                      group-focus-visible:border-[#2096BA]/40
-                      group-focus-visible:bg-[#2096BA]/10
-                    "
-                  >
-                    {/* El glifo crece un punto más que el azulejo: el conjunto
-                        se siente vivo sin que la fila se mueva de sitio. */}
-                    <Icono className="h-7 w-7 transition-transform duration-200 ease-out group-hover:scale-110 group-focus-visible:scale-110" />
-                  </span>
-
-                  {/* Altura fija en la etiqueta: "Administración" y "Cursos
-                      técnicos" ocupan dos líneas y sin esto la fila quedaba
-                      con los azulejos a distinta altura. */}
-                  <span className="mt-3 flex min-h-[2.25rem] items-start justify-center text-xs font-semibold leading-tight text-slate-700 transition-colors duration-200 group-hover:text-[#2096BA] sm:text-sm">
-                    {t(p.nombreKey as "portal_estudiante")}
-                  </span>
-                </Link>
+                {MODO_DISENO ? (
+                  <form action={cambiarRolDiseno.bind(null, p.clave, locale)} className="h-full">
+                    <button type="submit" className={className}>
+                      {Contenido}
+                    </button>
+                  </form>
+                ) : (
+                  <Link href={`/login/${p.clave}`} className={className}>
+                    {Contenido}
+                  </Link>
+                )}
               </li>
             );
           })}

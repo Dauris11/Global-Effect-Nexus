@@ -61,7 +61,7 @@ export default async function PortalContabilidadPage() {
         icono={DollarSign}
         titulo="Portal de Contabilidad"
         subtitulo="Control financiero y gestión de becas"
-        gradiente="bg-gradient-to-br from-violet-500 to-violet-700"
+        gradiente="bg-gradient-to-br from-[#0a6a8a] to-[#2096ba]"
         kpisEnvueltos
         kpis={[
           { valor: pesos(bal.ingresos), label: "Ingresos" },

@@ -6,7 +6,9 @@
  */
 "use client";
 
-import { ChevronDown, LogOut } from "lucide-react";
+import { useState, useTransition } from "react";
+import { ChevronDown, LogOut, Lock, Bell } from "lucide-react";
+import { Logo } from "@/components/brand/logo";
 import { useLocale, useTranslations } from "next-intl";
 import { cerrarSesion } from "@/server/auth/actions";
 import { MODO_DISENO } from "@/lib/modo-diseno";
@@ -50,22 +52,25 @@ export function TopBar({
   rol,
   items,
   theme,
+  permisos,
 }: {
   nombre: string;
   rol: string;
   items: NavItem[];
   theme: PortalTheme;
+  permisos?: string[] | null;
 }) {
   const tAuth = useTranslations("auth");
   const tPortal = useTranslations("portal");
   const locale = useLocale();
+  const [isPending, startTransition] = useTransition();
   // El TopBar es común a los siete portales: el título sale del rol, no de la
   // pantalla. Un rol sin título propio cae en el genérico.
   const claveTitulo = ROLES_CON_TITULO.includes(rol) ? rol : "default";
 
   return (
     <header
-      className="flex w-full items-center justify-between py-2 mb-2"
+      className="flex w-full items-center justify-between py-3 mb-2 bg-white dark:bg-[#101322] border-b border-slate-200 dark:border-slate-800/60 rounded-xl px-4 mt-2 shadow-sm"
       style={
         {
           "--portal-primary": theme.primary,
@@ -76,36 +81,39 @@ export function TopBar({
       {/* Izquierda: Título de la Fundación y Portal */}
       <div className="flex items-center gap-3">
         <MobileNav items={items} />
-        <div className="hidden md:flex flex-col">
-          <span className="text-[10px] font-extrabold tracking-[0.2em] uppercase text-[#0a6a8a] dark:text-[#38bdf8]">
-            {tPortal("foundation")}
-          </span>
-          <h1 className="text-xl font-bold tracking-tight text-slate-900 dark:text-white">
-            {tPortal(`title.${claveTitulo}`)}
-          </h1>
+        <div className="hidden md:flex">
+          <Logo className="h-7 w-auto invert dark:invert-0" />
         </div>
       </div>
 
       {/* Derecha: Selector de Idioma, Selector de Rol (si modo diseño), Tema y Usuario */}
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-4">
         {MODO_DISENO && <SelectorRolDiseno rolActual={rol} locale={locale} />}
+        
+
+
+        {/* Campana de Notificaciones */}
+        <button className="flex h-9 w-9 items-center justify-center rounded-full border border-slate-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 text-slate-500 hover:bg-[#e6f4f8] dark:hover:bg-zinc-800 hover:text-[#0a6a8a] transition-colors">
+          <Bell className="w-4 h-4" />
+        </button>
+
         <SelectorIdioma tone="light" />
         <ThemeToggle />
 
         <DropdownMenu>
-          <DropdownMenuTrigger className="flex items-center gap-3 rounded-full bg-white dark:bg-[#18181c] border border-slate-200/80 dark:border-zinc-800 p-1.5 pr-4 shadow-sm outline-none transition-all hover:bg-slate-50 dark:hover:bg-zinc-800/50">
-            <span className="flex h-9 w-9 items-center justify-center rounded-full bg-[#0a6a8a] dark:bg-[#2096ba] text-xs font-bold text-white shadow-sm">
+          <DropdownMenuTrigger className="flex items-center gap-3 outline-none group cursor-pointer">
+            <span className="flex h-10 w-10 items-center justify-center rounded-full bg-[#0a6a8a] text-sm font-bold text-white shadow-sm border-2 border-white dark:border-[#101322] group-hover:scale-105 transition-transform">
               {iniciales(nombre)}
             </span>
             <span className="hidden text-left sm:block">
-              <span className="block text-xs font-bold leading-tight text-slate-900 dark:text-white">
+              <span className="block text-sm font-bold leading-tight text-slate-900 dark:text-white">
                 {nombre}
               </span>
-              <span className="block text-[10px] font-medium capitalize leading-tight text-slate-500 dark:text-slate-400">
+              <span className="block text-xs font-medium capitalize leading-tight text-slate-500 dark:text-slate-400">
                 {rol.replace(/_/g, " ")}
               </span>
             </span>
-            <ChevronDown className="size-3.5 text-slate-400 ml-1" />
+            <ChevronDown className="size-4 text-slate-400 ml-1 hidden sm:block group-hover:text-slate-600 transition-colors" />
           </DropdownMenuTrigger>
 
           <DropdownMenuContent align="end" className="w-56 rounded-2xl p-2">
@@ -116,14 +124,19 @@ export function TopBar({
               </span>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <form action={cerrarSesion.bind(null, locale)}>
-              <DropdownMenuItem asChild>
-                <button type="submit" className="w-full cursor-pointer text-red-600 dark:text-red-400">
-                  <LogOut className="mr-2 h-4 w-4" />
-                  {tAuth("signOut")}
-                </button>
-              </DropdownMenuItem>
-            </form>
+            <DropdownMenuItem
+              className="cursor-pointer text-red-600 dark:text-red-400"
+              disabled={isPending}
+              onSelect={(e) => {
+                e.preventDefault();
+                startTransition(() => {
+                  cerrarSesion(locale);
+                });
+              }}
+            >
+              <LogOut className="mr-2 h-4 w-4" />
+              {tAuth("signOut")}
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>

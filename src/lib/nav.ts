@@ -121,7 +121,7 @@ export const PORTAL_THEME_BY_ROL: Record<string, PortalTheme> = {
 };
 
 export function portalThemePorRol(rol: string): PortalTheme {
-  return PORTAL_THEME_BY_ROL[rol] ?? PORTAL_THEME_BY_ROL.default;
+  return PORTAL_THEME_BY_ROL.default;
 }
 
 /** Ruta de inicio tras el login según el rol. */

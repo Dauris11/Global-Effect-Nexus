@@ -313,11 +313,16 @@ export async function agenda30Dias(
 /** Registros de servicio comunitario de un mes (formato YYYY-MM). */
 export async function serviciosDelMes(mes: string): Promise<RegistroServicio[]> {
   const { rows } = await query(
-    `SELECT rs.id, rs.estudiante_id, rs.mes, rs.hizo_servicio, rs.asistio_reunion,
-            rs.notas, e.nombre AS estudiante_nombre
-       FROM registro_servicio rs
-       JOIN estudiante e ON e.id = rs.estudiante_id
-      WHERE rs.mes = $1
+    `SELECT COALESCE(rs.id, gen_random_uuid()) AS id,
+            e.id AS estudiante_id, 
+            $1 AS mes, 
+            COALESCE(rs.hizo_servicio, false) AS hizo_servicio, 
+            COALESCE(rs.asistio_reunion, false) AS asistio_reunion,
+            rs.notas, 
+            e.nombre AS estudiante_nombre
+       FROM estudiante e
+       LEFT JOIN registro_servicio rs ON rs.estudiante_id = e.id AND rs.mes = $1
+      WHERE e.estado = 'activo' OR rs.id IS NOT NULL
       ORDER BY e.nombre`,
     [mes],
   );
